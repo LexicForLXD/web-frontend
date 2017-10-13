@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
 const Grid = require('react-bootstrap').Grid;
 const Row = require('react-bootstrap').Row;
 const Col = require('react-bootstrap').Col;
@@ -16,7 +17,23 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      containers: ['Container 1', 'Container 2', 'Container 3']
+      containers: [
+        {
+          name: "Container 1",
+          ip: "10.16.18.20",
+          status: "running"
+        },
+        {
+          name: "Container 2",
+          ip: "10.16.18.21",
+          status: "stopped"
+        },
+        {
+          name: "Container 3",
+          ip: "10.16.18.22",
+          status: "running"
+        }
+      ]
     };
   }
 
@@ -61,7 +78,7 @@ class Navigation extends Component {
       <Nav bsStyle="pills" stacked activeKey={this.state.page} onSelect={this.select}>
         <NavItem eventKey={1}>Overview</NavItem>
         {this.props.containers.map((container, index) =>
-          <NavItem eventKey={index + 2}>{container}</NavItem>
+            <NavItem eventKey={index + 2}>{container.name}</NavItem>
         )}
       </Nav>
     );
@@ -90,10 +107,17 @@ class Dashboard extends Component {
         <tbody>
           {this.props.containers.map(container =>
             <tr>
-              <td></td>
-              <td>{container}</td>
-              <td></td>
-              <td></td>
+              <td>{container.status}</td>
+              <td>{container.name}</td>
+              <td>{container.ip}</td>
+              <td>
+                <button type="button" className="btn">
+                  <i className="fa fa-play"></i>
+                </button>
+                <button type="button" className="btn">
+                  <i className="fa fa-stop"></i>
+                </button>
+              </td>
             </tr>
           )}
         </tbody>
