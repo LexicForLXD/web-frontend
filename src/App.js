@@ -36,14 +36,14 @@ class App extends Component {
   }
 
   logPush = (msg) => {
-    const log = [...this.state.log.slice(-9), ...msg]
+    const log = [...this.state.log.slice(-9), msg]
     this.setState({
       log: log
     });
   }
 
   componentDidMount() {
-    this.logPush(['Ready...'])
+    this.logPush('Ready...')
   }
 
   render() {
@@ -103,7 +103,7 @@ class Navigation extends Component {
     this.setState({
       page: key
     });
-    this.props.logCallBack([`${key} selected`]);
+    this.props.logCallBack(`${key} selected`);
   }
 
   render() {
