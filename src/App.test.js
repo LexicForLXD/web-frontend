@@ -11,23 +11,18 @@ it('renders without crashing', () => {
   ReactDOM.render(<App />, div);
 });
 
-it('stores the 10 newest log messages', () => {
+it('stores 10 latest out of 11 log messages, added one-by-one', () => {
   const wrapper = shallow(<App />);
-  // 1 message
-  wrapper.instance().logPush('foo');
-  expect(wrapper.state().log).toContain('foo');
-  // 10 messages, one by one
-  let messages = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  const messages = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
   messages.forEach(msg => {
     wrapper.instance().logPush(msg);
   });
-  expect(wrapper.state().log).toEqual(messages);
-  // 10 messages at once
-  messages.reverse();
+  expect(wrapper.state().log).toEqual(messages.slice(-10));
+});
+
+it('stores 10 latest out of 11 log messages, added at once', () => {
+  const wrapper = shallow(<App />);
+  const messages = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
   wrapper.instance().logPush(messages);
-  expect(wrapper.state().log).toEqual(messages);
-  // 11 messages at once
-  const tooManyMessages = ['bar', ...messages];
-  wrapper.instance().logPush(tooManyMessages);
-  expect(wrapper.state().log).toEqual(messages);
-})
+  expect(wrapper.state().log).toEqual(messages.slice(-10));
+});
