@@ -45,8 +45,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.logPush(['Developement console enabled.',
-                  'App component mounted.']);
+    this.logPush('App component mounted.');
   }
 
   render() {
