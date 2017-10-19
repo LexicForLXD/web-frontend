@@ -35,16 +35,8 @@
   margin: 1px;
 }
 
-.Log {
+.Console {
   font-family: monospace;
   font-size: 90%;
   text-align: left;
-}
-
-.Navigation {
-  text-align: center;
-}
-
-.Dashboard {
-  text-align: center;
 }

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Grid, Row, Col, Nav, NavItem, Table, Well } from 'react-bootstrap';
+import Console from './Console.js';
+import Navigation from './Navigation.js';
+import Dashboard from './Dashboard.js';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
@@ -66,90 +69,6 @@ class App extends Component {
           </Row>
         </Grid>
       </div>
-    );
-  }
-}
-
-class Console extends Component {
-  render() {
-    return (
-      <Well bsSize="small" className="Log">
-        <Grid>
-          {this.props.log.map((msg, index) =>
-            <Row key={index}>
-              {msg}
-            </Row>
-          )}
-      </Grid>
-    </Well>
-    )
-  }
-}
-
-class Navigation extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      page: 1
-    };
-  }
-
-  select = (key) => {
-    this.setState({
-      page: key
-    });
-    this.props.logCallBack(`${key} selected`);
-  }
-
-  render() {
-    return (
-      <Nav bsStyle="pills" stacked activeKey={this.state.page} onSelect={this.select}>
-        <NavItem eventKey={1}>Overview</NavItem>
-        {this.props.containers.map((container, index) =>
-          <NavItem key={index} eventKey={index + 2}>{container.name}</NavItem>
-        )}
-      </Nav>
-    );
-  }
-}
-
-class Dashboard extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      page: 1
-    };
-  }
-
-  render() {
-    return (
-      <Table bordered condensed>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Name</th>
-            <th>IP Address</th>
-            <th>Control</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.containers.map((container, index) =>
-            <tr key={index}>
-              <td>{container.status}</td>
-              <td>{container.name}</td>
-              <td>{container.ip}</td>
-              <td>
-                <button type="button" className="btn">
-                  <i className="fa fa-play"></i>
-                </button>
-                <button type="button" className="btn">
-                  <i className="fa fa-stop"></i>
-                </button>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
     );
   }
 }
