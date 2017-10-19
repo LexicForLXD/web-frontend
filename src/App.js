@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-const Grid = require('react-bootstrap').Grid;
-const Row = require('react-bootstrap').Row;
-const Col = require('react-bootstrap').Col;
-const Nav = require('react-bootstrap').Nav;
-const NavItem = require('react-bootstrap').NavItem;
-const Table = require('react-bootstrap').Table;
-const Well = require('react-bootstrap').Well;
+import { Grid, Row, Col, Nav, NavItem, Table, Well } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
