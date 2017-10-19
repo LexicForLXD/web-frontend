@@ -33,15 +33,11 @@ class App extends Component {
 
   logPush = (msg) => {
     const log =
-      msg.constructor === Array ? [...this.state.log.slice(-9), ...msg]
-                                : [...this.state.log.slice(-9), msg];
+      msg.constructor === Array ? [...this.state.log, ...msg]
+                                : [...this.state.log, msg];
     this.setState({
-      log: log
+      log: log.slice(-10)
     });
-  }
-
-  componentDidMount() {
-    this.logPush('App component mounted.');
   }
 
   render() {
