@@ -36,8 +36,7 @@ class Navigation extends Component {
             </NavItem>
           )}
         </Nav>
-        <Button type="btn" className="Refresh"
-          onClick={this.props.refresh}>
+        <Button type="btn" className="Refresh" onClick={this.props.refresh}>
           <i className="fa fa-refresh"></i> Refresh
         </Button>
       </div>

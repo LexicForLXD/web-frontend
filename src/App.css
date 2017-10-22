@@ -3,7 +3,6 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
 
@@ -43,4 +42,10 @@
 
 .Refresh {
   margin-top: 10px;
+}
+
+.Logout{
+   position: fixed;
+   right: 10px;
+   top: 5px;
 }
