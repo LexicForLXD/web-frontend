@@ -4,14 +4,28 @@ import './App.css';
 import Console from './Console.js';
 import Navigation from './Navigation.js';
 import Dashboard from './Dashboard.js';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      log: [],
-      containers: [
+      printQueue: [],
+      containers: []
+    };
+  }
+
+  componentDidMount() {
+    this.refresh();
+  }
+
+  refresh = () => {
+    this.fetchContainers();
+  }
+
+  fetchContainers = () => {
+    this.setState({
+      containers: [  // To be replaced with a fetch()-from-api method call
         {
           name: "Container 1",
           ip: "10.16.18.20",
@@ -28,15 +42,15 @@ class App extends Component {
           status: "running"
         }
       ]
-    };
+    })
   }
 
-  logPush = (msg) => {
-    const log =
-      msg.constructor === Array ? [...this.state.log, ...msg]
-                                : [...this.state.log, msg];
+  print = (msg) => {
+    const printQueue =
+      msg.constructor === Array ? [...this.state.printQueue, ...msg]
+                                : [...this.state.printQueue, msg];
     this.setState({
-      log: log.slice(-10)
+      printQueue: printQueue.slice(-10)
     });
   }
 
@@ -51,16 +65,17 @@ class App extends Component {
           <Row>
             <Col xs={3}>
               <Navigation containers={this.state.containers}
-                          logCallBack={msg => this.logPush(msg)} />
+                          print={msg => this.print(msg)}
+                          refresh={this.refresh} />
             </Col>
             <Col xs={9}>
               <Dashboard containers={this.state.containers}
-                         logCallBack={msg => this.logPush(msg)} />
+                         print={msg => this.print(msg)} />
             </Col>
           </Row>
           <Row>
             <Col xs={9} xsOffset={3}>
-              <Console log={this.state.log} />
+              <Console printQueue={this.state.printQueue} />
             </Col>
           </Row>
         </Grid>

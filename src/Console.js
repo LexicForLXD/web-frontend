@@ -7,7 +7,7 @@ class Console extends Component {
     return (
       <Well bsSize="small" className="Console">
         <Grid>
-          {this.props.log.map((msg, index) =>
+          {this.props.printQueue.map((msg, index) =>
             <Row key={index}>
               {msg}
             </Row>
