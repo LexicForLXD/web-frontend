@@ -14,20 +14,35 @@ class Navigation extends Component {
     this.setState({
       page: key
     });
-    this.props.print(`${key} selected`);
+    this.props.print(`Navigation: ${key} selected`);
   }
 
   render() {
     return (
       <div>
-        <Nav bsStyle="pills" stacked activeKey={this.state.page} onSelect={this.select}>
-          <NavItem eventKey={1}>Overview</NavItem>
+        <Nav stacked activeKey={this.state.page} onSelect={this.select}>
+          <NavItem eventKey={'monitoring'}>
+            <i className="fa fa-area-chart"></i> Monitoring
+          </NavItem>
+          <NavItem eventKey={'log'}>
+            <i className="fa fa-pencil"></i> Log
+          </NavItem>
+          <NavItem eventKey={'backup'}>
+            <i className="fa fa-hdd-o"></i> Backup
+          </NavItem>
+          <NavItem disabled>Containers</NavItem>
+          <NavItem eventKey={'overview'}>
+            <i className="fa fa-desktop"></i> Overview</NavItem>
           {this.props.containers.map((container, index) =>
-            <NavItem key={index} eventKey={index + 2}>{container.name}</NavItem>
+            <NavItem key={index} eventKey={`container ${index + 1}`}>
+              <i className="fa fa-cube"></i> {container.name}
+            </NavItem>
           )}
         </Nav>
-        <Button type="btn" onClick={this.props.refresh}
-                className="Refresh">Refresh</Button>
+        <Button type="btn" className="Refresh"
+          onClick={this.props.refresh}>
+          <i className="fa fa-refresh"></i> Refresh
+        </Button>
       </div>
     );
   }

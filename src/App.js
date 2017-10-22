@@ -4,7 +4,7 @@ import './App.css';
 import Console from './Console.js';
 import Navigation from './Navigation.js';
 import Dashboard from './Dashboard.js';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
@@ -21,6 +21,7 @@ class App extends Component {
 
   refresh = () => {
     this.fetchContainers();
+    this.print('App: refreshed')
   }
 
   fetchContainers = () => {
