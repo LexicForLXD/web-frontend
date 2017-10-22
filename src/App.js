@@ -51,7 +51,7 @@ class App extends Component {
       msg.constructor === Array ? [...this.state.printQueue, ...msg]
                                 : [...this.state.printQueue, msg];
     this.setState({
-      printQueue: printQueue.slice(-10)
+      printQueue: printQueue.slice(-5)
     });
   }
 

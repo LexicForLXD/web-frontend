@@ -6,7 +6,7 @@ class Navigation extends Component {
   constructor(props) {
     super();
     this.state = {
-      page: 1
+      page: 'overview'
     };
   }
 
@@ -21,18 +21,15 @@ class Navigation extends Component {
     return (
       <div>
         <Nav stacked activeKey={this.state.page} onSelect={this.select}>
+          <NavItem eventKey={'overview'}>
+            <i className="fa fa-desktop"></i> Overview
+          </NavItem>
           <NavItem eventKey={'monitoring'}>
             <i className="fa fa-area-chart"></i> Monitoring
-          </NavItem>
-          <NavItem eventKey={'log'}>
-            <i className="fa fa-pencil"></i> Log
           </NavItem>
           <NavItem eventKey={'backup'}>
             <i className="fa fa-hdd-o"></i> Backup
           </NavItem>
-          <NavItem disabled>Containers</NavItem>
-          <NavItem eventKey={'overview'}>
-            <i className="fa fa-desktop"></i> Overview</NavItem>
           {this.props.containers.map((container, index) =>
             <NavItem key={index} eventKey={`container ${index + 1}`}>
               <i className="fa fa-cube"></i> {container.name}
