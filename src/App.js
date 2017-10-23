@@ -4,13 +4,14 @@ import './App.css';
 import Console from './Console.js';
 import Navigation from './Navigation.js';
 import Dashboard from './Dashboard.js';
+import Login from './Login.js';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
       containers: [],
       printQueue: []
     };
@@ -56,39 +57,31 @@ class App extends Component {
     });
   }
 
-  logout = () => {
-    this.setState({
-      loggedIn: false
-    })
-    this.print('App: logged out')
-  }
-
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">LXD</h1>
-          {this.state.loggedIn &&
-            <Button type="btn"
-                    className="Logout"
-                    bsStyle="link"
-                    onClick={this.logout}>
-              Logout
-            </Button>
-          }
         </header>
+        <Login loggedIn={this.state.loggedIn}
+               login={() => this.setState({ loggedIn: true })}
+               logout={() => this.setState({ loggedIn: false })}
+               print={msg => this.print(msg)}
+        />
         {this.state.loggedIn &&
           <Grid>
             <Row>
               <Col xs={3}>
                 <Navigation containers={this.state.containers}
                             print={msg => this.print(msg)}
-                            refresh={this.refresh} />
+                            refresh={this.refresh}
+                />
               </Col>
               <Col xs={9}>
                 <Dashboard containers={this.state.containers}
-                           print={msg => this.print(msg)} />
+                           print={msg => this.print(msg)}
+                />
               </Col>
             </Row>
             <Row>

@@ -27,6 +27,9 @@ class Navigation extends Component {
           <NavItem eventKey={'monitoring'}>
             <i className="fa fa-area-chart"></i> Monitoring
           </NavItem>
+          <NavItem eventKey={'log'}>
+            <i className="fa fa-pencil"></i> Log
+          </NavItem>
           <NavItem eventKey={'backup'}>
             <i className="fa fa-hdd-o"></i> Backup
           </NavItem>
@@ -36,7 +39,7 @@ class Navigation extends Component {
             </NavItem>
           )}
         </Nav>
-        <Button type="btn" className="Refresh" onClick={this.props.refresh}>
+        <Button type="button" className="Refresh" onClick={this.props.refresh}>
           <i className="fa fa-refresh"></i> Refresh
         </Button>
       </div>
