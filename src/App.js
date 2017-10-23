@@ -11,8 +11,9 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: false,
+      loggedIn: true,
       containers: [],
+      hosts: [],
       printQueue: []
     };
   }
@@ -23,6 +24,7 @@ class App extends Component {
 
   refresh = () => {
     this.fetchContainers();
+    this.fetchHosts();
     this.print('App: refreshed')
   }
 
@@ -44,7 +46,29 @@ class App extends Component {
           ip: "10.16.18.22",
           status: "running"
         }
-      ]
+      ],
+    })
+  }
+
+  fetchHosts = () => {
+    this.setState({
+      hosts: [  // To be replaced with a fetch()-from-api method call
+        {
+          name: "Host 1",
+          ip: "10.16.18.20",
+          status: "running"
+        },
+        {
+          name: "Host 2",
+          ip: "10.16.18.21",
+          status: "stopped"
+        },
+        {
+          name: "Host 3",
+          ip: "10.16.18.22",
+          status: "running"
+        }
+      ],
     })
   }
 
@@ -64,28 +88,29 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">LXD</h1>
         </header>
+        {this.state.loggedIn &&
+          <Navigation containers={this.state.containers}
+            hosts={this.state.hosts}
+            print={msg => this.print(msg)}
+            refresh={this.refresh}
+          />
+        }
         <Login loggedIn={this.state.loggedIn}
-               login={() => this.setState({ loggedIn: true })}
-               logout={() => this.setState({ loggedIn: false })}
-               print={msg => this.print(msg)}
+          login={() => this.setState({ loggedIn: true })}
+          logout={() => this.setState({ loggedIn: false })}
+          print={msg => this.print(msg)}
         />
         {this.state.loggedIn &&
           <Grid>
             <Row>
-              <Col xs={3}>
-                <Navigation containers={this.state.containers}
-                            print={msg => this.print(msg)}
-                            refresh={this.refresh}
-                />
-              </Col>
-              <Col xs={9}>
+              <Col xs={10} xsOffset={1}>
                 <Dashboard containers={this.state.containers}
                            print={msg => this.print(msg)}
                 />
               </Col>
             </Row>
             <Row>
-              <Col xs={9} xsOffset={3}>
+              <Col xs={10} xsOffset={1}>
                 <Console printQueue={this.state.printQueue} />
               </Col>
             </Row>
