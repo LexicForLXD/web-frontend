@@ -90,7 +90,9 @@ class App extends Component {
           <h1 className="App-title">LXD</h1>
         </header>
         {this.state.loggedIn &&
-          <Navigation print={msg => this.print(msg)} />
+          <div className="Navigation">
+            <Navigation print={msg => this.print(msg)} />
+          </div>
         }
         <Login
           loggedIn={this.state.loggedIn}
