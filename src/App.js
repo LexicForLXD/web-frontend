@@ -90,13 +90,10 @@ class App extends Component {
           <h1 className="App-title">LXD</h1>
         </header>
         {this.state.loggedIn &&
-          <Navigation containers={this.state.containers}
-            hosts={this.state.hosts}
-            print={msg => this.print(msg)}
-            refresh={this.refresh}
-          />
+          <Navigation print={msg => this.print(msg)} />
         }
-        <Login loggedIn={this.state.loggedIn}
+        <Login
+          loggedIn={this.state.loggedIn}
           login={() => this.setState({ loggedIn: true })}
           logout={() => this.setState({ loggedIn: false })}
           print={msg => this.print(msg)}
@@ -105,15 +102,17 @@ class App extends Component {
           <Grid>
             <Row>
               <Col xs={3} md={2}>
-                <Sidebar containers={this.state.containers}
+                <Sidebar
+                  containers={this.state.containers}
                   hosts={this.state.hosts}
                   print={msg => this.print(msg)}
                   refresh={this.refresh}
                 />
               </Col>
               <Col xs={9} md={10}>
-                <Dashboard containers={this.state.containers}
-                           print={msg => this.print(msg)}
+                <Dashboard
+                  containers={this.state.containers}
+                  print={msg => this.print(msg)}
                 />
               </Col>
             </Row>

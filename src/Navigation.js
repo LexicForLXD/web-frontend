@@ -64,9 +64,6 @@ class Navigation extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Button type="button" className="Refresh" onClick={this.props.refresh}>
-          <i className="fa fa-refresh"></i> Refresh
-        </Button>
       </div>
     );
   }

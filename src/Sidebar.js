@@ -20,6 +20,9 @@ class Sidebar extends Component {
   render() {
     return (
       <Nav stacked activeKey={this.state.page} onSelect={this.select}>
+        <Button type="button" className="Refresh" onClick={this.props.refresh}>
+          <i className="fa fa-refresh"></i> Refresh
+        </Button>
         <NavItem key={0} eventKey={'container overview'}>
           <i className="fa fa-desktop"></i> Overview
         </NavItem>
