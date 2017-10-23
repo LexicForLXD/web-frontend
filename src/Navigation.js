@@ -6,7 +6,7 @@ class Navigation extends Component {
   constructor(props) {
     super();
     this.state = {
-      page: 'overview'
+      page: 'containers'
     };
   }
 
@@ -22,30 +22,36 @@ class Navigation extends Component {
       <div>
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
-            <Navbar.Brand>
+            {/* <Navbar.Brand>
               <a href="#">LXD</a>
-            </Navbar.Brand>
+            </Navbar.Brand> */}
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav activeKey={this.state.page} onSelect={this.select}>
-              <NavItem eventKey={'overview'}>
+              {/* <NavItem eventKey={'overview'}>
                 <i className="fa fa-desktop"></i> Overview
+              </NavItem> */}
+              <NavItem eventKey={'containers'}>
+                <i className="fa fa-cube"></i> Containers
               </NavItem>
-              <NavDropdown eventKey={'containers'} title="Containers" id="basic-nav-dropdown">
+              <NavItem eventKey={'hosts'}>
+                <i className="fa fa-server"></i> Hosts
+              </NavItem>
+              {/* <NavDropdown eventKey={'containers'} title="Containers" id="basic-nav-dropdown">
                 {this.props.containers.map((container, index) =>
                   <NavItem key={index} eventKey={`container ${index + 1}`}>
                     <i className="fa fa-cube"></i> {container.name}
                   </NavItem>
                 )}
-              </NavDropdown>
-              <NavDropdown eventKey={'hosts'} title="Hosts" id="basic-nav-dropdown">
+              </NavDropdown> */}
+              {/* <NavDropdown eventKey={'hosts'} title="Hosts" id="basic-nav-dropdown">
                 {this.props.hosts.map((host, index) =>
                   <NavItem key={index} eventKey={`host ${index + 1}`}>
                     <i className="fa fa-server"></i> {host.name}
                   </NavItem>
                 )}
-              </NavDropdown>
+              </NavDropdown> */}
               <NavItem eventKey={'monitoring'}>
                 <i className="fa fa-area-chart"></i> Monitoring
               </NavItem>

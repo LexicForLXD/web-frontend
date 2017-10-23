@@ -3,6 +3,7 @@ import logo from './containers.png';
 import './App.css';
 import Console from './Console.js';
 import Navigation from './Navigation.js';
+import Sidebar from './Sidebar.js';
 import Dashboard from './Dashboard.js';
 import Login from './Login.js';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
@@ -103,14 +104,21 @@ class App extends Component {
         {this.state.loggedIn &&
           <Grid>
             <Row>
-              <Col xs={10} xsOffset={1}>
+              <Col xs={3} md={2}>
+                <Sidebar containers={this.state.containers}
+                  hosts={this.state.hosts}
+                  print={msg => this.print(msg)}
+                  refresh={this.refresh}
+                />
+              </Col>
+              <Col xs={9} md={10}>
                 <Dashboard containers={this.state.containers}
                            print={msg => this.print(msg)}
                 />
               </Col>
             </Row>
             <Row>
-              <Col xs={10} xsOffset={1}>
+              <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
                 <Console printQueue={this.state.printQueue} />
               </Col>
             </Row>
