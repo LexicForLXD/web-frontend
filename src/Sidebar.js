@@ -6,7 +6,7 @@ class Sidebar extends Component {
   constructor(props) {
     super();
     this.state = {
-      selected: ''
+      selected: 'container overview'
     };
   }
 
@@ -19,7 +19,7 @@ class Sidebar extends Component {
 
   render() {
     return (
-      <Nav stacked activeKey={this.state.page} onSelect={this.select}>
+      <Nav stacked activeKey={this.state.selected} onSelect={this.select}>
         <Button type="button" className="Refresh" onClick={this.props.refresh}>
           <i className="fa fa-refresh"></i> Refresh
         </Button>
