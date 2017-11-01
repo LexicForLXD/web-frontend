@@ -13,6 +13,7 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: true,
+      page: 'containers',
       containers: [],
       hosts: [],
       printQueue: []
@@ -91,7 +92,10 @@ class App extends Component {
         </header>
         {this.state.loggedIn &&
           <div className="Navigation">
-            <Navigation print={msg => this.print(msg)} />
+            <Navigation
+              page={this.state.page}
+              setPage={page => this.setState({ page: page })}
+              print={msg => this.print(msg)} />
           </div>
         }
         <Login
@@ -105,6 +109,7 @@ class App extends Component {
             <Row>
               <Col xs={3} md={2}>
                 <Sidebar
+                  page={this.state.page}
                   containers={this.state.containers}
                   hosts={this.state.hosts}
                   print={msg => this.print(msg)}

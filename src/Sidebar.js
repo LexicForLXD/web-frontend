@@ -17,6 +17,31 @@ class Sidebar extends Component {
     this.props.print(`Sidebar: ${key} selected`);
   }
 
+  displayContainers = () =>
+    this.props.containers.map((container, index) =>
+      <NavItem key={index + 1} eventKey={`container ${index + 1}`}>
+        <i className="fa fa-cube"></i> {container.name}
+      </NavItem>
+    );
+
+  displayHosts = () =>
+    this.props.hosts.map((host, index) =>
+      <NavItem key={index} eventKey={`host ${index + 1}`}>
+        <i className="fa fa-server"></i> {host.name}
+      </NavItem>
+    );
+
+  switchPageItems = () => {
+    switch (this.props.page) {
+      case 'containers':
+        return this.displayContainers()
+        break;
+      case 'hosts':
+        return this.displayHosts()
+        break;
+    }
+  }
+
   render() {
     return (
       <Nav stacked activeKey={this.state.selected} onSelect={this.select}>
@@ -26,16 +51,7 @@ class Sidebar extends Component {
         <NavItem key={0} eventKey={'container overview'}>
           <i className="fa fa-desktop"></i> Overview
         </NavItem>
-        {this.props.containers.map((container, index) =>
-          <NavItem key={index + 1} eventKey={`container ${index + 1}`}>
-            <i className="fa fa-cube"></i> {container.name}
-          </NavItem>
-        )}
-        {/* {this.props.hosts.map((host, index) =>
-          <NavItem key={index} eventKey={`host ${index + 1}`}>
-            <i className="fa fa-server"></i> {host.name}
-          </NavItem>
-        )} */}
+        {this.switchPageItems()}
       </Nav>
     );
   }

@@ -5,21 +5,16 @@ import { Navbar, NavDropdown, Nav, NavItem, Button } from 'react-bootstrap';
 class Navigation extends Component {
   constructor(props) {
     super();
-    this.state = {
-      page: 'containers'
-    };
   }
 
   select = (key) => {
-    this.setState({
-      page: key
-    });
+    this.props.setPage(key);
     this.props.print(`Navigation: ${key} selected`);
   }
 
   render() {
     return (
-          <Nav bsStyle="tabs" activeKey={this.state.page} onSelect={this.select}>
+          <Nav bsStyle="tabs" activeKey={this.props.page} onSelect={this.select}>
             <NavItem eventKey={'containers'}>
               <i className="fa fa-cube"></i> Containers
             </NavItem>
