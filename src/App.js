@@ -86,7 +86,6 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <i className="fa fa-cubes fa-5x"></i>
           <h1 className="App-title">LXC Containers</h1>
         </header>
