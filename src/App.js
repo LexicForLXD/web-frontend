@@ -118,6 +118,7 @@ class App extends Component {
               </Col>
               <Col xs={9} md={10}>
                 <Dashboard
+                  page={this.state.page}
                   containers={this.state.containers}
                   print={msg => this.print(msg)}
                 />
