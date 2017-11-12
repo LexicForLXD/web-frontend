@@ -4,7 +4,7 @@ import './App.css';
 import Console from './Console.js';
 import Navigation from './Navigation.js';
 import Sidebar from './Sidebar.js';
-import Dashboard from './Dashboard.js';
+import MainArea from './MainArea.js';
 import Login from './Login.js';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 
@@ -117,7 +117,7 @@ class App extends Component {
                 />
               </Col>
               <Col xs={9} md={10}>
-                <Dashboard
+                <MainArea
                   page={this.state.page}
                   containers={this.state.containers}
                   print={msg => this.print(msg)}

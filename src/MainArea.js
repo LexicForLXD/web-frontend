@@ -3,7 +3,7 @@ import './App.css';
 import Containers from './Containers.js';
 import { Table } from 'react-bootstrap';
 
-class Dashboard extends Component {
+class MainArea extends Component {
   constructor(props) {
     super();
     this.state = {};
@@ -33,4 +33,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default MainArea;
