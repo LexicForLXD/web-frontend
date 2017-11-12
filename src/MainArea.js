@@ -42,11 +42,17 @@ class MainArea extends Component {
   }
 
   componentDidMount() {
-    this.refresh();
+    this.refresh(this.props.page);
   }
 
-  refresh = () => {
-    switch (this.props.page) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.page !== nextProps.page) {
+      this.refresh(nextProps.page);
+    }
+  }
+
+  refresh = (page) => {
+    switch (page) {
       case 'containers':
         this.fetchContainers();
         break;
