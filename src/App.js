@@ -13,62 +13,7 @@ class App extends Component {
     this.state = {
       loggedIn: true,
       page: 'containers',
-      containers: [],
-      hosts: [],
     };
-  }
-
-  componentDidMount() {
-    this.refresh();
-  }
-
-  refresh = () => {
-    this.fetchContainers();
-    this.fetchHosts();
-  }
-
-  fetchContainers = () => {
-    this.setState({
-      containers: [  // To be replaced with a fetch()-from-api method call
-        {
-          name: "Container 1",
-          ip: "10.16.18.20",
-          status: "running"
-        },
-        {
-          name: "Container 2",
-          ip: "10.16.18.21",
-          status: "stopped"
-        },
-        {
-          name: "Container 3",
-          ip: "10.16.18.22",
-          status: "running"
-        }
-      ]
-    })
-  }
-
-  fetchHosts = () => {
-    this.setState({
-      hosts: [  // To be replaced with a fetch()-from-api method call
-        {
-          name: "Host 1",
-          ip: "10.16.18.20",
-          status: "running"
-        },
-        {
-          name: "Host 2",
-          ip: "10.16.18.21",
-          status: "stopped"
-        },
-        {
-          name: "Host 3",
-          ip: "10.16.18.22",
-          status: "running"
-        }
-      ],
-    })
   }
 
   render() {
@@ -94,9 +39,6 @@ class App extends Component {
             <div className="MainArea">
               <MainArea
                 page={this.state.page}
-                containers={this.state.containers}
-                hosts={this.state.hosts}
-                refresh={this.refresh}
               />
             </div>
           </div>
