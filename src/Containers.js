@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Table, Well } from 'react-bootstrap';
 
 class Containers extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class Containers extends Component {
           )}
         </tbody>
       </Table>
-    );
+    )
   }
 }
 

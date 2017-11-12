@@ -6,7 +6,6 @@ import Navigation from './Navigation.js';
 import Sidebar from './Sidebar.js';
 import MainArea from './MainArea.js';
 import Login from './Login.js';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
@@ -16,7 +15,6 @@ class App extends Component {
       page: 'containers',
       containers: [],
       hosts: [],
-      printQueue: []
     };
   }
 
@@ -27,7 +25,6 @@ class App extends Component {
   refresh = () => {
     this.fetchContainers();
     this.fetchHosts();
-    this.print('App: refreshed')
   }
 
   fetchContainers = () => {
@@ -48,7 +45,7 @@ class App extends Component {
           ip: "10.16.18.22",
           status: "running"
         }
-      ],
+      ]
     })
   }
 
@@ -74,15 +71,6 @@ class App extends Component {
     })
   }
 
-  print = (msg) => {
-    const printQueue =
-      msg.constructor === Array ? [...this.state.printQueue, ...msg]
-                                : [...this.state.printQueue, msg];
-    this.setState({
-      printQueue: printQueue.slice(-5)
-    });
-  }
-
   render() {
     return (
       <div className="App">
@@ -90,46 +78,28 @@ class App extends Component {
           <i className="fa fa-cubes fa-5x"></i>
           <h1 className="App-title">LXC Containers</h1>
         </header>
-        {this.state.loggedIn &&
-          <div className="Navigation">
-            <Navigation
-              page={this.state.page}
-              setPage={page => this.setState({ page: page })}
-              print={msg => this.print(msg)} />
-          </div>
-        }
         <Login
           loggedIn={this.state.loggedIn}
           login={() => this.setState({ loggedIn: true })}
           logout={() => this.setState({ loggedIn: false })}
-          print={msg => this.print(msg)}
         />
         {this.state.loggedIn &&
-          <Grid>
-            <Row>
-              <Col xs={3} md={2}>
-                <Sidebar
-                  page={this.state.page}
-                  containers={this.state.containers}
-                  hosts={this.state.hosts}
-                  print={msg => this.print(msg)}
-                  refresh={this.refresh}
-                />
-              </Col>
-              <Col xs={9} md={10}>
-                <MainArea
-                  page={this.state.page}
-                  containers={this.state.containers}
-                  print={msg => this.print(msg)}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
-                <Console printQueue={this.state.printQueue} />
-              </Col>
-            </Row>
-          </Grid>
+          <div>
+            <div className="Navigation">
+              <Navigation
+                page={this.state.page}
+                setPage={page => this.setState({ page: page })}
+              />
+            </div>
+            <div className="MainArea">
+              <MainArea
+                page={this.state.page}
+                containers={this.state.containers}
+                hosts={this.state.hosts}
+                refresh={this.refresh}
+              />
+            </div>
+          </div>
         }
       </div>
     );

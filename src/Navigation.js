@@ -9,7 +9,6 @@ class Navigation extends Component {
 
   select = (key) => {
     this.props.setPage(key);
-    this.props.print(`Navigation: ${key} selected`);
   }
 
   render() {

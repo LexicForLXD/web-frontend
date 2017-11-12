@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
+import Console from './Console.js';
+import Sidebar from './Sidebar.js';
 import Containers from './Containers.js';
-import { Table } from 'react-bootstrap';
+import { Grid, Row, Col, Table, Well } from 'react-bootstrap';
+
+const LoadingView = () =>
+  <Well bsSize="small" className="Console">
+    Loading...
+  </Well>
+
+const ErrorView = () =>
+  <Well bsSize="small" className="Console">
+    Error loading data. Press "Refresh" button to try again.
+  </Well>
 
 class MainArea extends Component {
   constructor(props) {
@@ -20,15 +32,29 @@ class MainArea extends Component {
         break;
       case 'hosts':
         return (
-          <div>Not yet implemented...</div>
-        )
+          <div></div>
+        );
         break;
     }
   }
 
   render() {
     return (
-      <div>{this.switchPageItems()}</div>
+      <Grid>
+        <Row>
+          <Col xs={3} md={2}>
+            <Sidebar
+              page={this.props.page}
+              containers={this.props.containers}
+              hosts={this.props.hosts}
+              refresh={this.props.refresh}
+            />
+          </Col>
+          <Col xs={9} md={10}>
+            {this.switchPageItems()}
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

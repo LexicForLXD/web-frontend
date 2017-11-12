@@ -31,8 +31,11 @@
   text-align: left;
 }
 
+.MainArea {
+  margin-top: 32px;
+}
+
 .Refresh {
-  margin-top: 10px;
   margin-bottom: 20px;
 }
 

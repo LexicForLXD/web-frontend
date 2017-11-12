@@ -14,7 +14,6 @@ class Sidebar extends Component {
     this.setState({
       selected: key
     });
-    this.props.print(`Sidebar: ${key} selected`);
   }
 
   displayContainers = () =>
