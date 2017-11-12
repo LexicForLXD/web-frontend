@@ -34,10 +34,9 @@ class Sidebar extends Component {
     switch (this.props.page) {
       case 'containers':
         return this.displayContainers()
-        break;
       case 'hosts':
         return this.displayHosts()
-        break;
+      default: break;
     }
   }
 

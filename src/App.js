@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import logo from './containers.png';
 import './App.css';
-import Console from './Console.js';
 import Navigation from './Navigation.js';
-import Sidebar from './Sidebar.js';
 import MainArea from './MainArea.js';
 import Login from './Login.js';
 
@@ -14,6 +11,18 @@ class App extends Component {
       loggedIn: true,
       page: 'containers',
     };
+  }
+
+  refresh = () => {
+    switch (this.props.page) {
+      case 'containers':
+        this.fetchContainers();
+        break;
+      case 'hosts':
+        this.fetchHosts();
+        break;
+      default: break;
+    }
   }
 
   render() {

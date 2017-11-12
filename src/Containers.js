@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Table, Well } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 class Containers extends Component {
   constructor(props) {
