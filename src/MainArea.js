@@ -25,22 +25,6 @@ class MainArea extends Component {
     };
   }
 
-  showContent = () => {
-    if (this.state.loading)
-      return <LoadingView />;
-    else if (this.state.error)
-      return <ErrorView />;
-
-    switch (this.props.page) {
-      case 'containers':
-        return <Containers containers={this.state.containers}/>;
-      case 'hosts':
-        return <div></div>;
-      default:
-        return <div></div>
-    }
-  }
-
   componentDidMount() {
     this.refresh(this.props.page);
   }
@@ -117,6 +101,22 @@ class MainArea extends Component {
     })
   }
 
+  addContent = () => {
+    if (this.state.loading)
+      return <LoadingView />;
+    else if (this.state.error)
+      return <ErrorView />;
+
+    switch (this.props.page) {
+      case 'containers':
+        return <Containers containers={this.state.containers}/>;
+      case 'hosts':
+        return <div></div>;
+      default:
+        return <div></div>
+    }
+  }
+
   render() {
     return (
       <Grid>
@@ -130,7 +130,7 @@ class MainArea extends Component {
             />
           </Col>
           <Col xs={9} md={10}>
-            {this.showContent()}
+            {this.addContent()}
           </Col>
         </Row>
       </Grid>

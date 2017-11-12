@@ -14,12 +14,10 @@ class Navigation extends Component {
 
   login = () => {
     this.props.login();
-    this.props.print('Login: logged in')
   }
 
   logout = () => {
     this.props.logout();
-    this.props.print('Login: logged out')
   }
 
   handleUsernameChange = e => {
@@ -37,7 +35,8 @@ class Navigation extends Component {
   render() {
     if (this.props.loggedIn) {
       return (
-        <Button type="btn"
+        <Button
+          type="button"
           className="Logout"
           bsStyle="link"
           onClick={this.logout}>
