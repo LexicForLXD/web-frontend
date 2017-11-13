@@ -5,7 +5,6 @@ import { Table } from 'react-bootstrap';
 class Containers extends Component {
   constructor(props) {
     super();
-    this.state = {};
   }
 
   render() {

@@ -13,18 +13,6 @@ class App extends Component {
     };
   }
 
-  refresh = () => {
-    switch (this.props.page) {
-      case 'containers':
-        this.fetchContainers();
-        break;
-      case 'hosts':
-        this.fetchHosts();
-        break;
-      default: break;
-    }
-  }
-
   render() {
     return (
       <div className="App">

@@ -24,7 +24,7 @@ class Navigation extends Component {
           <i className="fa fa-area-chart"></i> Monitoring
         </NavItem>
         <NavItem eventKey={'log'}>
-          <i className="fa fa-pencil"></i> Log
+          <i className="fa fa-pencil"></i> Logs
         </NavItem>
         <NavItem eventKey={'backup'}>
           <i className="fa fa-hdd-o"></i> Backup
