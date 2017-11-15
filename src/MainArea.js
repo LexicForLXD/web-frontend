@@ -78,33 +78,30 @@ class MainArea extends Component {
     this.setState({
       loading: true
     });
-    this.setState({
-      hosts: [  // To be replaced with a fetch()-from-api method call
-        {
-          "ipv4": "192.168.10.1",
-          "ipv6": "ipv6",
-          "mac": "mac",
-          "name": "Kellerserver1",
-          "settings": "settings"
-        },
-        {
-          "ipv4": "192.168.10.2",
-          "ipv6": "ipv6",
-          "mac": "mac",
-          "name": "Kellerserver3",
-          "settings": "settings"
-        },
-        {
-          "ipv4": "192.168.10.3",
-          "ipv6": "ipv6",
-          "mac": "mac",
-          "name": "Kellerserver5",
-          "settings": "settings"
-        },
-      ],
-      loading: false,
-      error: false
+    const url = 'http://127.0.0.1:8000/hosts';  // Replace in production
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.accessToken}`
+      }
     })
+    .then(response => response.json())
+    .then(json => {
+      console.log('Request succeeded: ', json); // Remove in production
+      this.setState({
+        hosts: json,
+        loading: false,
+        error: false
+      });
+    })
+    .catch(error => {
+      console.log('Request failed: ', error);
+      this.setState({
+        loading: false,
+        error: true
+      });
+    });
   }
 
   showStatus = () => {
