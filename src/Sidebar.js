@@ -32,7 +32,7 @@ class Sidebar extends Component {
 
   mapItems = () =>
     this.props.items.map((item, index) =>
-      <NavItem key={index} eventKey={`item ${index + 1}`}>
+      <NavItem key={index + 2} eventKey={`item ${index + 1}`}>
         <i className={this.props.icon}></i> {item.name}
       </NavItem>
     );
@@ -57,6 +57,11 @@ class Sidebar extends Component {
           {this.props.overview &&
             <NavItem key={0} eventKey={'overview'}>
               <i className="fa fa-desktop"></i> Overview
+            </NavItem>
+          }
+          {this.props.create &&
+            <NavItem key={1} eventKey={'create'}>
+              <i className="fa fa-plus-square"></i> Create
             </NavItem>
           }
           {this.mapItems()}

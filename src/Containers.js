@@ -15,6 +15,7 @@ class Containers extends Component {
           <Sidebar
             refresh={this.props.refresh}
             overview
+            create
             items={this.props.containers}
             icon={'fa fa-cube'}
           />
