@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
 import HostOverview from './HostOverview.js';
+import HostCreate from './HostCreate.js';
 import { Grid, Col, Table } from 'react-bootstrap';
 
 class Hosts extends Component {
@@ -23,7 +24,7 @@ class Hosts extends Component {
       case 'overview':
         return <HostOverview hosts={this.props.hosts} />;
       case 'create':
-        return <div></div>;
+        return <HostCreate />;
       default:
         return <div></div>;
     }
