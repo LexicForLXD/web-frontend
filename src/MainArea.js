@@ -100,14 +100,14 @@ class MainArea extends Component {
     })
   }
 
-  showLoadingStatus = () => {
+  showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
     else if (this.state.error)
       return <ErrorView />;
   }
 
-  showPageContent = () => {
+  showPage = () => {
     switch (this.props.page) {
       case 'containers':
         return <Containers
@@ -124,8 +124,8 @@ class MainArea extends Component {
   render() {
     return (
       <div>
-        {this.showLoadingStatus()}
-        {this.showPageContent()}
+        {this.showStatus()}
+        {this.showPage()}
       </div>
     )
   }

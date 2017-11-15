@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
+import ContainerOverview from './ContainerOverview.js';
 import { Grid, Col, Table } from 'react-bootstrap';
 
 class Containers extends Component {
@@ -17,6 +18,17 @@ class Containers extends Component {
     });
   }
 
+  showItem = () => {
+    switch (this.state.selected) {
+      case 'overview':
+        return <ContainerOverview containers={this.props.containers} />;
+      case 'create':
+        return <div></div>;
+      default:
+        return <div></div>;
+    }
+  }
+
   render() {
     return (
       <Grid>
@@ -31,33 +43,7 @@ class Containers extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          <Table bordered condensed>
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Name</th>
-                <th>IP Address</th>
-                <th>Control</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.containers.map((container, index) =>
-                <tr key={index}>
-                  <td>{container.status}</td>
-                  <td>{container.name}</td>
-                  <td>{container.ip}</td>
-                  <td>
-                    <button type="button" className="btn">
-                      <i className="fa fa-play"></i>
-                    </button>
-                    <button type="button" className="btn">
-                      <i className="fa fa-stop"></i>
-                    </button>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
+          {this.showItem()}
         </Col>
       </Grid>
     )
