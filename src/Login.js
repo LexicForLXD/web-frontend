@@ -35,7 +35,7 @@ class Navigation extends Component {
   submit = () => {
     let access_token = '';
     let refresh_token = '';
-    const url = 'http://127.0.0.1:8000/oauth/v2/token';  // Replace
+    const url = 'http://127.0.0.1:8000/oauth/v2/token';  // Replace in production
     fetch(url, {
       method: 'POST',
       headers: {
@@ -51,11 +51,12 @@ class Navigation extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log('Request succeeded.');
+      console.log('Request succeeded: ', json); // Remove in production
       access_token = json.access_token;
       refresh_token = json.refresh_token;
+      if (json.access_token) this.login();
     })
-    .catch(error => console.log('Request failed: ', error));
+    .catch(error => console.log('Request failed: ', error)); // Remove in production
   }
 
   render() {
