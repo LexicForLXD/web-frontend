@@ -7,8 +7,8 @@ class Navigation extends Component {
   constructor(props) {
     super();
     this.state = {
-      username: 'mmustermann',  // Replace with '' in production
-      password: 'password'      // Replace with '' in production
+      username: '',
+      password: ''
     };
   }
 
