@@ -38,16 +38,16 @@ class MainArea extends Component {
   refresh = (page) => {
     switch (page) {
       case 'containers':
-        this.fetchContainers();
+        this.httpGetContainers();
         break;
       case 'hosts':
-        this.fetchHosts();
+        this.httpGetHosts();
         break;
       default: break;
     }
   }
 
-  fetchContainers = () => {
+  httpGetContainers = () => {
     this.setState({
       loading: true
     });
@@ -74,7 +74,7 @@ class MainArea extends Component {
     })
   }
 
-  fetchHosts = () => {
+  httpGetHosts = () => {
     this.setState({
       loading: true
     });
