@@ -28,6 +28,10 @@ class Navigation extends Component {
     this.setState({ password: e.target.value });
   }
 
+  handleKeyPress = e => {
+    if (e.keyCode == 13) this.submit();
+  }
+
   submit = () => {
     let access_token = '';
     let refresh_token = '';
@@ -78,6 +82,7 @@ class Navigation extends Component {
                     value={this.state.username.value}
                     placeholder="Enter username"
                     onChange={this.handleUsernameChange}
+                    onKeyDown={this.handleKeyPress}
                   />
                   <ControlLabel className="ControlLabel">Password</ControlLabel>
                   <FormControl
@@ -85,6 +90,7 @@ class Navigation extends Component {
                     value={this.state.password.value}
                     placeholder="Enter password"
                     onChange={this.handlePasswordChange}
+                    onKeyDown={this.handleKeyPress}
                   />
                 </FormGroup>
                 <Button type="button" onClick={this.submit}>Submit</Button>
