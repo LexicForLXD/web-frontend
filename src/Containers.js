@@ -6,6 +6,15 @@ import { Grid, Col, Table } from 'react-bootstrap';
 class Containers extends Component {
   constructor(props) {
     super();
+    this.state = {
+      selected: 'overview'
+    };
+  }
+
+  select = (key) => {
+    this.setState({
+      selected: key
+    });
   }
 
   render() {
@@ -18,6 +27,7 @@ class Containers extends Component {
             create
             items={this.props.containers}
             icon={'fa fa-cube'}
+            select={this.select}
           />
         </Col>
         <Col xs={9} md={10}>
