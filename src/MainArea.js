@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Containers from './Containers.js';
+import Hosts from './Hosts.js';
 import { Well } from 'react-bootstrap';
 
 const LoadingView = () =>
@@ -81,18 +82,18 @@ class MainArea extends Component {
       hosts: [  // To be replaced with a fetch()-from-api method call
         {
           name: "Host 1",
-          ip: "10.16.18.20",
-          status: "running"
+          ip: "10.16.12.20",
+          status: "online"
         },
         {
           name: "Host 2",
-          ip: "10.16.18.21",
-          status: "stopped"
+          ip: "10.16.12.21",
+          status: "offline"
         },
         {
-          name: "Host 3",
+          name: "Host 2",
           ip: "10.16.18.22",
-          status: "running"
+          status: "offline"
         }
       ],
       loading: false,
@@ -115,7 +116,10 @@ class MainArea extends Component {
                   containers={this.state.containers}
                 />;
       case 'hosts':
-        return <div></div>;
+      return <Hosts
+                refresh={this.refresh}
+                hosts={this.state.hosts}
+              />;
       default:
         return <div></div>
     }
