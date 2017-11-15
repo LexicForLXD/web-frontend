@@ -12,18 +12,22 @@ class HostOverview extends Component {
       <Table bordered condensed>
         <thead>
           <tr>
-            <th>Status</th>
             <th>Name</th>
-            <th>IP Address</th>
+            <th>IPv4</th>
+            <th>IPv6</th>
+            <th>MAC</th>
+            <th>Settings</th>
             <th>Control</th>
           </tr>
         </thead>
         <tbody>
           {this.props.hosts.map((host, index) =>
             <tr key={index}>
-              <td>{host.status}</td>
               <td>{host.name}</td>
-              <td>{host.ip}</td>
+              <td>{host.ipv4}</td>
+              <td>{host.ipv6}</td>
+              <td>{host.mac}</td>
+              <td>{host.settings}</td>
               <td>
                 <button type="button" className="btn">
                   <i className="fa fa-play"></i>

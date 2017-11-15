@@ -81,20 +81,26 @@ class MainArea extends Component {
     this.setState({
       hosts: [  // To be replaced with a fetch()-from-api method call
         {
-          name: "Host 1",
-          ip: "10.16.12.20",
-          status: "online"
+          "ipv4": "192.168.10.1",
+          "ipv6": "ipv6",
+          "mac": "mac",
+          "name": "Kellerserver1",
+          "settings": "settings"
         },
         {
-          name: "Host 2",
-          ip: "10.16.12.21",
-          status: "offline"
+          "ipv4": "192.168.10.2",
+          "ipv6": "ipv6",
+          "mac": "mac",
+          "name": "Kellerserver3",
+          "settings": "settings"
         },
         {
-          name: "Host 2",
-          ip: "10.16.18.22",
-          status: "offline"
-        }
+          "ipv4": "192.168.10.3",
+          "ipv6": "ipv6",
+          "mac": "mac",
+          "name": "Kellerserver5",
+          "settings": "settings"
+        },
       ],
       loading: false,
       error: false
