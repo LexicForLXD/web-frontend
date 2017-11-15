@@ -115,11 +115,13 @@ class MainArea extends Component {
     switch (this.props.page) {
       case 'containers':
         return <Containers
+                  accessToken={this.props.accessToken}
                   refresh={this.refresh}
                   containers={this.state.containers}
                 />;
       case 'hosts':
       return <Hosts
+                accessToken={this.props.accessToken}
                 refresh={this.refresh}
                 hosts={this.state.hosts}
               />;

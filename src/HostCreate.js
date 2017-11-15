@@ -38,7 +38,45 @@ class HostCreate extends Component {
     if (e.keyCode === 13) this.submit();
   }
 
-  submit = () => {}
+  submit = () => {
+    this.httpPostHost();
+  }
+
+  httpPostHost = () => {
+    this.setState({
+      loading: true
+    });
+    const url = 'http://127.0.0.1:8000/hosts';  // Replace in production
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.accessToken}`
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        ipv4: this.state.ipv4,
+        ipv6: this.state.ipv6,
+        mac: this.state.mac,
+        settings: this.state.settings
+      })
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log('Request succeeded: ', json); // Remove in production
+      this.setState({
+        loading: false,
+        error: false
+      });
+    })
+    .catch(error => {
+      console.log('Request failed: ', error);
+      this.setState({
+        loading: false,
+        error: true
+      });
+    });
+  }
 
   render() {
     return (
@@ -49,7 +87,7 @@ class HostCreate extends Component {
             type="text"
             value={this.state.name.value}
             placeholder="Enter name"
-            onChange={this.handleUsernameChange}
+            onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
@@ -57,7 +95,7 @@ class HostCreate extends Component {
             type='text'
             value={this.state.ipv4.value}
             placeholder="Enter IPv4 address"
-            onChange={this.ipv4Change}
+            onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
           />
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
@@ -65,7 +103,7 @@ class HostCreate extends Component {
             type='text'
             value={this.state.ipv6.value}
             placeholder="Enter IPv6 address"
-            onChange={this.ipv6Change}
+            onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
           />
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
@@ -73,7 +111,7 @@ class HostCreate extends Component {
             type='text'
             value={this.state.mac.value}
             placeholder="Enter MAC address"
-            onChange={this.macChange}
+            onChange={this.handleMacChange}
             onKeyDown={this.handleKeyPress}
           />
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
@@ -81,11 +119,16 @@ class HostCreate extends Component {
             type='text'
             value={this.state.settings.value}
             placeholder="Enter settings"
-            onChange={this.settingsChange}
+            onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
-        <Button type="button" onClick={this.submit}>Submit</Button>
+        <Button
+          type="button"
+          disabled={this.state.name.length < 1}
+          onClick={this.submit}
+          >Submit
+        </Button>
       </form>
     )
   }
