@@ -17,7 +17,6 @@ class HostOverview extends Component {
             <th>IPv6</th>
             <th>MAC</th>
             <th>Settings</th>
-            <th>Control</th>
           </tr>
         </thead>
         <tbody>
@@ -29,14 +28,6 @@ class HostOverview extends Component {
                 <td>{host.ipv6}</td>
                 <td>{host.mac}</td>
                 <td>{host.settings}</td>
-                <td>
-                  <button type="button" className="btn">
-                    <i className="fa fa-play"></i>
-                  </button>
-                  <button type="button" className="btn">
-                    <i className="fa fa-stop"></i>
-                  </button>
-                </td>
               </tr>
             )
           }

@@ -64,6 +64,7 @@ class HostCreate extends Component {
     .then(response => response.json())
     .then(json => {
       console.log('Request succeeded: ', json); // Remove in production
+      this.props.refresh();
       this.setState({
         loading: false,
         error: false

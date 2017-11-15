@@ -24,7 +24,10 @@ class Hosts extends Component {
       case 'overview':
         return <HostOverview hosts={this.props.hosts} />;
       case 'create':
-        return <HostCreate accessToken={this.props.accessToken} />;
+        return <HostCreate
+                 accessToken={this.props.accessToken}
+                 refresh={this.props.refresh}
+               />;
       default:
         return <div></div>;
     }

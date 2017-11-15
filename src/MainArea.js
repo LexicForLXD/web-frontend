@@ -26,7 +26,7 @@ class MainArea extends Component {
   }
 
   componentDidMount() {
-    this.refresh(this.props.page);
+    this.refresh();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,7 +35,7 @@ class MainArea extends Component {
     }
   }
 
-  refresh = (page) => {
+  refresh = (page = this.props.page) => {
     switch (page) {
       case 'containers':
         this.httpGetContainers();
