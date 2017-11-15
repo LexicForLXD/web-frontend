@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Sidebar from './Sidebar.js';
 import Containers from './Containers.js';
-import { Grid, Row, Col, Well } from 'react-bootstrap';
+import { Well } from 'react-bootstrap';
 
 const LoadingView = () =>
   <Well bsSize="small" className="Console">
@@ -101,15 +100,14 @@ class MainArea extends Component {
     })
   }
 
-  addContent = () => {
-  }
-
-  render() {
+  showLoadingStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
     else if (this.state.error)
       return <ErrorView />;
+  }
 
+  showPageContent = () => {
     switch (this.props.page) {
       case 'containers':
         return <Containers
@@ -121,6 +119,15 @@ class MainArea extends Component {
       default:
         return <div></div>
     }
+  }
+
+  render() {
+    return (
+      <div>
+        {this.showLoadingStatus()}
+        {this.showPageContent()}
+      </div>
+    )
   }
 }
 
