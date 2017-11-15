@@ -9,7 +9,7 @@ class App extends Component {
     super();
     this.state = {
       loggedIn: true,
-      page: 'containers',
+      page: 'containers'
     };
   }
 
@@ -24,6 +24,8 @@ class App extends Component {
           loggedIn={this.state.loggedIn}
           login={() => this.setState({ loggedIn: true })}
           logout={() => this.setState({ loggedIn: false })}
+          setAccessToken={token => this.setState({ accessToken: token})}
+          setRefreshToken={token => this.setState({ refreshToken: token})}
         />
         {this.state.loggedIn &&
           <div>
@@ -36,6 +38,8 @@ class App extends Component {
             <div className="MainArea">
               <MainArea
                 page={this.state.page}
+                accessToken={this.state.accessToken}
+                refreshToken={this.state.refreshToken}
               />
             </div>
           </div>
