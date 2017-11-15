@@ -31,7 +31,7 @@ class Sidebar extends Component {
               <i className="fa fa-plus-square"></i> Create
             </NavItem>
           }
-          {this.mapItems()}
+          {this.props.items instanceof Array && this.mapItems()}
         </Nav>
       </div>
     );

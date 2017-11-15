@@ -19,21 +19,23 @@ class ContainerOverview extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.containers.map((container, index) =>
-            <tr key={index}>
-              <td>{container.status}</td>
-              <td>{container.name}</td>
-              <td>{container.ip}</td>
-              <td>
-                <button type="button" className="btn">
-                  <i className="fa fa-play"></i>
-                </button>
-                <button type="button" className="btn">
-                  <i className="fa fa-stop"></i>
-                </button>
-              </td>
-            </tr>
-          )}
+          {this.props.containers instanceof Array &&
+            this.props.containers.map((container, index) =>
+              <tr key={index}>
+                <td>{container.status}</td>
+                <td>{container.name}</td>
+                <td>{container.ip}</td>
+                <td>
+                  <button type="button" className="btn">
+                    <i className="fa fa-play"></i>
+                  </button>
+                  <button type="button" className="btn">
+                    <i className="fa fa-stop"></i>
+                  </button>
+                </td>
+              </tr>
+            )
+          }
         </tbody>
       </Table>
     )
