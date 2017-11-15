@@ -29,7 +29,29 @@ class Navigation extends Component {
   }
 
   submit = () => {
-    this.login();  // To be replaced with authentification logic call
+    let access_token = '';
+    let refresh_token = '';
+    const url = 'http://127.0.0.1:8000/oauth/v2/token';  // Replace
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        grant_type: 'password',
+        client_id: '2_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',
+        client_secret: '4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k',
+        username: this.state.username,
+        password: this.state.password
+      })
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log('Request succeeded.')
+      access_token = json.access_token;
+      refresh_token = json.refresh_token;
+    })
+    .catch(error => console.log('Request failed: ', error));
   }
 
   render() {
