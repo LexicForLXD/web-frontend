@@ -3,7 +3,7 @@ import './App.css';
 import Sidebar from './Sidebar.js';
 import HostOverview from './HostOverview.js';
 import HostCreate from './HostCreate.js';
-import { Grid, Col, Table } from 'react-bootstrap';
+import { Grid, Col } from 'react-bootstrap';
 
 class Hosts extends Component {
   constructor(props) {

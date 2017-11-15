@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
 import ContainerOverview from './ContainerOverview.js';
-import { Grid, Col, Table } from 'react-bootstrap';
+import { Grid, Col } from 'react-bootstrap';
 
 class Containers extends Component {
   constructor(props) {

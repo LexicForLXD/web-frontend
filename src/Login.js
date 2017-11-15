@@ -29,7 +29,7 @@ class Navigation extends Component {
   }
 
   handleKeyPress = e => {
-    if (e.keyCode == 13) this.submit();
+    if (e.keyCode === 13) this.submit();
   }
 
   submit = () => {
