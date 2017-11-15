@@ -11,7 +11,7 @@ const LoadingView = () =>
 
 const ErrorView = () =>
   <Well bsSize="small" className="Console">
-    Error loading data. Press "Refresh" button to try again.
+    Error loading data. Try refreshing.
   </Well>
 
 class MainArea extends Component {
@@ -102,6 +102,9 @@ class MainArea extends Component {
   }
 
   addContent = () => {
+  }
+
+  render() {
     if (this.state.loading)
       return <LoadingView />;
     else if (this.state.error)
@@ -109,32 +112,15 @@ class MainArea extends Component {
 
     switch (this.props.page) {
       case 'containers':
-        return <Containers containers={this.state.containers}/>;
+        return <Containers
+                  refresh={this.refresh}
+                  containers={this.state.containers}
+                />;
       case 'hosts':
         return <div></div>;
       default:
         return <div></div>
     }
-  }
-
-  render() {
-    return (
-      <Grid>
-        <Row>
-          <Col xs={3} md={2}>
-            <Sidebar
-              page={this.props.page}
-              containers={this.state.containers}
-              hosts={this.state.hosts}
-              refresh={this.refresh}
-            />
-          </Col>
-          <Col xs={9} md={10}>
-            {this.addContent()}
-          </Col>
-        </Row>
-      </Grid>
-    );
   }
 }
 

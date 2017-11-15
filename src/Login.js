@@ -47,7 +47,7 @@ class Navigation extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log('Request succeeded.')
+      console.log('Request succeeded.');
       access_token = json.access_token;
       refresh_token = json.refresh_token;
     })
