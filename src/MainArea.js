@@ -18,6 +18,7 @@ class MainArea extends Component {
   constructor(props) {
     super();
     this.state = {
+      url: 'http://127.0.0.1:8000/',  // Replace in production
       loading: false,
       error: false,
       containers: [],
@@ -74,12 +75,11 @@ class MainArea extends Component {
     })
   }
 
-  httpGetHosts = () => {
+  httpGet = (path, processData) => {
     this.setState({
       loading: true
     });
-    const url = 'http://127.0.0.1:8000/hosts';  // Replace in production
-    fetch(url, {
+    fetch(this.state.url + path, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -88,20 +88,29 @@ class MainArea extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log('Request succeeded: ', json); // Remove in production
+      console.log('Request response: ', json); // Remove in production
       this.setState({
-        hosts: json,
         loading: false,
         error: false
       });
+      return json;
     })
+    .then(json => processData(json))
     .catch(error => {
-      console.log('Request failed: ', error);
+      console.log('Request failed: ', error); // Remove in production
       this.setState({
         loading: false,
         error: true
       });
     });
+  }
+
+  httpGetHosts = () => {
+    this.httpGet('hosts', json => {
+      this.setState({
+        hosts: json
+      })
+    })
   }
 
   showStatus = () => {
