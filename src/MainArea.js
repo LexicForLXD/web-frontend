@@ -75,7 +75,7 @@ class MainArea extends Component {
     })
   }
 
-  httpRequest = (method, path, processData) => {
+  httpRequest = (method, path, processData, body) => {
     this.setState({
       loading: true
     });
@@ -84,7 +84,8 @@ class MainArea extends Component {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.props.accessToken}`
-      }
+      },
+      body: body
     })
     .then(response => response.json())
     .then(json => {

@@ -39,44 +39,18 @@ class HostCreate extends Component {
   }
 
   submit = () => {
-    this.httpPostHost();
+    this.httpPostHosts();
   }
 
-  httpPostHost = () => {
-    this.setState({
-      loading: true
+  httpPostHosts = () => {
+    const body = JSON.stringify({
+      name: this.state.name,
+      ipv4: this.state.ipv4,
+      ipv6: this.state.ipv6,
+      mac: this.state.mac,
+      settings: this.state.settings
     });
-    const url = 'http://127.0.0.1:8000/hosts';  // Replace in production
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.props.accessToken}`
-      },
-      body: JSON.stringify({
-        name: this.state.name,
-        ipv4: this.state.ipv4,
-        ipv6: this.state.ipv6,
-        mac: this.state.mac,
-        settings: this.state.settings
-      })
-    })
-    .then(response => response.json())
-    .then(json => {
-      console.log('Request succeeded: ', json); // Remove in production
-      this.props.refresh();
-      this.setState({
-        loading: false,
-        error: false
-      });
-    })
-    .catch(error => {
-      console.log('Request failed: ', error);
-      this.setState({
-        loading: false,
-        error: true
-      });
-    });
+    this.props.httpRequest('POST', 'hosts', () => this.props.refresh(), body);
   }
 
   render() {

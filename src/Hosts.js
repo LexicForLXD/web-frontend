@@ -28,6 +28,7 @@ class Hosts extends Component {
         return <HostCreate
                  accessToken={this.props.accessToken}
                  refresh={this.props.refresh}
+                 httpRequest={this.props.httpRequest}
                />;
       default:
         return <Host
