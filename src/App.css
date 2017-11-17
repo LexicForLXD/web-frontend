@@ -38,7 +38,11 @@
   margin-top: 32px;
 }
 
-.Refresh {
+.RefreshBtn {
+  margin-bottom: 20px;
+}
+
+.DeleteBtn {
   margin-bottom: 20px;
 }
 

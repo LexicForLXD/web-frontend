@@ -17,7 +17,7 @@ class Sidebar extends Component {
   render() {
     return (
       <div>
-        <Button type="button" className="Refresh" onClick={() => this.props.refresh()}>
+        <Button type="button" className="RefreshBtn" onClick={() => this.props.refresh()}>
           <i className="fa fa-refresh"></i> Refresh
         </Button>
         <Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
