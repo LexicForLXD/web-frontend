@@ -125,14 +125,15 @@ class MainArea extends Component {
       case 'containers':
         return <Containers
                   accessToken={this.props.accessToken}
-                  refresh={this.refresh}
                   containers={this.state.containers}
+                  refresh={this.refresh}
                 />;
       case 'hosts':
       return <Hosts
                 accessToken={this.props.accessToken}
-                refresh={this.refresh}
                 hosts={this.state.hosts}
+                refresh={this.refresh}
+                httpRequest={this.httpRequest}
               />;
       default:
         return <div></div>

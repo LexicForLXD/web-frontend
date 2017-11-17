@@ -9,7 +9,7 @@ class Sidebar extends Component {
 
   mapItems = () =>
     this.props.items.map((item, index) =>
-      <NavItem key={index + 2} eventKey={`item ${index + 1}`}>
+      <NavItem key={index + 2} eventKey={index}>
         <i className={this.props.icon}></i> {item.name}
       </NavItem>
     );

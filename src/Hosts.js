@@ -3,6 +3,7 @@ import './App.css';
 import Sidebar from './Sidebar.js';
 import HostOverview from './HostOverview.js';
 import HostCreate from './HostCreate.js';
+import Host from './Host.js';
 import { Grid, Col } from 'react-bootstrap';
 
 class Hosts extends Component {
@@ -29,7 +30,7 @@ class Hosts extends Component {
                  refresh={this.props.refresh}
                />;
       default:
-        return <div></div>;
+        return <Host host={this.props.hosts[this.state.selected]}/>;
     }
   }
 
