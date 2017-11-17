@@ -43,10 +43,18 @@ class Host extends Component {
             </tr>
           </tbody>
         </Table>
-        <Button type="button" className="Button" onClick={() => this.toggleEditView()}>
+        <Button
+          type="button"
+          className="Button"
+          onClick={() => this.toggleEditView()}
+        >
           <i className="fa fa-edit"></i> Edit Host
         </Button>
-        <Button type="button" className="Button" onClick={() => this.httpDeleteHost()}>
+        <Button
+          type="button"
+          className="Button"
+          onClick={() => this.httpDeleteHost()}
+        >
           <i className="fa fa-trash"></i> Delete Host
         </Button>
         {this.state.editView &&

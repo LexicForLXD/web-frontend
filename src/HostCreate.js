@@ -98,7 +98,11 @@ class HostCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
-        <Button type="button" disabled={this.state.name.length < 1} onClick={this.submit}>
+        <Button
+          type="button"
+          disabled={this.state.name.length < 1}
+          onClick={this.submit}
+        >
           Submit
         </Button>
       </form>
