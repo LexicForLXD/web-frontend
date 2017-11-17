@@ -75,7 +75,7 @@ class MainArea extends Component {
     })
   }
 
-  httpRequest = (method, path, processData, body) => {
+  httpRequest = (method, path, body, callbackFunction) => {
     this.setState({
       loading: true
     });
@@ -87,16 +87,24 @@ class MainArea extends Component {
       },
       body: body
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log('Request response: ', response); // Remove in production
+      let contentType = response.headers.get("content-type");
+      if(contentType && contentType.includes("application/json")) {
+        return response.json();
+      }
+      return {};
+    })
     .then(json => {
-      console.log('Request response: ', json); // Remove in production
+      console.log('Response body: ', json); // Remove in production
+      callbackFunction(json);
+    })
+    .then(() => {
       this.setState({
         loading: false,
         error: false
       });
-      return json;
     })
-    .then(json => processData(json))
     .catch(error => {
       console.log('Request failed: ', error); // Remove in production
       this.setState({
@@ -107,7 +115,7 @@ class MainArea extends Component {
   }
 
   httpGetHosts = () => {
-    this.httpRequest('GET', 'hosts', json => {
+    this.httpRequest('GET', 'hosts', {}, json => {
       this.setState({
         hosts: json
       })

@@ -50,7 +50,7 @@ class HostCreate extends Component {
       mac: this.state.mac,
       settings: this.state.settings
     });
-    this.props.httpRequest('POST', 'hosts', () => this.props.refresh(), body);
+    this.props.httpRequest('POST', 'hosts', body, () => this.props.refresh());
   }
 
   render() {

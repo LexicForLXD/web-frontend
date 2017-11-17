@@ -50,8 +50,8 @@ class HostEdit extends Component {
       mac: this.state.mac,
       settings: this.state.settings
     });
-    this.props.httpRequest('PUT', `hosts/${this.props.host.id}`,
-      () => this.props.refresh(), body);
+    this.props.httpRequest('PUT', `hosts/${this.props.host.id}`, body,
+      () => this.props.refresh());
   }
 
   render() {

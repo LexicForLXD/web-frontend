@@ -35,6 +35,7 @@ class Hosts extends Component {
                  host={this.props.hosts[this.state.selected]}
                  refresh={this.props.refresh}
                  httpRequest={this.props.httpRequest}
+                 goBack={() => this.select('overview')}
                />;
     }
   }
