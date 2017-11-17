@@ -75,12 +75,12 @@ class MainArea extends Component {
     })
   }
 
-  httpGet = (path, processData) => {
+  httpRequest = (method, path, processData) => {
     this.setState({
       loading: true
     });
     fetch(this.state.url + path, {
-      method: 'GET',
+      method: method,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.props.accessToken}`
@@ -106,7 +106,7 @@ class MainArea extends Component {
   }
 
   httpGetHosts = () => {
-    this.httpGet('hosts', json => {
+    this.httpRequest('GET', 'hosts', json => {
       this.setState({
         hosts: json
       })
