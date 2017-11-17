@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-class HostCreate extends Component {
+class HostEdit extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      name: '',
-      ipv4: '',
-      ipv6: '',
-      mac: '',
-      settings: ''
+      name: this.props.host.name,
+      ipv4: this.props.host.ipv4,
+      ipv6: this.props.host.ipv6,
+      mac: this.props.host.mac,
+      settings: this.props.host.settings
     };
   }
 
@@ -39,10 +39,10 @@ class HostCreate extends Component {
   }
 
   submit = () => {
-    this.httpPostHost();
+    this.httpPutHost();
   }
 
-  httpPostHost = () => {
+  httpPutHost = () => {
     const body = JSON.stringify({
       name: this.state.name,
       ipv4: this.state.ipv4,
@@ -50,7 +50,8 @@ class HostCreate extends Component {
       mac: this.state.mac,
       settings: this.state.settings
     });
-    this.props.httpRequest('POST', 'hosts', () => this.props.refresh(), body);
+    this.props.httpRequest('PUT', `hosts/${this.props.host.id}`,
+      () => this.props.refresh(), body);
   }
 
   render() {
@@ -60,6 +61,7 @@ class HostCreate extends Component {
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
+            defaultValue={this.state.name}
             value={this.state.name.value}
             placeholder="Enter name"
             onChange={this.handleNameChange}
@@ -68,6 +70,7 @@ class HostCreate extends Component {
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
             type='text'
+            defaultValue={this.state.ipv4}
             value={this.state.ipv4.value}
             placeholder="Enter IPv4 address"
             onChange={this.handleIpv4Change}
@@ -76,6 +79,7 @@ class HostCreate extends Component {
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
           <FormControl
             type='text'
+            defaultValue={this.state.ipv6}
             value={this.state.ipv6.value}
             placeholder="Enter IPv6 address"
             onChange={this.handleIpv6Change}
@@ -84,6 +88,7 @@ class HostCreate extends Component {
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
           <FormControl
             type='text'
+            defaultValue={this.state.mac}
             value={this.state.mac.value}
             placeholder="Enter MAC address"
             onChange={this.handleMacChange}
@@ -92,6 +97,7 @@ class HostCreate extends Component {
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
+            defaultValue={this.state.settings}
             value={this.state.settings.value}
             placeholder="Enter settings"
             onChange={this.handleSettingsChange}
@@ -106,4 +112,4 @@ class HostCreate extends Component {
   }
 }
 
-export default HostCreate;
+export default HostEdit;

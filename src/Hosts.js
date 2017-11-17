@@ -33,6 +33,7 @@ class Hosts extends Component {
       default:
         return <Host
                  host={this.props.hosts[this.state.selected]}
+                 refresh={this.props.refresh}
                  httpRequest={this.props.httpRequest}
                />;
     }

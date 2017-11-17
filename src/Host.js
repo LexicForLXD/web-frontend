@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
+import HostEdit from './HostEdit.js';
 import { Table, Button } from 'react-bootstrap';
 
 class Host extends Component {
   constructor(props) {
     super();
+    this.state = {
+      editView: false
+    }
+  }
+
+  toggleEditView = () => {
+    this.setState({ editView: !this.state.editView });
   }
 
   httpDeleteHost = () => {
@@ -35,9 +43,19 @@ class Host extends Component {
             </tr>
           </tbody>
         </Table>
-        <Button type="button" className="DeleteBtn" onClick={() => this.httpDeleteHost()}>
+        <Button type="button" className="Button" onClick={() => this.toggleEditView()}>
+          <i className="fa fa-edit"></i> Edit Host
+        </Button>
+        <Button type="button" className="Button" onClick={() => this.httpDeleteHost()}>
           <i className="fa fa-trash"></i> Delete Host
         </Button>
+        {this.state.editView &&
+          <HostEdit
+            host={this.props.host}
+            refresh={this.props.refresh}
+            httpRequest={this.props.httpRequest}
+          />
+        }
       </div>
     )
   }

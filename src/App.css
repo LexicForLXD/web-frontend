@@ -42,8 +42,10 @@
   margin-bottom: 20px;
 }
 
-.DeleteBtn {
+.Button {
   margin-bottom: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .Logout {
