@@ -26,7 +26,7 @@ class Host extends Component {
   render() {
     return (
       <div>
-        <Table bordered condensed>
+        <Table bordered condensed responsive>
           <thead>
             <tr>
               <th>Name</th>

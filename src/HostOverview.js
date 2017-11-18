@@ -9,7 +9,7 @@ class HostOverview extends Component {
 
   render() {
     return (
-      <Table bordered condensed>
+      <Table bordered condensed responsive>
         <thead>
           <tr>
             <th>Name</th>

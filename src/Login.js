@@ -63,7 +63,8 @@ class Navigation extends Component {
         <Button
           type="button"
           className="Logout"
-          bsStyle="link"
+          // bsStyle="link"
+          bsSize="xsmall"
           onClick={this.logout}>
           Logout
         </Button>
