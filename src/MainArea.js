@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Containers from './Containers.js';
+// import Containers from './Containers.js';
 import Hosts from './Hosts.js';
 import { Well } from 'react-bootstrap';
 
@@ -48,33 +48,6 @@ class MainArea extends Component {
     }
   }
 
-  httpGetContainers = () => {
-    this.setState({
-      loading: true
-    });
-    this.setState({
-      containers: [  // To be replaced with a fetch()-from-api method call
-        {
-          name: "Container 1",
-          ip: "10.16.18.20",
-          status: "running"
-        },
-        {
-          name: "Container 2",
-          ip: "10.16.18.21",
-          status: "stopped"
-        },
-        {
-          name: "Container 3",
-          ip: "10.16.18.22",
-          status: "running"
-        }
-      ],
-      loading: false,
-      error: false
-    })
-  }
-
   httpRequest = (method, path, body, callbackFunction) => {
     this.setState({
       loading: true
@@ -88,15 +61,15 @@ class MainArea extends Component {
       body: body
     })
     .then(response => {
-      console.log('Request response: ', response); // Remove in production
-      let contentType = response.headers.get("content-type");
+      console.log('Request response: ', response);  // Remove in production
+      const contentType = response.headers.get("content-type");
       if(contentType && contentType.includes("application/json")) {
         return response.json();
       }
       return {};
     })
     .then(json => {
-      console.log('Response body: ', json); // Remove in production
+      console.log('Response body: ', json);  // Remove in production
       callbackFunction(json);
     })
     .then(() => {
@@ -113,6 +86,8 @@ class MainArea extends Component {
       });
     });
   }
+
+  httpGetContainers = () => {};
 
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', {}, json => {
@@ -132,11 +107,7 @@ class MainArea extends Component {
   showPage = () => {
     switch (this.props.page) {
       case 'containers':
-        return <Containers
-                  accessToken={this.props.accessToken}
-                  containers={this.state.containers}
-                  refresh={this.refresh}
-                />;
+        return <div></div>
       case 'hosts':
       return <Hosts
                 accessToken={this.props.accessToken}
