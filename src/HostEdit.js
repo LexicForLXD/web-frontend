@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class HostEdit extends Component {
   constructor(props) {
@@ -10,7 +10,12 @@ class HostEdit extends Component {
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
       mac: this.props.host.mac,
-      settings: this.props.host.settings
+      settings: this.props.host.settings,
+      errorName: null,
+      errorIpv4: null,
+      errorIpv6: null,
+      errorMac: null,
+      errorSettings: null
     };
   }
 
@@ -35,7 +40,9 @@ class HostEdit extends Component {
   }
 
   handleKeyPress = e => {
-    if (e.keyCode === 13) this.submit();
+    if (e.keyCode === 13 && this.state.name.length > 0) {
+      this.submit();
+    }
   }
 
   submit = () => {
@@ -50,14 +57,29 @@ class HostEdit extends Component {
       mac: this.state.mac,
       settings: this.state.settings
     });
-    this.props.httpRequest('PUT', `hosts/${this.props.host.id}`, body,
-      () => this.props.refresh());
+    const callbackFunction = json => {
+      if (json.errors) {
+        this.setState({
+          errorName: json.errors.name,
+          errorIpv4: json.errors.ipv4,
+          errorIpv6: json.errors.ipv6,
+          errorMac: json.errors.mac,
+          errorSettings: json.errors.settings
+        });
+      } else {
+        this.props.goBack();
+      }
+      this.props.refresh();
+    }
+    this.props.httpRequest(
+      'PUT', `hosts/${this.props.host.id}`, body, callbackFunction
+    );
   }
 
   render() {
     return (
       <form>
-        <FormGroup controlId="formBasicText">
+        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
@@ -67,6 +89,9 @@ class HostEdit extends Component {
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
             type='text'
@@ -76,6 +101,9 @@ class HostEdit extends Component {
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorIpv4}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formIpv6" validationState={this.state.errorIpv6 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
           <FormControl
             type='text'
@@ -85,6 +113,9 @@ class HostEdit extends Component {
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorIpv6}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
           <FormControl
             type='text'
@@ -94,6 +125,9 @@ class HostEdit extends Component {
             onChange={this.handleMacChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorMac}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
@@ -103,8 +137,13 @@ class HostEdit extends Component {
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorSettings}</HelpBlock>
         </FormGroup>
-        <Button type="button" disabled={this.state.name.length < 1} onClick={this.submit}>
+        <Button
+          type="button"
+          disabled={this.state.name.length < 1}
+          onClick={this.submit}
+        >
           Submit
         </Button>
       </form>

@@ -64,6 +64,7 @@ class Host extends Component {
           <HostEdit
             host={this.props.host}
             refresh={this.props.refresh}
+            goBack={this.props.goBack}
             httpRequest={this.props.httpRequest}
           />
         }

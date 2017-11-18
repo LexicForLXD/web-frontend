@@ -29,6 +29,7 @@ class Hosts extends Component {
                  accessToken={this.props.accessToken}
                  refresh={this.props.refresh}
                  httpRequest={this.props.httpRequest}
+                 goBack={() => this.select('overview')}
                />;
       default:
         return <Host

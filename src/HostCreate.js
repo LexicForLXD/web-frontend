@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class HostCreate extends Component {
   constructor(props) {
@@ -10,7 +10,12 @@ class HostCreate extends Component {
       ipv4: '',
       ipv6: '',
       mac: '',
-      settings: ''
+      settings: '',
+      errorName: null,
+      errorIpv4: null,
+      errorIpv6: null,
+      errorMac: null,
+      errorSettings: null
     };
   }
 
@@ -35,7 +40,9 @@ class HostCreate extends Component {
   }
 
   handleKeyPress = e => {
-    if (e.keyCode === 13) this.submit();
+    if (e.keyCode === 13 && this.state.name.length > 0) {
+      this.submit();
+    }
   }
 
   submit = () => {
@@ -50,13 +57,27 @@ class HostCreate extends Component {
       mac: this.state.mac,
       settings: this.state.settings
     });
-    this.props.httpRequest('POST', 'hosts', body, () => this.props.refresh());
+    const callbackFunction = json => {
+      if (json.errors) {
+        this.setState({
+          errorName: json.errors.name,
+          errorIpv4: json.errors.ipv4,
+          errorIpv6: json.errors.ipv6,
+          errorMac: json.errors.mac,
+          errorSettings: json.errors.settings
+        });
+      } else {
+        this.props.goBack();
+      }
+      this.props.refresh();
+    }
+    this.props.httpRequest('POST', 'hosts', body, callbackFunction);
   }
 
   render() {
     return (
       <form>
-        <FormGroup controlId="formBasicText">
+        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
@@ -65,6 +86,9 @@ class HostCreate extends Component {
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
             type='text'
@@ -73,6 +97,9 @@ class HostCreate extends Component {
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorIpv4}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formIpv6" validationState={this.state.errorIpv6 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
           <FormControl
             type='text'
@@ -81,6 +108,9 @@ class HostCreate extends Component {
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorIpv6}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
           <FormControl
             type='text'
@@ -89,6 +119,9 @@ class HostCreate extends Component {
             onChange={this.handleMacChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorMac}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
@@ -97,6 +130,7 @@ class HostCreate extends Component {
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorSettings}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
