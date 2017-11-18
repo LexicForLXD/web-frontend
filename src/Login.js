@@ -82,6 +82,7 @@ class Navigation extends Component {
                     placeholder="Enter username"
                     onChange={this.handleUsernameChange}
                     onKeyDown={this.handleKeyPress}
+                    autoFocus
                   />
                   <ControlLabel className="ControlLabel">Password</ControlLabel>
                   <FormControl

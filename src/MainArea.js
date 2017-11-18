@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 // import Containers from './Containers.js';
 import Hosts from './Hosts.js';
-import { Well } from 'react-bootstrap';
+import { Well, Grid, Col } from 'react-bootstrap';
 
 const LoadingView = () =>
   <Well bsSize="small" className="Console">
@@ -123,8 +123,12 @@ class MainArea extends Component {
   render() {
     return (
       <div>
-        {this.showStatus()}
         {this.showPage()}
+        <Grid>
+          <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
+            {this.showStatus()}
+          </Col>
+        </Grid>
       </div>
     )
   }
