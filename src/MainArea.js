@@ -90,7 +90,7 @@ class MainArea extends Component {
   httpGetContainers = () => {};
 
   httpGetHosts = () => {
-    this.httpRequest('GET', 'hosts', {}, json => {
+    this.httpRequest('GET', 'hosts', null, json => {
       this.setState({
         hosts: json
       })
