@@ -32,6 +32,7 @@ class Host extends Component {
               <th>Name</th>
               <th>IPv4</th>
               <th>IPv6</th>
+              <th>Domain Name</th>
               <th>MAC</th>
               <th>Settings</th>
             </tr>
@@ -41,6 +42,7 @@ class Host extends Component {
               <td>{this.props.host.name}</td>
               <td>{this.props.host.ipv4}</td>
               <td>{this.props.host.ipv6}</td>
+              <td>{this.props.host.domain_name}</td>
               <td>{this.props.host.mac}</td>
               <td>{this.props.host.settings}</td>
             </tr>

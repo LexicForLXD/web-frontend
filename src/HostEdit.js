@@ -9,11 +9,13 @@ class HostEdit extends Component {
       name: this.props.host.name,
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
+      domain_name: this.props.host.domain_name,
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
+      errorDomainName: null,
       errorMac: null,
       errorSettings: null
     };
@@ -29,6 +31,10 @@ class HostEdit extends Component {
 
   handleIpv6Change = e => {
     this.setState({ ipv6: e.target.value });
+  }
+
+  handleDomainNameChange = e => {
+    this.setState({ domain_name: e.target.value });
   }
 
   handleMacChange = e => {
@@ -54,6 +60,7 @@ class HostEdit extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
+      domain_name: this.state.domain_name,
       mac: this.state.mac,
       settings: this.state.settings
     });
@@ -63,6 +70,7 @@ class HostEdit extends Component {
           errorName: json.errors.name,
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
+          errorDomainName: json.errors.domain_name,
           errorMac: json.errors.mac,
           errorSettings: json.errors.settings
         });
@@ -114,6 +122,18 @@ class HostEdit extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorIpv6}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formDomainName" validationState={this.state.errorDomainName ? 'error' : null}>
+          <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
+          <FormControl
+            type='text'
+            defaultValue={this.state.domain_name}
+            value={this.state.domain_name.value}
+            placeholder="Enter domain name"
+            onChange={this.handleDomainNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
         <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
