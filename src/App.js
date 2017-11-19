@@ -18,7 +18,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <i className="fa fa-cubes fa-5x"></i>
-          <h1 className="App-title">LXC Containers</h1>
+          <h1 className="App-title">Lexic</h1>
         </header>
         <Login
           loggedIn={this.state.loggedIn}
