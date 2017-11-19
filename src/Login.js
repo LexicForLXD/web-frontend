@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl,
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
          Grid, Row, Col } from 'react-bootstrap';
 
 class Navigation extends Component {
@@ -8,7 +8,8 @@ class Navigation extends Component {
     super();
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      errorDescription: null
     };
   }
 
@@ -49,7 +50,8 @@ class Navigation extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log('Request succeeded: ', json); // Remove in production
+      console.log('Response body: ', json); // Remove in production
+      this.setState({ errorDescription: json.error_description });
       this.props.setAccessToken(json.access_token);
       this.props.setRefreshToken(json.refresh_token);
       if (json.access_token) this.login();
@@ -63,7 +65,6 @@ class Navigation extends Component {
         <Button
           type="button"
           className="Logout"
-          // bsStyle="link"
           bsSize="xsmall"
           onClick={this.logout}>
           Logout
@@ -75,7 +76,7 @@ class Navigation extends Component {
           <Row>
             <Col xs={6} xsOffset={3}>
               <form>
-                <FormGroup controlId="formBasicText">
+                <FormGroup controlId="formLogin" validationState={this.state.errorDescription ? 'error' : null}>
                   <ControlLabel>Username</ControlLabel>
                   <FormControl
                     type="text"
@@ -93,6 +94,7 @@ class Navigation extends Component {
                     onChange={this.handlePasswordChange}
                     onKeyDown={this.handleKeyPress}
                   />
+                  <HelpBlock>{this.state.errorDescription}</HelpBlock>
                 </FormGroup>
                 <Button type="button" onClick={this.submit}>Submit</Button>
               </form>
