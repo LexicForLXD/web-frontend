@@ -70,7 +70,7 @@ class HostCreate extends Component {
           errorName: json.errors.name,
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
-          errorDomainName: json.errors.domain_name,
+          errorDomainName: json.errors.domainName,
           errorMac: json.errors.mac,
           errorSettings: json.errors.settings
         });
