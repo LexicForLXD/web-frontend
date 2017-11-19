@@ -18,7 +18,7 @@ class MainArea extends Component {
   constructor(props) {
     super();
     this.state = {
-      url: 'http://127.0.0.1:8000/',  // Replace in production
+      url: 'https://lxd-api.lleon.de/',  // Replace in production
       loading: false,
       error: false,
       containers: [],
