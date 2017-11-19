@@ -16,7 +16,7 @@ class Host extends Component {
   }
 
   httpDeleteHost = () => {
-    this.props.httpRequest('DELETE', `hosts/${this.props.host.id}`, {}, () => {
+    this.props.httpRequest('DELETE', `hosts/${this.props.host.id}`, null, () => {
         this.props.goBack();
         this.props.refresh();
       }
