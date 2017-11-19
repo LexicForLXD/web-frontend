@@ -33,7 +33,7 @@ class Navigation extends Component {
   }
 
   submit = () => {
-    const url = 'https://lxd-api.lleon.de/';  // Replace in production
+    const url = 'https://lxd-api.lleon.de/oauth/v2/token';  // Replace in production
     fetch(url, {
       method: 'POST',
       headers: {
