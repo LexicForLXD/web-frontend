@@ -7,10 +7,31 @@ import Login from './Login.js';
 class App extends Component {
   constructor() {
     super();
+    const accessToken = localStorage.getItem('accessToken');
     this.state = {
-      loggedIn: false,
-      page: 'containers'
+      page: 'containers',
+      accessToken: accessToken,
+      refreshToken: localStorage.getItem('refreshToken'),
+      loggedIn: accessToken ? true : false
     };
+  }
+
+  setAccessToken = token => {
+    this.setState({ accessToken: token });
+    localStorage.setItem('accessToken', token);
+  }
+
+  setRefreshToken = token => {
+    this.setState({ refreshToken: token });
+    localStorage.setItem('refreshToken', token);
+  }
+
+  login = () => this.setState({ loggedIn: true });
+
+  logout = () => {
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    this.setState({ loggedIn: false });
   }
 
   render() {
@@ -22,10 +43,10 @@ class App extends Component {
         </header>
         <Login
           loggedIn={this.state.loggedIn}
-          login={() => this.setState({ loggedIn: true })}
-          logout={() => this.setState({ loggedIn: false })}
-          setAccessToken={token => this.setState({ accessToken: token})}
-          setRefreshToken={token => this.setState({ refreshToken: token})}
+          login={this.login}
+          logout={this.logout}
+          setAccessToken={this.setAccessToken}
+          setRefreshToken={this.setRefreshToken}
         />
         {this.state.loggedIn &&
           <div>
