@@ -61,6 +61,7 @@ class App extends Component {
                 page={this.state.page}
                 accessToken={this.state.accessToken}
                 refreshToken={this.state.refreshToken}
+                logout={this.logout}
               />
             </div>
           </div>

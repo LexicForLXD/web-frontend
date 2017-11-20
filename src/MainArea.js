@@ -62,6 +62,9 @@ class MainArea extends Component {
     })
     .then(response => {
       console.log('Request response: ', response);  // Remove in production
+      if (response.status === 401) {
+        this.props.logout();  // TODO try using refresh token before logging out
+      };
       const contentType = response.headers.get("content-type");
       if(contentType && contentType.includes("application/json")) {
         return response.json();
