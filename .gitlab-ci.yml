@@ -31,4 +31,4 @@ Deployment:
     - ssh deploy@173.249.11.123 "echo $SUDO_PASS | sudo -S rm -rf /var/www/html/*"
 
     # copy new files
-    - ssh deploy@173.249.11.123 "cp -a /home/deploy/syp-lxc/Frontend/build/* /var/www/html/"
+    - ssh deploy@173.249.11.123 "echo $SUDO_PASS | sudo -S cp -a /home/deploy/syp-lxc/Frontend/build/* /var/www/html/"
