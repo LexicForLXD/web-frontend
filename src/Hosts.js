@@ -5,6 +5,8 @@ import HostOverview from './HostOverview.js';
 import HostCreate from './HostCreate.js';
 import Host from './Host.js';
 import { Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import queryString from 'query-string';
 
 class Hosts extends Component {
   constructor(props) {
@@ -12,6 +14,10 @@ class Hosts extends Component {
     this.state = {
       selected: 'overview'
     };
+  }
+
+  componentDidMount() {
+    this.props.refresh();
   }
 
   select = (key) => {
@@ -46,6 +52,7 @@ class Hosts extends Component {
       <Grid>
         <Col xs={3} md={2}>
           <Sidebar
+            parent="hosts"
             refresh={this.props.refresh}
             overview
             create
@@ -55,7 +62,30 @@ class Hosts extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          {this.showItem()}
+          {/* {this.showItem()} */}
+          <Route
+            path="/hosts/overview"
+            render={() => <HostOverview hosts={this.props.hosts} />}
+          />
+          <Route
+            path="/hosts/create"
+            render={() => <HostCreate
+                            accessToken={this.props.accessToken}
+                            refresh={this.props.refresh}
+                            httpRequest={this.props.httpRequest}
+                            goBack={() => this.select('overview')}
+                          />}
+          />
+          <Route
+            path="/hosts/show"
+            render={() => <Host
+                            // host={this.props.hosts[this.state.selected]}
+                            host={this.props.hosts.find(host => host.name === queryString.parse(window.location.search).name)}
+                            refresh={this.props.refresh}
+                            httpRequest={this.props.httpRequest}
+                            goBack={() => this.select('overview')}
+                          />}
+          />
         </Col>
       </Grid>
     )
