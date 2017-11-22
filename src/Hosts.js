@@ -10,20 +10,30 @@ import queryString from 'query-string';
 
 class Hosts extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      selected: 'overview'
+      selected: 'overview',
+      hosts: []
     };
   }
 
   componentDidMount() {
-    this.props.refresh();
+    this.httpGetHosts();
   }
 
-  select = (key) => {
-    this.setState({
-      selected: key
-    });
+  goToOverview = () => {
+    window.location.href = '/hosts/overview';
+    // history.push('/hosts/overview');
+    // this.props.history.push('/hosts/overview');
+    // withRouter(({ history }) => history.push('/hosts/overview'));
+  }
+
+  httpGetHosts = () => {
+    this.props.httpRequest('GET', 'hosts', null, json => {
+      this.setState({
+        hosts: json
+      })
+    })
   }
 
   showItem = () => {
@@ -33,16 +43,15 @@ class Hosts extends Component {
       case 'create':
         return <HostCreate
                  accessToken={this.props.accessToken}
-                 refresh={this.props.refresh}
+                 httpGetHosts={this.httpGetHosts}
                  httpRequest={this.props.httpRequest}
-                 goBack={() => this.select('overview')}
+                 goToOverview={this.goToOverview}
                />;
       default:
         return <Host
                  host={this.props.hosts[this.state.selected]}
-                 refresh={this.props.refresh}
+                 httpGetHosts={this.httpGetHosts}
                  httpRequest={this.props.httpRequest}
-                 goBack={() => this.select('overview')}
                />;
     }
   }
@@ -53,37 +62,35 @@ class Hosts extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="hosts"
-            refresh={this.props.refresh}
+            refresh={this.httpGetHosts}
             overview
             create
-            items={this.props.hosts}
+            items={this.state.hosts}
             icon={'fa fa-server'}
             select={this.select}
           />
         </Col>
         <Col xs={9} md={10}>
-          {/* {this.showItem()} */}
           <Route
             path="/hosts/overview"
-            render={() => <HostOverview hosts={this.props.hosts} />}
+            render={() => <HostOverview hosts={this.state.hosts} />}
           />
           <Route
             path="/hosts/create"
             render={() => <HostCreate
                             accessToken={this.props.accessToken}
-                            refresh={this.props.refresh}
+                            httpGetHosts={this.httpGetHosts}
                             httpRequest={this.props.httpRequest}
-                            goBack={() => this.select('overview')}
+                            goToOverview={this.goToOverview}
                           />}
           />
           <Route
             path="/hosts/show"
             render={() => <Host
-                            // host={this.props.hosts[this.state.selected]}
-                            // host={this.props.hosts.find(host => host.id === queryString.parse(window.location.search).id)}
-                            refresh={this.props.refresh}
+                            id={queryString.parse(window.location.search).id}
+                            httpGetHosts={this.httpGetHosts}
                             httpRequest={this.props.httpRequest}
-                            goBack={() => this.select('overview')}
+                            goToOverview={this.goToOverview}
                           />}
           />
         </Col>

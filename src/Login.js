@@ -6,8 +6,8 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
 class Navigation extends Component {
   constructor(props) {
     super();
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('accessToken');
+    // localStorage.removeItem('refreshToken');
+    // localStorage.removeItem('accessToken');
     this.state = {
       username: '',
       password: '',

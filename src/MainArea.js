@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Containers from './Containers.js';
 import Hosts from './Hosts.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -25,28 +24,6 @@ class MainArea extends Component {
       containers: [],
       hosts: []
     };
-  }
-
-  componentDidMount() {
-    this.refresh();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.page !== nextProps.page) {
-      this.refresh(nextProps.page);
-    }
-  }
-
-  refresh = (page = this.props.page) => {
-    switch (page) {
-      case 'containers':
-        this.httpGetContainers();
-        break;
-      case 'hosts':
-        this.httpGetHosts();
-        break;
-      default: break;
-    }
   }
 
   httpRequest = (method, path, body, callbackFunction) => {
@@ -91,16 +68,6 @@ class MainArea extends Component {
     });
   }
 
-  httpGetContainers = () => {};
-
-  httpGetHosts = () => {
-    this.httpRequest('GET', 'hosts', null, json => {
-      this.setState({
-        hosts: json
-      })
-    })
-  }
-
   showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
@@ -120,7 +87,6 @@ class MainArea extends Component {
           render={() => <Hosts
                           accessToken={this.props.accessToken}
                           hosts={this.state.hosts}
-                          refresh={this.refresh}
                           httpRequest={this.httpRequest}
                         />}
         />

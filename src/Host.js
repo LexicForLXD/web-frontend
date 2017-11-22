@@ -25,6 +25,12 @@ class Host extends Component {
     this.httpGetHost();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== this.props.id) {
+      this.httpGetHost();
+    }
+  }
+
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
@@ -35,16 +41,13 @@ class Host extends Component {
       this.setState({
         host: json
       })
-        // this.props.goBack();
-        // this.props.refresh();
-      }
-    );
+    });
   }
 
   httpDeleteHost = () => {
-    this.props.httpRequest('DELETE', `hosts/${this.props.host.id}`, null, () => {
-        this.props.goBack();
-        this.props.refresh();
+    this.props.httpRequest('DELETE', `hosts/${this.state.host.id}`, null, () => {
+        this.props.goToOverview();
+        this.props.httpGetHosts();
       }
     );
   }
@@ -91,8 +94,8 @@ class Host extends Component {
         {this.state.editView &&
           <HostEdit
             host={this.state.host}
-            refresh={this.props.refresh}
-            goBack={this.props.goBack}
+            httpGetHosts={this.props.httpGetHosts}
+            goToOverview={this.goToOverview}
             httpRequest={this.props.httpRequest}
           />
         }
