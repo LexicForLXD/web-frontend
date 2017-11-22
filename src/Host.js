@@ -2,17 +2,43 @@ import React, { Component } from 'react';
 import './App.css';
 import HostEdit from './HostEdit.js';
 import { Table, Button } from 'react-bootstrap';
+import queryString from 'query-string';
 
 class Host extends Component {
   constructor(props) {
     super();
     this.state = {
-      editView: false
+      editView: false,
+      host: {
+        id: '',
+        name: '',
+        ipv4: '',
+        ipv6: '',
+        domain_name: '',
+        mac: '',
+        settings: ''
+      }
     }
+  }
+
+  componentDidMount () {
+    this.httpGetHost();
   }
 
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
+  }
+
+  httpGetHost = () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('GET', `hosts/${id}`, null, json => {
+      this.setState({
+        host: json
+      })
+        // this.props.goBack();
+        // this.props.refresh();
+      }
+    );
   }
 
   httpDeleteHost = () => {
@@ -39,12 +65,12 @@ class Host extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>{this.props.host.name}</td>
-              <td>{this.props.host.ipv4}</td>
-              <td>{this.props.host.ipv6}</td>
-              <td>{this.props.host.domain_name}</td>
-              <td>{this.props.host.mac}</td>
-              <td>{this.props.host.settings}</td>
+              <td>{this.state.host.name}</td>
+              <td>{this.state.host.ipv4}</td>
+              <td>{this.state.host.ipv6}</td>
+              <td>{this.state.host.domain_name}</td>
+              <td>{this.state.host.mac}</td>
+              <td>{this.state.host.settings}</td>
             </tr>
           </tbody>
         </Table>
@@ -64,7 +90,7 @@ class Host extends Component {
         </Button>
         {this.state.editView &&
           <HostEdit
-            host={this.props.host}
+            host={this.state.host}
             refresh={this.props.refresh}
             goBack={this.props.goBack}
             httpRequest={this.props.httpRequest}

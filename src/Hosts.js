@@ -80,7 +80,7 @@ class Hosts extends Component {
             path="/hosts/show"
             render={() => <Host
                             // host={this.props.hosts[this.state.selected]}
-                            host={this.props.hosts.find(host => host.name === queryString.parse(window.location.search).name)}
+                            // host={this.props.hosts.find(host => host.id === queryString.parse(window.location.search).id)}
                             refresh={this.props.refresh}
                             httpRequest={this.props.httpRequest}
                             goBack={() => this.select('overview')}

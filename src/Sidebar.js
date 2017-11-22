@@ -14,7 +14,7 @@ class Sidebar extends Component {
       // <NavItem key={index + 2} eventKey={index}>
       //   <i className={this.props.icon}></i> {item.name}
       // </NavItem>
-      <LinkContainer to={`/${this.props.parent}/show?name=${item.name}`}>
+      <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`}>
         <NavItem key={index + 2} eventKey={index}>
           <i className={this.props.icon}></i> {item.name}
         </NavItem>
