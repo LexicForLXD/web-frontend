@@ -5,40 +5,28 @@ import HostOverview from './HostOverview.js';
 import HostCreate from './HostCreate.js';
 import Host from './Host.js';
 import { Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import queryString from 'query-string';
 
 class Hosts extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      selected: 'overview'
+      selected: 'overview',
+      hosts: []
     };
   }
 
-  select = (key) => {
-    this.setState({
-      selected: key
-    });
+  componentDidMount() {
+    this.httpGetHosts();
   }
 
-  showItem = () => {
-    switch (this.state.selected) {
-      case 'overview':
-        return <HostOverview hosts={this.props.hosts} />;
-      case 'create':
-        return <HostCreate
-                 accessToken={this.props.accessToken}
-                 refresh={this.props.refresh}
-                 httpRequest={this.props.httpRequest}
-                 goBack={() => this.select('overview')}
-               />;
-      default:
-        return <Host
-                 host={this.props.hosts[this.state.selected]}
-                 refresh={this.props.refresh}
-                 httpRequest={this.props.httpRequest}
-                 goBack={() => this.select('overview')}
-               />;
-    }
+  httpGetHosts = () => {
+    this.props.httpRequest('GET', 'hosts', null, json => {
+      this.setState({
+        hosts: json
+      })
+    })
   }
 
   render() {
@@ -46,16 +34,36 @@ class Hosts extends Component {
       <Grid>
         <Col xs={3} md={2}>
           <Sidebar
-            refresh={this.props.refresh}
+            parent="hosts"
+            refresh={this.httpGetHosts}
             overview
             create
-            items={this.props.hosts}
+            items={this.state.hosts}
             icon={'fa fa-server'}
             select={this.select}
           />
         </Col>
         <Col xs={9} md={10}>
-          {this.showItem()}
+          <Route
+            path="/hosts/overview"
+            render={() => <HostOverview hosts={this.state.hosts} />}
+          />
+          <Route
+            path="/hosts/create"
+            render={() => <HostCreate
+                            accessToken={this.props.accessToken}
+                            httpGetHosts={this.httpGetHosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+          <Route
+            path="/hosts/show"
+            render={() => <Host
+                            id={queryString.parse(window.location.search).id}
+                            httpGetHosts={this.httpGetHosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
         </Col>
       </Grid>
     )

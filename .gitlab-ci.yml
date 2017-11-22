@@ -1,4 +1,7 @@
-Deployment:
+deployment:
+  only:
+    - master
+
   before_script:
     # install ssh-agent
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'

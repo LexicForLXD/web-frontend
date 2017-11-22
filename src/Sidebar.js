@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Nav, NavItem, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -9,9 +10,11 @@ class Sidebar extends Component {
 
   mapItems = () =>
     this.props.items.map((item, index) =>
-      <NavItem key={index + 2} eventKey={index}>
-        <i className={this.props.icon}></i> {item.name}
-      </NavItem>
+      <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
+        <NavItem>
+          <i className={this.props.icon}></i> {item.name}
+        </NavItem>
+      </LinkContainer>
     );
 
   render() {
@@ -22,14 +25,18 @@ class Sidebar extends Component {
         </Button>
         <Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
           {this.props.overview &&
-            <NavItem key={0} eventKey={'overview'}>
-              <i className="fa fa-desktop"></i> Overview
-            </NavItem>
+            <LinkContainer to={`/${this.props.parent}/overview`}>
+              <NavItem>
+                <i className="fa fa-desktop"></i> Overview
+              </NavItem>
+            </LinkContainer>
           }
           {this.props.create &&
-            <NavItem key={1} eventKey={'create'}>
-              <i className="fa fa-plus-square"></i> Create
-            </NavItem>
+            <LinkContainer to={`/${this.props.parent}/create`}>
+              <NavItem>
+                <i className="fa fa-plus-square"></i> Create
+              </NavItem>
+            </LinkContainer>
           }
           {this.props.items instanceof Array && this.mapItems()}
         </Nav>

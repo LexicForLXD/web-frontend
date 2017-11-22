@@ -1,34 +1,41 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Nav, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class Navigation extends Component {
   constructor(props) {
     super();
   }
 
-  select = (key) => {
-    this.props.setPage(key);
-  }
-
   render() {
     return (
-      <Nav bsStyle="tabs" activeKey={this.props.page} onSelect={this.select}>
-        <NavItem eventKey={'containers'}>
-          <i className="fa fa-cube"></i> Containers
-        </NavItem>
-        <NavItem eventKey={'hosts'}>
-          <i className="fa fa-server"></i> Hosts
-        </NavItem>
-        <NavItem eventKey={'monitoring'}>
-          <i className="fa fa-area-chart"></i> Monitoring
-        </NavItem>
-        <NavItem eventKey={'log'}>
-          <i className="fa fa-pencil"></i> Logs
-        </NavItem>
-        <NavItem eventKey={'backup'}>
-          <i className="fa fa-hdd-o"></i> Backup
-        </NavItem>
+      <Nav bsStyle="tabs">
+        <LinkContainer to="/containers">
+          <NavItem>
+            <i className="fa fa-cube"></i> Containers
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/hosts/overview">
+          <NavItem>
+            <i className="fa fa-server"></i> Hosts
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/monitoring">
+          <NavItem>
+            <i className="fa fa-area-chart"></i> Monitoring
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/logs">
+          <NavItem>
+            <i className="fa fa-pencil"></i> Logs
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/backup">
+          <NavItem>
+            <i className="fa fa-hdd-o"></i> Backup
+          </NavItem>
+        </LinkContainer>
       </Nav>
     );
   }

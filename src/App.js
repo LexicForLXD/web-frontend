@@ -9,7 +9,6 @@ class App extends Component {
     super();
     const accessToken = localStorage.getItem('accessToken');
     this.state = {
-      page: 'containers',
       accessToken: accessToken,
       refreshToken: localStorage.getItem('refreshToken'),
       loggedIn: accessToken ? true : false
@@ -51,14 +50,10 @@ class App extends Component {
         {this.state.loggedIn &&
           <div>
             <div className="Navigation">
-              <Navigation
-                page={this.state.page}
-                setPage={page => this.setState({ page: page })}
-              />
+              <Navigation />
             </div>
             <div className="MainArea">
               <MainArea
-                page={this.state.page}
                 accessToken={this.state.accessToken}
                 refreshToken={this.state.refreshToken}
                 logout={this.logout}

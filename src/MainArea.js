@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Containers from './Containers.js';
 import Hosts from './Hosts.js';
 import { Well, Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 
 const LoadingView = () =>
   <Well bsSize="small" className="Console">
@@ -24,28 +24,6 @@ class MainArea extends Component {
       containers: [],
       hosts: []
     };
-  }
-
-  componentDidMount() {
-    this.refresh();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.page !== nextProps.page) {
-      this.refresh(nextProps.page);
-    }
-  }
-
-  refresh = (page = this.props.page) => {
-    switch (page) {
-      case 'containers':
-        this.httpGetContainers();
-        break;
-      case 'hosts':
-        this.httpGetHosts();
-        break;
-      default: break;
-    }
   }
 
   httpRequest = (method, path, body, callbackFunction) => {
@@ -90,16 +68,6 @@ class MainArea extends Component {
     });
   }
 
-  httpGetContainers = () => {};
-
-  httpGetHosts = () => {
-    this.httpRequest('GET', 'hosts', null, json => {
-      this.setState({
-        hosts: json
-      })
-    })
-  }
-
   showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
@@ -107,26 +75,33 @@ class MainArea extends Component {
       return <ErrorView />;
   }
 
-  showPage = () => {
-    switch (this.props.page) {
-      case 'containers':
-        return <div></div>
-      case 'hosts':
-      return <Hosts
-                accessToken={this.props.accessToken}
-                hosts={this.state.hosts}
-                refresh={this.refresh}
-                httpRequest={this.httpRequest}
-              />;
-      default:
-        return <div></div>
-    }
-  }
-
   render() {
     return (
       <div>
-        {this.showPage()}
+        <Route
+          path="/containers"
+          render={() => <div></div>}
+        />
+        <Route
+          path="/hosts"
+          render={() => <Hosts
+                          accessToken={this.props.accessToken}
+                          hosts={this.state.hosts}
+                          httpRequest={this.httpRequest}
+                        />}
+        />
+        <Route
+          path="/monitoring"
+          render={() => <div></div>}
+        />
+        <Route
+          path="/logs"
+          render={() => <div></div>}
+        />
+        <Route
+          path="/backup"
+          render={() => <div></div>}
+        />
         <Grid>
           <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
             {this.showStatus()}
