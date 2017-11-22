@@ -75,9 +75,9 @@ class HostCreate extends Component {
           errorSettings: json.errors.settings
         });
       } else {
-        this.props.goToOverview();
+        window.location.href = '/hosts/overview';
       }
-      this.props.httpGetHosts();
+      // this.props.httpGetHosts();
     }
     this.props.httpRequest('POST', 'hosts', body, callbackFunction);
   }

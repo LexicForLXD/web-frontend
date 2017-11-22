@@ -21,39 +21,12 @@ class Hosts extends Component {
     this.httpGetHosts();
   }
 
-  goToOverview = () => {
-    window.location.href = '/hosts/overview';
-    // history.push('/hosts/overview');
-    // this.props.history.push('/hosts/overview');
-    // withRouter(({ history }) => history.push('/hosts/overview'));
-  }
-
   httpGetHosts = () => {
     this.props.httpRequest('GET', 'hosts', null, json => {
       this.setState({
         hosts: json
       })
     })
-  }
-
-  showItem = () => {
-    switch (this.state.selected) {
-      case 'overview':
-        return <HostOverview hosts={this.props.hosts} />;
-      case 'create':
-        return <HostCreate
-                 accessToken={this.props.accessToken}
-                 httpGetHosts={this.httpGetHosts}
-                 httpRequest={this.props.httpRequest}
-                 goToOverview={this.goToOverview}
-               />;
-      default:
-        return <Host
-                 host={this.props.hosts[this.state.selected]}
-                 httpGetHosts={this.httpGetHosts}
-                 httpRequest={this.props.httpRequest}
-               />;
-    }
   }
 
   render() {
@@ -81,7 +54,6 @@ class Hosts extends Component {
                             accessToken={this.props.accessToken}
                             httpGetHosts={this.httpGetHosts}
                             httpRequest={this.props.httpRequest}
-                            goToOverview={this.goToOverview}
                           />}
           />
           <Route
@@ -90,7 +62,6 @@ class Hosts extends Component {
                             id={queryString.parse(window.location.search).id}
                             httpGetHosts={this.httpGetHosts}
                             httpRequest={this.props.httpRequest}
-                            goToOverview={this.goToOverview}
                           />}
           />
         </Col>

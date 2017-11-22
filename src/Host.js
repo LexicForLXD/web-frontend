@@ -46,8 +46,8 @@ class Host extends Component {
 
   httpDeleteHost = () => {
     this.props.httpRequest('DELETE', `hosts/${this.state.host.id}`, null, () => {
-        this.props.goToOverview();
-        this.props.httpGetHosts();
+        window.location.href = '/hosts/overview';
+        // this.props.httpGetHosts();
       }
     );
   }
@@ -95,7 +95,6 @@ class Host extends Component {
           <HostEdit
             host={this.state.host}
             httpGetHosts={this.props.httpGetHosts}
-            goToOverview={this.goToOverview}
             httpRequest={this.props.httpRequest}
           />
         }
