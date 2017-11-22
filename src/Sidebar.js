@@ -23,18 +23,18 @@ class Sidebar extends Component {
         <Button type="button" className="RefreshBtn" onClick={() => this.props.refresh()}>
           <i className="fa fa-refresh"></i> Refresh
         </Button>
+        {this.props.create &&
+          <LinkContainer to={`/${this.props.parent}/create`}>
+            <Button type="button" className="CreateBtn" bsStyle="success">
+              <i className="fa fa-plus"></i> <b>Create</b>
+            </Button>
+          </LinkContainer>
+        }
         <Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
           {this.props.overview &&
             <LinkContainer to={`/${this.props.parent}/overview`}>
               <NavItem>
                 <i className="fa fa-desktop"></i> Overview
-              </NavItem>
-            </LinkContainer>
-          }
-          {this.props.create &&
-            <LinkContainer to={`/${this.props.parent}/create`}>
-              <NavItem>
-                <i className="fa fa-plus-square"></i> Create
               </NavItem>
             </LinkContainer>
           }

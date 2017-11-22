@@ -29,9 +29,6 @@
   font-family: monospace;
   font-size: 90%;
   text-align: left;
-  /*margin-left: 20px;*/
-  /*margin-right: 20px;*/
-  /*margin-bottom: 34px;*/
 }
 
 .MainArea {
@@ -39,7 +36,11 @@
 }
 
 .RefreshBtn {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.CreateBtn {
+  margin-bottom: 16px;
 }
 
 .Button {
