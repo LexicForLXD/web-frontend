@@ -14,7 +14,7 @@ class App extends Component {
       accessToken: accessToken,
       expirationDate: localStorage.getItem('expirationDate'),
       refreshToken: localStorage.getItem('refreshToken'),
-      loggedIn: loggedIn ? true : false
+      loggedIn: loggedIn
     };
   }
 
