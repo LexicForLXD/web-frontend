@@ -6,8 +6,6 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
 class Navigation extends Component {
   constructor(props) {
     super();
-    // localStorage.removeItem('refreshToken');
-    // localStorage.removeItem('accessToken');
     this.state = {
       username: '',
       password: '',
@@ -55,6 +53,7 @@ class Navigation extends Component {
       console.log('Response body: ', json); // Remove in production
       this.setState({ errorDescription: json.error_description });
       this.props.setAccessToken(json.access_token);
+      this.props.setExpirationDate(json.expires_in);
       this.props.setRefreshToken(json.refresh_token);
       if (json.access_token) this.login();
     })

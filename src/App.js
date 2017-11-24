@@ -8,16 +8,25 @@ class App extends Component {
   constructor() {
     super();
     const accessToken = localStorage.getItem('accessToken');
+    const loggedIn = accessToken &&
+                     Date.now() < localStorage.getItem('expirationDate');
     this.state = {
       accessToken: accessToken,
+      expirationDate: localStorage.getItem('expirationDate'),
       refreshToken: localStorage.getItem('refreshToken'),
-      loggedIn: accessToken ? true : false
+      loggedIn: loggedIn ? true : false
     };
   }
 
   setAccessToken = token => {
     this.setState({ accessToken: token });
     localStorage.setItem('accessToken', token);
+  }
+
+  setExpirationDate = seconds => {
+    const expirationDate = Date.now() + seconds * 1000;
+    this.setState({ expirationDate: expirationDate });
+    localStorage.setItem('expirationDate', expirationDate);
   }
 
   setRefreshToken = token => {
@@ -45,6 +54,7 @@ class App extends Component {
           login={this.login}
           logout={this.logout}
           setAccessToken={this.setAccessToken}
+          setExpirationDate={this.setExpirationDate}
           setRefreshToken={this.setRefreshToken}
         />
         {this.state.loggedIn &&
