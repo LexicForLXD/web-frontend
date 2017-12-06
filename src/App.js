@@ -47,7 +47,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <i className="fa fa-cubes fa-5x"></i>
-          <h1 className="App-title">Lexic</h1>
+          <h1 className="App-title"><b>LEXIC</b></h1>
         </header>
         <Login
           loggedIn={this.state.loggedIn}
