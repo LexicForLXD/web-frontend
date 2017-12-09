@@ -8,7 +8,7 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
-class Hosts extends Component {
+class HostPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,4 +70,4 @@ class Hosts extends Component {
   }
 }
 
-export default Hosts;
+export default HostPage;

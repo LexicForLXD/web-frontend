@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Hosts from './Hosts.js';
+import HostPage from './HostPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 
@@ -84,7 +84,7 @@ class MainArea extends Component {
         />
         <Route
           path="/hosts"
-          render={() => <Hosts
+          render={() => <HostPage
                           accessToken={this.props.accessToken}
                           hosts={this.state.hosts}
                           httpRequest={this.httpRequest}
