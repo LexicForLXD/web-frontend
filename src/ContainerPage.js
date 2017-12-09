@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
-import HostOverview from './HostOverview.js';
-import HostCreate from './HostCreate.js';
-import HostShow from './HostShow.js';
+import ContainerOverview from './ContainerOverview.js';
+import ContainerCreate from './ContainerCreate.js';
+import Container from './Container.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
-class HostPage extends Component {
+class ContainerPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selected: 'overview',
-      hosts: []
+      containers: []
     };
   }
 
   componentDidMount() {
-    this.httpGetHosts();
+    this.httpGetContainers();
   }
 
-  httpGetHosts = () => {
-    this.props.httpRequest('GET', 'hosts', null, json => {
+  httpGetContainers = () => {
+    this.props.httpRequest('GET', 'containers', null, json => {
       this.setState({
-        hosts: json
+        containers: json
       })
     })
   }
@@ -34,33 +34,33 @@ class HostPage extends Component {
       <Grid>
         <Col xs={3} md={2}>
           <Sidebar
-            parent="hosts"
-            refresh={this.httpGetHosts}
+            parent="containers"
+            refresh={this.httpGetContainers}
             overview
             create
-            items={this.state.hosts}
+            items={this.state.containers}
             icon={'fa fa-server'}
             select={this.select}
           />
         </Col>
         <Col xs={9} md={10}>
           <Route
-            path="/hosts/overview"
-            render={() => <HostOverview hosts={this.state.hosts} />}
+            path="/containers/overview"
+            render={() => <ContainerOverview containers={this.state.containers} />}
           />
           <Route
-            path="/hosts/create"
-            render={() => <HostCreate
+            path="/containers/create"
+            render={() => <ContainerCreate
                             accessToken={this.props.accessToken}
-                            httpGetHosts={this.httpGetHosts}
+                            httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />
           <Route
-            path="/hosts/show"
-            render={() => <HostShow
+            path="/containers/show"
+            render={() => <Container
                             id={queryString.parse(window.location.search).id}
-                            httpGetHosts={this.httpGetHosts}
+                            httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />
@@ -70,4 +70,4 @@ class HostPage extends Component {
   }
 }
 
-export default HostPage;
+export default ContainerPage;

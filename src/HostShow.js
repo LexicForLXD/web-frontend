@@ -4,7 +4,7 @@ import HostEdit from './HostEdit.js';
 import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 
-class Host extends Component {
+class HostShow extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -103,4 +103,4 @@ class Host extends Component {
   }
 }
 
-export default Host;
+export default HostShow;
