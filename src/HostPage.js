@@ -10,23 +10,14 @@ import queryString from 'query-string';
 
 class HostPage extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       selected: 'overview',
-      hosts: []
     };
   }
 
   componentDidMount() {
-    this.httpGetHosts();
-  }
-
-  httpGetHosts = () => {
-    this.props.httpRequest('GET', 'hosts', null, json => {
-      this.setState({
-        hosts: json
-      })
-    })
+    this.props.httpGetHosts();
   }
 
   render() {
@@ -35,10 +26,10 @@ class HostPage extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="hosts"
-            refresh={this.httpGetHosts}
+            refresh={this.props.httpGetHosts}
             overview
             create
-            items={this.state.hosts}
+            items={this.props.hosts}
             icon={'fa fa-server'}
             select={this.select}
           />
@@ -46,13 +37,12 @@ class HostPage extends Component {
         <Col xs={9} md={10}>
           <Route
             path="/hosts/overview"
-            render={() => <HostOverview hosts={this.state.hosts} />}
+            render={() => <HostOverview hosts={this.props.hosts} />}
           />
           <Route
             path="/hosts/create"
             render={() => <HostCreate
-                            accessToken={this.props.accessToken}
-                            httpGetHosts={this.httpGetHosts}
+                            httpGetHosts={this.props.httpGetHosts}
                             httpRequest={this.props.httpRequest}
                           />}
           />
@@ -60,7 +50,7 @@ class HostPage extends Component {
             path="/hosts/show"
             render={() => <HostShow
                             id={queryString.parse(window.location.search).id}
-                            httpGetHosts={this.httpGetHosts}
+                            httpGetHosts={this.props.httpGetHosts}
                             httpRequest={this.props.httpRequest}
                           />}
           />

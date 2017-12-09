@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
-import ContainerOverview from './ContainerOverview.js';
-import ContainerCreate from './ContainerCreate.js';
-import Container from './Container.js';
+// import ContainerOverview from './ContainerOverview.js';
+// import ContainerCreate from './ContainerCreate.js';
+// import ContainerShow from './ContainerShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
 class ContainerPage extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       selected: 'overview',
       containers: []
@@ -18,15 +18,7 @@ class ContainerPage extends Component {
   }
 
   componentDidMount() {
-    this.httpGetContainers();
-  }
-
-  httpGetContainers = () => {
-    this.props.httpRequest('GET', 'containers', null, json => {
-      this.setState({
-        containers: json
-      })
-    })
+    this.props.httpGetContainers();
   }
 
   render() {
@@ -35,7 +27,7 @@ class ContainerPage extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="containers"
-            refresh={this.httpGetContainers}
+            refresh={this.props.httpGetContainers}
             overview
             create
             items={this.state.containers}
@@ -44,26 +36,25 @@ class ContainerPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          <Route
+          {/* <Route
             path="/containers/overview"
             render={() => <ContainerOverview containers={this.state.containers} />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate
-                            accessToken={this.props.accessToken}
                             httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />
           <Route
             path="/containers/show"
-            render={() => <Container
+            render={() => <ContainerShow
                             id={queryString.parse(window.location.search).id}
                             httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
-          />
+          /> */}
         </Col>
       </Grid>
     )
