@@ -16,7 +16,7 @@ class Navigation extends Component {
             <i className="fa fa-cube"></i> Containers
           </NavItem>
         </LinkContainer>
-        <LinkContainer to="/hosts/overview">
+        <LinkContainer to="/hosts">
           <NavItem>
             <i className="fa fa-server"></i> Hosts
           </NavItem>

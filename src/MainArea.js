@@ -70,6 +70,7 @@ class MainArea extends Component {
   }
 
   httpGetContainers = () => {
+    this.httpGetHosts();
     const containers = [];
     this.state.hosts.forEach(host => {
       this.httpRequest('GET', `${host.id}/containers`, null, json => {
@@ -98,7 +99,6 @@ class MainArea extends Component {
       <div>
         <Route
           path="/containers"
-          // render={() => <div></div>}
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
                           httpGetContainers={this.httpGetContainers}

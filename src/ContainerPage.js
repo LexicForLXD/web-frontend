@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
-// import ContainerOverview from './ContainerOverview.js';
+import ContainerOverview from './ContainerOverview.js';
 // import ContainerCreate from './ContainerCreate.js';
 // import ContainerShow from './ContainerShow.js';
 import { Grid, Col } from 'react-bootstrap';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
 class ContainerPage extends Component {
@@ -36,10 +36,11 @@ class ContainerPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          {/* <Route
+          <Redirect from="/containers" exact to="/containers/overview" />
+          <Route
             path="/containers/overview"
             render={() => <ContainerOverview containers={this.state.containers} />}
-          /> */}
+          />
           {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate

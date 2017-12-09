@@ -5,7 +5,7 @@ import HostOverview from './HostOverview.js';
 import HostCreate from './HostCreate.js';
 import HostShow from './HostShow.js';
 import { Grid, Col } from 'react-bootstrap';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
 class HostPage extends Component {
@@ -35,6 +35,7 @@ class HostPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
+          <Redirect from="/hosts" exact to="/hosts/overview" />
           <Route
             path="/hosts/overview"
             render={() => <HostOverview hosts={this.props.hosts} />}
