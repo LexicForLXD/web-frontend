@@ -57,7 +57,7 @@ class HostShow extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts/overview" />}
+        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
         <Table bordered responsive striped>
           <thead>
             <tr>

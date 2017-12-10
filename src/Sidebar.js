@@ -32,7 +32,7 @@ class Sidebar extends Component {
         }
         <Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
           {this.props.overview &&
-            <LinkContainer to={`/${this.props.parent}/overview`}>
+            <LinkContainer to={`/${this.props.parent}`}>
               <NavItem>
                 <i className="fa fa-desktop"></i> Overview
               </NavItem>

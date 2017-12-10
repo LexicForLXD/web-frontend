@@ -66,3 +66,8 @@
 .Navigation {
   margin-bottom: 25px;
 }
+
+h5 {
+  font-weight: bold;
+  color: #428bca;
+}

@@ -22,8 +22,8 @@ class HostOverview extends Component {
         </thead>
         <tbody>
           {this.props.hosts instanceof Array &&
-            this.props.hosts.map((host, index) =>
-              <tr key={index}>
+            this.props.hosts.map(host =>
+              <tr key={host.id}>
                 <td>{host.name}</td>
                 <td>{host.ipv4}</td>
                 <td>{host.ipv6}</td>

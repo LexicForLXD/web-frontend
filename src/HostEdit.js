@@ -90,7 +90,7 @@ class HostEdit extends Component {
   render() {
     return (
       <form>
-        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts/overview" />}
+        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
         <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl

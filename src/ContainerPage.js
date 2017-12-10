@@ -5,7 +5,7 @@ import ContainerOverview from './ContainerOverview.js';
 // import ContainerCreate from './ContainerCreate.js';
 // import ContainerShow from './ContainerShow.js';
 import { Grid, Col } from 'react-bootstrap';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
 class ContainerPage extends Component {
@@ -17,7 +17,8 @@ class ContainerPage extends Component {
   }
 
   componentDidMount() {
-    this.props.httpGetContainers();
+    // this.props.httpGetContainers();
+    this.props.httpGetHosts();
   }
 
   render() {
@@ -26,7 +27,7 @@ class ContainerPage extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="containers"
-            refresh={this.props.httpGetContainers}
+            refresh={this.props.httpGetHosts}
             overview
             create
             items={this.state.containers}
@@ -39,10 +40,10 @@ class ContainerPage extends Component {
             exact path="/containers"
             render={() => <ContainerOverview containers={this.props.containers} />}
           />
-          <Route
+          {/* <Route
             path="/containers/overview"
             render={() => <ContainerOverview containers={this.props.containers} />}
-          />
+          /> */}
           {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate

@@ -70,21 +70,22 @@ class MainArea extends Component {
   }
 
   httpGetContainers = () => {
-    this.httpGetHosts();
     const containers = [];
     this.state.hosts.forEach(host => {
-      const hostId = host.id;
-      this.httpRequest('GET', `${hostId}/containers`, null, json => {
-        containers.push({ hostId: json})
+      const set = { host: host.name };
+      this.httpRequest('GET', `${host.id}/containers`, null, json => {
+        set.containers = json;
       })
+      containers.push(set);
     });
-    console.log('containers:', containers);
     this.setState({ containers: containers });
+    console.log('containers:', containers);
   }
 
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, json => {
-      this.setState({ hosts: json })
+      this.setState({ hosts: json });
+      this.httpGetContainers();
     })
   }
 
@@ -102,9 +103,9 @@ class MainArea extends Component {
           path="/containers"
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
-                          httpGetContainers={this.httpGetContainers}
+                          // httpGetContainers={this.httpGetContainers}
+                          httpGetHosts={this.httpGetHosts}
                           containers={this.state.containers}
-                          hosts={this.state.hosts}
                         />}
         />
         <Route
