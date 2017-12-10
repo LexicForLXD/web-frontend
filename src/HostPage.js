@@ -35,7 +35,10 @@ class HostPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          <Redirect from="/hosts" exact to="/hosts/overview" />
+          <Route
+            exact path="/hosts"
+            render={() => <HostOverview hosts={this.props.hosts} />}
+          />
           <Route
             path="/hosts/overview"
             render={() => <HostOverview hosts={this.props.hosts} />}

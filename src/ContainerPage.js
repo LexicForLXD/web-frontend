@@ -12,8 +12,7 @@ class ContainerPage extends Component {
   constructor(props) {
     super();
     this.state = {
-      selected: 'overview',
-      containers: []
+      selected: 'overview'
     };
   }
 
@@ -36,10 +35,13 @@ class ContainerPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
-          <Redirect from="/containers" exact to="/containers/overview" />
+          <Route
+            exact path="/containers"
+            render={() => <ContainerOverview containers={this.props.containers} />}
+          />
           <Route
             path="/containers/overview"
-            render={() => <ContainerOverview containers={this.state.containers} />}
+            render={() => <ContainerOverview containers={this.props.containers} />}
           />
           {/* <Route
             path="/containers/create"

@@ -73,8 +73,9 @@ class MainArea extends Component {
     this.httpGetHosts();
     const containers = [];
     this.state.hosts.forEach(host => {
-      this.httpRequest('GET', `${host.id}/containers`, null, json => {
-        containers.push({ host: json})
+      const hostId = host.id;
+      this.httpRequest('GET', `${hostId}/containers`, null, json => {
+        containers.push({ hostId: json})
       })
     });
     console.log('containers:', containers);
