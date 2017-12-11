@@ -16,6 +16,7 @@ class ContainerOverview extends Component {
           <Table bordered responsive striped>
             <thead>
               <tr>
+                <th>Control</th>
                 <th>Name</th>
                 <th>IPv4</th>
                 <th>IPv6</th>
@@ -27,6 +28,17 @@ class ContainerOverview extends Component {
             {set.containers instanceof Array &&
               set.containers.map(container =>
                 <tr key={set.host}>
+                  <td>
+                    <button type="button" className="btn">
+                      <i className="fa fa-play"></i>
+                    </button>
+                    <button type="button" className="btn">
+                      <i className="fa fa-stop"></i>
+                    </button>
+                    <button type="button" className="btn">
+                      <i className="fa fa-repeat"></i>
+                    </button>
+                  </td>
                   <td>{container.name}</td>
                   <td>{container.ipv4}</td>
                   <td>{container.ipv6}</td>

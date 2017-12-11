@@ -17,8 +17,7 @@ class ContainerPage extends Component {
   }
 
   componentDidMount() {
-    // this.props.httpGetContainers();
-    this.props.httpGetHosts();
+    this.props.httpGetHostsAndContainers();
   }
 
   render() {
@@ -27,7 +26,7 @@ class ContainerPage extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="containers"
-            refresh={this.props.httpGetHosts}
+            refresh={this.props.httpGetHostsAndContainers}
             overview
             create
             items={this.state.containers}
@@ -47,7 +46,7 @@ class ContainerPage extends Component {
           {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate
-                            httpGetContainers={this.httpGetContainers}
+                            httpGetHostsAndContainers={this.httpGetHostsAndContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />
@@ -55,7 +54,7 @@ class ContainerPage extends Component {
             path="/containers/show"
             render={() => <ContainerShow
                             id={queryString.parse(window.location.search).id}
-                            httpGetContainers={this.httpGetContainers}
+                            httpGetHostsAndContainers={this.httpGetHostsAndContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           /> */}

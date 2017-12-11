@@ -3,7 +3,7 @@ import './App.css';
 import HostPage from './HostPage.js';
 import ContainerPage from './ContainerPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 const LoadingView = () =>
   <Well bsSize="small" className="Console">
@@ -73,7 +73,7 @@ class MainArea extends Component {
     const containers = [];
     this.state.hosts.forEach(host => {
       const set = { host: host.name };
-      this.httpRequest('GET', `${host.id}/containers`, null, json => {
+      this.httpRequest('GET', `hosts/${host.id}/containers`, null, json => {
         set.containers = json;
       })
       containers.push(set);
@@ -83,6 +83,12 @@ class MainArea extends Component {
   }
 
   httpGetHosts = () => {
+    this.httpRequest('GET', 'hosts', null, json => {
+      this.setState({ hosts: json });
+    })
+  }
+
+  httpGetHostsAndContainers = () => {
     this.httpRequest('GET', 'hosts', null, json => {
       this.setState({ hosts: json });
       this.httpGetContainers();
@@ -99,12 +105,12 @@ class MainArea extends Component {
   render() {
     return (
       <div>
+        <Route exact path="/" render={() => <Redirect to="/containers" />} />
         <Route
           path="/containers"
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
-                          // httpGetContainers={this.httpGetContainers}
-                          httpGetHosts={this.httpGetHosts}
+                          httpGetHostsAndContainers={this.httpGetHostsAndContainers}
                           containers={this.state.containers}
                         />}
         />
