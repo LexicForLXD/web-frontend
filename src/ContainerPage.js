@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
 import ContainerOverview from './ContainerOverview.js';
-// import ContainerCreate from './ContainerCreate.js';
+import ContainerCreate from './ContainerCreate.js';
 import ContainerShow from './ContainerShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -49,13 +49,14 @@ class ContainerPage extends Component {
                             containerStates={this.props.containerStates}
                           />}
           />
-          {/* <Route
+          <Route
             path="/containers/create"
             render={() => <ContainerCreate
+                            hosts={this.props.hosts}
                             httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
-          /> */}
+          />
           <Route
             path="/containers/show"
             render={() => <ContainerShow

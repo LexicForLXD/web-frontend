@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-// import ContainerEdit from './ContainerEdit.js';
+import ContainerEdit from './ContainerEdit.js';
 import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
@@ -133,13 +133,13 @@ class ContainerShow extends Component {
         >
           <i className="fa fa-trash"></i> Delete Container
         </Button>
-        {/* {this.state.editView &&
+        {this.state.editView &&
           <ContainerEdit
             container={this.state.container}
             httpGetContainers={this.props.httpGetContainers}
             httpRequest={this.props.httpRequest}
           />
-        } */}
+        }
       </div>
     )
   }
