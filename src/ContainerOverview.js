@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 class ContainerOverview extends Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class ContainerOverview extends Component {
   render() {
     return (
       <div>
-      {this.props.containers.map(set =>
+      {this.props.containers.filter(set => set.containers instanceof Array).map(set =>
         <div>
           <h5>{set.host}</h5>
           <Table bordered responsive striped>
@@ -25,28 +25,27 @@ class ContainerOverview extends Component {
               </tr>
             </thead>
             <tbody>
-            {set.containers instanceof Array &&
-              set.containers.map(container =>
-                <tr key={set.host}>
-                  <td>
-                    <button type="button" className="btn">
-                      <i className="fa fa-play"></i>
-                    </button>
-                    <button type="button" className="btn">
-                      <i className="fa fa-stop"></i>
-                    </button>
-                    <button type="button" className="btn">
-                      <i className="fa fa-repeat"></i>
-                    </button>
-                  </td>
-                  <td>{container.name}</td>
-                  <td>{container.ipv4}</td>
-                  <td>{container.ipv6}</td>
-                  <td>{container.domain_name}</td>
-                  <td>{container.settings}</td>
-                </tr>
-              )
-            }
+            {set.containers.map(container =>
+              <tr key={set.host}>
+                <td>
+                  {/* <Button type="button" onClick={() => this.props.startContainer()}> */}
+                  <button type="button" className="btn">
+                    <i className="fa fa-play"></i>
+                  </button>
+                  <button type="button" className="btn">
+                    <i className="fa fa-stop"></i>
+                  </button>
+                  <button type="button" className="btn">
+                    <i className="fa fa-repeat"></i>
+                  </button>
+                </td>
+                <td>{container.name}</td>
+                <td>{container.ipv4}</td>
+                <td>{container.ipv6}</td>
+                <td>{container.domain_name}</td>
+                <td>{container.settings}</td>
+              </tr>
+            )}
             </tbody>
           </Table>
         </div>
