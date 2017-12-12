@@ -102,7 +102,7 @@ class MainArea extends Component {
     });
   }
 
-  httpSetContainerState = (id, action) => {
+  httpPutContainerState = (id, action) => {
     const body = JSON.stringify({
       action: action
     });
@@ -140,7 +140,7 @@ class MainArea extends Component {
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
                           httpGetContainers={this.httpGetContainers}
-                          httpSetContainerState={this.httpSetContainerState}
+                          httpPutContainerState={this.httpPutContainerState}
                           containers={this.state.containers}
                           containerStates={this.props.containerStates}
                         />}

@@ -19,7 +19,6 @@ class ContainerOverview extends Component {
             <th>IPv4</th>
             <th>IPv6</th>
             <th>Domain Name</th>
-            <th>MAC</th>
             <th>Settings</th>
           </tr>
         </thead>
@@ -28,23 +27,22 @@ class ContainerOverview extends Component {
             this.props.containers.map(container =>
               <tr key={container.id}>
                 <td>{this.props.containerStates[container.id]}</td>
-                <td>{container.host}</td>
                 <td>
-                  <Button type="button" onClick={() => this.props.httpSetContainerState('start')}>
+                  <Button type="button" onClick={() => this.props.httpPutContainerState(container.id, 'start')}>
                     <i className="fa fa-play"></i>
                   </Button>
-                  <Button type="button" onClick={() => this.props.httpSetContainerState('stop')}>
+                  <Button type="button" onClick={() => this.props.httpPutContainerState(container.id, 'stop')}>
                     <i className="fa fa-stop"></i>
                   </Button>
-                  <Button type="button" onClick={() => this.props.httpSetContainerState('restart')}>
+                  <Button type="button" onClick={() => this.props.httpPutContainerState(container.id, 'restart')}>
                     <i className="fa fa-repeat"></i>
                   </Button>
                 </td>
+                <td>{container.host}</td>
                 <td>{container.name}</td>
                 <td>{container.ipv4}</td>
                 <td>{container.ipv6}</td>
                 <td>{container.domain_name}</td>
-                <td>{container.mac}</td>
                 <td>{container.settings}</td>
               </tr>
             )

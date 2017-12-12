@@ -46,7 +46,8 @@ class HostShow extends Component {
   }
 
   httpDeleteHost = () => {
-    this.props.httpRequest('DELETE', `hosts/${this.state.host.id}`, null, () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('DELETE', `hosts/${id}`, null, () => {
         // window.location.href = '/hosts/overview';
         this.props.httpGetHosts();
         this.setState({ redirect: true });
@@ -57,7 +58,7 @@ class HostShow extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
+        {this.state.redirect && <Redirect from="/hosts/show" exact to="/hosts" />}
         <Table bordered responsive striped>
           <thead>
             <tr>

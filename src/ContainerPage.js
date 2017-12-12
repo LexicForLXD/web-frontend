@@ -3,7 +3,7 @@ import './App.css';
 import Sidebar from './Sidebar.js';
 import ContainerOverview from './ContainerOverview.js';
 // import ContainerCreate from './ContainerCreate.js';
-// import ContainerShow from './ContainerShow.js';
+import ContainerShow from './ContainerShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
@@ -44,30 +44,28 @@ class ContainerPage extends Component {
           <Route
             exact path="/containers"
             render={() => <ContainerOverview
-                            httpSetContainerState={this.props.httpSetContainerState}
+                            httpPutContainerState={this.props.httpPutContainerState}
                             containers={this.props.containers}
                             containerStates={this.props.containerStates}
                           />}
           />
-          {/* <Route
-            path="/containers/overview"
-            render={() => <ContainerOverview containers={this.props.containers} />}
-          /> */}
           {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate
                             httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
-          />
+          /> */}
           <Route
             path="/containers/show"
             render={() => <ContainerShow
                             id={queryString.parse(window.location.search).id}
+                            containers={this.props.containers}
                             httpGetContainers={this.httpGetContainers}
+                            httpPutContainerState={this.props.httpPutContainerState}
                             httpRequest={this.props.httpRequest}
                           />}
-          /> */}
+          />
         </Col>
       </Grid>
     )
