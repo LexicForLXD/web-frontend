@@ -17,7 +17,13 @@ class ContainerPage extends Component {
   }
 
   componentDidMount() {
-    this.props.httpGetHostsAndContainers();
+    this.props.httpGetContainers();
+  }
+
+  startContainer = () => {
+    this.httpRequest('GET', 'containers', null, json => {
+      this.setState({ containers: json})
+    });
   }
 
   render() {
@@ -26,7 +32,7 @@ class ContainerPage extends Component {
         <Col xs={3} md={2}>
           <Sidebar
             parent="containers"
-            refresh={this.props.httpGetHostsAndContainers}
+            refresh={this.props.httpGetContainers}
             overview
             create
             items={this.state.containers}
@@ -37,7 +43,11 @@ class ContainerPage extends Component {
         <Col xs={9} md={10}>
           <Route
             exact path="/containers"
-            render={() => <ContainerOverview containers={this.props.containers} />}
+            render={() => <ContainerOverview
+                            httpSetContainerState={this.props.httpSetContainerState}
+                            containers={this.props.containers}
+                            containerStates={this.props.containerStates}
+                          />}
           />
           {/* <Route
             path="/containers/overview"
@@ -46,7 +56,7 @@ class ContainerPage extends Component {
           {/* <Route
             path="/containers/create"
             render={() => <ContainerCreate
-                            httpGetHostsAndContainers={this.httpGetHostsAndContainers}
+                            httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />
@@ -54,7 +64,7 @@ class ContainerPage extends Component {
             path="/containers/show"
             render={() => <ContainerShow
                             id={queryString.parse(window.location.search).id}
-                            httpGetHostsAndContainers={this.httpGetHostsAndContainers}
+                            httpGetContainers={this.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           /> */}

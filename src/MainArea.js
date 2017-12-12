@@ -23,6 +23,7 @@ class MainArea extends Component {
       loading: false,
       error: false,
       containers: [],
+      containerStates: [],
       hosts: []
     };
   }
@@ -69,17 +70,45 @@ class MainArea extends Component {
     });
   }
 
+  // httpGetHostsAndContainers = () => {
+  //   const containers = [];
+  //   this.state.hosts.forEach(host => {
+  //     const set = { host: host.name };
+  //     this.httpRequest('GET', `hosts/${host.id}/containers`, null, json => {
+  //       set.containers = json;
+  //     })
+  //     containers.push(set);
+  //   });
+  //   this.setState({ containers: containers });
+  //   console.log('containers:', containers);
+  // }
+
   httpGetContainers = () => {
-    const containers = [];
-    this.state.hosts.forEach(host => {
-      const set = { host: host.name };
-      this.httpRequest('GET', `hosts/${host.id}/containers`, null, json => {
-        set.containers = json;
-      })
-      containers.push(set);
+    this.httpRequest('GET', 'containers', null, json => {
+      this.setState({ containers: json});
+      if (this.state.containers instanceof Array) {
+        this.state.containers.forEach(container => {
+          this.httpGetContainerState(container.id);
+        });
+      };
     });
-    this.setState({ containers: containers });
-    console.log('containers:', containers);
+  }
+
+  httpGetContainerState = id => {
+    this.httpRequest('GET', `containers/${id}/state`, null, json => {
+      const containerStates = this.state.containerStates;
+      containerStates[id] = json.metadata.status;
+      this.setState({ containerStates: containerStates });
+    });
+  }
+
+  httpSetContainerState = (id, action) => {
+    const body = JSON.stringify({
+      action: action
+    });
+    this.httpRequest('PUT', `containers/${id}/state`, body, () => {
+      this.httpGetContainerState(id);
+    })
   }
 
   httpGetHosts = () => {
@@ -88,12 +117,12 @@ class MainArea extends Component {
     })
   }
 
-  httpGetHostsAndContainers = () => {
-    this.httpRequest('GET', 'hosts', null, json => {
-      this.setState({ hosts: json });
-      this.httpGetContainers();
-    })
-  }
+  // httpGetContainers = () => {
+  //   this.httpRequest('GET', 'hosts', null, json => {
+  //     this.setState({ hosts: json });
+  //     this.httpGetContainers();
+  //   })
+  // }
 
   showStatus = () => {
     if (this.state.loading)
@@ -110,8 +139,10 @@ class MainArea extends Component {
           path="/containers"
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
-                          httpGetHostsAndContainers={this.httpGetHostsAndContainers}
+                          httpGetContainers={this.httpGetContainers}
+                          httpSetContainerState={this.httpSetContainerState}
                           containers={this.state.containers}
+                          containerStates={this.props.containerStates}
                         />}
         />
         <Route

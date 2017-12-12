@@ -9,48 +9,48 @@ class ContainerOverview extends Component {
 
   render() {
     return (
-      <div>
-      {this.props.containers.filter(set => set.containers instanceof Array).map(set =>
-        <div>
-          <h5>{set.host}</h5>
-          <Table bordered responsive striped>
-            <thead>
-              <tr>
-                <th>Control</th>
-                <th>Name</th>
-                <th>IPv4</th>
-                <th>IPv6</th>
-                <th>Domain Name</th>
-                <th>Settings</th>
-              </tr>
-            </thead>
-            <tbody>
-            {set.containers.map(container =>
-              <tr key={set.host}>
+      <Table bordered responsive striped>
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Control</th>
+            <th>Host</th>
+            <th>Name</th>
+            <th>IPv4</th>
+            <th>IPv6</th>
+            <th>Domain Name</th>
+            <th>MAC</th>
+            <th>Settings</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.containers instanceof Array &&
+            this.props.containers.map(container =>
+              <tr key={container.id}>
+                <td>{this.props.containerStates[container.id]}</td>
+                <td>{container.host}</td>
                 <td>
-                  {/* <Button type="button" onClick={() => this.props.startContainer()}> */}
-                  <button type="button" className="btn">
+                  <Button type="button" onClick={() => this.props.httpSetContainerState('start')}>
                     <i className="fa fa-play"></i>
-                  </button>
-                  <button type="button" className="btn">
+                  </Button>
+                  <Button type="button" onClick={() => this.props.httpSetContainerState('stop')}>
                     <i className="fa fa-stop"></i>
-                  </button>
-                  <button type="button" className="btn">
+                  </Button>
+                  <Button type="button" onClick={() => this.props.httpSetContainerState('restart')}>
                     <i className="fa fa-repeat"></i>
-                  </button>
+                  </Button>
                 </td>
                 <td>{container.name}</td>
                 <td>{container.ipv4}</td>
                 <td>{container.ipv6}</td>
                 <td>{container.domain_name}</td>
+                <td>{container.mac}</td>
                 <td>{container.settings}</td>
               </tr>
-            )}
-            </tbody>
-          </Table>
-        </div>
-      )}
-      </div>
+            )
+          }
+        </tbody>
+      </Table>
     )
   }
 }
