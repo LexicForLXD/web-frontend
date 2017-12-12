@@ -11,12 +11,12 @@ class ContainerEdit extends Component {
       ipv4: this.props.container.ipv4,
       ipv6: this.props.container.ipv6,
       domain_name: this.props.container.domain_name,
-      settings: this.props.container.settings,
+      // settings: this.props.container.settings,
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
-      errorSettings: null
+      // errorSettings: null
     };
   }
 
@@ -56,7 +56,7 @@ class ContainerEdit extends Component {
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domain_name: this.state.domain_name,
-      settings: this.state.settings
+      // settings: this.state.settings
     });
     const callbackFunction = json => {
       if (json.errors) {
@@ -65,7 +65,7 @@ class ContainerEdit extends Component {
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
           errorDomainName: json.errors.domainName,
-          errorSettings: json.errors.settings
+          // errorSettings: json.errors.settings
         });
       } else {
         // window.location.href = '/containers/overview';
@@ -88,7 +88,7 @@ class ContainerEdit extends Component {
           <FormControl
             type="text"
             defaultValue={this.state.name}
-            value={this.state.name.value}
+            value={this.state.name ? this.state.name.value : ''}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
@@ -100,7 +100,7 @@ class ContainerEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.ipv4}
-            value={this.state.ipv4.value}
+            value={this.state.ipv4 ? this.state.ipv4.value : ''}
             placeholder="Enter IPv4 address"
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
@@ -112,7 +112,7 @@ class ContainerEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.ipv6}
-            value={this.state.ipv6.value}
+            value={this.state.ipv6 ? this.state.ipv6.value : ''}
             placeholder="Enter IPv6 address"
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
@@ -124,14 +124,14 @@ class ContainerEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.domain_name}
-            value={this.state.domain_name.value}
+            value={this.state.domain_name ? this.state.domain_name.value : ''}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
+        {/* <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
@@ -142,7 +142,7 @@ class ContainerEdit extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorSettings}</HelpBlock>
-        </FormGroup>
+        </FormGroup> */}
         <Button
           type="button"
           disabled={this.state.name.length < 1}

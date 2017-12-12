@@ -70,27 +70,14 @@ class MainArea extends Component {
     });
   }
 
-  // httpGetHostsAndContainers = () => {
-  //   const containers = [];
-  //   this.state.hosts.forEach(host => {
-  //     const set = { host: host.name };
-  //     this.httpRequest('GET', `hosts/${host.id}/containers`, null, json => {
-  //       set.containers = json;
-  //     })
-  //     containers.push(set);
-  //   });
-  //   this.setState({ containers: containers });
-  //   console.log('containers:', containers);
-  // }
-
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, json => {
-      this.setState({ containers: json});
-      if (this.state.containers instanceof Array) {
-        this.state.containers.forEach(container => {
-          this.httpGetContainerState(container.id);
-        });
-      };
+      this.setState({ containers: json });
+      // if (this.state.containers instanceof Array) {
+      //   this.state.containers.forEach(container => {
+      //     this.httpGetContainerState(container.id);
+      //   });
+      // };
     });
   }
 
@@ -107,7 +94,7 @@ class MainArea extends Component {
       action: action
     });
     this.httpRequest('PUT', `containers/${id}/state`, body, () => {
-      this.httpGetContainerState(id);
+      // this.httpGetContainerState(id);
     })
   }
 
@@ -116,13 +103,6 @@ class MainArea extends Component {
       this.setState({ hosts: json });
     })
   }
-
-  // httpGetContainers = () => {
-  //   this.httpRequest('GET', 'hosts', null, json => {
-  //     this.setState({ hosts: json });
-  //     this.httpGetContainers();
-  //   })
-  // }
 
   showStatus = () => {
     if (this.state.loading)
@@ -139,6 +119,8 @@ class MainArea extends Component {
           path="/containers"
           render={() => <ContainerPage
                           httpRequest={this.httpRequest}
+                          httpGetHosts={this.httpGetHosts}
+                          hosts={this.state.hosts}
                           httpGetContainers={this.httpGetContainers}
                           httpPutContainerState={this.httpPutContainerState}
                           containers={this.state.containers}

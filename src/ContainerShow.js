@@ -17,7 +17,7 @@ class ContainerShow extends Component {
         ipv4: '',
         ipv6: '',
         domain_name: '',
-        settings: ''
+        // settings: ''
       },
       containerState: ''
     }
@@ -37,18 +37,13 @@ class ContainerShow extends Component {
     this.setState({ editView: !this.state.editView });
   }
 
-  // findHostId = id => {
-  //   const hostId = this.props.containers.find(
-  //     container => container.id === id).host;
-  // }
-
   httpGetContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}`, null, json => {
       this.setState({
         container: json
       });
-      this.httpGetContainerState(id);
+      // this.httpGetContainerState(id);
     });
   }
 
@@ -72,7 +67,6 @@ class ContainerShow extends Component {
   httpDeleteContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `containers/${id}`, null, () => {
-        // window.location.href = '/containers/overview';
         this.props.httpGetContainers();
         this.setState({ redirect: true });
       }
@@ -93,12 +87,13 @@ class ContainerShow extends Component {
               <th>IPv4</th>
               <th>IPv6</th>
               <th>Domain Name</th>
-              <th>Settings</th>
+              {/* <th>Settings</th> */}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{this.state.containerState}</td>
+              {/* <td>{this.state.containerState}</td> */}
+              <td>{this.state.container.state}</td>
               <td>
                 <Button type="button" onClick={() => this.httpPutContainerState('start')}>
                   <i className="fa fa-play"></i>
@@ -110,12 +105,12 @@ class ContainerShow extends Component {
                   <i className="fa fa-repeat"></i>
                 </Button>
               </td>
-              <td>{this.state.container.host}</td>
+              <td>{this.state.container.host.name}</td>
               <td>{this.state.container.name}</td>
               <td>{this.state.container.ipv4}</td>
               <td>{this.state.container.ipv6}</td>
               <td>{this.state.container.domain_name}</td>
-              <td>{this.state.container.settings}</td>
+              {/* <td>{this.state.container.settings}</td> */}
             </tr>
           </tbody>
         </Table>

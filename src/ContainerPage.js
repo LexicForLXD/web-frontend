@@ -35,8 +35,8 @@ class ContainerPage extends Component {
             refresh={this.props.httpGetContainers}
             overview
             create
-            items={this.state.containers}
-            icon={'fa fa-server'}
+            items={this.props.containers}
+            icon={'fa fa-cube'}
             select={this.select}
           />
         </Col>
@@ -53,7 +53,8 @@ class ContainerPage extends Component {
             path="/containers/create"
             render={() => <ContainerCreate
                             hosts={this.props.hosts}
-                            httpGetContainers={this.httpGetContainers}
+                            httpGetHosts={this.props.httpGetHosts}
+                            httpGetContainers={this.props.httpGetContainers}
                             httpRequest={this.props.httpRequest}
                           />}
           />

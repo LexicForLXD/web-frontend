@@ -39,14 +39,11 @@ class HostPage extends Component {
             exact path="/hosts"
             render={() => <HostOverview hosts={this.props.hosts} />}
           />
-          {/* <Route
-            path="/hosts/overview"
-            render={() => <HostOverview hosts={this.props.hosts} />}
-          /> */}
           <Route
             path="/hosts/create"
             render={() => <HostCreate
                             httpGetHosts={this.props.httpGetHosts}
+                            hosts={this.state.hosts}
                             httpRequest={this.props.httpRequest}
                           />}
           />

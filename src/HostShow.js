@@ -48,7 +48,6 @@ class HostShow extends Component {
   httpDeleteHost = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `hosts/${id}`, null, () => {
-        // window.location.href = '/hosts/overview';
         this.props.httpGetHosts();
         this.setState({ redirect: true });
       }

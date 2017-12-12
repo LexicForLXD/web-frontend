@@ -76,11 +76,9 @@ class HostEdit extends Component {
           errorSettings: json.errors.settings
         });
       } else {
-        // window.location.href = '/hosts/overview';
         this.props.httpGetHosts();
         this.setState({ redirect: true });
       }
-      // this.props.httpGetHosts();
     }
     this.props.httpRequest(
       'PUT', `hosts/${this.props.host.id}`, body, callbackFunction
@@ -96,7 +94,7 @@ class HostEdit extends Component {
           <FormControl
             type="text"
             defaultValue={this.state.name}
-            value={this.state.name.value}
+            value={this.state.name ? this.state.name.value : ''}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
@@ -108,7 +106,7 @@ class HostEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.ipv4}
-            value={this.state.ipv4.value}
+            value={this.state.ipv4 ? this.state.ipv4.value : ''}
             placeholder="Enter IPv4 address"
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
@@ -120,7 +118,7 @@ class HostEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.ipv6}
-            value={this.state.ipv6.value}
+            value={this.state.ipv6 ? this.state.ipv6.value : ''}
             placeholder="Enter IPv6 address"
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
@@ -132,7 +130,7 @@ class HostEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.domain_name}
-            value={this.state.domain_name.value}
+            value={this.state.domain_name ? this.state.domain_name.value : ''}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}
@@ -144,7 +142,7 @@ class HostEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.mac}
-            value={this.state.mac.value}
+            value={this.state.mac ? this.state.mac.value : ''}
             placeholder="Enter MAC address"
             onChange={this.handleMacChange}
             onKeyDown={this.handleKeyPress}
@@ -156,7 +154,7 @@ class HostEdit extends Component {
           <FormControl
             type='text'
             defaultValue={this.state.settings}
-            value={this.state.settings.value}
+            value={this.state.settings ? this.state.settings.value : ''}
             placeholder="Enter settings"
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}

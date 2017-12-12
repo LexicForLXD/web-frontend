@@ -1,24 +1,38 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-class HostCreate extends Component {
+class ContainerCreate extends Component {
   constructor(props) {
     super();
     this.state = {
       host: '',
+      type: '',
       name: '',
       ipv4: '',
       ipv6: '',
       domain_name: '',
-      settings: '',
+      // settings: '',
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
-      errorSettings: null
+      // errorSettings: null
     };
+  }
+
+  componentDidMount() {
+    this.props.httpGetHosts();
+  }
+
+  handleTypeChange = e => {
+    this.setState({ type: this.typeList.value });
+  }
+
+  handleHostChange = e => {
+    this.setState({ host: this.hostList.value });
   }
 
   handleNameChange = e => {
@@ -48,17 +62,17 @@ class HostCreate extends Component {
   }
 
   submit = () => {
-    this.httpPostHost();
+    this.httpPostContainer();
   }
 
-  httpPostHost = () => {
+  httpPostContainer = () => {
     const body = JSON.stringify({
       host: this.state.host,
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domain_name: this.state.domain_name,
-      settings: this.state.settings
+      // settings: this.state.settings
     });
     const callbackFunction = json => {
       if (json.errors) {
@@ -67,25 +81,44 @@ class HostCreate extends Component {
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
           errorDomainName: json.errors.domainName,
-          errorSettings: json.errors.settings
+          // errorSettings: json.errors.settings
         });
       } else {
-        // window.location.href = '/containers/overview';
-        this.props.httpGetHosts();
+        this.props.httpGetContainers();
         this.setState({ redirect: true });
       }
-      // this.props.httpGetHosts();
     }
-    this.props.httpRequest('POST', `hosts/${this.state.host}/containers`, body, callbackFunction);
+    this.props.httpRequest('POST', `hosts/${this.state.host}/containers?type=${this.state.type}`, body, callbackFunction);
   }
 
   render() {
     return (
       <form>
         {this.state.redirect && <Redirect from="/containers/create" exact to="/containers" />}
+        <FormGroup controlId="formType">
+          <ControlLabel>Select Type</ControlLabel>
+          <FormControl
+            componentClass="select"
+            placeholder="select"
+            onChange={this.handleTypeChange}
+            inputRef={ tl => this.typeList = tl }
+          >
+            <option value="none">None</option>
+            <option value="image">Image</option>
+            <option value="copy">Copy</option>
+            <option value="migrate">Migrate</option>
+            }
+          </FormControl>
+        </FormGroup>
         <FormGroup controlId="formHost">
           <ControlLabel>Select Host</ControlLabel>
-          <FormControl componentClass="select" placeholder="select">
+          <FormControl
+            componentClass="select"
+            placeholder="select"
+            onChange={this.handleHostChange}
+            inputRef={ hl => this.hostList = hl }
+          >
+            <option>...</option>
             {this.props.hosts instanceof Array &&
               this.props.hosts.map(host =>
                 <option value={host.id}>{host.name}</option>
@@ -137,7 +170,7 @@ class HostCreate extends Component {
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
+        {/* <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
@@ -147,7 +180,7 @@ class HostCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorSettings}</HelpBlock>
-        </FormGroup>
+        </FormGroup> */}
         <Button
           type="button"
           disabled={this.state.name.length < 1}
@@ -160,4 +193,4 @@ class HostCreate extends Component {
   }
 }
 
-export default HostCreate;
+export default ContainerCreate;

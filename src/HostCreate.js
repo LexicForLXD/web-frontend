@@ -76,11 +76,9 @@ class HostCreate extends Component {
           errorSettings: json.errors.settings
         });
       } else {
-        // window.location.href = '/hosts/overview';
         this.props.httpGetHosts();
         this.setState({ redirect: true });
       }
-      // this.props.httpGetHosts();
     }
     this.props.httpRequest('POST', 'hosts', body, callbackFunction);
   }
