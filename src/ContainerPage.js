@@ -62,7 +62,6 @@ class ContainerPage extends Component {
             path="/containers/show"
             render={() => <ContainerShow
                             id={queryString.parse(window.location.search).id}
-                            containers={this.props.containers}
                             httpGetContainers={this.httpGetContainers}
                             httpPutContainerState={this.props.httpPutContainerState}
                             httpRequest={this.props.httpRequest}

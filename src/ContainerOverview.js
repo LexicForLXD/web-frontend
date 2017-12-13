@@ -24,7 +24,7 @@ class ContainerOverview extends Component {
         </thead>
         <tbody>
           {this.props.containers instanceof Array &&
-            this.props.containers.map(container =>
+            this.props.containers.sort((a, b) => a.name > b.name).map(container =>
               <tr key={container.id}>
                 {/* <td>{this.props.containerStates[container.id]}</td> */}
                 <td>{container.state}</td>

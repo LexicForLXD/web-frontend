@@ -17,7 +17,7 @@ class ContainerShow extends Component {
         ipv4: '',
         ipv6: '',
         domain_name: '',
-        // settings: ''
+        settings: ''
       },
       containerState: ''
     }
@@ -87,12 +87,10 @@ class ContainerShow extends Component {
               <th>IPv4</th>
               <th>IPv6</th>
               <th>Domain Name</th>
-              {/* <th>Settings</th> */}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {/* <td>{this.state.containerState}</td> */}
               <td>{this.state.container.state}</td>
               <td>
                 <Button type="button" onClick={() => this.httpPutContainerState('start')}>
@@ -110,7 +108,95 @@ class ContainerShow extends Component {
               <td>{this.state.container.ipv4}</td>
               <td>{this.state.container.ipv6}</td>
               <td>{this.state.container.domain_name}</td>
-              {/* <td>{this.state.container.settings}</td> */}
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Settings</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>Architecture</th>
+              <th>Ephermal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.settings.architecture}</td>
+              <td>{this.state.container.settings.ephermal}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Config</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>CPU Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.settings.config ? this.state.container.settings.config['limits.cpu'] : ''}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Devices: Root</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>path</th>
+              <th>type</th>
+              <th>pool</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.path : '' : ''}</td>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.type : '' : ''}</td>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.pool : '' : ''}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Source</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Mode</th>
+              <th>Server</th>
+              <th>Protocol</th>
+              <th>Alias</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.settings.source ? this.state.container.settings.source.type : ''}</td>
+              <td>{this.state.container.settings.source ? this.state.container.settings.source.mode : ''}</td>
+              <td>{this.state.container.settings.source ? this.state.container.settings.source.server : ''}</td>
+              <td>{this.state.container.settings.source ? this.state.container.settings.source.protocol : ''}</td>
+              <td>{this.state.container.settings.source ? this.state.container.settings.source.alias : ''}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Host</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Domain Name</th>
+              <th>Port</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.host ? this.state.container.host.name : ''}</td>
+              <td>{this.state.container.host ? this.state.container.host.domain_name : ''}</td>
+              <td>{this.state.container.host ? this.state.container.host.port : ''}</td>
             </tr>
           </tbody>
         </Table>
