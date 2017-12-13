@@ -3,6 +3,7 @@ import './App.css';
 import HostEdit from './HostEdit.js';
 import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
+import { Redirect } from 'react-router-dom';
 
 class HostShow extends Component {
   constructor(props) {
@@ -45,9 +46,10 @@ class HostShow extends Component {
   }
 
   httpDeleteHost = () => {
-    this.props.httpRequest('DELETE', `hosts/${this.state.host.id}`, null, () => {
-        window.location.href = '/hosts/overview';
-        // this.props.httpGetHosts();
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('DELETE', `hosts/${id}`, null, () => {
+        this.props.httpGetHosts();
+        this.setState({ redirect: true });
       }
     );
   }
@@ -55,6 +57,7 @@ class HostShow extends Component {
   render() {
     return (
       <div>
+        {this.state.redirect && <Redirect from="/hosts/show" exact to="/hosts" />}
         <Table bordered responsive striped>
           <thead>
             <tr>

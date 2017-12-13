@@ -3,22 +3,20 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-class HostEdit extends Component {
+class ContainerEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.host.name,
-      ipv4: this.props.host.ipv4,
-      ipv6: this.props.host.ipv6,
-      domain_name: this.props.host.domain_name,
-      mac: this.props.host.mac,
-      settings: this.props.host.settings,
+      name: this.props.container.name,
+      ipv4: this.props.container.ipv4,
+      ipv6: this.props.container.ipv6,
+      domain_name: this.props.container.domain_name,
+      // settings: this.props.container.settings,
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
-      errorMac: null,
-      errorSettings: null
+      // errorSettings: null
     };
   }
 
@@ -38,10 +36,6 @@ class HostEdit extends Component {
     this.setState({ domain_name: e.target.value });
   }
 
-  handleMacChange = e => {
-    this.setState({ mac: e.target.value });
-  }
-
   handleSettingsChange = e => {
     this.setState({ settings: e.target.value });
   }
@@ -53,17 +47,16 @@ class HostEdit extends Component {
   }
 
   submit = () => {
-    this.httpPutHost();
+    this.httpPutContainer();
   }
 
-  httpPutHost = () => {
+  httpPutContainer = () => {
     const body = JSON.stringify({
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domain_name: this.state.domain_name,
-      mac: this.state.mac,
-      settings: this.state.settings
+      // settings: this.state.settings
     });
     const callbackFunction = json => {
       if (json.errors) {
@@ -72,23 +65,24 @@ class HostEdit extends Component {
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
           errorDomainName: json.errors.domainName,
-          errorMac: json.errors.mac,
-          errorSettings: json.errors.settings
+          // errorSettings: json.errors.settings
         });
       } else {
-        this.props.httpGetHosts();
+        // window.location.href = '/containers/overview';
+        this.props.httpGetContainers();
         this.setState({ redirect: true });
       }
+      // this.props.httpGetContainers();
     }
     this.props.httpRequest(
-      'PUT', `hosts/${this.props.host.id}`, body, callbackFunction
+      'PUT', `containers/${this.props.container.id}`, body, callbackFunction
     );
   }
 
   render() {
     return (
       <form>
-        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
+        {this.state.redirect && <Redirect from="/containers/edit" exact to="/containers" />}
         <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
@@ -137,30 +131,18 @@ class HostEdit extends Component {
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
-          <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.mac}
-            value={this.state.mac ? this.state.mac.value : ''}
-            placeholder="Enter MAC address"
-            onChange={this.handleMacChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorMac}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
+        {/* <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
             defaultValue={this.state.settings}
-            value={this.state.settings ? this.state.settings.value : ''}
+            value={this.state.settings.value}
             placeholder="Enter settings"
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorSettings}</HelpBlock>
-        </FormGroup>
+        </FormGroup> */}
         <Button
           type="button"
           disabled={this.state.name.length < 1}
@@ -173,4 +155,4 @@ class HostEdit extends Component {
   }
 }
 
-export default HostEdit;
+export default ContainerEdit;

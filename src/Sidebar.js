@@ -9,7 +9,7 @@ class Sidebar extends Component {
   }
 
   mapItems = () =>
-    this.props.items.map((item, index) =>
+    this.props.items.sort((a, b) => a.name > b.name).map((item, index) =>
       <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
         <NavItem>
           <i className={this.props.icon}></i> {item.name}
@@ -32,7 +32,7 @@ class Sidebar extends Component {
         }
         <Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
           {this.props.overview &&
-            <LinkContainer to={`/${this.props.parent}/overview`}>
+            <LinkContainer to={`/${this.props.parent}`}>
               <NavItem>
                 <i className="fa fa-desktop"></i> Overview
               </NavItem>

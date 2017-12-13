@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-class HostEdit extends Component {
+class ContainerCreate extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
-      name: this.props.host.name,
-      ipv4: this.props.host.ipv4,
-      ipv6: this.props.host.ipv6,
-      domain_name: this.props.host.domain_name,
-      mac: this.props.host.mac,
-      settings: this.props.host.settings,
+      host: '',
+      type: '',
+      name: '',
+      ipv4: '',
+      ipv6: '',
+      domain_name: '',
+      // settings: '',
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
-      errorMac: null,
-      errorSettings: null
+      // errorSettings: null
     };
+  }
+
+  componentDidMount() {
+    this.props.httpGetHosts();
+  }
+
+  handleTypeChange = e => {
+    this.setState({ type: this.typeList.value });
+  }
+
+  handleHostChange = e => {
+    this.setState({ host: this.hostList.value });
   }
 
   handleNameChange = e => {
@@ -38,10 +51,6 @@ class HostEdit extends Component {
     this.setState({ domain_name: e.target.value });
   }
 
-  handleMacChange = e => {
-    this.setState({ mac: e.target.value });
-  }
-
   handleSettingsChange = e => {
     this.setState({ settings: e.target.value });
   }
@@ -53,17 +62,17 @@ class HostEdit extends Component {
   }
 
   submit = () => {
-    this.httpPutHost();
+    this.httpPostContainer();
   }
 
-  httpPutHost = () => {
+  httpPostContainer = () => {
     const body = JSON.stringify({
+      host: this.state.host,
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domain_name: this.state.domain_name,
-      mac: this.state.mac,
-      settings: this.state.settings
+      // settings: this.state.settings
     });
     const callbackFunction = json => {
       if (json.errors) {
@@ -72,29 +81,56 @@ class HostEdit extends Component {
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
           errorDomainName: json.errors.domainName,
-          errorMac: json.errors.mac,
-          errorSettings: json.errors.settings
+          // errorSettings: json.errors.settings
         });
       } else {
-        this.props.httpGetHosts();
+        this.props.httpGetContainers();
         this.setState({ redirect: true });
       }
     }
-    this.props.httpRequest(
-      'PUT', `hosts/${this.props.host.id}`, body, callbackFunction
-    );
+    this.props.httpRequest('POST', `hosts/${this.state.host}/containers?type=${this.state.type}`, body, callbackFunction);
   }
 
   render() {
     return (
       <form>
-        {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
+        {this.state.redirect && <Redirect from="/containers/create" exact to="/containers" />}
+        <FormGroup controlId="formType">
+          <ControlLabel>Select Type</ControlLabel>
+          <FormControl
+            componentClass="select"
+            placeholder="select"
+            onChange={this.handleTypeChange}
+            inputRef={ tl => this.typeList = tl }
+          >
+            <option value="none">None</option>
+            <option value="image">Image</option>
+            <option value="copy">Copy</option>
+            <option value="migrate">Migrate</option>
+            }
+          </FormControl>
+        </FormGroup>
+        <FormGroup controlId="formHost">
+          <ControlLabel>Select Host</ControlLabel>
+          <FormControl
+            componentClass="select"
+            placeholder="select"
+            onChange={this.handleHostChange}
+            inputRef={ hl => this.hostList = hl }
+          >
+            <option>...</option>
+            {this.props.hosts instanceof Array &&
+              this.props.hosts.map(host =>
+                <option value={host.id}>{host.name}</option>
+              )
+            }
+          </FormControl>
+        </FormGroup>
         <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
-            defaultValue={this.state.name}
-            value={this.state.name ? this.state.name.value : ''}
+            value={this.state.name.value}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
@@ -105,8 +141,7 @@ class HostEdit extends Component {
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.ipv4}
-            value={this.state.ipv4 ? this.state.ipv4.value : ''}
+            value={this.state.ipv4.value}
             placeholder="Enter IPv4 address"
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
@@ -117,8 +152,7 @@ class HostEdit extends Component {
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.ipv6}
-            value={this.state.ipv6 ? this.state.ipv6.value : ''}
+            value={this.state.ipv6.value}
             placeholder="Enter IPv6 address"
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
@@ -129,38 +163,24 @@ class HostEdit extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.domain_name}
-            value={this.state.domain_name ? this.state.domain_name.value : ''}
+            value={this.state.domain_name.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
-          <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.mac}
-            value={this.state.mac ? this.state.mac.value : ''}
-            placeholder="Enter MAC address"
-            onChange={this.handleMacChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorMac}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
+        {/* <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.settings}
-            value={this.state.settings ? this.state.settings.value : ''}
+            value={this.state.settings.value}
             placeholder="Enter settings"
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorSettings}</HelpBlock>
-        </FormGroup>
+        </FormGroup> */}
         <Button
           type="button"
           disabled={this.state.name.length < 1}
@@ -173,4 +193,4 @@ class HostEdit extends Component {
   }
 }
 
-export default HostEdit;
+export default ContainerCreate;

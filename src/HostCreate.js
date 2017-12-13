@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 class HostCreate extends Component {
   constructor(props) {
@@ -75,9 +76,9 @@ class HostCreate extends Component {
           errorSettings: json.errors.settings
         });
       } else {
-        window.location.href = '/hosts/overview';
+        this.props.httpGetHosts();
+        this.setState({ redirect: true });
       }
-      // this.props.httpGetHosts();
     }
     this.props.httpRequest('POST', 'hosts', body, callbackFunction);
   }
@@ -85,6 +86,7 @@ class HostCreate extends Component {
   render() {
     return (
       <form>
+        {this.state.redirect && <Redirect from="/hosts/create" exact to="/hosts" />}
         <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
