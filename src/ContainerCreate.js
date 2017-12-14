@@ -133,7 +133,6 @@ class ContainerCreate extends Component {
           <ControlLabel>Type</ControlLabel>
           <FormControl
             componentClass="select"
-            placeholder="select"
             onChange={this.handleTypeChange}
             inputRef={ tl => this.typeList = tl }
           >
@@ -147,7 +146,6 @@ class ContainerCreate extends Component {
           <ControlLabel>Alias</ControlLabel>
           <FormControl
             componentClass="select"
-            placeholder="select"
             onChange={this.handleAliasChange}
             inputRef={ list => this.aliasList = list }
           >
@@ -158,7 +156,6 @@ class ContainerCreate extends Component {
           <ControlLabel>CPU Limit</ControlLabel>
           <FormControl
             componentClass="select"
-            placeholder="select"  // necessary?
             onChange={this.handleLimitsCpuChange}
             inputRef={ list => this.limitsCpuList = list }
           >
@@ -172,7 +169,6 @@ class ContainerCreate extends Component {
           <ControlLabel>Host</ControlLabel>
           <FormControl
             componentClass="select"
-            placeholder="select"
             onChange={this.handleHostChange}
             inputRef={ hl => this.hostList = hl }
           >
