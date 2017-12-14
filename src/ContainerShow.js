@@ -43,24 +43,24 @@ class ContainerShow extends Component {
       this.setState({
         container: json
       });
-      // this.httpGetContainerState(id);
+      // this.httpShowGetContainerState(id);
     });
   }
 
-  httpGetContainerState = () => {
+  httpShowGetContainerState = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}/state`, null, json => {
       this.setState({ containerState: json.metadata.status });
     });
   }
 
-  httpPutContainerState = action => {
+  httpShowPutContainerState = action => {
     const id = queryString.parse(window.location.search).id;
     const body = JSON.stringify({
       action: action
     });
     this.props.httpRequest('PUT', `containers/${id}/state`, body, () => {
-      this.httpGetContainerState(id);
+      this.httpShowGetContainerState(id);
     })
   }
 
@@ -93,13 +93,13 @@ class ContainerShow extends Component {
             <tr>
               <td>{this.state.container.state}</td>
               <td>
-                <Button type="button" onClick={() => this.httpPutContainerState('start')}>
+                <Button type="button" onClick={() => this.httpShowPutContainerState('start')}>
                   <i className="fa fa-play"></i>
                 </Button>
-                <Button type="button" onClick={() => this.httpPutContainerState('stop')}>
+                <Button type="button" onClick={() => this.httpShowPutContainerState('stop')}>
                   <i className="fa fa-stop"></i>
                 </Button>
-                <Button type="button" onClick={() => this.httpPutContainerState('restart')}>
+                <Button type="button" onClick={() => this.httpShowPutContainerState('restart')}>
                   <i className="fa fa-repeat"></i>
                 </Button>
               </td>
@@ -116,49 +116,13 @@ class ContainerShow extends Component {
           <thead>
             <tr>
               <th>Architecture</th>
-              <th>Ephermal</th>
+              <th>Ephermeral</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{this.state.container.settings.architecture}</td>
-              <td>{this.state.container.settings.epheremal}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Config</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>CPU Limit</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.container.settings.config ? this.state.container.settings.config['limits.cpu'] : ''}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Devices: Root</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>path</th>
-              <th>type</th>
-              <th>pool</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.path : '' : ''}</td>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.type : '' : ''}</td>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.pool : '' : ''}</td>
+              <td>{this.state.container.settings.ephermeral ? 'true' : 'false'}</td>
             </tr>
           </tbody>
         </Table>
@@ -196,7 +160,45 @@ class ContainerShow extends Component {
             <tr>
               <td>{this.state.container.host ? this.state.container.host.name : ''}</td>
               <td>{this.state.container.host ? this.state.container.host.domain_name : ''}</td>
-              <td>{this.state.container.host ? this.state.container.host.port : ''}</td>
+              {/* <td>{this.state.container.host ? this.state.container.host.port : ''}</td> */}
+              <td>8443</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Config</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>CPU Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {/* <td>{this.state.container.settings.config ? this.state.container.settings.config['limits.cpu'] : ''}</td> */}
+              <td>2</td>
+            </tr>
+          </tbody>
+        </Table>
+        <h5><b>Devices: Root</b></h5>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>path</th>
+              <th>type</th>
+              <th>pool</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.path : '' : ''}</td>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.type : '' : ''}</td>
+              <td>{this.state.container.settings.devices ?
+                   this.state.container.settings.devices.root ?
+                   this.state.container.settings.devices.root.pool : '' : ''}</td>
             </tr>
           </tbody>
         </Table>

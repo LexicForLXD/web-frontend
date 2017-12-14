@@ -70,8 +70,17 @@ class MainArea extends Component {
     });
   }
 
+  compareName = (a, b) => {
+    if (a.name < b.name)
+      return -1;
+    if (a.name > b.name)
+      return 1;
+    return 0;
+  }
+
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, json => {
+      json.sort(this.compareName);
       this.setState({ containers: json });
       // if (this.state.containers instanceof Array) {
       //   this.state.containers.forEach(container => {
@@ -100,6 +109,7 @@ class MainArea extends Component {
 
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, json => {
+      json.sort(this.compareName);
       this.setState({ hosts: json });
     })
   }

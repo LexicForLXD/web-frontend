@@ -9,7 +9,7 @@ class Sidebar extends Component {
   }
 
   mapItems = () =>
-    this.props.items.sort((a, b) => a.name > b.name).map((item, index) =>
+    this.props.items.map((item, index) =>
       <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
         <NavItem>
           <i className={this.props.icon}></i> {item.name}
