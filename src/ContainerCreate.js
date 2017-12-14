@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
@@ -14,12 +13,11 @@ class ContainerCreate extends Component {
       ipv4: '',
       ipv6: '',
       domain_name: '',
-      // settings: '',
+      limitsCpu: 1,
       errorName: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
-      // errorSettings: null
     };
   }
 
@@ -30,6 +28,10 @@ class ContainerCreate extends Component {
   handleTypeChange = e => {
     this.setState({ type: this.typeList.value });
   }
+
+  // handleAliasChange = e => {
+  //   this.setState({ type: this.aliasList.value });
+  // }
 
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
@@ -51,8 +53,8 @@ class ContainerCreate extends Component {
     this.setState({ domain_name: e.target.value });
   }
 
-  handleSettingsChange = e => {
-    this.setState({ settings: e.target.value });
+  handleLimitsCpuChange = e => {
+    this.setState({ limitsCpu: e.target.value });
   }
 
   handleKeyPress = e => {
@@ -72,7 +74,40 @@ class ContainerCreate extends Component {
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domain_name: this.state.domain_name,
-      // settings: this.state.settings
+      // limitsCpu: this.state.limitsCpu
+      settings: {
+        name: this.state.name,
+        architecture: 'x86_64',
+        profiles: [
+           'default'
+        ],
+        ephermeral: false,
+        config: {
+           'limits.cpu': 1
+        },
+        devices: {
+           root: {
+               path: '/',
+               type: 'disk',
+               pool: 'default'
+           }
+        },
+        source: {
+           'type': 'image',
+           mode: 'pull',
+           server: 'https://images.linuxcontainers.org:8443',
+           protocol: 'lxd',
+           alias: 'ubuntu/zesty/amd64'
+        }
+      }
+      // host: {
+      //    id: 44,
+      //    domain_name: 'lxd-host.lleon.de',
+      //    name: 'lxd-host2',
+      //    port: 8443,
+      //    settings: 'settings',
+      //    containers: []
+      // },
     });
     const callbackFunction = json => {
       if (json.errors) {
@@ -81,7 +116,6 @@ class ContainerCreate extends Component {
           errorIpv4: json.errors.ipv4,
           errorIpv6: json.errors.ipv6,
           errorDomainName: json.errors.domainName,
-          // errorSettings: json.errors.settings
         });
       } else {
         this.props.httpGetContainers();
@@ -96,7 +130,7 @@ class ContainerCreate extends Component {
       <form>
         {this.state.redirect && <Redirect from="/containers/create" exact to="/containers" />}
         <FormGroup controlId="formType">
-          <ControlLabel>Select Type</ControlLabel>
+          <ControlLabel>Type</ControlLabel>
           <FormControl
             componentClass="select"
             placeholder="select"
@@ -107,11 +141,35 @@ class ContainerCreate extends Component {
             <option value="image">Image</option>
             <option value="copy">Copy</option>
             <option value="migrate">Migrate</option>
-            }
+          </FormControl>
+        </FormGroup>
+        <FormGroup controlId="formAlias">
+          <ControlLabel>Alias</ControlLabel>
+          <FormControl
+            componentClass="select"
+            placeholder="select"
+            onChange={this.handleAliasChange}
+            inputRef={ list => this.aliasList = list }
+          >
+            <option value="ubuntu/zesty/amd64">ubuntu/zesty/amd64</option>
+          </FormControl>
+        </FormGroup>
+        <FormGroup controlId="formLimitsCpu">
+          <ControlLabel>CPU Limit</ControlLabel>
+          <FormControl
+            componentClass="select"
+            placeholder="select"  // necessary?
+            onChange={this.handleLimitsCpuChange}
+            inputRef={ list => this.limitsCpuList = list }
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
           </FormControl>
         </FormGroup>
         <FormGroup controlId="formHost">
-          <ControlLabel>Select Host</ControlLabel>
+          <ControlLabel>Host</ControlLabel>
           <FormControl
             componentClass="select"
             placeholder="select"
@@ -170,17 +228,6 @@ class ContainerCreate extends Component {
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        {/* <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
-          <ControlLabel className="ControlLabel">Settings</ControlLabel>
-          <FormControl
-            type='text'
-            value={this.state.settings.value}
-            placeholder="Enter settings"
-            onChange={this.handleSettingsChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorSettings}</HelpBlock>
-        </FormGroup> */}
         <Button
           type="button"
           disabled={this.state.name.length < 1}

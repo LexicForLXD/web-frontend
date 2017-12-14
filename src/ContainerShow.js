@@ -122,7 +122,7 @@ class ContainerShow extends Component {
           <tbody>
             <tr>
               <td>{this.state.container.settings.architecture}</td>
-              <td>{this.state.container.settings.ephermal}</td>
+              <td>{this.state.container.settings.epheremal}</td>
             </tr>
           </tbody>
         </Table>
