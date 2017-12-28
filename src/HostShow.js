@@ -38,9 +38,9 @@ class HostShow extends Component {
 
   httpGetHost = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `hosts/${id}`, null, json => {
+    this.props.httpRequest('GET', `hosts/${id}`, null, obj => {
       this.setState({
-        host: json
+        host: obj.jsonData
       })
     });
   }

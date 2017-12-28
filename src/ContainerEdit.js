@@ -58,13 +58,13 @@ class ContainerEdit extends Component {
       domain_name: this.state.domain_name,
       // settings: this.state.settings
     });
-    const callbackFunction = json => {
-      if (json.errors) {
+    const callbackFunction = obj => {
+      if (obj.jsonData.errors) {
         this.setState({
-          errorName: json.errors.name,
-          errorIpv4: json.errors.ipv4,
-          errorIpv6: json.errors.ipv6,
-          errorDomainName: json.errors.domainName,
+          errorName: obj.jsonData.errors.name,
+          errorIpv4: obj.jsonData.errors.ipv4,
+          errorIpv6: obj.jsonData.errors.ipv6,
+          errorDomainName: obj.jsonData.errors.domainName,
           // errorSettings: json.errors.settings
         });
       } else {

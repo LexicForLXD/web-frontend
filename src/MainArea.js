@@ -41,19 +41,35 @@ class MainArea extends Component {
       body: body
     })
     .then(response => {
-      console.log('Request response: ', response);  // Remove in production
+      console.log('Request response: ', response);
       if (response.status === 401) {
         this.props.logout();  // TODO try using refresh token before logging out
+        Promise.reject();
       };
-      const contentType = response.headers.get("content-type");
-      if(contentType && contentType.includes("application/json")) {
-        return response.json();
+      const obj = {};
+      obj.httpStatus = response.status;
+
+      const contentType = response.headers.get('content-type');
+      obj.isJson = (contentType && contentType.includes('application/json'));
+
+      if (obj.isJson) {
+        return response.json().then(json => {
+          obj.jsonData = json;
+          return obj;
+        })
       }
-      return {};
+      return obj;
     })
-    .then(json => {
-      console.log('Response body: ', json);  // Remove in production
-      callbackFunction(json);
+    .then(obj => {
+      if (obj.jsonData)
+        obj.jsonIsArray = (obj.jsonData instanceof Array) ? true : false;
+
+      console.log('Request response JSON data: ', obj.jsonData);
+
+      if (obj.jsonIsArray)
+        obj.jsonArrayIsEmpty = (obj.jsonData.length === 0) ? true : false;
+
+      callbackFunction(obj);
     })
     .then(() => {
       this.setState({
@@ -62,7 +78,7 @@ class MainArea extends Component {
       });
     })
     .catch(error => {
-      console.log('Request failed: ', error); // Remove in production
+      console.log('Request failed: ', error);
       this.setState({
         loading: false,
         error: true
@@ -79,21 +95,18 @@ class MainArea extends Component {
   }
 
   httpGetContainers = () => {
-    this.httpRequest('GET', 'containers', null, json => {
-      json.sort(this.compareName);
-      this.setState({ containers: json });
-      // if (this.state.containers instanceof Array) {
-      //   this.state.containers.forEach(container => {
-      //     this.httpGetContainerState(container.id);
-      //   });
-      // };
+    this.httpRequest('GET', 'containers', null, obj => {
+      // if (!obj.isArray) throw 'json is not an array';  // TODO
+      // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
+      obj.jsonData.sort(this.compareName);
+      this.setState({ containers: obj.jsonData });
     });
   }
 
   httpGetContainerState = id => {
-    this.httpRequest('GET', `containers/${id}/state`, null, json => {
+    this.httpRequest('GET', `containers/${id}/state`, null, obj => {
       const containerStates = this.state.containerStates;
-      containerStates[id] = json.metadata.status;
+      containerStates[id] = obj.jsonData.metadata.status;
       this.setState({ containerStates: containerStates });
     });
   }
@@ -103,14 +116,13 @@ class MainArea extends Component {
       action: action
     });
     this.httpRequest('PUT', `containers/${id}/state`, body, () => {
-      // this.httpGetContainerState(id);
     })
   }
 
   httpGetHosts = () => {
-    this.httpRequest('GET', 'hosts', null, json => {
-      json.sort(this.compareName);
-      this.setState({ hosts: json });
+    this.httpRequest('GET', 'hosts', null, obj => {
+      obj.jsonData.sort(this.compareName);
+      this.setState({ hosts: obj.jsonData });
     })
   }
 

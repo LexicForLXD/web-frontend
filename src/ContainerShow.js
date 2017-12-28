@@ -39,28 +39,27 @@ class ContainerShow extends Component {
 
   httpGetContainer = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `containers/${id}`, null, json => {
+    this.props.httpRequest('GET', `containers/${id}`, null, obj => {
       this.setState({
-        container: json
+        container: obj.jsonData
       });
-      // this.httpShowGetContainerState(id);
     });
   }
 
-  httpShowGetContainerState = () => {
+  httpGetContainerState = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `containers/${id}/state`, null, json => {
-      this.setState({ containerState: json.metadata.status });
+    this.props.httpRequest('GET', `containers/${id}/state`, null, obj => {
+      this.setState({ containerState: obj.jsonData.metadata.status });
     });
   }
 
-  httpShowPutContainerState = action => {
+  httpPutContainerState = action => {
     const id = queryString.parse(window.location.search).id;
     const body = JSON.stringify({
       action: action
     });
     this.props.httpRequest('PUT', `containers/${id}/state`, body, () => {
-      this.httpShowGetContainerState(id);
+      this.httpGetContainerState(id);
     })
   }
 
@@ -93,13 +92,13 @@ class ContainerShow extends Component {
             <tr>
               <td>{this.state.container.state}</td>
               <td>
-                <Button type="button" onClick={() => this.httpShowPutContainerState('start')}>
+                <Button type="button" onClick={() => this.httpPutContainerState('start')}>
                   <i className="fa fa-play"></i>
                 </Button>
-                <Button type="button" onClick={() => this.httpShowPutContainerState('stop')}>
+                <Button type="button" onClick={() => this.httpPutContainerState('stop')}>
                   <i className="fa fa-stop"></i>
                 </Button>
-                <Button type="button" onClick={() => this.httpShowPutContainerState('restart')}>
+                <Button type="button" onClick={() => this.httpPutContainerState('restart')}>
                   <i className="fa fa-repeat"></i>
                 </Button>
               </td>
