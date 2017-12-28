@@ -77,7 +77,7 @@ class Navigation extends Component {
           <Row>
             <Col xs={6} xsOffset={3}>
               <form>
-                <FormGroup controlId="formLogin" validationState={this.state.errorDescription ? 'error' : null}>
+                <FormGroup controlId="formLoginUsername" validationState={this.state.errorDescription ? 'error' : null}>
                   <ControlLabel>Username</ControlLabel>
                   <FormControl
                     type="text"
@@ -87,6 +87,8 @@ class Navigation extends Component {
                     onKeyDown={this.handleKeyPress}
                     autoFocus
                   />
+                </FormGroup>
+                <FormGroup controlId="formLoginPassword" validationState={this.state.errorDescription ? 'error' : null}>
                   <ControlLabel className="ControlLabel">Password</ControlLabel>
                   <FormControl
                     type='password'
