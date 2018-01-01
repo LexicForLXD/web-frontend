@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import HostPage from './HostPage.js';
 import ContainerPage from './ContainerPage.js';
+import ProfilePage from './ProfilePage.js';
+import HostPage from './HostPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -24,7 +25,8 @@ class MainArea extends Component {
       error: false,
       containers: [],
       containerStates: [],
-      hosts: []
+      hosts: [],
+      profiles: []
     };
   }
 
@@ -126,6 +128,13 @@ class MainArea extends Component {
     })
   }
 
+  httpGetProfiles = () => {
+    this.httpRequest('GET', 'profiles', null, obj => {
+      obj.jsonData.sort(this.compareName);
+      this.setState({ hosts: obj.jsonData });
+    })
+  }
+
   showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
@@ -147,6 +156,14 @@ class MainArea extends Component {
                           httpPutContainerState={this.httpPutContainerState}
                           containers={this.state.containers}
                           containerStates={this.props.containerStates}
+                        />}
+        />
+        <Route
+          path="/profiles"
+          render={() => <ProfilePage
+                          httpRequest={this.httpRequest}
+                          httpGetProfiles={this.httpGetProfiles}
+                          profiles={this.state.profiles}
                         />}
         />
         <Route
