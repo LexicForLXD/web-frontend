@@ -30,7 +30,7 @@ class ProfilePage extends Component {
             overview
             create
             items={this.props.profiles}
-            icon={'fa fa-file-text'}
+            icon={'fa fa-gear'}
             select={this.select}
           />
         </Col>

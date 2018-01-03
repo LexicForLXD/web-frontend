@@ -18,7 +18,7 @@ class Navigation extends Component {
         </LinkContainer>
         <LinkContainer to="/profiles">
           <NavItem>
-            <i className="fa fa-file-text"></i> Profiles
+            <i className="fa fa-gear"></i> Profiles
           </NavItem>
         </LinkContainer>
         <LinkContainer to="/hosts">

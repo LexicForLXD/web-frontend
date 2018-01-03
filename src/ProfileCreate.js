@@ -23,17 +23,38 @@ class ProfileCreate extends Component {
   }
 
   handleConfigChange = e => {
-    this.setState({ config: e.target.value });
+    const config = e.target.value;
+    const error = !config || this.isJsonString(config) ?
+      null : 'Not a valid JSON String';
+    this.setState({
+      config: config,
+      errorConfig: error
+    });
   }
 
   handleDevicesChange = e => {
-    this.setState({ devices: e.target.value });
+    const devices = e.target.value;
+    const error = !devices || this.isJsonString(devices) ?
+      null : 'Not a valid JSON String';
+    this.setState({
+      devices: devices,
+      errorDevices: error
+    });
   }
 
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
+  }
+
+  isJsonString = str => {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   submit = () => {
@@ -92,20 +113,23 @@ class ProfileCreate extends Component {
         <FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
           <ControlLabel className="ControlLabel">Config</ControlLabel>
           <FormControl
-            type='text'
+            componentClass="textarea"
+            rows={20}
             value={this.state.config.value}
-            placeholder="Enter config JSON object"
-            onChange={this.handleConfig}
+            placeholder="Enter optional config JSON string"
+            onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorConfig}</HelpBlock>
         </FormGroup>
+
         <FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
-          <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
+          <ControlLabel className="ControlLabel">Devices</ControlLabel>
           <FormControl
-            type='text'
+            componentClass="textarea"
+            rows={20}
             value={this.state.devices.value}
-            placeholder="Enter devices JSON object"
+            placeholder="Enter optional devices JSON string"
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />
@@ -113,7 +137,9 @@ class ProfileCreate extends Component {
         </FormGroup>
         <Button
           type="button"
-          disabled={this.state.name.length < 1}
+          disabled={this.state.name.length < 1 ||
+                    this.state.errorConfig ||
+                    this.state.errorDevices}
           onClick={this.submit}
         >
           Submit
