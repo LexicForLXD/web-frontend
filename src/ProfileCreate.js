@@ -119,7 +119,7 @@ class ProfileCreate extends Component {
             componentClass="textarea"
             rows={20}
             value={this.state.config.value}
-            placeholder="Enter optional config JSON object (quotes not necessary for keys)"
+            placeholder="Enter optional config JSON object"
             onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
@@ -132,7 +132,7 @@ class ProfileCreate extends Component {
             componentClass="textarea"
             rows={20}
             value={this.state.devices.value}
-            placeholder="Enter optional devices JSON object (quotes not necessary for keys)"
+            placeholder="Enter optional devices JSON object"
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />

@@ -81,7 +81,7 @@ class ProfileShow extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>{JSON.stringify(this.state.profile.config)}</td>
+              <td style={{textAlign: 'left'}}><pre>{JSON.stringify(this.state.profile.config, null, 2)}</pre></td>
             </tr>
           </tbody>
         </Table>
@@ -93,7 +93,7 @@ class ProfileShow extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>{JSON.stringify(this.state.profile.devices)}</td>
+              <td style={{textAlign: 'left'}}><pre>{JSON.stringify(this.state.profile.devices, null, 2)}</pre></td>
             </tr>
           </tbody>
         </Table>
