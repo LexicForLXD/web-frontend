@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+const JSON5 = require('json5');
 
 class ProfileCreate extends Component {
   constructor(props) {
@@ -22,39 +23,40 @@ class ProfileCreate extends Component {
     this.setState({ description: e.target.value });
   }
 
-  handleConfigChange = e => {
-    const config = e.target.value;
-    const error = !config || this.isJsonString(config) ?
-      null : 'Not a valid JSON String';
-    this.setState({
-      config: config,
-      errorConfig: error
-    });
+  handleConfigChange = event => {
+    try {
+      const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        config: config,
+        errorConfig: null
+      });
+    } catch (exception) {
+      this.setState({
+        config: '',
+        errorConfig: 'Not a valid JSON object'
+      });
+    }
   }
 
-  handleDevicesChange = e => {
-    const devices = e.target.value;
-    const error = !devices || this.isJsonString(devices) ?
-      null : 'Not a valid JSON String';
-    this.setState({
-      devices: devices,
-      errorDevices: error
-    });
+  handleDevicesChange = event => {
+    try {
+      const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        devices: devices,
+        errorDevices: null
+      });
+    } catch (exception) {
+      this.setState({
+        devices: '',
+        errorDevices: 'Not a valid JSON object'
+      });
+    }
   }
 
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
-  }
-
-  isJsonString = str => {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return false;
-    }
-    return true;
   }
 
   submit = () => {
@@ -74,7 +76,7 @@ class ProfileCreate extends Component {
           errorName: obj.jsonData.errors.name,
           errorDescription: obj.jsonData.errors.description,
           errorConfig: obj.jsonData.errors.config,
-          errorDomainDevices: obj.jsonData.errors.devices
+          errorDevices: obj.jsonData.errors.devices
         });
       } else {
         this.props.httpGetProfiles();
@@ -82,6 +84,7 @@ class ProfileCreate extends Component {
       }
     }
     this.props.httpRequest('POST', 'profiles', body, callbackFunction);
+    // console.log('body', body);
   }
 
   render() {
@@ -116,7 +119,7 @@ class ProfileCreate extends Component {
             componentClass="textarea"
             rows={20}
             value={this.state.config.value}
-            placeholder="Enter optional config JSON string"
+            placeholder="Enter optional config JSON object (quotes not necessary for keys)"
             onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
@@ -129,7 +132,7 @@ class ProfileCreate extends Component {
             componentClass="textarea"
             rows={20}
             value={this.state.devices.value}
-            placeholder="Enter optional devices JSON string"
+            placeholder="Enter optional devices JSON object (quotes not necessary for keys)"
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />

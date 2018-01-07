@@ -8,6 +8,7 @@
     "enzyme-adapter-react-16": "^1.0.2",
     "font-awesome": "^4.7.0",
     "jest-enzyme": "^4.0.1",
+    "json5": "^0.5.1",
     "query-string": "^5.0.1",
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.3",

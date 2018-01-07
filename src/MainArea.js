@@ -131,7 +131,7 @@ class MainArea extends Component {
   httpGetProfiles = () => {
     this.httpRequest('GET', 'profiles', null, obj => {
       obj.jsonData.sort(this.compareName);
-      this.setState({ hosts: obj.jsonData });
+      this.setState({ profiles: obj.jsonData });
     })
   }
 
