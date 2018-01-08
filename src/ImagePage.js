@@ -45,6 +45,8 @@ class ImagePage extends Component {
                             httpGetImages={this.props.httpGetImages}
                             images={this.state.images}
                             httpRequest={this.props.httpRequest}
+                            httpGetContainers={this.props.httpGetContainers}
+                            containers={this.props.containers}
                           />}
           />
           <Route

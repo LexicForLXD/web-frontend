@@ -23,6 +23,7 @@ class ContainerCreate extends Component {
 
   componentDidMount() {
     this.props.httpGetHosts();
+    this.httpGetAliases();
   }
 
   handleTypeChange = e => {
@@ -65,6 +66,56 @@ class ContainerCreate extends Component {
 
   submit = () => {
     this.httpPostContainer();
+  }
+
+  httpGetAliases = () => {
+    this.httpGetLinuxcontainers('GET', '1.0/images/aliases', null, obj => {
+      // if (!obj.isArray) throw 'json is not an array';  // TODO
+      // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
+      // obj.jsonData.sort(this.compareName);
+      this.setState({ aliases: obj.jsonData.metadata });
+    });
+  }
+
+  httpGetLinuxcontainers = (method, path, body, callbackFunction) => {
+    fetch('https://uk.images.linuxcontainers.org:8443/' + path, {
+      method: method,
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
+    })
+    .then(response => {
+      console.log('LXC Request response: ', response);
+      const obj = {};
+      obj.httpStatus = response.status;
+
+      const contentType = response.headers.get('content-type');
+      obj.isJson = (contentType && contentType.includes('application/json'));
+
+      if (obj.isJson) {
+        return response.json().then(json => {
+          obj.jsonData = json;
+          return obj;
+        })
+      }
+      return obj;
+    })
+    .then(obj => {
+      if (obj.jsonData)
+        obj.jsonIsArray = (obj.jsonData instanceof Array) ? true : false;
+
+      console.log('LXC Request response JSON data: ', obj.jsonData);
+
+      if (obj.jsonIsArray)
+        obj.jsonArrayIsEmpty = (obj.jsonData.length === 0) ? true : false;
+
+      callbackFunction(obj);
+    })
+    .catch(error => {
+      console.log('LXC Request failed: ', error);
+    });
   }
 
   httpPostContainer = () => {

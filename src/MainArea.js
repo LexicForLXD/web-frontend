@@ -181,6 +181,8 @@ class MainArea extends Component {
                           httpRequest={this.httpRequest}
                           httpGetImages={this.httpGetImages}
                           images={this.state.images}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
                         />}
         />
         <Route
