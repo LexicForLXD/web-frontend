@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ContainerPage from './ContainerPage.js';
 import ProfilePage from './ProfilePage.js';
+import ImagePage from './ImagePage.js';
 import HostPage from './HostPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
@@ -26,7 +27,8 @@ class MainArea extends Component {
       containers: [],
       containerStates: [],
       hosts: [],
-      profiles: []
+      profiles: [],
+      images: []
     };
   }
 
@@ -135,6 +137,13 @@ class MainArea extends Component {
     })
   }
 
+  httpGetImages = () => {
+    this.httpRequest('GET', 'images', null, obj => {
+      obj.jsonData.sort(this.compareName);
+      this.setState({ images: obj.jsonData });
+    })
+  }
+
   showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
@@ -164,6 +173,14 @@ class MainArea extends Component {
                           httpRequest={this.httpRequest}
                           httpGetProfiles={this.httpGetProfiles}
                           profiles={this.state.profiles}
+                        />}
+        />
+        <Route
+          path="/images"
+          render={() => <ImagePage
+                          httpRequest={this.httpRequest}
+                          httpGetImages={this.httpGetImages}
+                          images={this.state.images}
                         />}
         />
         <Route

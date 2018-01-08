@@ -1,0 +1,64 @@
+import React, { Component } from 'react';
+import './App.css';
+import Sidebar from './Sidebar.js';
+import ImageOverview from './ImageOverview.js';
+import ImageCreate from './ImageCreate.js';
+import ImageShow from './ImageShow.js';
+import { Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import queryString from 'query-string';
+
+class ImagePage extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      selected: 'overview',
+    };
+  }
+
+  componentDidMount() {
+    this.props.httpGetImages();
+  }
+
+  render() {
+    return (
+      <Grid>
+        <Col xs={3} md={2}>
+          <Sidebar
+            parent="images"
+            refresh={this.props.httpGetImages}
+            overview
+            create
+            items={this.props.images}
+            icon={'fa fa-camera'}
+            select={this.select}
+          />
+        </Col>
+        <Col xs={9} md={10}>
+          <Route
+            exact path="/images"
+            render={() => <ImageOverview images={this.props.images} />}
+          />
+          <Route
+            path="/images/create"
+            render={() => <ImageCreate
+                            httpGetImages={this.props.httpGetImages}
+                            images={this.state.images}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+          <Route
+            path="/images/show"
+            render={() => <ImageShow
+                            id={queryString.parse(window.location.search).id}
+                            httpGetImages={this.props.httpGetImages}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+        </Col>
+      </Grid>
+    )
+  }
+}
+
+export default ImagePage;
