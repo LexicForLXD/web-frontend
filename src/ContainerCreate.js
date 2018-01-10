@@ -7,6 +7,8 @@ class ContainerCreate extends Component {
   constructor(props) {
     super();
     this.state = {
+      aliases: [],
+      alias: '',
       host: '',
       type: '',
       name: '',
@@ -30,9 +32,9 @@ class ContainerCreate extends Component {
     this.setState({ type: this.typeList.value });
   }
 
-  // handleAliasChange = e => {
-  //   this.setState({ type: this.aliasList.value });
-  // }
+  handleAliasChange = e => {
+    this.setState({ alias: this.aliasList.value });
+  }
 
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
@@ -69,52 +71,11 @@ class ContainerCreate extends Component {
   }
 
   httpGetAliases = () => {
-    this.httpGetLinuxcontainers('GET', '1.0/images/aliases', null, obj => {
-      // if (!obj.isArray) throw 'json is not an array';  // TODO
-      // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
+    const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
+    this.props.httpRequest('GET', url, null, obj => {
       // obj.jsonData.sort(this.compareName);
-      this.setState({ aliases: obj.jsonData.metadata });
-    });
-  }
-
-  httpGetLinuxcontainers = (method, path, body, callbackFunction) => {
-    fetch('https://uk.images.linuxcontainers.org:8443/' + path, {
-      method: method,
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: body
-    })
-    .then(response => {
-      console.log('LXC Request response: ', response);
-      const obj = {};
-      obj.httpStatus = response.status;
-
-      const contentType = response.headers.get('content-type');
-      obj.isJson = (contentType && contentType.includes('application/json'));
-
-      if (obj.isJson) {
-        return response.json().then(json => {
-          obj.jsonData = json;
-          return obj;
-        })
-      }
-      return obj;
-    })
-    .then(obj => {
-      if (obj.jsonData)
-        obj.jsonIsArray = (obj.jsonData instanceof Array) ? true : false;
-
-      console.log('LXC Request response JSON data: ', obj.jsonData);
-
-      if (obj.jsonIsArray)
-        obj.jsonArrayIsEmpty = (obj.jsonData.length === 0) ? true : false;
-
-      callbackFunction(obj);
-    })
-    .catch(error => {
-      console.log('LXC Request failed: ', error);
+      const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+      this.setState({ aliases: aliases });
     });
   }
 
@@ -148,7 +109,7 @@ class ContainerCreate extends Component {
            mode: 'pull',
            server: 'https://images.linuxcontainers.org:8443',
            protocol: 'lxd',
-           alias: 'ubuntu/zesty/amd64'
+           alias: this.state.alias
         }
       }
       // host: {
@@ -200,7 +161,12 @@ class ContainerCreate extends Component {
             onChange={this.handleAliasChange}
             inputRef={ list => this.aliasList = list }
           >
-            <option value="ubuntu/zesty/amd64">ubuntu/zesty/amd64</option>
+            <option>...</option>
+            {this.state.aliases instanceof Array &&
+              this.state.aliases.map(alias =>
+                <option value={alias}>{alias}</option>
+              )
+            }
           </FormControl>
         </FormGroup>
         <FormGroup controlId="formLimitsCpu">
