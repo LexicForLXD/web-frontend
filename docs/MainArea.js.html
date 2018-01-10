@@ -1,4 +1,32 @@
-import React, { Component } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MainArea.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MainArea.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
 import ContainerPage from './ContainerPage.js';
 import ProfilePage from './ProfilePage.js';
@@ -12,9 +40,9 @@ import { Route, Redirect } from 'react-router-dom';
  * @returns {jsx} component html code
  */
 const LoadingView = () =>
-  <Well bsSize="small" className="Console">
+  &lt;Well bsSize="small" className="Console">
     Loading...
-  </Well>
+  &lt;/Well>
 
 /**
  * Renders error view component.
@@ -22,9 +50,9 @@ const LoadingView = () =>
  * @returns {jsx} component html code
  */
 const ErrorView = props =>
-  <Well bsSize="small" className="Console">
+  &lt;Well bsSize="small" className="Console">
     {props.msg}
-  </Well>
+  &lt;/Well>
 
 /**
  * Main area UI component
@@ -48,9 +76,6 @@ class MainArea extends Component {
   /**
    * Http request method.
    * @param {string} method http method
-   * @param {string} path url path
-   * @param {string} body http method body
-   * @param {function} callBackfunction callback function to be called with http response body as argument
    */
   httpRequest = (method, path, body, callbackFunction) => {
     this.setState({
@@ -77,7 +102,7 @@ class MainArea extends Component {
       obj.httpStatus = response.status;
 
       const contentType = response.headers.get('content-type');
-      obj.isJson = (contentType && contentType.includes('application/json'));
+      obj.isJson = (contentType &amp;&amp; contentType.includes('application/json'));
 
       if (obj.isJson) {
         return response.json().then(json => {
@@ -113,28 +138,23 @@ class MainArea extends Component {
     });
   }
 
-
-  /** Shows the current loading status */
   showStatus = () => {
     if (this.state.loading)
-      return <LoadingView />;
+      return &lt;LoadingView />;
     else if (this.state.error === 404)
-      return <ErrorView msg="Not found."/>;
+      return &lt;ErrorView msg="Not found."/>;
     else if (this.state.error)
-      return <ErrorView msg="Error loading. Try refreshing."/>;
+      return &lt;ErrorView msg="Error loading. Try refreshing."/>;
   }
 
-
-  /** Compares two object's names. To be used in Array.sort method */
   compareName = (a, b) => {
-    if (a.name < b.name)
+    if (a.name &lt; b.name)
       return -1;
     if (a.name > b.name)
       return 1;
     return 0;
   }
 
-  /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
       // if (!obj.isArray) throw 'json is not an array';  // TODO
@@ -144,7 +164,6 @@ class MainArea extends Component {
     });
   }
 
-  /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest('GET', `containers/${id}/state`, null, obj => {
       const containerStates = this.state.containerStates;
@@ -153,7 +172,6 @@ class MainArea extends Component {
     });
   }
 
-  /** Puts container state */
   httpPutContainerState = (id, action) => {
     const body = JSON.stringify({
       action: action
@@ -162,7 +180,6 @@ class MainArea extends Component {
     })
   }
 
-  /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -170,7 +187,6 @@ class MainArea extends Component {
     })
   }
 
-  /** Gets profiles */
   httpGetProfiles = () => {
     this.httpRequest('GET', 'profiles', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -178,7 +194,6 @@ class MainArea extends Component {
     })
   }
 
-  /** Gets images */
   httpGetImages = () => {
     this.httpRequest('GET', 'images', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -186,17 +201,13 @@ class MainArea extends Component {
     })
   }
 
-  /**
-   * Renders the component.
-   * @returns {jsx} component html code
-   */
   render() {
     return (
-      <div>
-        <Route exact path="/" render={() => <Redirect to="/containers" />} />
-        <Route
+      &lt;div>
+        &lt;Route exact path="/" render={() => &lt;Redirect to="/containers" />} />
+        &lt;Route
           path="/containers"
-          render={() => <ContainerPage
+          render={() => &lt;ContainerPage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
@@ -207,18 +218,18 @@ class MainArea extends Component {
                           containerStates={this.props.containerStates}
                         />}
         />
-        <Route
+        &lt;Route
           path="/profiles"
-          render={() => <ProfilePage
+          render={() => &lt;ProfilePage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetProfiles={this.httpGetProfiles}
                           profiles={this.state.profiles}
                         />}
         />
-        <Route
+        &lt;Route
           path="/images"
-          render={() => <ImagePage
+          render={() => &lt;ImagePage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetImages={this.httpGetImages}
@@ -227,35 +238,58 @@ class MainArea extends Component {
                           containers={this.state.containers}
                         />}
         />
-        <Route
+        &lt;Route
           path="/hosts"
-          render={() => <HostPage
+          render={() => &lt;HostPage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
                           hosts={this.state.hosts}
                         />}
         />
-        <Route
+        &lt;Route
           path="/monitoring"
-          render={() => <div></div>}
+          render={() => &lt;div>&lt;/div>}
         />
-        <Route
+        &lt;Route
           path="/logs"
-          render={() => <div></div>}
+          render={() => &lt;div>&lt;/div>}
         />
-        <Route
+        &lt;Route
           path="/backup"
-          render={() => <div></div>}
+          render={() => &lt;div>&lt;/div>}
         />
-        <Grid>
-          <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
+        &lt;Grid>
+          &lt;Col xs={9} xsOffset={3} md={10} mdOffset={2}>
             {this.showStatus()}
-          </Col>
-        </Grid>
-      </div>
+          &lt;/Col>
+        &lt;/Grid>
+      &lt;/div>
     )
   }
 }
 
 export default MainArea;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:16:51 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

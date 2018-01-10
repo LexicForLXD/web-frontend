@@ -3,11 +3,15 @@ import './App.css';
 import { Nav, NavItem, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+/**
+ * Sidebar UI component
+ */
 class Sidebar extends Component {
   constructor(props) {
     super();
   }
 
+  /** Creates sidebar links for all items received via props */
   mapItems = () =>
     this.props.items.map((item, index) =>
       <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
@@ -17,6 +21,10 @@ class Sidebar extends Component {
       </LinkContainer>
     );
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>

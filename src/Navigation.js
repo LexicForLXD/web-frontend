@@ -3,11 +3,18 @@ import './App.css';
 import { Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+/**
+ * Navigation bar UI component
+ */
 class Navigation extends Component {
   constructor(props) {
     super();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Nav bsStyle="tabs">

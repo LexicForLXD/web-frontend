@@ -80,7 +80,6 @@ class App extends Component {
 
   /**
    * Renders the component.
-   *
    * @returns {jsx} component html code
    */
   render() {
