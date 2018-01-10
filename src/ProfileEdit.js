@@ -4,6 +4,9 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-b
 import { Redirect } from 'react-router-dom';
 const JSON5 = require('json5');
 
+/**
+ * UI component for editing profiles
+ */
 class ProfileEdit extends Component {
   constructor(props) {
     super(props);
@@ -19,14 +22,17 @@ class ProfileEdit extends Component {
     };
   }
 
+/** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleDescriptionChange = e => {
     this.setState({ description: e.target.value });
   }
 
+  /** Form change handler */
   handleConfigChange = event => {
     try {
       const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
@@ -42,6 +48,7 @@ class ProfileEdit extends Component {
     }
   }
 
+  /** Form change handler */
   handleDevicesChange = event => {
     try {
       const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
@@ -57,16 +64,19 @@ class ProfileEdit extends Component {
     }
   }
 
+  /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Puts profile on form submit */
   submit = () => {
     this.httpPutProfile();
   }
 
+  /** Puts profile */
   httpPutProfile = () => {
     const body = JSON.stringify({
       name: this.state.name,
@@ -92,6 +102,10 @@ class ProfileEdit extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

@@ -8,6 +8,9 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
+/**
+ *  Host (top level) page component
+ */
 class HostPage extends Component {
   constructor(props) {
     super();
@@ -16,10 +19,17 @@ class HostPage extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches containers.
+   */
   componentDidMount() {
     this.props.httpGetHosts();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Grid>

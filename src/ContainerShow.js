@@ -5,6 +5,9 @@ import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
+/**
+ *  Container detail view UI component
+ */
 class ContainerShow extends Component {
   constructor(props) {
     super();
@@ -24,20 +27,29 @@ class ContainerShow extends Component {
     }
   }
 
+  /**
+   * Gets called once component has mounted. Fetches container.
+   */
   componentDidMount () {
     this.httpGetContainer();
   }
 
+  /**
+   * Gets called when different container is clicked on sidebar.
+   * Fetches container.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.httpGetContainer();
     }
   }
 
+  /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
 
+  /** Fetches container. */
   httpGetContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}`, null, obj => {
@@ -47,6 +59,7 @@ class ContainerShow extends Component {
     });
   }
 
+  /** Fetches container state. */
   httpGetContainerState = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}/state`, null, obj => {
@@ -54,6 +67,7 @@ class ContainerShow extends Component {
     });
   }
 
+  /** Puts container state. */
   httpPutContainerState = action => {
     const id = queryString.parse(window.location.search).id;
     const body = JSON.stringify({
@@ -64,6 +78,7 @@ class ContainerShow extends Component {
     })
   }
 
+  /** Deletes container. */
   httpDeleteContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `containers/${id}`, null, () => {
@@ -73,6 +88,10 @@ class ContainerShow extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>

@@ -8,6 +8,9 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
+/**
+ *  Container (top-level) page component
+ */
 class ContainerPage extends Component {
   constructor(props) {
     super();
@@ -16,16 +19,27 @@ class ContainerPage extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches containers.
+   */
   componentDidMount() {
     this.props.httpGetContainers();
   }
 
+
+  /**
+   * Starts container.
+   */
   startContainer = () => {
     this.httpRequest('GET', 'containers', null, obj => {
       this.setState({ containers: obj.jsonData})
     });
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Grid>

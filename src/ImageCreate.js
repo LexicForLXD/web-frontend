@@ -3,23 +3,30 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for creating a new image.
+ */
 class ImageCreate extends Component {
+
+  /**
+   * @param {props} props from ImagePage
+   */
   constructor(props) {
     super();
     this.state = {
-      container: '',
+      image: '',
       name: '',
-      errorContainer: null,
+      errorImage: null,
       errorName: null
     };
   }
 
   componentDidMount() {
-    this.props.httpGetContainers();
+    this.props.httpGetImages();
   }
 
-  handleContainerChange = e => {
-    this.setState({ container: this.containerList.value });
+  handleImageChange = e => {
+    this.setState({ image: this.imageList.value });
   }
 
   handleNameChange = e => {
@@ -27,7 +34,7 @@ class ImageCreate extends Component {
   }
 
   handleKeyPress = e => {
-    if (e.keyCode === 13 && this.state.name.length > 0 && this.state.container.length > 0) {
+    if (e.keyCode === 13 && this.state.name.length > 0 && this.state.image.length > 0) {
       this.submit();
     }
   }
@@ -67,23 +74,23 @@ class ImageCreate extends Component {
     return (
       <form>
         {this.state.redirect && <Redirect from="/images/create" exact to="/images" />}
-        <FormGroup controlId="formContainer">
-          <ControlLabel>Container</ControlLabel>
+        <FormGroup controlId="formImage">
+          <ControlLabel>Image</ControlLabel>
           <FormControl
             componentClass="select"
-            onChange={this.handleContainerChange}
-            inputRef={ hl => this.containerList = hl }
+            onChange={this.handleImageChange}
+            inputRef={ hl => this.imageList = hl }
           >
             <option>...</option>
-            {this.props.containers instanceof Array &&
-              this.props.containers.map(container =>
-                <option value={container.id}>{container.name}</option>
+            {this.props.images instanceof Array &&
+              this.props.images.map(image =>
+                <option value={image.id}>{image.name}</option>
               )
             }
           </FormControl>
           <HelpBlock>
-            {this.state.errorContainer || (this.state.container.length < 1 &&
-              'Please choose a container of which you want to create an image')
+            {this.state.errorImage || (this.state.image.length < 1 &&
+              'Please choose a image of which you want to create an image')
             }
           </HelpBlock>
         </FormGroup>
@@ -100,7 +107,7 @@ class ImageCreate extends Component {
         </FormGroup>
         <Button
           type="button"
-          disabled={this.state.name.length < 1 || this.state.container.length < 1}
+          disabled={this.state.name.length < 1 || this.state.image.length < 1}
           onClick={this.submit}
         >
           Submit

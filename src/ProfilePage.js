@@ -8,6 +8,9 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
+/**
+ *  Image (top level) page component
+ */
 class ProfilePage extends Component {
   constructor(props) {
     super();
@@ -16,10 +19,17 @@ class ProfilePage extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches profiles.
+   */
   componentDidMount() {
     this.props.httpGetProfiles();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Grid>

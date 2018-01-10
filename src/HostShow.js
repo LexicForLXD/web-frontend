@@ -5,6 +5,9 @@ import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
+/**
+ *  Host detail view UI component
+ */
 class HostShow extends Component {
   constructor(props) {
     super();
@@ -22,20 +25,29 @@ class HostShow extends Component {
     }
   }
 
+  /**
+   * Gets called once component has mounted. Fetches host.
+   */
   componentDidMount () {
     this.httpGetHost();
   }
 
+  /**
+   * Gets called when different host is clicked on sidebar.
+   * Fetches host.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.httpGetHost();
     }
   }
 
+  /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
 
+  /** Fetches host. */
   httpGetHost = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `hosts/${id}`, null, obj => {
@@ -45,6 +57,7 @@ class HostShow extends Component {
     });
   }
 
+  /** Deletes host. */
   httpDeleteHost = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `hosts/${id}`, null, () => {
@@ -54,6 +67,10 @@ class HostShow extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>

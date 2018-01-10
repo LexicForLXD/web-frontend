@@ -3,6 +3,9 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for editing images
+ */
 class ImageEdit extends Component {
   constructor(props) {
     super(props);

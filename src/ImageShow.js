@@ -5,6 +5,9 @@ import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
+/**
+ *  Image detail view UI component
+ */
 class ImageShow extends Component {
   constructor(props) {
     super();
@@ -22,20 +25,29 @@ class ImageShow extends Component {
     }
   }
 
+  /**
+   * Gets called once component has mounted. Fetches image.
+   */
   componentDidMount () {
     this.httpGetImage();
   }
 
+  /**
+   * Gets called when different image is clicked on sidebar.
+   * Fetches image.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.httpGetImage();
     }
   }
 
+  /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
 
+  /** Fetches image. */
   httpGetImage = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `images/${id}`, null, obj => {
@@ -45,6 +57,7 @@ class ImageShow extends Component {
     });
   }
 
+  /** Deletes image. */
   httpDeleteImage = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `images/${id}`, null, () => {
@@ -54,6 +67,10 @@ class ImageShow extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>

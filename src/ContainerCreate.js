@@ -3,7 +3,14 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for creating a new container
+ */
 class ContainerCreate extends Component {
+
+  /**
+   * @param {props} props from ContainerPage
+   */
   constructor(props) {
     super();
     this.state = {
@@ -23,53 +30,67 @@ class ContainerCreate extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches hosts and aliases.
+   */
   componentDidMount() {
     this.props.httpGetHosts();
     this.httpGetAliases();
   }
 
+C
   handleTypeChange = e => {
     this.setState({ type: this.typeList.value });
   }
 
+  /** Form change handler */
   handleAliasChange = e => {
     this.setState({ alias: this.aliasList.value });
   }
 
+  /** Form change handler */
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
   }
 
+  /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv4Change = e => {
     this.setState({ ipv4: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv6Change = e => {
     this.setState({ ipv6: e.target.value });
   }
 
+  /** Form change handler */
   handleDomainNameChange = e => {
     this.setState({ domain_name: e.target.value });
   }
 
+  /** Form change handler */
   handleLimitsCpuChange = e => {
     this.setState({ limitsCpu: e.target.value });
   }
 
+  /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Posts container on form submit */
   submit = () => {
     this.httpPostContainer();
   }
 
+  /** Fetches aliases */
   httpGetAliases = () => {
     const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', url, null, obj => {
@@ -79,6 +100,7 @@ class ContainerCreate extends Component {
     });
   }
 
+  /** Posts container */
   httpPostContainer = () => {
     const body = JSON.stringify({
       host: this.state.host,
@@ -137,6 +159,10 @@ class ContainerCreate extends Component {
     this.props.httpRequest('POST', `hosts/${this.state.host}/containers?type=${this.state.type}`, body, callbackFunction);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

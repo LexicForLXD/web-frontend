@@ -4,6 +4,9 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-b
 import { Redirect } from 'react-router-dom';
 const JSON5 = require('json5');
 
+/**
+ * UI component for creating a new host
+ */
 class ProfileCreate extends Component {
   constructor(props) {
     super();
@@ -15,14 +18,17 @@ class ProfileCreate extends Component {
     };
   }
 
+  /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleDescriptionChange = e => {
     this.setState({ description: e.target.value });
   }
 
+  /** Form change handler */
   handleConfigChange = event => {
     try {
       const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
@@ -38,6 +44,7 @@ class ProfileCreate extends Component {
     }
   }
 
+  /** Form change handler */
   handleDevicesChange = event => {
     try {
       const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
@@ -53,16 +60,19 @@ class ProfileCreate extends Component {
     }
   }
 
+  /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Posts profile on form submit */
   submit = () => {
     this.httpPostProfile();
   }
 
+  /** Posts profile */
   httpPostProfile = () => {
     const body = JSON.stringify({
       name: this.state.name,
@@ -87,6 +97,10 @@ class ProfileCreate extends Component {
     // console.log('body', body);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

@@ -5,6 +5,9 @@ import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
+/**
+ *  Profile detail view UI component
+ */
 class ProfileShow extends Component {
   constructor(props) {
     super();
@@ -22,20 +25,29 @@ class ProfileShow extends Component {
     }
   }
 
+  /**
+   * Gets called once component has mounted. Fetches profile.
+   */
   componentDidMount () {
     this.httpGetProfile();
   }
 
+  /**
+   * Gets called when different profile is clicked on sidebar.
+   * Fetches profile.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.httpGetProfile();
     }
   }
 
+  /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
 
+  /** Fetches profile. */
   httpGetProfile = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `profiles/${id}`, null, obj => {
@@ -45,6 +57,7 @@ class ProfileShow extends Component {
     });
   }
 
+  /** Deletes profile. */
   httpDeleteProfile = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `profiles/${id}`, null, () => {
@@ -54,6 +67,10 @@ class ProfileShow extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>

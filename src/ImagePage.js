@@ -8,6 +8,9 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
+/**
+ *  Image (top level) page component
+ */
 class ImagePage extends Component {
   constructor(props) {
     super();
@@ -16,10 +19,17 @@ class ImagePage extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches images.
+   */
   componentDidMount() {
     this.props.httpGetImages();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Grid>

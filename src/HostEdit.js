@@ -3,6 +3,9 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for editing host
+ */
 class HostEdit extends Component {
   constructor(props) {
     super(props);
@@ -22,40 +25,49 @@ class HostEdit extends Component {
     };
   }
 
+  /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv4Change = e => {
     this.setState({ ipv4: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv6Change = e => {
     this.setState({ ipv6: e.target.value });
   }
 
+  /** Form change handler */
   handleDomainNameChange = e => {
     this.setState({ domain_name: e.target.value });
   }
 
+  /** Form change handler */
   handleMacChange = e => {
     this.setState({ mac: e.target.value });
   }
 
+  /** Form change handler */
   handleSettingsChange = e => {
     this.setState({ settings: e.target.value });
   }
 
+  /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Puts host on form submit */
   submit = () => {
     this.httpPutHost();
   }
 
+  /** Puts host */
   httpPutHost = () => {
     const body = JSON.stringify({
       name: this.state.name,
@@ -85,6 +97,10 @@ class HostEdit extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

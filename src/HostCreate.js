@@ -3,7 +3,14 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for creating a new host
+ */
 class HostCreate extends Component {
+
+  /**
+   * @param {props} props from HostPage
+   */
   constructor(props) {
     super();
     this.state = {
@@ -22,40 +29,49 @@ class HostCreate extends Component {
     };
   }
 
+  /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv4Change = e => {
     this.setState({ ipv4: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv6Change = e => {
     this.setState({ ipv6: e.target.value });
   }
 
+  /** Form change handler */
   handleDomainNameChange = e => {
     this.setState({ domain_name: e.target.value });
   }
 
+  /** Form change handler */
   handleMacChange = e => {
     this.setState({ mac: e.target.value });
   }
 
+  /** Form change handler */
   handleSettingsChange = e => {
     this.setState({ settings: e.target.value });
   }
 
+  /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Posts host on form submit */
   submit = () => {
     this.httpPostHost();
   }
 
+  /** Posts host */
   httpPostHost = () => {
     const body = JSON.stringify({
       name: this.state.name,
@@ -83,6 +99,10 @@ class HostCreate extends Component {
     this.props.httpRequest('POST', 'hosts', body, callbackFunction);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

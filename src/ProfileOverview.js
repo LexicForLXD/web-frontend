@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import './App.css';
 import { Table } from 'react-bootstrap';
 
+/**
+ *  Profile overview UI component
+ */
 class ProfileOverview extends Component {
   constructor(props) {
     super();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Table bordered responsive striped>
