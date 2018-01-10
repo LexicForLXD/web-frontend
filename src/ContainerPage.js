@@ -40,34 +40,36 @@ class ContainerPage extends Component {
             select={this.select}
           />
         </Col>
-        <Col xs={9} md={10}>
-          <Route
-            exact path="/containers"
-            render={() => <ContainerOverview
-                            httpPutContainerState={this.props.httpPutContainerState}
-                            containers={this.props.containers}
-                            containerStates={this.props.containerStates}
-                          />}
-          />
-          <Route
-            path="/containers/create"
-            render={() => <ContainerCreate
-                            hosts={this.props.hosts}
-                            httpGetHosts={this.props.httpGetHosts}
-                            httpGetContainers={this.props.httpGetContainers}
-                            httpRequest={this.props.httpRequest}
-                          />}
-          />
-          <Route
-            path="/containers/show"
-            render={() => <ContainerShow
-                            id={queryString.parse(window.location.search).id}
-                            httpGetContainers={this.props.httpGetContainers}
-                            httpPutContainerState={this.props.httpPutContainerState}
-                            httpRequest={this.props.httpRequest}
-                          />}
-          />
-        </Col>
+        {!this.props.error &&
+          <Col xs={9} md={10}>
+            <Route
+              exact path="/containers"
+              render={() => <ContainerOverview
+                              httpPutContainerState={this.props.httpPutContainerState}
+                              containers={this.props.containers}
+                              containerStates={this.props.containerStates}
+                            />}
+            />
+            <Route
+              path="/containers/create"
+              render={() => <ContainerCreate
+                              hosts={this.props.hosts}
+                              httpGetHosts={this.props.httpGetHosts}
+                              httpGetContainers={this.props.httpGetContainers}
+                              httpRequest={this.props.httpRequest}
+                            />}
+            />
+            <Route
+              path="/containers/show"
+              render={() => <ContainerShow
+                              id={queryString.parse(window.location.search).id}
+                              httpGetContainers={this.props.httpGetContainers}
+                              httpPutContainerState={this.props.httpPutContainerState}
+                              httpRequest={this.props.httpRequest}
+                            />}
+            />
+          </Col>
+        }
       </Grid>
     )
   }

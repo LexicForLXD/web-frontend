@@ -12,9 +12,9 @@ const LoadingView = () =>
     Loading...
   </Well>
 
-const ErrorView = () =>
+const ErrorView = props =>
   <Well bsSize="small" className="Console">
-    Error loading data. Try refreshing.
+    {props.msg}
   </Well>
 
 class MainArea extends Component {
@@ -49,6 +49,9 @@ class MainArea extends Component {
       if (response.status === 401) {
         this.props.logout();  // TODO try using refresh token before logging out
         Promise.reject();
+      };
+      if (response.status === 404) {
+        throw(404);
       };
       const obj = {};
       obj.httpStatus = response.status;
@@ -85,9 +88,18 @@ class MainArea extends Component {
       console.log('Request failed: ', error);
       this.setState({
         loading: false,
-        error: true
+        error: error
       });
     });
+  }
+
+  showStatus = () => {
+    if (this.state.loading)
+      return <LoadingView />;
+    else if (this.state.error === 404)
+      return <ErrorView msg="Not found."/>;
+    else if (this.state.error)
+      return <ErrorView msg="Error loading. Try refreshing."/>;
   }
 
   compareName = (a, b) => {
@@ -144,13 +156,6 @@ class MainArea extends Component {
     })
   }
 
-  showStatus = () => {
-    if (this.state.loading)
-      return <LoadingView />;
-    else if (this.state.error)
-      return <ErrorView />;
-  }
-
   render() {
     return (
       <div>
@@ -158,6 +163,7 @@ class MainArea extends Component {
         <Route
           path="/containers"
           render={() => <ContainerPage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
                           hosts={this.state.hosts}
@@ -170,6 +176,7 @@ class MainArea extends Component {
         <Route
           path="/profiles"
           render={() => <ProfilePage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetProfiles={this.httpGetProfiles}
                           profiles={this.state.profiles}
@@ -178,6 +185,7 @@ class MainArea extends Component {
         <Route
           path="/images"
           render={() => <ImagePage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetImages={this.httpGetImages}
                           images={this.state.images}
@@ -188,6 +196,7 @@ class MainArea extends Component {
         <Route
           path="/hosts"
           render={() => <HostPage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
                           hosts={this.state.hosts}
