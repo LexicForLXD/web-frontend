@@ -14,7 +14,7 @@ class ContainerEdit extends Component {
       name: this.props.container.name,
       ipv4: this.props.container.ipv4,
       ipv6: this.props.container.ipv6,
-      domain_name: this.props.container.domain_name,
+      domainName: this.props.container.domainName,
       // settings: this.props.container.settings,
       errorName: null,
       errorIpv4: null,
@@ -41,7 +41,7 @@ class ContainerEdit extends Component {
 
   /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
   /** Form change handler */
@@ -67,7 +67,7 @@ class ContainerEdit extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       // settings: this.state.settings
     });
     const callbackFunction = obj => {
@@ -139,8 +139,8 @@ class ContainerEdit extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.domain_name}
-            value={this.state.domain_name ? this.state.domain_name.value : ''}
+            defaultValue={this.state.domainName}
+            value={this.state.domainName ? this.state.domainName.value : ''}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}

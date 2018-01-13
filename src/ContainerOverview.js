@@ -50,7 +50,7 @@ class ContainerOverview extends Component {
                 <td>{container.name}</td>
                 <td>{container.ipv4}</td>
                 <td>{container.ipv6}</td>
-                <td>{container.domain_name}</td>
+                <td>{container.domainName}</td>
                 {/* <td>{container.settings}</td> */}
               </tr>
             )

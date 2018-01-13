@@ -17,7 +17,7 @@ class HostCreate extends Component {
       name: '',
       ipv4: '',
       ipv6: '',
-      domain_name: '',
+      domainName: '',
       mac: '',
       settings: '',
       errorName: null,
@@ -46,7 +46,7 @@ class HostCreate extends Component {
 
   /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
   /** Form change handler */
@@ -77,7 +77,7 @@ class HostCreate extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       mac: this.state.mac,
       settings: this.state.settings
     });
@@ -144,7 +144,7 @@ class HostCreate extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            value={this.state.domain_name.value}
+            value={this.state.domainName.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}

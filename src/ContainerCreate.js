@@ -21,7 +21,7 @@ class ContainerCreate extends Component {
       name: '',
       ipv4: '',
       ipv6: '',
-      domain_name: '',
+      domainName: '',
       limitsCpu: 1,
       errorName: null,
       errorIpv4: null,
@@ -70,7 +70,7 @@ C
 
   /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
   /** Form change handler */
@@ -107,7 +107,7 @@ C
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       // limitsCpu: this.state.limitsCpu
       settings: {
         name: this.state.name,
@@ -136,7 +136,7 @@ C
       }
       // host: {
       //    id: 44,
-      //    domain_name: 'lxd-host.lleon.de',
+      //    domainName: 'lxd-host.lleon.de',
       //    name: 'lxd-host2',
       //    port: 8443,
       //    settings: 'settings',
@@ -260,7 +260,7 @@ C
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            value={this.state.domain_name.value}
+            value={this.state.domainName.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}

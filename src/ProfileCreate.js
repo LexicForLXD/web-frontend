@@ -94,7 +94,6 @@ class ProfileCreate extends Component {
       }
     }
     this.props.httpRequest('POST', 'profiles', body, callbackFunction);
-    // console.log('body', body);
   }
 
   /**

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ImageOverview.js</title>
+    <title>JSDoc: Source: Navigation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ImageOverview.js</h1>
+    <h1 class="page-title">Source: Navigation.js</h1>
 
     
 
@@ -28,12 +28,13 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Nav, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 /**
- *  Image overview UI component
+ * Navigation bar UI component
  */
-class ImageOverview extends Component {
+class Navigation extends Component {
   constructor(props) {
     super();
   }
@@ -44,35 +45,48 @@ class ImageOverview extends Component {
    */
   render() {
     return (
-      &lt;Table bordered responsive striped>
-        &lt;thead>
-          &lt;tr>
-            &lt;th>ID&lt;/th>
-            &lt;th>Fingerprint&lt;/th>
-            &lt;th>Aliases&lt;/th>
-            &lt;th>Architecture&lt;/th>
-            &lt;th>Size&lt;/th>
-          &lt;/tr>
-        &lt;/thead>
-        &lt;tbody>
-          {this.props.images instanceof Array &amp;&amp;
-            this.props.images.map(image =>
-              &lt;tr key={image.id}>
-                &lt;td>{image.id}&lt;/td>
-                &lt;td>{image.fingerprint}&lt;/td>
-                &lt;td>{image.aliases}&lt;/td>
-                &lt;td>{image.architecture}&lt;/td>
-                &lt;td>{image.size}&lt;/td>
-              &lt;/tr>
-            )
-          }
-        &lt;/tbody>
-      &lt;/Table>
-    )
+      &lt;Nav bsStyle="tabs">
+        &lt;LinkContainer to="/containers">
+          &lt;NavItem>
+            &lt;i className="fa fa-cube">&lt;/i> Containers
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/profiles">
+          &lt;NavItem>
+            &lt;i className="fa fa-gear">&lt;/i> Profiles
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/images">
+          &lt;NavItem>
+            &lt;i className="fa fa-camera">&lt;/i> Images
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/hosts">
+          &lt;NavItem>
+            &lt;i className="fa fa-server">&lt;/i> Hosts
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/monitoring">
+          &lt;NavItem>
+            &lt;i className="fa fa-area-chart">&lt;/i> Monitoring
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/logs">
+          &lt;NavItem>
+            &lt;i className="fa fa-pencil">&lt;/i> Logs
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+        &lt;LinkContainer to="/backup">
+          &lt;NavItem>
+            &lt;i className="fa fa-hdd-o">&lt;/i> Backup
+          &lt;/NavItem>
+        &lt;/LinkContainer>
+      &lt;/Nav>
+    );
   }
 }
 
-export default ImageOverview;
+export default Navigation;
 </code></pre>
         </article>
     </section>

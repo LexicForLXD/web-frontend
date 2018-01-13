@@ -18,7 +18,7 @@ class ImageShow extends Component {
         name: '',
         ipv4: '',
         ipv6: '',
-        domain_name: '',
+        domainName: '',
         mac: '',
         settings: ''
       }
@@ -91,7 +91,7 @@ class ImageShow extends Component {
               <td>{this.state.image.name}</td>
               <td>{this.state.image.ipv4}</td>
               <td>{this.state.image.ipv6}</td>
-              <td>{this.state.image.domain_name}</td>
+              <td>{this.state.image.domainName}</td>
               <td>{this.state.image.mac}</td>
               <td>{this.state.image.settings}</td>
             </tr>

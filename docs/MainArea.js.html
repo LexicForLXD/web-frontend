@@ -76,6 +76,9 @@ class MainArea extends Component {
   /**
    * Http request method.
    * @param {string} method http method
+   * @param {string} path url path
+   * @param {string} body http method body
+   * @param {function} callBackfunction callback function to be called with http response body as argument
    */
   httpRequest = (method, path, body, callbackFunction) => {
     this.setState({
@@ -138,6 +141,8 @@ class MainArea extends Component {
     });
   }
 
+
+  /** Shows the current loading status */
   showStatus = () => {
     if (this.state.loading)
       return &lt;LoadingView />;
@@ -147,6 +152,8 @@ class MainArea extends Component {
       return &lt;ErrorView msg="Error loading. Try refreshing."/>;
   }
 
+
+  /** Compares two object's names. To be used in Array.sort method */
   compareName = (a, b) => {
     if (a.name &lt; b.name)
       return -1;
@@ -155,6 +162,7 @@ class MainArea extends Component {
     return 0;
   }
 
+  /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
       // if (!obj.isArray) throw 'json is not an array';  // TODO
@@ -164,6 +172,7 @@ class MainArea extends Component {
     });
   }
 
+  /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest('GET', `containers/${id}/state`, null, obj => {
       const containerStates = this.state.containerStates;
@@ -172,6 +181,7 @@ class MainArea extends Component {
     });
   }
 
+  /** Puts container state */
   httpPutContainerState = (id, action) => {
     const body = JSON.stringify({
       action: action
@@ -180,6 +190,7 @@ class MainArea extends Component {
     })
   }
 
+  /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -187,6 +198,7 @@ class MainArea extends Component {
     })
   }
 
+  /** Gets profiles */
   httpGetProfiles = () => {
     this.httpRequest('GET', 'profiles', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -194,6 +206,7 @@ class MainArea extends Component {
     })
   }
 
+  /** Gets images */
   httpGetImages = () => {
     this.httpRequest('GET', 'images', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -201,6 +214,10 @@ class MainArea extends Component {
     })
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       &lt;div>
@@ -280,13 +297,13 @@ export default MainArea;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:16:51 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

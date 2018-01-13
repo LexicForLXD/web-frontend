@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ImageOverview.js</title>
+    <title>JSDoc: Source: Sidebar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ImageOverview.js</h1>
+    <h1 class="page-title">Source: Sidebar.js</h1>
 
     
 
@@ -28,15 +28,26 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Nav, NavItem, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 /**
- *  Image overview UI component
+ * Sidebar UI component
  */
-class ImageOverview extends Component {
+class Sidebar extends Component {
   constructor(props) {
     super();
   }
+
+  /** Creates sidebar links for all items received via props */
+  mapItems = () =>
+    this.props.items.map((item, index) =>
+      &lt;LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
+        &lt;NavItem>
+          &lt;i className={this.props.icon}>&lt;/i> {item.name}
+        &lt;/NavItem>
+      &lt;/LinkContainer>
+    );
 
   /**
    * Renders the component.
@@ -44,35 +55,33 @@ class ImageOverview extends Component {
    */
   render() {
     return (
-      &lt;Table bordered responsive striped>
-        &lt;thead>
-          &lt;tr>
-            &lt;th>ID&lt;/th>
-            &lt;th>Fingerprint&lt;/th>
-            &lt;th>Aliases&lt;/th>
-            &lt;th>Architecture&lt;/th>
-            &lt;th>Size&lt;/th>
-          &lt;/tr>
-        &lt;/thead>
-        &lt;tbody>
-          {this.props.images instanceof Array &amp;&amp;
-            this.props.images.map(image =>
-              &lt;tr key={image.id}>
-                &lt;td>{image.id}&lt;/td>
-                &lt;td>{image.fingerprint}&lt;/td>
-                &lt;td>{image.aliases}&lt;/td>
-                &lt;td>{image.architecture}&lt;/td>
-                &lt;td>{image.size}&lt;/td>
-              &lt;/tr>
-            )
+      &lt;div>
+        &lt;Button type="button" className="RefreshBtn" onClick={() => this.props.refresh()}>
+          &lt;i className="fa fa-refresh">&lt;/i> Refresh
+        &lt;/Button>
+        {this.props.create &amp;&amp;
+          &lt;LinkContainer to={`/${this.props.parent}/create`}>
+            &lt;Button type="button" className="CreateBtn" bsStyle="success">
+              &lt;i className="fa fa-plus">&lt;/i> &lt;b>Create&lt;/b>
+            &lt;/Button>
+          &lt;/LinkContainer>
+        }
+        &lt;Nav stacked activeKey={this.props.selected} onSelect={this.props.select}>
+          {this.props.overview &amp;&amp;
+            &lt;LinkContainer to={`/${this.props.parent}`}>
+              &lt;NavItem>
+                &lt;i className="fa fa-desktop">&lt;/i> Overview
+              &lt;/NavItem>
+            &lt;/LinkContainer>
           }
-        &lt;/tbody>
-      &lt;/Table>
-    )
+          {this.props.items instanceof Array &amp;&amp; this.mapItems()}
+        &lt;/Nav>
+      &lt;/div>
+    );
   }
 }
 
-export default ImageOverview;
+export default Sidebar;
 </code></pre>
         </article>
     </section>

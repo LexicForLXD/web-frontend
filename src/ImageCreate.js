@@ -48,7 +48,7 @@ class ImageCreate extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       mac: this.state.mac,
       settings: this.state.settings
     });

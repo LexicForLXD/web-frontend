@@ -13,7 +13,7 @@ class ImageEdit extends Component {
       name: this.props.image.name,
       ipv4: this.props.image.ipv4,
       ipv6: this.props.image.ipv6,
-      domain_name: this.props.image.domain_name,
+      domainName: this.props.image.domainName,
       mac: this.props.image.mac,
       settings: this.props.image.settings,
       errorName: null,
@@ -38,7 +38,7 @@ class ImageEdit extends Component {
   }
 
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
   handleMacChange = e => {
@@ -64,7 +64,7 @@ class ImageEdit extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       mac: this.state.mac,
       settings: this.state.settings
     });
@@ -132,8 +132,8 @@ class ImageEdit extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.domain_name}
-            value={this.state.domain_name ? this.state.domain_name.value : ''}
+            defaultValue={this.state.domainName}
+            value={this.state.domainName ? this.state.domainName.value : ''}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}

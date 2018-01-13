@@ -13,7 +13,7 @@ class HostEdit extends Component {
       name: this.props.host.name,
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
-      domain_name: this.props.host.domain_name,
+      domainName: this.props.host.domainName,
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
@@ -42,7 +42,7 @@ class HostEdit extends Component {
 
   /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
   /** Form change handler */
@@ -73,7 +73,7 @@ class HostEdit extends Component {
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       mac: this.state.mac,
       settings: this.state.settings
     });
@@ -145,8 +145,8 @@ class HostEdit extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            defaultValue={this.state.domain_name}
-            value={this.state.domain_name ? this.state.domain_name.value : ''}
+            defaultValue={this.state.domainName}
+            value={this.state.domainName ? this.state.domainName.value : ''}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}
