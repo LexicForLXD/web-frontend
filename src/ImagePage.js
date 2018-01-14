@@ -52,6 +52,8 @@ class ImagePage extends Component {
           <Route
             path="/images/create"
             render={() => <ImageCreate
+                            hosts={this.props.hosts}
+                            httpGetHosts={this.props.httpGetHosts}
                             httpGetImages={this.props.httpGetImages}
                             images={this.state.images}
                             httpRequest={this.props.httpRequest}

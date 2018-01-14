@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import Toggle from 'react-bootstrap-toggle';
 
 /**
  * UI component for creating a new image.
@@ -14,27 +15,56 @@ class ImageCreate extends Component {
   constructor(props) {
     super();
     this.state = {
-      image: '',
-      name: '',
-      errorImage: null,
-      errorName: null
+      host: '',
+      type: 'container',
+      reqBody: {
+        filename: '',
+        public: false,
+        properties: {
+          os: ''
+        },
+        aliases: [
+          {
+            name: '',
+            description: ''
+          }
+        ],
+        source: {
+          type: 'container',
+          name: '',
+          url: ''
+        }
+      },
+      resError: null
     };
   }
 
   componentDidMount() {
-    this.props.httpGetImages();
+    this.props.httpGetHosts();
   }
 
-  handleImageChange = e => {
-    this.setState({ image: this.imageList.value });
+  handleFilenameChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.filename = e.target.value;
+    this.setState({ reqBody: reqBody });
   }
 
-  handleNameChange = e => {
-    this.setState({ name: e.target.value });
+  handleHostChange = e => {
+    this.setState({ host: this.hostList.value });
+  }
+
+  changeType = () => {
+    const type = this.state.type === 'remote' ? 'container' : 'remote';
+    const reqBody = this.state.reqBody;
+    reqBody.source.type = this.state.type === 'remote' ? 'container' : 'url';
+    this.setState({
+      type: type,
+      reqBody: reqBody
+     });
   }
 
   handleKeyPress = e => {
-    if (e.keyCode === 13 && this.state.name.length > 0 && this.state.image.length > 0) {
+    if (e.keyCode === 13) {
       this.submit();
     }
   }
@@ -44,74 +74,87 @@ class ImageCreate extends Component {
   }
 
   httpPostImage = () => {
-    const body = JSON.stringify({
-      name: this.state.name,
-      ipv4: this.state.ipv4,
-      ipv6: this.state.ipv6,
-      domainName: this.state.domainName,
-      mac: this.state.mac,
-      settings: this.state.settings
-    });
+    const reqBody = this.state.reqBody;
+    const keyToRemove = this.state.type === 'remote' ? 'name' : 'url'
+    delete reqBody.source[keyToRemove];
+    const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
-        this.setState({
-          errorName: obj.jsonData.errors.name,
-          errorIpv4: obj.jsonData.errors.ipv4,
-          errorIpv6: obj.jsonData.errors.ipv6,
-          errorDomainName: obj.jsonData.errors.domainName,
-          errorMac: obj.jsonData.errors.mac,
-          errorSettings: obj.jsonData.errors.settings
-        });
+      if (obj.httpStatus !== 202) {
+        this.setState({ resError: obj.httpStatus });
       } else {
         this.props.httpGetImages();
-        this.setState({ redirect: true });
+        this.setState({
+          resError: null,
+          redirect: true
+        });
       }
     }
-    this.props.httpRequest('POST', 'images', body, callbackFunction);
+    const path = `hosts/${this.state.hostId}/images/${this.state.type}`;
+    this.props.httpRequest('POST', path, body, callbackFunction);
   }
 
   render() {
     return (
       <form>
         {this.state.redirect && <Redirect from="/images/create" exact to="/images" />}
-        <FormGroup controlId="formImage">
-          <ControlLabel>Image</ControlLabel>
+        {/* <Button type="button" bsStyle="info" onClick={this.changeType}>
+          {this.state.type}
+        </Button> */}
+        <ControlLabel>Source</ControlLabel><br />
+        <Toggle
+          onClick={this.changeType}
+          on="Local Container"
+          off="Remote Image"
+          size="lg"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.type === 'container'}
+          className="ToggleBtn"
+        />
+        <FormGroup controlId="formFilename">
+          <ControlLabel>Filename</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.reqBody.filename}
+            placeholder="Enter filename (optional)"
+            onChange={this.handleFilenameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup>
+        <FormGroup controlId="formHost">
+          <ControlLabel>Host</ControlLabel>
           <FormControl
             componentClass="select"
-            onChange={this.handleImageChange}
-            inputRef={ hl => this.imageList = hl }
+            onChange={this.handleHostChange}
+            inputRef={ hl => this.hostList = hl }
           >
             <option>...</option>
-            {this.props.images instanceof Array &&
+            {this.props.hosts instanceof Array &&
+              this.props.hosts.map(host =>
+                <option key={host.id} value={host.id}>{host.name}</option>
+              )
+            }
+          </FormControl>
+          <HelpBlock>
+            {this.state.host.length < 1 && 'Please choose a host'}
+          </HelpBlock>
+        </FormGroup>
+        {/* <FormGroup controlId="formContainer">
+          <ControlLabel>Container</ControlLabel>
+          <FormControl
+            componentClass="select"
+            onChange={this.handleContainerChange}
+            inputRef={ hl => this.containerList = hl }
+          >
+            <option>...</option>
+            {this.props.containers instanceof Array &&
               this.props.images.map(image =>
                 <option value={image.id}>{image.name}</option>
               )
             }
           </FormControl>
-          <HelpBlock>
-            {this.state.errorImage || (this.state.image.length < 1 &&
-              'Please choose a image of which you want to create an image')
-            }
-          </HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.name.value}
-            placeholder="Enter name"
-            onChange={this.handleNameChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
-        </FormGroup>
-        <Button
-          type="button"
-          disabled={this.state.name.length < 1 || this.state.image.length < 1}
-          onClick={this.submit}
-        >
-          Submit
-        </Button>
+        </FormGroup> */}
+        <Button type="button" onClick={this.submit}>Submit</Button>
       </form>
     )
   }

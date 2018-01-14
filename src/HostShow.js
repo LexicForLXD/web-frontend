@@ -13,6 +13,7 @@ class HostShow extends Component {
     super();
     this.state = {
       editView: false,
+      notFound: false,
       host: {
         id: '',
         name: '',
@@ -51,9 +52,10 @@ class HostShow extends Component {
   httpGetHost = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `hosts/${id}`, null, obj => {
-      this.setState({
-        host: obj.jsonData
-      })
+      if (obj.httpStatus === 404)
+        this.setState({ notFound: true })
+      else
+        this.setState({ notFound: false, host: obj.jsonData });
     });
   }
 
@@ -75,43 +77,50 @@ class HostShow extends Component {
     return (
       <div>
         {this.state.redirect && <Redirect from="/hosts/show" exact to="/hosts" />}
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>IPv4</th>
-              <th>IPv6</th>
-              <th>Domain Name</th>
-              <th>MAC</th>
-              <th>Settings</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.host.name}</td>
-              <td>{this.state.host.ipv4}</td>
-              <td>{this.state.host.ipv6}</td>
-              <td>{this.state.host.domainName}</td>
-              <td>{this.state.host.mac}</td>
-              <td>{this.state.host.settings}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <Button
-          type="button"
-          className="Button"
-          onClick={() => this.toggleEditView()}
-        >
-          <i className="fa fa-edit"></i> Edit Host
-        </Button>
-        <Button
-          type="button"
-          className="Button"
-          onClick={() => this.httpDeleteHost()}
-        >
-          <i className="fa fa-trash"></i> Delete Host
-        </Button>
-        {this.state.editView &&
+        {this.state.notFound &&
+          <h6>Host not found!</h6>
+        }
+        {!this.state.notFound &&
+          <div>
+            <Table bordered responsive striped>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>IPv4</th>
+                  <th>IPv6</th>
+                  <th>Domain Name</th>
+                  <th>MAC</th>
+                  <th>Settings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{this.state.host.name}</td>
+                  <td>{this.state.host.ipv4}</td>
+                  <td>{this.state.host.ipv6}</td>
+                  <td>{this.state.host.domainName}</td>
+                  <td>{this.state.host.mac}</td>
+                  <td>{this.state.host.settings}</td>
+                </tr>
+              </tbody>
+            </Table>
+            <Button
+              type="button"
+              className="Button"
+              onClick={() => this.toggleEditView()}
+            >
+              <i className="fa fa-edit"></i> Edit Host
+            </Button>
+            <Button
+              type="button"
+              className="Button"
+              onClick={() => this.httpDeleteHost()}
+            >
+              <i className="fa fa-trash"></i> Delete Host
+            </Button>
+          </div>
+        }
+        {!this.state.notFound && this.state.editView &&
           <HostEdit
             host={this.state.host}
             httpGetHosts={this.props.httpGetHosts}

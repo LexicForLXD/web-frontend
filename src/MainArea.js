@@ -70,9 +70,6 @@ class MainArea extends Component {
         this.props.logout();  // TODO try using refresh token before logging out
         Promise.reject();
       };
-      if (response.status === 404) {
-        throw(404);
-      };
       const obj = {};
       obj.httpStatus = response.status;
 
@@ -105,7 +102,7 @@ class MainArea extends Component {
       });
     })
     .catch(error => {
-      console.log('Request failed: ', error);
+      console.log('Request failed: ', error.message);
       this.setState({
         loading: false,
         error: error
@@ -118,8 +115,6 @@ class MainArea extends Component {
   showStatus = () => {
     if (this.state.loading)
       return <LoadingView />;
-    else if (this.state.error === 404)
-      return <ErrorView msg="Not found."/>;
     else if (this.state.error)
       return <ErrorView msg="Error loading. Try refreshing."/>;
   }
@@ -221,6 +216,8 @@ class MainArea extends Component {
           render={() => <ImagePage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
+                          hosts={this.state.hosts}
+                          httpGetHosts={this.httpGetHosts}
                           httpGetImages={this.httpGetImages}
                           images={this.state.images}
                           httpGetContainers={this.httpGetContainers}
