@@ -35,12 +35,31 @@ class ImageCreate extends Component {
           url: ''
         }
       },
+      remoteAliases: [],
       resError: null
     };
   }
 
   componentDidMount() {
     this.props.httpGetHosts();
+    this.httpGetRemoteAliases();
+  }
+
+  /** Fetches remote aliases */
+  httpGetRemoteAliases = () => {
+    const path = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
+    this.props.httpRequest('GET', path, null, obj => {
+      const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+      this.setState({ remoteAliases: aliases });
+    });
+  }
+
+  /** Fetches containers from selected host */
+  httpGetHostContainers = () => {
+    const path = `hosts/${this.state.host}/containers?fresh=true`;
+    this.props.httpRequest('GET', path, null, obj => {
+      this.setState({ hostContainers: obj.jsonData });
+    });
   }
 
   changeType = () => {
@@ -93,7 +112,17 @@ class ImageCreate extends Component {
   }
 
   handleHostChange = e => {
+    if (this.hostList.value)
+      this.httpGetHostContainers();
     this.setState({ host: this.hostList.value });
+  }
+
+  handleRemoteAliasChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.source.url =
+      'https://uk.images.linuxcontainers.org:8443' +
+      this.remoteAliasList.value;
+    this.setState({ host: this.remoteAliasList.value });
   }
 
   handleKeyPress = e => {
@@ -132,18 +161,14 @@ class ImageCreate extends Component {
     return (
       <form>
         {this.state.redirect && <Redirect from="/images/create" exact to="/images" />}
-        {/* <Button type="button" bsStyle="info" onClick={this.changeType}>
-          {this.state.type}
-        </Button> */}
-        <ControlLabel>Source</ControlLabel><br />
         <Toggle
-          onClick={this.changeType}
-          on={<b>Local Container</b>}
-          off={<b>Remote Image</b>}
+          onClick={this.togglePublic}
+          on={<b>Public</b>}
+          off={<b>Private</b>}
           size="md"
           onstyle="success"
           offstyle="info"
-          active={this.state.type === 'container'}
+          active={this.state.reqBody.public}
           className="ToggleBtn"
         />
         <FormGroup controlId="formFilename">
@@ -156,17 +181,6 @@ class ImageCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
-        <ControlLabel>Download</ControlLabel><br />
-        <Toggle
-          onClick={this.togglePublic}
-          on={<b>Public</b>}
-          off={<b>Private</b>}
-          size="md"
-          onstyle="success"
-          offstyle="info"
-          active={this.state.reqBody.public}
-          className="ToggleBtn"
-        />
         <FormGroup controlId="formOS">
           <ControlLabel>OS</ControlLabel>
           <FormControl
@@ -215,21 +229,52 @@ class ImageCreate extends Component {
             {this.state.host.length < 1 && 'Please choose a host'}
           </HelpBlock>
         </FormGroup>
-        {/* <FormGroup controlId="formContainer">
-          <ControlLabel>Container</ControlLabel>
+        <ControlLabel>Source Type</ControlLabel>
+        <br />
+        <Toggle
+          onClick={this.changeType}
+          on={<b>Local Container</b>}
+          off={<b>Remote Image</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.type === 'container'}
+          className="ToggleBtn"
+        />
+        <br />
+        <ControlLabel>Source</ControlLabel>
+        {this.state.type === 'container' &&
+        <FormGroup controlId="formContainerName">
           <FormControl
             componentClass="select"
-            onChange={this.handleContainerChange}
-            inputRef={ hl => this.containerList = hl }
-          >
-            <option>...</option>
-            {this.props.containers instanceof Array &&
-              this.props.images.map(image =>
-                <option value={image.id}>{image.name}</option>
-              )
-            }
-          </FormControl>
-        </FormGroup> */}
+            onChange={this.handleContainerNameChange}
+            inputRef={ cl => this.containerNameList = cl }
+            >
+              <option>...</option>
+              {this.state.containerNames instanceof Array &&
+                this.state.containerNames.map(name =>
+                  <option value={name}>{name}</option>
+                )
+              }
+            </FormControl>
+          </FormGroup>
+        }
+        {this.state.type === 'remote' &&
+        <FormGroup controlId="formRemoteAlias">
+          <FormControl
+            componentClass="select"
+            onChange={this.handleRemoteAliasChange}
+            inputRef={ rl => this.remoteAliasList = rl }
+            >
+              <option>...</option>
+              {this.state.remoteAliases instanceof Array &&
+                this.state.remoteAliases.map(alias =>
+                  <option value={alias}>{alias}</option>
+                )
+              }
+            </FormControl>
+          </FormGroup>
+        }
         <Button type="button" onClick={this.submit}>Submit</Button>
       </form>
     )
