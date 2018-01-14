@@ -49,6 +49,32 @@ class ImageCreate extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  handleOsChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.properties.os = e.target.value;
+    this.setState({ reqBody: reqBody });
+  }
+
+  handleAliasNamesChange = e => {
+    const reqBody = this.state.reqBody;
+    const description = this.state.reqBody.aliases[0].description;
+    const names = e.target.value.split(','); // Trailing char adds nameless alias -> is removed in httpPostImage()
+    const aliases = names.map(name => {
+      return { name: name.trim(), description: description }
+    });
+    reqBody.aliases = aliases;
+    this.setState({ reqBody: reqBody });
+  }
+
+  handleAliasDescriptionChange = e => {
+    const description = e.target.value;
+    const reqBody = this.state.reqBody;
+    reqBody.aliases = reqBody.aliases.map(alias => {
+      return { name: alias.name, description: description}
+    })
+    this.setState({ reqBody: reqBody });
+  }
+
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
   }
@@ -75,6 +101,7 @@ class ImageCreate extends Component {
 
   httpPostImage = () => {
     const reqBody = this.state.reqBody;
+    reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
     const keyToRemove = this.state.type === 'remote' ? 'name' : 'url'
     delete reqBody.source[keyToRemove];
     const body = JSON.stringify(this.state.reqBody);
@@ -90,7 +117,8 @@ class ImageCreate extends Component {
       }
     }
     const path = `hosts/${this.state.hostId}/images/${this.state.type}`;
-    this.props.httpRequest('POST', path, body, callbackFunction);
+    console.log('body', body);
+    // this.props.httpRequest('POST', path, body, callbackFunction);
   }
 
   render() {
@@ -103,9 +131,9 @@ class ImageCreate extends Component {
         <ControlLabel>Source</ControlLabel><br />
         <Toggle
           onClick={this.changeType}
-          on="Local Container"
-          off="Remote Image"
-          size="lg"
+          on={<b>Local Container</b>}
+          off={<b>Remote Image</b>}
+          size="md"
           onstyle="success"
           offstyle="info"
           active={this.state.type === 'container'}
@@ -118,6 +146,36 @@ class ImageCreate extends Component {
             value={this.state.reqBody.filename}
             placeholder="Enter filename (optional)"
             onChange={this.handleFilenameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup>
+        <FormGroup controlId="formOS">
+          <ControlLabel>OS</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.reqBody.properties.os}
+            placeholder="Enter OS (optional) e.g. 'Ubuntu'"
+            onChange={this.handleOsChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup>
+        <FormGroup controlId="formAliasNames">
+          <ControlLabel>Alias Names</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.reqBody.aliases.map(a => a.name).join(', ')}
+            placeholder="Enter Alias names (separated by comma)"
+            onChange={this.handleAliasNamesChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup>
+        <FormGroup controlId="formAliasDescription">
+          <ControlLabel>Alias Description</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.reqBody.aliases[0].description}
+            placeholder="Enter Alias description (optional)"
+            onChange={this.handleAliasDescriptionChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
