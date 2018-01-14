@@ -43,6 +43,23 @@ class ImageCreate extends Component {
     this.props.httpGetHosts();
   }
 
+  changeType = () => {
+    const type = this.state.type === 'remote' ? 'container' : 'remote';
+    const reqBody = this.state.reqBody;
+    reqBody.source.type = this.state.type === 'remote' ? 'container' : 'url';
+    this.setState({
+      type: type,
+      reqBody: reqBody
+     });
+  }
+
+  togglePublic = () => {
+    const isPublic  = !this.state.reqBody.public;
+    const reqBody = this.state.reqBody;
+    reqBody.public = isPublic;
+    this.setState({ reqBody: reqBody });
+  }
+
   handleFilenameChange = e => {
     const reqBody = this.state.reqBody;
     reqBody.filename = e.target.value;
@@ -77,16 +94,6 @@ class ImageCreate extends Component {
 
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
-  }
-
-  changeType = () => {
-    const type = this.state.type === 'remote' ? 'container' : 'remote';
-    const reqBody = this.state.reqBody;
-    reqBody.source.type = this.state.type === 'remote' ? 'container' : 'url';
-    this.setState({
-      type: type,
-      reqBody: reqBody
-     });
   }
 
   handleKeyPress = e => {
@@ -149,6 +156,17 @@ class ImageCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
+        <ControlLabel>Download</ControlLabel><br />
+        <Toggle
+          onClick={this.togglePublic}
+          on={<b>Public</b>}
+          off={<b>Private</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.reqBody.public}
+          className="ToggleBtn"
+        />
         <FormGroup controlId="formOS">
           <ControlLabel>OS</ControlLabel>
           <FormControl
