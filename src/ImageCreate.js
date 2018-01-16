@@ -35,6 +35,7 @@ class ImageCreate extends Component {
           url: ''
         }
       },
+      containerNames: [],
       remoteAliases: [],
       resError: null
     };
@@ -112,9 +113,13 @@ class ImageCreate extends Component {
   }
 
   handleHostChange = e => {
-    if (this.hostList.value)
-      this.httpGetHostContainers();
-    this.setState({ host: this.hostList.value });
+    this.setState({ host: this.hostList.value }, () => {
+      if (this.hostList.value)
+        this.httpGetHostContainers();
+      else
+        this.setState({ containerNames: [] });
+      }
+    )
   }
 
   handleRemoteAliasChange = e => {
@@ -254,9 +259,9 @@ class ImageCreate extends Component {
             inputRef={ cl => this.containerNameList = cl }
             >
               <option value="">...</option>
-              {this.state.containerNames instanceof Array &&
-                this.state.containerNames.map(name =>
-                  <option value={name}>{name}</option>
+              {this.state.hostContainers instanceof Array &&
+                this.state.hostContainers.map(container =>
+                  <option value={container.id}>{container.name}</option>
                 )
               }
             </FormControl>

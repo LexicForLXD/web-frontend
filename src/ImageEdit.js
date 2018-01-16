@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import Toggle from 'react-bootstrap-toggle';
 
 /**
  * UI component for editing images
@@ -10,47 +11,72 @@ class ImageEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.image.name,
-      ipv4: this.props.image.ipv4,
-      ipv6: this.props.image.ipv6,
-      domainName: this.props.image.domainName,
-      mac: this.props.image.mac,
-      settings: this.props.image.settings,
-      errorName: null,
-      errorIpv4: null,
-      errorIpv6: null,
-      errorDomainName: null,
-      errorMac: null,
-      errorSettings: null
+      reqBody: {
+          auto_update: this.props.image.auto_update,
+          "properties": {
+              architecture: this.props.image.architecture,
+              description: this.props.image.description,
+              os: this.props.image.properties,
+              release: this.props.image.release
+          },
+          public: this.props.image.public
+        }
     };
   }
 
-  handleNameChange = e => {
-    this.setState({ name: e.target.value });
+  togglePublic = () => {
+    const isPublic  = !this.state.reqBody.public;
+    const reqBody = this.state.reqBody;
+    reqBody.public = isPublic;
+    this.setState({ reqBody: reqBody });
   }
 
-  handleIpv4Change = e => {
-    this.setState({ ipv4: e.target.value });
+  handleOsChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.properties.os = e.target.value;
+    this.setState({ reqBody: reqBody });
   }
 
-  handleIpv6Change = e => {
-    this.setState({ ipv6: e.target.value });
+  handleAliasNamesChange = e => {
+    const reqBody = this.state.reqBody;
+    const description = this.state.reqBody.aliases[0].description;
+    const names = e.target.value.split(','); // Trailing char adds nameless alias -> is removed in httpPostImage()
+    const aliases = names.map(name => {
+      return { name: name.trim(), description: description }
+    });
+    reqBody.aliases = aliases;
+    this.setState({ reqBody: reqBody });
   }
 
-  handleDomainNameChange = e => {
-    this.setState({ domainName: e.target.value });
+  handleAliasDescriptionChange = e => {
+    const description = e.target.value;
+    const reqBody = this.state.reqBody;
+    reqBody.aliases = reqBody.aliases.map(alias => {
+      return { name: alias.name, description: description}
+    })
+    this.setState({ reqBody: reqBody });
   }
 
-  handleMacChange = e => {
-    this.setState({ mac: e.target.value });
+  handleHostChange = e => {
+    this.setState({ host: this.hostList.value }, () => {
+      if (this.hostList.value)
+        this.httpGetHostContainers();
+      else
+        this.setState({ containerNames: [] });
+      }
+    )
   }
 
-  handleSettingsChange = e => {
-    this.setState({ settings: e.target.value });
+  handleRemoteAliasChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.source.url =
+      'https://uk.images.linuxcontainers.org:8443' +
+      this.remoteAliasList.value;
+    this.setState({ host: this.remoteAliasList.value });
   }
 
   handleKeyPress = e => {
-    if (e.keyCode === 13 && this.state.name.length > 0) {
+    if (e.keyCode === 13) {
       this.submit();
     }
   }
@@ -60,117 +86,54 @@ class ImageEdit extends Component {
   }
 
   httpPutImage = () => {
-    const body = JSON.stringify({
-      name: this.state.name,
-      ipv4: this.state.ipv4,
-      ipv6: this.state.ipv6,
-      domainName: this.state.domainName,
-      mac: this.state.mac,
-      settings: this.state.settings
-    });
+    const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
-        this.setState({
-          errorName: obj.jsonData.errors.name,
-          errorIpv4: obj.jsonData.errors.ipv4,
-          errorIpv6: obj.jsonData.errors.ipv6,
-          errorDomainName: obj.jsonData.errors.domainName,
-          errorMac: obj.jsonData.errors.mac,
-          errorSettings: obj.jsonData.errors.settings
-        });
+      if (obj.httpStatus !== 202) {
+        this.setState({ resError: obj.jsonData.error.message});
       } else {
         this.props.httpGetImages();
-        this.setState({ redirect: true });
+        this.setState({
+          resError: null,
+          redirect: true
+        });
       }
     }
-    this.props.httpRequest(
-      'PUT', `images/${this.props.image.id}`, body, callbackFunction
-    );
+    const path = 'images/' + this.props.image.id;
+    // console.log('body', body);
+    this.props.httpRequest('PUT', path, body, callbackFunction);
   }
 
   render() {
     return (
       <form>
-        {this.state.redirect && <Redirect from="/images/edit" exact to="/images" />}
-        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
-          <ControlLabel>Name</ControlLabel>
+        {this.state.redirect && <Redirect from="/images/create" exact to="/images" />}
+        <Toggle
+          onClick={this.togglePublic}
+          on={<b>Public</b>}
+          off={<b>Private</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.reqBody.public}
+          className="ToggleBtn"
+        />
+        <FormGroup controlId="formOS">
+          <ControlLabel>OS</ControlLabel>
           <FormControl
             type="text"
-            defaultValue={this.state.name}
-            value={this.state.name ? this.state.name.value : ''}
-            placeholder="Enter name"
-            onChange={this.handleNameChange}
+            value={this.state.reqBody.properties.os}
+            placeholder="Enter OS (optional) e.g. 'Ubuntu'"
+            onChange={this.handleOsChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
-          <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.ipv4}
-            value={this.state.ipv4 ? this.state.ipv4.value : ''}
-            placeholder="Enter IPv4 address"
-            onChange={this.handleIpv4Change}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorIpv4}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formIpv6" validationState={this.state.errorIpv6 ? 'error' : null}>
-          <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.ipv6}
-            value={this.state.ipv6 ? this.state.ipv6.value : ''}
-            placeholder="Enter IPv6 address"
-            onChange={this.handleIpv6Change}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorIpv6}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formDomainName" validationState={this.state.errorDomainName ? 'error' : null}>
-          <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.domainName}
-            value={this.state.domainName ? this.state.domainName.value : ''}
-            placeholder="Enter domain name"
-            onChange={this.handleDomainNameChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
-          <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.mac}
-            value={this.state.mac ? this.state.mac.value : ''}
-            placeholder="Enter MAC address"
-            onChange={this.handleMacChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorMac}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
-          <ControlLabel className="ControlLabel">Settings</ControlLabel>
-          <FormControl
-            type='text'
-            defaultValue={this.state.settings}
-            value={this.state.settings ? this.state.settings.value : ''}
-            placeholder="Enter settings"
-            onChange={this.handleSettingsChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorSettings}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
-          disabled={this.state.name.length < 1}
           onClick={this.submit}
         >
           Submit
         </Button>
+        <HelpBlock>{this.state.resError}</HelpBlock>
       </form>
     )
   }
