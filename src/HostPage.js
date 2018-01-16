@@ -14,9 +14,7 @@ import queryString from 'query-string';
 class HostPage extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selected: 'overview',
-    };
+    this.state = {};
   }
 
   /**

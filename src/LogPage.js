@@ -12,9 +12,7 @@ import queryString from 'query-string';
 class LogPage extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selected: 'overview',
-    };
+    this.state = {};
   }
 
   /**

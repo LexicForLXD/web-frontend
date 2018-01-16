@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
@@ -14,9 +15,7 @@ import queryString from 'query-string';
 class ProfilePage extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selected: 'overview',
-    };
+    this.state = {};
   }
 
   /**

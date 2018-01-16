@@ -14,9 +14,7 @@ import queryString from 'query-string';
 class ContainerPage extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selected: 'overview'
-    };
+    this.state = {};
   }
 
   /**
