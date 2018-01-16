@@ -44,6 +44,7 @@ class LogPage extends Component {
           <Route
             path="/logs/show"
             render={() => <LogShow
+                            accessToken={this.props.accessToken}
                             containerId={queryString.parse(window.location.search).id}
                             httpRequest={this.props.httpRequest}
                           />}

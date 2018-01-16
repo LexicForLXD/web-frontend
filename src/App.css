@@ -31,6 +31,17 @@
   text-align: left;
 }
 
+.LogText {
+  font-family: monospace;
+  font-size: 90%;
+  text-align: left;
+  margin-top: 59px;
+}
+
+.LogSidebar {
+  margin-top: 59px;
+}
+
 .MainArea {
   margin-top: 32px;
 }
