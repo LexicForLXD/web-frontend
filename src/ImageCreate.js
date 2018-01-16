@@ -143,7 +143,7 @@ class ImageCreate extends Component {
     const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
       if (obj.httpStatus !== 202) {
-        this.setState({ resError: obj.httpStatus });
+        this.setState({ resError: obj.jsonData.error.message});
       } else {
         this.props.httpGetImages();
         this.setState({
@@ -153,8 +153,8 @@ class ImageCreate extends Component {
       }
     }
     const path = `hosts/${this.state.hostId}/images/${this.state.type}`;
-    console.log('body', body);
-    // this.props.httpRequest('POST', path, body, callbackFunction);
+    // console.log('body', body);
+    this.props.httpRequest('POST', path, body, callbackFunction);
   }
 
   render() {
@@ -196,17 +196,20 @@ class ImageCreate extends Component {
           <FormControl
             type="text"
             value={this.state.reqBody.aliases.map(a => a.name).join(', ')}
-            placeholder="Enter Alias names (separated by comma)"
+            placeholder="Enter alias names (separated by comma)"
             onChange={this.handleAliasNamesChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
+        <HelpBlock>
+          {this.state.reqBody.aliases[0].name.length < 1 && 'Please enter at least one alias name'}
+        </HelpBlock>
         <FormGroup controlId="formAliasDescription">
           <ControlLabel>Alias Description</ControlLabel>
           <FormControl
             type="text"
             value={this.state.reqBody.aliases[0].description}
-            placeholder="Enter Alias description (optional)"
+            placeholder="Enter alias description (optional)"
             onChange={this.handleAliasDescriptionChange}
             onKeyDown={this.handleKeyPress}
           />
@@ -218,7 +221,7 @@ class ImageCreate extends Component {
             onChange={this.handleHostChange}
             inputRef={ hl => this.hostList = hl }
           >
-            <option>...</option>
+            <option value="">...</option>
             {this.props.hosts instanceof Array &&
               this.props.hosts.map(host =>
                 <option key={host.id} value={host.id}>{host.name}</option>
@@ -250,13 +253,14 @@ class ImageCreate extends Component {
             onChange={this.handleContainerNameChange}
             inputRef={ cl => this.containerNameList = cl }
             >
-              <option>...</option>
+              <option value="">...</option>
               {this.state.containerNames instanceof Array &&
                 this.state.containerNames.map(name =>
                   <option value={name}>{name}</option>
                 )
               }
             </FormControl>
+            {this.state.reqBody.source.name.length < 1 && 'Please choose a container'}
           </FormGroup>
         }
         {this.state.type === 'remote' &&
@@ -266,16 +270,28 @@ class ImageCreate extends Component {
             onChange={this.handleRemoteAliasChange}
             inputRef={ rl => this.remoteAliasList = rl }
             >
-              <option>...</option>
+              <option value="">...</option>
               {this.state.remoteAliases instanceof Array &&
                 this.state.remoteAliases.map(alias =>
                   <option value={alias}>{alias}</option>
                 )
               }
             </FormControl>
+            {this.state.reqBody.source.url.length < 1 && 'Please choose a remote image'}
           </FormGroup>
         }
-        <Button type="button" onClick={this.submit}>Submit</Button>
+        <Button
+          type="button"
+          disabled={this.state.reqBody.aliases[0].name.length < 1 ||
+                    this.state.host.length < 1 ||
+                    (this.state.reqBody.source.type === 'container' &&
+                    this.state.reqBody.source.name.length < 1) ||
+                    (this.state.reqBody.source.url.length < 1)}
+          onClick={this.submit}
+        >
+          Submit
+        </Button>
+        <HelpBlock>{this.state.resError}</HelpBlock>
       </form>
     )
   }
