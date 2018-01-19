@@ -19,6 +19,7 @@ class HostOverview extends Component {
       <Table bordered responsive striped>
         <thead>
           <tr>
+            <th>Auth.</th>
             <th>Name</th>
             <th>IPv4</th>
             <th>IPv6</th>
@@ -31,6 +32,9 @@ class HostOverview extends Component {
           {this.props.hosts instanceof Array &&
             this.props.hosts.map(host =>
               <tr key={host.id}>
+                <td style={host.authenticated ? { 'color': 'green' } : { 'color': 'red' }}>
+                  {host.authenticated ? '\u2713' : '\u2715'}
+                </td>
                 <td>{host.name}</td>
                 <td>{host.ipv4}</td>
                 <td>{host.ipv6}</td>

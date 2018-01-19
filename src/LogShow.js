@@ -3,8 +3,6 @@ import './App.css';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import { Grid, Col, Nav, NavItem, Well } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-
 
 /**
  *  Log detail view UI component

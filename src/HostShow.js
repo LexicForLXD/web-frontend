@@ -16,6 +16,7 @@ class HostShow extends Component {
       notFound: false,
       host: {
         id: '',
+        authenticated: '',
         name: '',
         ipv4: '',
         ipv6: '',
@@ -85,6 +86,7 @@ class HostShow extends Component {
             <Table bordered responsive striped>
               <thead>
                 <tr>
+                  <th>Auth.</th>
                   <th>Name</th>
                   <th>IPv4</th>
                   <th>IPv6</th>
@@ -95,6 +97,9 @@ class HostShow extends Component {
               </thead>
               <tbody>
                 <tr>
+                  <td style={this.state.host.authenticated ? { 'color': 'green' } : { 'color': 'red' }}>
+                    {this.state.host.authenticated ? '\u2713' : '\u2715'}
+                  </td>
                   <td>{this.state.host.name}</td>
                   <td>{this.state.host.ipv4}</td>
                   <td>{this.state.host.ipv6}</td>

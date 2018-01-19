@@ -11,12 +11,14 @@ class HostEdit extends Component {
     super(props);
     this.state = {
       name: this.props.host.name,
+      password: '',
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
       domainName: this.props.host.domainName,
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
+      errorPassword: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
@@ -28,6 +30,11 @@ class HostEdit extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handlePasswordChange = e => {
+    this.setState({ password: e.target.value });
   }
 
   /** Form change handler */
@@ -69,18 +76,24 @@ class HostEdit extends Component {
 
   /** Puts host */
   httpPutHost = () => {
-    const body = JSON.stringify({
+    let body = {
       name: this.state.name,
+      password: this.state.password,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domainName: this.state.domainName,
       mac: this.state.mac,
       settings: this.state.settings
-    });
+    };
+    Object.keys(body).forEach(
+      key => body[key].length === 0 && delete body[key]
+    );
+    body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (obj.jsonData.errors) {
         this.setState({
           errorName: obj.jsonData.errors.name,
+          errorPassword: obj.jsonData.errors.password,
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
           errorDomainName: obj.jsonData.errors.domainName,
@@ -116,6 +129,17 @@ class HostEdit extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
+          <ControlLabel>Password</ControlLabel>
+          <FormControl
+            type="password"
+            value={this.state.password.value}
+            placeholder="Enter new password"
+            onChange={this.handlePasswordChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorPassword}</HelpBlock>
         </FormGroup>
         <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>

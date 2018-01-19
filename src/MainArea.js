@@ -4,6 +4,7 @@ import ContainerPage from './ContainerPage.js';
 import ProfilePage from './ProfilePage.js';
 import ImagePage from './ImagePage.js';
 import HostPage from './HostPage.js';
+import MonitoringPage from './MonitoringPage.js';
 import LogPage from './LogPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
@@ -236,7 +237,9 @@ class MainArea extends Component {
         />
         <Route
           path="/monitoring"
-          render={() => <div></div>}
+          render={() => <MonitoringPage
+                          httpRequest={this.httpRequest}
+                        />}
         />
         <Route
           path="/logs"
