@@ -11,15 +11,43 @@ class MonitoringShow extends Component {
     super();
     this.state = {
       notFound: false,
-      chart: ''
+      containerChecks: {},
+      hostChecks: {}
     }
   }
 
   /**
    * Gets called once component has mounted. Fetches monitoring.
    */
-  componentDidMount () {
-    this.httpGetChart();
+  componentDidMount() {
+    this.getChecks();
+  }
+
+  getChecks = () => {
+    if (this.props.toggleContainers)
+      this.httpGetContainerChecks();
+    else
+      this.httpGetHostChecks();
+  }
+
+  httpGetContainerChecks = () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('GET', 'monitoring/checks/containers/' + id, null, obj => {
+      if (obj.httpStatus === 404)
+        this.setState({ notFound: true });
+      else
+        this.setState({ notFound: false, containerChecks: obj.jsonData });
+    })
+  }
+
+  httpGetHostChecks = () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('GET', 'monitoring/checks/hosts/' + id, null, obj => {
+      if (obj.httpStatus === 404)
+        this.setState({ notFound: true });
+      else
+        this.setState({ notFound: false, hostChecks: obj.jsonData });
+    })
   }
 
   /**
@@ -28,14 +56,8 @@ class MonitoringShow extends Component {
    */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
-      this.httpGetChart();
+      this.getChecks();
     }
-  }
-
-  /** Fetches chart. */
-  httpGetChart = () => {
-    const id = queryString.parse(window.location.search).id;
-    // TODO
   }
 
   /**
@@ -45,14 +67,11 @@ class MonitoringShow extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect && <Redirect from="/monitoring/show" exact to="/monitoring" />}
         {this.state.notFound &&
-          <h6>Chart not found!</h6>
+          <h6>No monitoring configuration found!</h6>
         }
         {!this.state.notFound &&
-          <div>
-
-          </div>
+          <div></div>
         }
       </div>
     )

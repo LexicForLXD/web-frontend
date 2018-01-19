@@ -238,6 +238,10 @@ class MainArea extends Component {
         <Route
           path="/monitoring"
           render={() => <MonitoringPage
+                          httpGetHosts={this.httpGetHosts}
+                          hosts={this.state.hosts}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
                           httpRequest={this.httpRequest}
                         />}
         />

@@ -5,6 +5,7 @@ import MonitoringShow from './MonitoringShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
+import Toggle from 'react-bootstrap-toggle';
 
 /**
  *  Monitoring (top level) page component
@@ -13,10 +14,7 @@ class MonitoringPage extends Component {
   constructor(props) {
     super();
     this.state = {
-      charts: [
-        'chart 1',
-        'chart 2'
-      ]
+      toggleContainers: true
     };
   }
 
@@ -24,14 +22,17 @@ class MonitoringPage extends Component {
    * Gets called once component has mounted. Fetches containers.
    */
   componentDidMount() {
-    this.httpGetCharts();
+    this.getContainersAndHosts();
   }
 
-  /**
-   * Fetches charts
-   */
-  httpGetCharts = () => {
-    // TODO
+  getContainersAndHosts = () => {
+    this.props.httpGetContainers();
+    this.props.httpGetHosts();
+  }
+
+  toggleContainers = () => {
+    const toggleContainers = !this.state.toggleContainers;
+    this.setState({ toggleContainers: toggleContainers });
   }
 
   /**
@@ -42,20 +43,38 @@ class MonitoringPage extends Component {
     return (
       <Grid>
         <Col xs={3} md={2}>
+          <Toggle
+            onClick={this.toggleContainers}
+            on={<b>Containers</b>}
+            off={<b>Hosts</b>}
+            size="md"
+            onstyle="success"
+            offstyle="info"
+            active={this.state.toggleContainers}
+            className="ToggleBtn"
+          />
           <Sidebar
-            parent="monitoring"
-            refresh={this.httpGetCharts}
-            items={this.state.charts}
-            icon={'fa fa-chart'}
+            parent={this.state.toggleContainers ?
+                    'monitoring/containers' : 'monitoring/hosts'}
+            refresh={this.getContainersAndHosts}
+            items={this.state.toggleContainers ?
+                   this.props.containers : this.props.hosts}
+            icon={this.state.toggleContainers ?
+                  'fa fa-cube' : 'fa fa-server'}
           />
         </Col>
         <Col xs={9} md={10}>
           <Route
-            path="/monitoring/show"
+            path={this.state.toggleContainers ?
+                  '/monitoring/containers/show' : '/monitoring/hosts/show'}
             render={() => <MonitoringShow
                             id={queryString.parse(window.location.search).id}
-                            httpGetCharts={this.httpGetCharts}
+                            httpGetHosts={this.httpGetHosts}
+                            hosts={this.state.hosts}
+                            httpGetContainers={this.httpGetContainers}
+                            containers={this.state.containers}
                             httpRequest={this.props.httpRequest}
+                            toggleContainers={this.state.toggleContainers}
                           />}
           />
         </Col>

@@ -58,7 +58,7 @@ class HostPage extends Component {
           <Route
             path="/hosts/show"
             render={() => <HostShow
-                            id={queryString.parse(window.location.search).id}
+                            id={queryString.parse(window.location.search).id} // still needed?
                             httpGetHosts={this.props.httpGetHosts}
                             httpRequest={this.props.httpRequest}
                           />}
