@@ -54,7 +54,7 @@ class ContainerShow extends Component {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}`, null, obj => {
       this.setState({
-        container: obj.jsonData[0]
+        container: obj.jsonData
       });
     });
   }
