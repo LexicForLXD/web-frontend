@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
-import { Redirect } from 'react-router-dom';
+import Image from 'react-image-file';
 
 /**
  *  Monitoring detail view UI component
@@ -11,13 +11,14 @@ class MonitoringShow extends Component {
     super();
     this.state = {
       notFound: false,
-      containerChecks: {},
-      hostChecks: {}
+      containerChecks: [],
+      hostChecks: [],
+      graphs: []
     }
   }
 
   /**
-   * Gets called once component has mounted. Fetches monitoring.
+   * Gets called once component has mounted. Fetches monitoring configuration.
    */
   componentDidMount() {
     this.getChecks();
@@ -33,10 +34,14 @@ class MonitoringShow extends Component {
   httpGetContainerChecks = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', 'monitoring/checks/containers/' + id, null, obj => {
-      if (obj.httpStatus === 404)
+      if (obj.httpStatus === 200) {
+        this.setState(
+          { notFound: false, containerChecks: obj.jsonData },
+          () => this.getGraphs()
+        );
+      } else {
         this.setState({ notFound: true });
-      else
-        this.setState({ notFound: false, containerChecks: obj.jsonData });
+      }
     })
   }
 
@@ -46,13 +51,38 @@ class MonitoringShow extends Component {
       if (obj.httpStatus === 404)
         this.setState({ notFound: true });
       else
-        this.setState({ notFound: false, hostChecks: obj.jsonData });
+        this.setState(
+          { notFound: false, hostChecks: obj.jsonData },
+          () => this.getGraphs()
+        );
+    })
+  }
+
+  getGraphs = () => {
+    if (this.props.toggleContainers)
+      this.state.containerChecks.forEach(cc => this.httpGetGraph(cc.id));
+    else
+      this.state.hostChecks.forEach(hc => this.httpGetGraph(hc.id));
+  }
+
+  httpGetGraph = checkId => {
+    const path = this.prop.toggleContainers ?
+                 `monitoring/checks/${checkId}/containers/graph` :
+                 `monitoring/checks/${checkId}/hosts/graph`;
+    this.props.httpRequest('GET', path, null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ notFound: true });
+      } else {
+        const graphs = this.state.graphs;
+        graphs.push(obj.jsonData);
+        this.setState({ notFound: false, graphs: graphs })
+      };
     })
   }
 
   /**
    * Gets called when different item is clicked on sidebar.
-   * Fetches chart.
+   * Fetches monitoring configuration.
    */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
@@ -71,7 +101,9 @@ class MonitoringShow extends Component {
           <h6>No monitoring configuration found!</h6>
         }
         {!this.state.notFound &&
-          <div></div>
+          <div>
+            {this.state.graphs.map(graph => <div><Image file={graph}/><br /></div>)}
+          </div>
         }
       </div>
     )
