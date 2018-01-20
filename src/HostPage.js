@@ -8,18 +8,26 @@ import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
 
+/**
+ *  Host (top level) page component
+ */
 class HostPage extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selected: 'overview',
-    };
+    this.state = {};
   }
 
+  /**
+   * Gets called once component has mounted. Fetches containers.
+   */
   componentDidMount() {
     this.props.httpGetHosts();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Grid>
@@ -50,7 +58,7 @@ class HostPage extends Component {
           <Route
             path="/hosts/show"
             render={() => <HostShow
-                            id={queryString.parse(window.location.search).id}
+                            id={queryString.parse(window.location.search).id} // still needed?
                             httpGetHosts={this.props.httpGetHosts}
                             httpRequest={this.props.httpRequest}
                           />}

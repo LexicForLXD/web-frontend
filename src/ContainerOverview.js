@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import './App.css';
 import { Table, Button } from 'react-bootstrap';
 
+/**
+ *  Container overview UI component
+ */
 class ContainerOverview extends Component {
   constructor(props) {
     super();
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <Table bordered responsive striped>
@@ -43,7 +50,7 @@ class ContainerOverview extends Component {
                 <td>{container.name}</td>
                 <td>{container.ipv4}</td>
                 <td>{container.ipv6}</td>
-                <td>{container.domain_name}</td>
+                <td>{container.domainName}</td>
                 {/* <td>{container.settings}</td> */}
               </tr>
             )

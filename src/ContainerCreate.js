@@ -3,16 +3,25 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+/**
+ * UI component for creating a new container
+ */
 class ContainerCreate extends Component {
+
+  /**
+   * @param {props} props from ContainerPage
+   */
   constructor(props) {
     super();
     this.state = {
+      aliases: [],
+      alias: '',
       host: '',
       type: '',
       name: '',
       ipv4: '',
       ipv6: '',
-      domain_name: '',
+      domainName: '',
       limitsCpu: 1,
       errorName: null,
       errorIpv4: null,
@@ -21,59 +30,84 @@ class ContainerCreate extends Component {
     };
   }
 
+  /**
+   * Gets called once component has mounted. Fetches hosts and aliases.
+   */
   componentDidMount() {
     this.props.httpGetHosts();
+    this.httpGetAliases();
   }
 
+C
   handleTypeChange = e => {
     this.setState({ type: this.typeList.value });
   }
 
-  // handleAliasChange = e => {
-  //   this.setState({ type: this.aliasList.value });
-  // }
+  /** Form change handler */
+  handleAliasChange = e => {
+    this.setState({ alias: this.aliasList.value });
+  }
 
+  /** Form change handler */
   handleHostChange = e => {
     this.setState({ host: this.hostList.value });
   }
 
+  /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv4Change = e => {
     this.setState({ ipv4: e.target.value });
   }
 
+  /** Form change handler */
   handleIpv6Change = e => {
     this.setState({ ipv6: e.target.value });
   }
 
+  /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
   }
 
+  /** Form change handler */
   handleLimitsCpuChange = e => {
     this.setState({ limitsCpu: e.target.value });
   }
 
+  /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
       this.submit();
     }
   }
 
+  /** Posts container on form submit */
   submit = () => {
     this.httpPostContainer();
   }
 
+  /** Fetches aliases */
+  httpGetAliases = () => {
+    const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
+    this.props.httpRequest('GET', url, null, obj => {
+      // obj.jsonData.sort(this.compareName);
+      const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+      this.setState({ aliases: aliases });
+    });
+  }
+
+  /** Posts container */
   httpPostContainer = () => {
     const body = JSON.stringify({
       host: this.state.host,
       name: this.state.name,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
       // limitsCpu: this.state.limitsCpu
       settings: {
         name: this.state.name,
@@ -97,12 +131,12 @@ class ContainerCreate extends Component {
            mode: 'pull',
            server: 'https://images.linuxcontainers.org:8443',
            protocol: 'lxd',
-           alias: 'ubuntu/zesty/amd64'
+           alias: this.state.alias
         }
       }
       // host: {
       //    id: 44,
-      //    domain_name: 'lxd-host.lleon.de',
+      //    domainName: 'lxd-host.lleon.de',
       //    name: 'lxd-host2',
       //    port: 8443,
       //    settings: 'settings',
@@ -125,6 +159,10 @@ class ContainerCreate extends Component {
     this.props.httpRequest('POST', `hosts/${this.state.host}/containers?type=${this.state.type}`, body, callbackFunction);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>
@@ -149,7 +187,12 @@ class ContainerCreate extends Component {
             onChange={this.handleAliasChange}
             inputRef={ list => this.aliasList = list }
           >
-            <option value="ubuntu/zesty/amd64">ubuntu/zesty/amd64</option>
+            <option>...</option>
+            {this.state.aliases instanceof Array &&
+              this.state.aliases.map(alias =>
+                <option value={alias}>{alias}</option>
+              )
+            }
           </FormControl>
         </FormGroup>
         <FormGroup controlId="formLimitsCpu">
@@ -217,7 +260,7 @@ class ContainerCreate extends Component {
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
-            value={this.state.domain_name.value}
+            value={this.state.domainName.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}

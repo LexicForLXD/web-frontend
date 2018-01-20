@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: App.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: App.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import './App.css';
+import Navigation from './Navigation.js';
+import MainArea from './MainArea.js';
+import Login from './Login.js';
+
+
+/**
+ * LEXIC's top level component
+ */
+class App extends Component {
+
+  /**
+   * Tries to get oauth2 access token and token expiration data
+   * from browser's local storage. Logs the user in if it finds a token and the
+   * token isn't expired.
+   */
+  constructor() {
+    super();
+    const accessToken = localStorage.getItem('accessToken');
+    const loggedIn = accessToken &amp;&amp;
+                     Date.now() &lt; localStorage.getItem('expirationDate');
+    this.state = {
+      accessToken: accessToken,
+      expirationDate: localStorage.getItem('expirationDate'),
+      refreshToken: localStorage.getItem('refreshToken'),
+      loggedIn: loggedIn
+    };
+  }
+
+  /**
+   * Adds an access token to the component's state.
+   * @param {string} token OAuth2 access token
+   */
+  setAccessToken = token => {
+    this.setState({ accessToken: token });
+    localStorage.setItem('accessToken', token);
+  }
+
+  /**
+   * Adds an access token expiration data to the component's state.
+   * @param {number} seconds expiration time in seconds
+   */
+  setExpirationDate = seconds  => {
+    const expirationDate = Date.now() + seconds * 1000;
+    this.setState({ expirationDate: expirationDate });
+    localStorage.setItem('expirationDate', expirationDate);
+  }
+
+
+
+  /**
+   * Adds an access token to the component's state.
+   * @param {string} token Oauth2 refresh token
+   */
+  setRefreshToken = token => {
+    this.setState({ refreshToken: token });
+    localStorage.setItem('refreshToken', token);
+  }
+
+
+  /**
+   * Logs the user in.
+   */
+  login = () => {
+    this.setState({ loggedIn: true })
+  };
+
+
+  /**
+   * Removes refresh and access token from browser's local storage and logs the
+   * user out.
+   */
+  logout = () => {
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    this.setState({ loggedIn: false });
+  }
+
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
+  render() {
+    return (
+      &lt;div className="App">
+        &lt;header className="App-header">
+          &lt;i className="fa fa-cubes fa-5x">&lt;/i>
+          &lt;h1 className="App-title">&lt;b>LEXIC&lt;/b>&lt;/h1>
+        &lt;/header>
+        &lt;Login
+          loggedIn={this.state.loggedIn}
+          login={this.login}
+          logout={this.logout}
+          setAccessToken={this.setAccessToken}
+          setExpirationDate={this.setExpirationDate}
+          setRefreshToken={this.setRefreshToken}
+        />
+        {this.state.loggedIn &amp;&amp;
+          &lt;div>
+            &lt;div className="Navigation">
+              &lt;Navigation />
+            &lt;/div>
+            &lt;div className="MainArea">
+              &lt;MainArea
+                accessToken={this.state.accessToken}
+                refreshToken={this.state.refreshToken}
+                logout={this.logout}
+              />
+            &lt;/div>
+          &lt;/div>
+        }
+      &lt;/div>
+    );
+  }
+}
+
+export default App;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

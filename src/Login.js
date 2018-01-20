@@ -3,6 +3,9 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
          Grid, Row, Col } from 'react-bootstrap';
 
+/**
+*  User login UI component
+*/
 class Navigation extends Component {
   constructor(props) {
     super();
@@ -13,26 +16,36 @@ class Navigation extends Component {
     };
   }
 
+  /** Calls the App compnent's login method */
   login = () => {
     this.props.login();
   }
 
+  /** Calls the App compnent's logout method */
   logout = () => {
     this.props.logout();
   }
 
+  /** Form change handler */
   handleUsernameChange = e => {
     this.setState({ username: e.target.value });
   }
 
+  /** Form change handler */
   handlePasswordChange = e => {
     this.setState({ password: e.target.value });
   }
 
+  /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13) this.submit();
   }
 
+  /**
+   * Sends a POST request with OAuth2 client id and client secret.
+   * Calls the App component's setAccessToken, setExpirationDate and
+   * setRefreshToken methods with the POST request'S return values.
+   */
   submit = () => {
     const url = 'https://lxd-api.lleon.de/oauth/v2/token';  // Replace in production
     fetch(url, {
@@ -60,6 +73,10 @@ class Navigation extends Component {
     .catch(error => console.log('Request failed: ', error)); // Remove in production
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     if (this.props.loggedIn) {
       return (

@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+  import React, { Component } from 'react';
 import './App.css';
 import ContainerEdit from './ContainerEdit.js';
 import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
+/**
+ *  Container detail view UI component
+ */
 class ContainerShow extends Component {
   constructor(props) {
     super();
@@ -12,31 +15,41 @@ class ContainerShow extends Component {
       editView: false,
       container: {
         id: '',
-        host: '',
+        host: {
+          name: '',
+          domainName: ''
+        },
         name: '',
         ipv4: '',
-        ipv6: '',
-        domain_name: '',
-        settings: ''
-      },
-      containerState: ''
+        settings: {},
+        state: ''
+      }
     }
   }
 
+  /**
+   * Gets called once component has mounted. Fetches container.
+   */
   componentDidMount () {
     this.httpGetContainer();
   }
 
+  /**
+   * Gets called when different container is clicked on sidebar.
+   * Fetches container.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.httpGetContainer();
     }
   }
 
+  /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
   }
 
+  /** Fetches container. */
   httpGetContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}`, null, obj => {
@@ -46,6 +59,7 @@ class ContainerShow extends Component {
     });
   }
 
+  /** Fetches container state. */
   httpGetContainerState = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}/state`, null, obj => {
@@ -53,6 +67,7 @@ class ContainerShow extends Component {
     });
   }
 
+  /** Puts container state. */
   httpPutContainerState = action => {
     const id = queryString.parse(window.location.search).id;
     const body = JSON.stringify({
@@ -63,6 +78,7 @@ class ContainerShow extends Component {
     })
   }
 
+  /** Deletes container. */
   httpDeleteContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('DELETE', `containers/${id}`, null, () => {
@@ -72,6 +88,10 @@ class ContainerShow extends Component {
     );
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>
@@ -79,17 +99,16 @@ class ContainerShow extends Component {
         <Table bordered responsive striped>
           <thead>
             <tr>
+              <th>Name</th>
               <th>Status</th>
               <th>Control</th>
-              <th>Host</th>
-              <th>Name</th>
               <th>IPv4</th>
-              <th>IPv6</th>
-              <th>Domain Name</th>
+              <th>Host</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>{this.state.container.name}</td>
               <td>{this.state.container.state}</td>
               <td>
                 <Button type="button" onClick={() => this.httpPutContainerState('start')}>
@@ -102,102 +121,20 @@ class ContainerShow extends Component {
                   <i className="fa fa-repeat"></i>
                 </Button>
               </td>
-              <td>{this.state.container.host.name}</td>
-              <td>{this.state.container.name}</td>
               <td>{this.state.container.ipv4}</td>
-              <td>{this.state.container.ipv6}</td>
-              <td>{this.state.container.domain_name}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Settings</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>Architecture</th>
-              <th>Ephermeral</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.container.settings.architecture}</td>
-              <td>{this.state.container.settings.ephermeral ? 'true' : 'false'}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Source</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Mode</th>
-              <th>Server</th>
-              <th>Protocol</th>
-              <th>Alias</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.container.settings.source ? this.state.container.settings.source.type : ''}</td>
-              <td>{this.state.container.settings.source ? this.state.container.settings.source.mode : ''}</td>
-              <td>{this.state.container.settings.source ? this.state.container.settings.source.server : ''}</td>
-              <td>{this.state.container.settings.source ? this.state.container.settings.source.protocol : ''}</td>
-              <td>{this.state.container.settings.source ? this.state.container.settings.source.alias : ''}</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Host</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Domain Name</th>
-              <th>Port</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
               <td>{this.state.container.host ? this.state.container.host.name : ''}</td>
-              <td>{this.state.container.host ? this.state.container.host.domain_name : ''}</td>
-              {/* <td>{this.state.container.host ? this.state.container.host.port : ''}</td> */}
-              <td>8443</td>
             </tr>
           </tbody>
         </Table>
-        <h5><b>Config</b></h5>
         <Table bordered responsive striped>
           <thead>
             <tr>
-              <th>CPU Limit</th>
+              <th>Settings</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              {/* <td>{this.state.container.settings.config ? this.state.container.settings.config['limits.cpu'] : ''}</td> */}
-              <td>2</td>
-            </tr>
-          </tbody>
-        </Table>
-        <h5><b>Devices: Root</b></h5>
-        <Table bordered responsive striped>
-          <thead>
-            <tr>
-              <th>path</th>
-              <th>type</th>
-              <th>pool</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.path : '' : ''}</td>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.type : '' : ''}</td>
-              <td>{this.state.container.settings.devices ?
-                   this.state.container.settings.devices.root ?
-                   this.state.container.settings.devices.root.pool : '' : ''}</td>
+              <td style={{textAlign: 'left'}}><pre>{JSON.stringify(this.state.container.settings, null, 2)}</pre></td>
             </tr>
           </tbody>
         </Table>

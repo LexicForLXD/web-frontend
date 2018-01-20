@@ -4,7 +4,17 @@ import Navigation from './Navigation.js';
 import MainArea from './MainArea.js';
 import Login from './Login.js';
 
+
+/**
+ * LEXIC's top level component
+ */
 class App extends Component {
+
+  /**
+   * Tries to get oauth2 access token and token expiration data
+   * from browser's local storage. Logs the user in if it finds a token and the
+   * token isn't expired.
+   */
   constructor() {
     super();
     const accessToken = localStorage.getItem('accessToken');
@@ -18,30 +28,60 @@ class App extends Component {
     };
   }
 
+  /**
+   * Adds an access token to the component's state.
+   * @param {string} token OAuth2 access token
+   */
   setAccessToken = token => {
     this.setState({ accessToken: token });
     localStorage.setItem('accessToken', token);
   }
 
-  setExpirationDate = seconds => {
+  /**
+   * Adds an access token expiration data to the component's state.
+   * @param {number} seconds expiration time in seconds
+   */
+  setExpirationDate = seconds  => {
     const expirationDate = Date.now() + seconds * 1000;
     this.setState({ expirationDate: expirationDate });
     localStorage.setItem('expirationDate', expirationDate);
   }
 
+
+
+  /**
+   * Adds an access token to the component's state.
+   * @param {string} token Oauth2 refresh token
+   */
   setRefreshToken = token => {
     this.setState({ refreshToken: token });
     localStorage.setItem('refreshToken', token);
   }
 
-  login = () => this.setState({ loggedIn: true });
 
+  /**
+   * Logs the user in.
+   */
+  login = () => {
+    this.setState({ loggedIn: true })
+  };
+
+
+  /**
+   * Removes refresh and access token from browser's local storage and logs the
+   * user out.
+   */
   logout = () => {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('accessToken');
     this.setState({ loggedIn: false });
   }
 
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div className="App">

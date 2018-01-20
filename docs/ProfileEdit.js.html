@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ProfileEdit.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ProfileEdit.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import './App.css';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
+const JSON5 = require('json5');
+
+/**
+ * UI component for editing profiles
+ */
+class ProfileEdit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: this.props.profile.name,
+      description: this.props.profile.description,
+      config: this.props.profile.config,
+      devices: this.props.profile.devices,
+      errorName: null,
+      errorDescription: null,
+      errorConfig: null,
+      errorDevices: null,
+    };
+  }
+
+/** Form change handler */
+  handleNameChange = e => {
+    this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handleDescriptionChange = e => {
+    this.setState({ description: e.target.value });
+  }
+
+  /** Form change handler */
+  handleConfigChange = event => {
+    try {
+      const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        config: config,
+        errorConfig: null
+      });
+    } catch (exception) {
+      this.setState({
+        config: '',
+        errorConfig: 'Not a valid JSON object'
+      });
+    }
+  }
+
+  /** Form change handler */
+  handleDevicesChange = event => {
+    try {
+      const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        devices: devices,
+        errorDevices: null
+      });
+    } catch (exception) {
+      this.setState({
+        devices: '',
+        errorDevices: 'Not a valid JSON object'
+      });
+    }
+  }
+
+  /** Return key press handler - calls submit() */
+  handleKeyPress = e => {
+    if (e.keyCode === 13 &amp;&amp; this.state.name.length > 0) {
+      this.submit();
+    }
+  }
+
+  /** Puts profile on form submit */
+  submit = () => {
+    this.httpPutProfile();
+  }
+
+  /** Puts profile */
+  httpPutProfile = () => {
+    const body = JSON.stringify({
+      name: this.state.name,
+      description: this.state.description,
+      config: this.state.config,
+      devices: this.state.devices
+    });
+    const callbackFunction = obj => {
+      if (obj.jsonData.errors) {
+        this.setState({
+          errorName: obj.jsonData.errors.name,
+          errorDescription: obj.jsonData.errors.description,
+          errorConfig: obj.jsonData.errors.config,
+          errorDevices: obj.jsonData.errors.devices
+        });
+      } else {
+        this.props.httpGetProfiles();
+        this.setState({ redirect: true });
+      }
+    }
+    this.props.httpRequest(
+      'PUT', `profiles/${this.props.profile.id}`, body, callbackFunction
+    );
+  }
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
+  render() {
+    return (
+      &lt;form>
+        {this.state.redirect &amp;&amp; &lt;Redirect from="/profiles/edit" exact to="/profiles" />}
+        &lt;FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
+          &lt;ControlLabel>Name&lt;/ControlLabel>
+          &lt;FormControl
+            type="text"
+            defaultValue={this.state.name}
+            value={this.state.name.value}
+            placeholder="Enter name"
+            onChange={this.handleNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorName || (this.state.name.length &lt; 1 &amp;&amp; 'Please enter a name')}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;FormGroup controlId="formDescription" validationState={this.state.errorDescription ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Description&lt;/ControlLabel>
+          &lt;FormControl
+            type='text'
+            defaultValue={this.state.description}
+            value={this.state.description.value}
+            placeholder="Enter description"
+            onChange={this.handleDescriptionChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorDescription}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Config&lt;/ControlLabel>
+          &lt;FormControl
+            componentClass="textarea"
+            rows={20}
+            defaultValue={JSON.stringify(this.state.config, null, 2)}
+            value={this.state.config.value}
+            placeholder="Enter optional config JSON object"
+            onChange={this.handleConfigChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorConfig}&lt;/HelpBlock>
+        &lt;/FormGroup>
+
+        &lt;FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Devices&lt;/ControlLabel>
+          &lt;FormControl
+            componentClass="textarea"
+            rows={20}
+            defaultValue={JSON.stringify(this.state.devices, null, 2)}
+            value={this.state.devices.value}
+            placeholder="Enter optional devices JSON object"
+            onChange={this.handleDevicesChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorDevices}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;Button
+          type="button"
+          disabled={this.state.name.length &lt; 1 ||
+                    this.state.errorConfig ||
+                    this.state.errorDevices}
+          onClick={this.submit}
+        >
+          Submit
+        &lt;/Button>
+      &lt;/form>
+    )
+  }
+}
+
+export default ProfileEdit;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

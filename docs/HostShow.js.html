@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: HostShow.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: HostShow.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import './App.css';
+import HostEdit from './HostEdit.js';
+import { Table, Button } from 'react-bootstrap';
+import queryString from 'query-string';
+import { Redirect } from 'react-router-dom';
+
+/**
+ *  Host detail view UI component
+ */
+class HostShow extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      editView: false,
+      host: {
+        id: '',
+        name: '',
+        ipv4: '',
+        ipv6: '',
+        domain_name: '',
+        mac: '',
+        settings: ''
+      }
+    }
+  }
+
+  /**
+   * Gets called once component has mounted. Fetches host.
+   */
+  componentDidMount () {
+    this.httpGetHost();
+  }
+
+  /**
+   * Gets called when different host is clicked on sidebar.
+   * Fetches host.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== this.props.id) {
+      this.httpGetHost();
+    }
+  }
+
+  /** Toggles edit view. */
+  toggleEditView = () => {
+    this.setState({ editView: !this.state.editView });
+  }
+
+  /** Fetches host. */
+  httpGetHost = () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('GET', `hosts/${id}`, null, obj => {
+      this.setState({
+        host: obj.jsonData
+      })
+    });
+  }
+
+  /** Deletes host. */
+  httpDeleteHost = () => {
+    const id = queryString.parse(window.location.search).id;
+    this.props.httpRequest('DELETE', `hosts/${id}`, null, () => {
+        this.props.httpGetHosts();
+        this.setState({ redirect: true });
+      }
+    );
+  }
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
+  render() {
+    return (
+      &lt;div>
+        {this.state.redirect &amp;&amp; &lt;Redirect from="/hosts/show" exact to="/hosts" />}
+        &lt;Table bordered responsive striped>
+          &lt;thead>
+            &lt;tr>
+              &lt;th>Name&lt;/th>
+              &lt;th>IPv4&lt;/th>
+              &lt;th>IPv6&lt;/th>
+              &lt;th>Domain Name&lt;/th>
+              &lt;th>MAC&lt;/th>
+              &lt;th>Settings&lt;/th>
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
+            &lt;tr>
+              &lt;td>{this.state.host.name}&lt;/td>
+              &lt;td>{this.state.host.ipv4}&lt;/td>
+              &lt;td>{this.state.host.ipv6}&lt;/td>
+              &lt;td>{this.state.host.domain_name}&lt;/td>
+              &lt;td>{this.state.host.mac}&lt;/td>
+              &lt;td>{this.state.host.settings}&lt;/td>
+            &lt;/tr>
+          &lt;/tbody>
+        &lt;/Table>
+        &lt;Button
+          type="button"
+          className="Button"
+          onClick={() => this.toggleEditView()}
+        >
+          &lt;i className="fa fa-edit">&lt;/i> Edit Host
+        &lt;/Button>
+        &lt;Button
+          type="button"
+          className="Button"
+          onClick={() => this.httpDeleteHost()}
+        >
+          &lt;i className="fa fa-trash">&lt;/i> Delete Host
+        &lt;/Button>
+        {this.state.editView &amp;&amp;
+          &lt;HostEdit
+            host={this.state.host}
+            httpGetHosts={this.props.httpGetHosts}
+            httpRequest={this.props.httpRequest}
+          />
+        }
+      &lt;/div>
+    )
+  }
+}
+
+export default HostShow;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

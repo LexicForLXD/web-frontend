@@ -1,20 +1,36 @@
 import React, { Component } from 'react';
 import './App.css';
-import HostPage from './HostPage.js';
 import ContainerPage from './ContainerPage.js';
+import ProfilePage from './ProfilePage.js';
+import ImagePage from './ImagePage.js';
+import HostPage from './HostPage.js';
+import MonitoringPage from './MonitoringPage.js';
+import LogPage from './LogPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
 
+/**
+ * Renders loading view component.
+ * @returns {jsx} component html code
+ */
 const LoadingView = () =>
   <Well bsSize="small" className="Console">
     Loading...
   </Well>
 
-const ErrorView = () =>
+/**
+ * Renders error view component.
+ * @param {props} props contains error message
+ * @returns {jsx} component html code
+ */
+const ErrorView = props =>
   <Well bsSize="small" className="Console">
-    Error loading data. Try refreshing.
+    {props.msg}
   </Well>
 
+/**
+ * Main area UI component
+ */
 class MainArea extends Component {
   constructor(props) {
     super();
@@ -24,10 +40,20 @@ class MainArea extends Component {
       error: false,
       containers: [],
       containerStates: [],
-      hosts: []
+      hosts: [],
+      profiles: [],
+      images: []
     };
   }
 
+
+  /**
+   * Http request method.
+   * @param {string} method http method
+   * @param {string} path url path
+   * @param {string} body http method body
+   * @param {function} callBackfunction callback function to be called with http response body as argument
+   */
   httpRequest = (method, path, body, callbackFunction) => {
     this.setState({
       loading: true
@@ -78,14 +104,25 @@ class MainArea extends Component {
       });
     })
     .catch(error => {
-      console.log('Request failed: ', error);
+      console.log('Request failed: ', error.message);
       this.setState({
         loading: false,
-        error: true
+        error: error
       });
     });
   }
 
+
+  /** Shows the current loading status */
+  showStatus = () => {
+    if (this.state.loading)
+      return <LoadingView />;
+    else if (this.state.error)
+      return <ErrorView msg="Error loading. Try refreshing."/>;
+  }
+
+
+  /** Compares two object's names. To be used in Array.sort method */
   compareName = (a, b) => {
     if (a.name < b.name)
       return -1;
@@ -94,6 +131,7 @@ class MainArea extends Component {
     return 0;
   }
 
+  /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
       // if (!obj.isArray) throw 'json is not an array';  // TODO
@@ -103,6 +141,7 @@ class MainArea extends Component {
     });
   }
 
+  /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest('GET', `containers/${id}/state`, null, obj => {
       const containerStates = this.state.containerStates;
@@ -111,6 +150,7 @@ class MainArea extends Component {
     });
   }
 
+  /** Puts container state */
   httpPutContainerState = (id, action) => {
     const body = JSON.stringify({
       action: action
@@ -119,6 +159,7 @@ class MainArea extends Component {
     })
   }
 
+  /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, obj => {
       obj.jsonData.sort(this.compareName);
@@ -126,13 +167,26 @@ class MainArea extends Component {
     })
   }
 
-  showStatus = () => {
-    if (this.state.loading)
-      return <LoadingView />;
-    else if (this.state.error)
-      return <ErrorView />;
+  /** Gets profiles */
+  httpGetProfiles = () => {
+    this.httpRequest('GET', 'profiles', null, obj => {
+      obj.jsonData.sort(this.compareName);
+      this.setState({ profiles: obj.jsonData });
+    })
   }
 
+  /** Gets images */
+  httpGetImages = () => {
+    this.httpRequest('GET', 'images', null, obj => {
+      obj.jsonData.sort(this.compareName);
+      this.setState({ images: obj.jsonData });
+    })
+  }
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <div>
@@ -140,6 +194,7 @@ class MainArea extends Component {
         <Route
           path="/containers"
           render={() => <ContainerPage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
                           hosts={this.state.hosts}
@@ -150,8 +205,31 @@ class MainArea extends Component {
                         />}
         />
         <Route
+          path="/profiles"
+          render={() => <ProfilePage
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          httpGetProfiles={this.httpGetProfiles}
+                          profiles={this.state.profiles}
+                        />}
+        />
+        <Route
+          path="/images"
+          render={() => <ImagePage
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          hosts={this.state.hosts}
+                          httpGetHosts={this.httpGetHosts}
+                          httpGetImages={this.httpGetImages}
+                          images={this.state.images}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
+                        />}
+        />
+        <Route
           path="/hosts"
           render={() => <HostPage
+                          error={this.state.error}
                           httpRequest={this.httpRequest}
                           httpGetHosts={this.httpGetHosts}
                           hosts={this.state.hosts}
@@ -159,11 +237,23 @@ class MainArea extends Component {
         />
         <Route
           path="/monitoring"
-          render={() => <div></div>}
+          render={() => <MonitoringPage
+                          httpGetHosts={this.httpGetHosts}
+                          hosts={this.state.hosts}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
+                          httpRequest={this.httpRequest}
+                        />}
         />
         <Route
           path="/logs"
-          render={() => <div></div>}
+          render={() => <LogPage
+                          accessToken={this.props.accessToken}
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
+                        />}
         />
         <Route
           path="/backup"
