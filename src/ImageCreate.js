@@ -240,6 +240,7 @@ class ImageCreate extends Component {
         <ControlLabel>Source Type</ControlLabel>
         <br />
         <Toggle
+          style={{ marginTop: '5px' }}
           onClick={this.changeType}
           on={<b>Local Container</b>}
           off={<b>Remote Image</b>}

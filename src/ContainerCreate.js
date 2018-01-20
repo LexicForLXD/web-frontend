@@ -3,7 +3,8 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import 'react-select/dist/react-select.css'; // move to index.js if used more than once
+import Toggle from 'react-bootstrap-toggle';
 
 /**
  * UI component for creating a new container
@@ -63,6 +64,11 @@ class ContainerCreate extends Component {
   /** Profiles multi-select change handler */
   handleProfilesChange = selection => {
     this.setState({ profiles: selection.map(option => option.value) });
+  }
+
+  toggleEphemeral = () => {
+    const ephemeral = !this.state.ephemeral;
+    this.setState({ ephemeral: ephemeral });
   }
 
   /** Form change handler */
@@ -176,6 +182,7 @@ class ContainerCreate extends Component {
           />
           <HelpBlock>{this.state.name.length < 1 && 'Please enter a name'}</HelpBlock>
         </FormGroup>
+        <ControlLabel>Profiles</ControlLabel>
         <Select
           multi
           closeOnSelect={false} // is this default?
@@ -185,6 +192,18 @@ class ContainerCreate extends Component {
           options={this.props.profiles.map(profile => {
             return { value: profile.id, label: profile.name }
           })}
+        />
+        <ControlLabel>Ephemeral</ControlLabel><br />
+        <Toggle
+          style={{ marginTop: '5px' }}
+          onClick={this.toggleEphemeral}
+          on={<b>True</b>}
+          off={<b>False</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.ephemeral}
+          className="ToggleBtn"
         />
         <FormGroup controlId="formAlias">
           <ControlLabel>Alias</ControlLabel>
