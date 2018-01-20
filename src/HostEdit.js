@@ -86,7 +86,7 @@ class HostEdit extends Component {
       settings: this.state.settings
     };
     Object.keys(body).forEach(
-      key => body[key].length === 0 && delete body[key]
+      key => body[key] === undefined || body[key].length === 0 && delete body[key]
     );
     body = JSON.stringify(body);
     const callbackFunction = obj => {
