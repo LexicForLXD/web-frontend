@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css'; // move to index.js if used more than once
 import Toggle from 'react-bootstrap-toggle';
+const JSON5 = require('json5');
 
 /**
  * UI component for creating a new container
@@ -69,6 +70,43 @@ class ContainerCreate extends Component {
   toggleEphemeral = () => {
     const ephemeral = !this.state.ephemeral;
     this.setState({ ephemeral: ephemeral });
+  }
+
+  /** Form change handler */
+  handleConfigChange = event => {
+    try {
+      const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        config: config,
+        errorConfig: null
+      });
+    } catch (exception) {
+      this.setState({
+        config: '',
+        errorConfig: 'Not a valid JSON object'
+      });
+    }
+  }
+
+  /** Form change handler */
+  handleDevicesChange = event => {
+    try {
+      const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        devices: devices,
+        errorDevices: null
+      });
+    } catch (exception) {
+      this.setState({
+        devices: '',
+        errorDevices: 'Not a valid JSON object'
+      });
+    }
+  }
+
+  /** Form change handler */
+  handleFingerprintChange = e => {
+    this.setState({ fingerprint: e.target.value });
   }
 
   /** Form change handler */
@@ -205,6 +243,40 @@ class ContainerCreate extends Component {
           active={this.state.ephemeral}
           className="ToggleBtn"
         />
+        <FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
+          <ControlLabel className="ControlLabel">Config</ControlLabel>
+          <FormControl
+            componentClass="textarea"
+            rows={20}
+            value={this.state.config.value}
+            placeholder="Enter optional config JSON object"
+            onChange={this.handleConfigChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorConfig}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
+          <ControlLabel className="ControlLabel">Devices</ControlLabel>
+          <FormControl
+            componentClass="textarea"
+            rows={20}
+            value={this.state.devices.value}
+            placeholder="Enter optional devices JSON object"
+            onChange={this.handleDevicesChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorDevices}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formFingerprint">
+          <ControlLabel>Fingerprint</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.fingerprint.value}
+            placeholder="Enter fingerprint"
+            onChange={this.handleFingerprintChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup>
         <FormGroup controlId="formAlias">
           <ControlLabel>Alias</ControlLabel>
           <FormControl
