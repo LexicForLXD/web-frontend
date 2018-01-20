@@ -65,9 +65,10 @@ class ContainerPage extends Component {
             <Route
               path="/containers/create"
               render={() => <ContainerCreate
-                              hosts={this.props.hosts}
                               httpGetHosts={this.props.httpGetHosts}
+                              hosts={this.props.hosts}
                               httpGetContainers={this.props.httpGetContainers}
+                              containers={this.props.containers}
                               httpRequest={this.props.httpRequest}
                               httpGetProfiles={this.props.httpGetProfiles}
                               profiles={this.props.profiles}

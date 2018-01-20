@@ -46,6 +46,7 @@ class ContainerCreate extends Component {
     this.props.httpGetHosts();
     this.props.httpGetProfiles();
     this.httpGetAliases();
+    this.props.httpGetContainers();
   }
 
   /** Form change handler */
@@ -114,6 +115,21 @@ class ContainerCreate extends Component {
     this.setState({ alias: this.aliasList.value });
   }
 
+  /** Form change handler */
+  handleOldContainerChange = e => {
+    this.setState({ oldContainerId: this.oldContainerList.value });
+  }
+
+  toggleContainerOnly = () => {
+    const containerOnly = !this.state.containerOnly;
+    this.setState({ containerOnly: containerOnly });
+  }
+
+  toggleLive = () => {
+    const live = !this.state.live;
+    this.setState({ live: live });
+  }
+
   /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13 && this.state.name.length > 0) {
@@ -165,11 +181,11 @@ class ContainerCreate extends Component {
         this.setState({ redirect: true });
       }
     };
-    console.log('body', body);
-    // this.props.httpRequest(
-    //   'POST', `hosts/${this.state.host}/containers?type=${this.state.type}`,
-    //   body, callbackFunction
-    // );
+    // console.log('body', body);
+    this.props.httpRequest(
+      'POST', `hosts/${this.state.host}/containers?type=${this.state.type}`,
+      body, callbackFunction
+    );
   }
 
   /**
@@ -233,7 +249,6 @@ class ContainerCreate extends Component {
         />
         <ControlLabel>Ephemeral</ControlLabel><br />
         <Toggle
-          style={{ marginTop: '5px' }}
           onClick={this.toggleEphemeral}
           on={<b>True</b>}
           off={<b>False</b>}
@@ -242,6 +257,7 @@ class ContainerCreate extends Component {
           offstyle="info"
           active={this.state.ephemeral}
           className="ToggleBtn"
+          style={{ marginTop: '5px' }}
         />
         <FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
           <ControlLabel className="ControlLabel">Config</ControlLabel>
@@ -292,6 +308,45 @@ class ContainerCreate extends Component {
             }
           </FormControl>
         </FormGroup>
+        <FormGroup controlId="formOldContainer">
+          <ControlLabel>Existing Container</ControlLabel>
+          <FormControl
+            componentClass="select"
+            onChange={this.handleOldContainerChange}
+            inputRef={ list => this.oldContainerList = list }
+          >
+            <option value="">...</option>
+            {this.props.containers instanceof Array &&
+              this.props.containers.map(container =>
+                <option key={container.id} value={container.id}>{container.name}</option>
+              )
+            }
+          </FormControl>
+        </FormGroup>
+        <ControlLabel>Container Only</ControlLabel><br />
+        <Toggle
+          onClick={this.toggleContainerOnly}
+          on={<b>True</b>}
+          off={<b>False</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.containerOnly}
+          className="ToggleBtn"
+          style={{ marginTop: '5px' }}
+        /><br />
+        <ControlLabel>Live</ControlLabel><br />
+        <Toggle
+          onClick={this.toggleLive}
+          on={<b>True</b>}
+          off={<b>False</b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.live}
+          className="ToggleBtn"
+          style={{ marginTop: '5px', marginBottom: '25px' }}
+        /><br />
         <Button
           type="button"
           disabled={this.state.host.length < 1 || this.state.name.length < 1}
