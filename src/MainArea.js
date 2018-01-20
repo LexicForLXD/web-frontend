@@ -202,6 +202,8 @@ class MainArea extends Component {
                           httpPutContainerState={this.httpPutContainerState}
                           containers={this.state.containers}
                           containerStates={this.props.containerStates}
+                          httpGetProfiles={this.httpGetProfiles}
+                          profiles={this.state.profiles}
                         />}
         />
         <Route

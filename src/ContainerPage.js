@@ -69,6 +69,8 @@ class ContainerPage extends Component {
                               httpGetHosts={this.props.httpGetHosts}
                               httpGetContainers={this.props.httpGetContainers}
                               httpRequest={this.props.httpRequest}
+                              httpGetProfiles={this.props.httpGetProfiles}
+                              profiles={this.props.profiles}
                             />}
             />
             <Route
