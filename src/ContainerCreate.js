@@ -21,7 +21,7 @@ class ContainerCreate extends Component {
       error: null,          // POST request error message
       aliases: [],          // fetched from linuxcontainers.org
       host: '',             // path: hostId
-      type: '',             // query: image, migration, copy or none (default)
+      type: 'none',         // query: image, migration, copy or none (default)
       // body:
       name: '',             // all
       architecture: 'x86_64', // hardcoded - no other valid values documented!
