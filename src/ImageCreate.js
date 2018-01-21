@@ -50,6 +50,7 @@ class ImageCreate extends Component {
   httpGetRemoteAliases = () => {
     const path = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', path, null, obj => {
+      if (obj.httpStatus !== 200) return;
       const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
       this.setState({ remoteAliases: aliases });
     });
@@ -59,6 +60,7 @@ class ImageCreate extends Component {
   httpGetHostContainers = () => {
     const path = `hosts/${this.state.host}/containers?fresh=true`;
     this.props.httpRequest('GET', path, null, obj => {
+      if (obj.httpStatus !== 200) return;
       this.setState({ hostContainers: obj.jsonData });
     });
   }

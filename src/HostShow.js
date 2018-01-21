@@ -56,7 +56,7 @@ class HostShow extends Component {
     this.props.httpRequest('GET', `hosts/${id}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ notFound: true })
-      else
+      else if (obj.httpStatus === 200)
         this.setState({ notFound: false, host: obj.jsonData });
     });
   }

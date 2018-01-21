@@ -51,9 +51,8 @@ class ProfileShow extends Component {
   httpGetProfile = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `profiles/${id}`, null, obj => {
-      this.setState({
-        profile: obj.jsonData
-      })
+      if (obj.httpStatus !== 200) return;
+      this.setState({ profile: obj.jsonData })
     });
   }
 

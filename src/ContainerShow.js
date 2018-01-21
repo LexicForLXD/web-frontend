@@ -53,9 +53,8 @@ class ContainerShow extends Component {
   httpGetContainer = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}`, null, obj => {
-      this.setState({
-        container: obj.jsonData
-      });
+      if (obj.httpStatus !== 200) return;
+      this.setState({ container: obj.jsonData });
     });
   }
 
@@ -63,6 +62,7 @@ class ContainerShow extends Component {
   httpGetContainerState = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `containers/${id}/state`, null, obj => {
+      if (obj.httpStatus !== 200) return;
       this.setState({ containerState: obj.jsonData.metadata.status });
     });
   }

@@ -41,7 +41,7 @@ class LogShow extends Component {
     this.props.httpRequest('GET', `/monitoring/logs/containers/${id}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logsNotFound: true })
-      else
+      else if (obj.httpStatus === 200)
         this.setState({ logsNotFound: false, logs: obj.jsonData.logs });
     });
   }
@@ -52,7 +52,7 @@ class LogShow extends Component {
     this.props.httpRequest('GET', `/monitoring/logs/containers/${id}/${log}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logNotFound: true })
-      else
+      else if (obj.httpStatus === 200) 
         this.setState({ logNotFound: false, log: obj.jsonData });
     });
 

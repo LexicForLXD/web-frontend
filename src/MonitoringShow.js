@@ -50,7 +50,7 @@ class MonitoringShow extends Component {
     this.props.httpRequest('GET', 'monitoring/checks/hosts/' + id, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ notFound: true });
-      else
+      else if (obj.httpStatus === 200)
         this.setState(
           { notFound: false, hostChecks: obj.jsonData },
           () => this.getGraphs()

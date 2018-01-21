@@ -57,10 +57,10 @@ class ImageEdit extends Component {
     this.setState({ reqBody: reqBody });
   }
 
-  handleHostChange = e => {
+  handleHostChange = e => {             // TODO if this is allowed in edit, then read comment below!
     this.setState({ host: this.hostList.value }, () => {
       if (this.hostList.value)
-        this.httpGetHostContainers();
+        this.httpGetHostContainers();   // TODO method declared in ImageCreate. method needs to be moved up, if this stays.
       else
         this.setState({ containerNames: [] });
       }

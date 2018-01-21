@@ -51,9 +51,8 @@ class ImageShow extends Component {
   httpGetImage = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', `images/${id}`, null, obj => {
-      this.setState({
-        image: obj.jsonData
-      })
+      if (obj.httpStatus !== 200) return;
+      this.setState({ image: obj.jsonData })
     });
   }
 
