@@ -21,6 +21,7 @@ class HostShow extends Component {
         ipv4: '',
         ipv6: '',
         domainName: '',
+        port: '',
         mac: '',
         settings: ''
       }
@@ -91,6 +92,7 @@ class HostShow extends Component {
                   <th>IPv4</th>
                   <th>IPv6</th>
                   <th>Domain Name</th>
+                  <th>Port</th>
                   <th>MAC</th>
                   <th>Settings</th>
                 </tr>
@@ -104,6 +106,7 @@ class HostShow extends Component {
                   <td>{this.state.host.ipv4}</td>
                   <td>{this.state.host.ipv6}</td>
                   <td>{this.state.host.domainName}</td>
+                  <td>{this.state.host.port}</td>
                   <td>{this.state.host.mac}</td>
                   <td>{this.state.host.settings}</td>
                 </tr>

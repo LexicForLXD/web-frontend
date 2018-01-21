@@ -19,6 +19,7 @@ class HostCreate extends Component {
       ipv4: '',
       ipv6: '',
       domainName: '',
+      port: '',
       mac: '',
       settings: '',
       errorName: null,
@@ -26,6 +27,7 @@ class HostCreate extends Component {
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
+      errorPort: null,
       errorMac: null,
       errorSettings: null
     };
@@ -54,6 +56,11 @@ class HostCreate extends Component {
   /** Form change handler */
   handleDomainNameChange = e => {
     this.setState({ domainName: e.target.value });
+  }
+
+  /** Form change handler */
+  handlePortChange = e => {
+    this.setState({ port: e.target.value });
   }
 
   /** Form change handler */
@@ -86,6 +93,7 @@ class HostCreate extends Component {
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domainName: this.state.domainName,
+      port: this.state.port,
       mac: this.state.mac,
       settings: this.state.settings
     };
@@ -101,6 +109,7 @@ class HostCreate extends Component {
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
           errorDomainName: obj.jsonData.errors.domainName,
+          errorPort: obj.jsonData.errors.port,
           errorMac: obj.jsonData.errors.mac,
           errorSettings: obj.jsonData.errors.settings
         });
@@ -171,6 +180,17 @@ class HostCreate extends Component {
             value={this.state.domainName.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formPort" validationState={this.state.errorPort ? 'error' : null}>
+          <ControlLabel className="ControlLabel">Port</ControlLabel>
+          <FormControl
+            type='text'
+            value={this.state.port.value}
+            placeholder="Enter port"
+            onChange={this.handlePortChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorDomainName}</HelpBlock>

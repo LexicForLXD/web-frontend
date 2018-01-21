@@ -15,6 +15,7 @@ class HostEdit extends Component {
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
       domainName: this.props.host.domainName,
+      port: this.props.host.port,
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
@@ -22,6 +23,7 @@ class HostEdit extends Component {
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
+      errorPort: null,
       errorMac: null,
       errorSettings: null
     };
@@ -50,6 +52,11 @@ class HostEdit extends Component {
   /** Form change handler */
   handleDomainNameChange = e => {
     this.setState({ domainName: e.target.value });
+  }
+
+  /** Form change handler */
+  handlePortChange = e => {
+    this.setState({ port: e.target.value });
   }
 
   /** Form change handler */
@@ -82,6 +89,7 @@ class HostEdit extends Component {
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domainName: this.state.domainName,
+      port: this.state.port,
       mac: this.state.mac,
       settings: this.state.settings
     };
@@ -97,6 +105,7 @@ class HostEdit extends Component {
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
           errorDomainName: obj.jsonData.errors.domainName,
+          errorPort: obj.jsonData.errors.port,
           errorMac: obj.jsonData.errors.mac,
           errorSettings: obj.jsonData.errors.settings
         });
@@ -188,6 +197,17 @@ class HostEdit extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorMac}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formPort" validationState={this.state.errorPort ? 'error' : null}>
+          <ControlLabel className="ControlLabel">Port</ControlLabel>
+          <FormControl
+            type='text'
+            value={this.state.port.value}
+            placeholder="Enter port"
+            onChange={this.handlePortChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
         <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
           <ControlLabel className="ControlLabel">Settings</ControlLabel>

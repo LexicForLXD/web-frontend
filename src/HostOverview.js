@@ -24,6 +24,7 @@ class HostOverview extends Component {
             <th>IPv4</th>
             <th>IPv6</th>
             <th>Domain Name</th>
+            <th>Port</th>
             <th>MAC</th>
             <th>Settings</th>
           </tr>
@@ -39,6 +40,7 @@ class HostOverview extends Component {
                 <td>{host.ipv4}</td>
                 <td>{host.ipv6}</td>
                 <td>{host.domainName}</td>
+                <td>{host.port}</td>
                 <td>{host.mac}</td>
                 <td>{host.settings}</td>
               </tr>
