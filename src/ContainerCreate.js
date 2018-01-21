@@ -28,7 +28,13 @@ class ContainerCreate extends Component {
       profiles: [],         // all
       ephemeral: false,     // all
       config: '',           // all
-      devices: '',          // all
+      devices: {
+        root: {
+          path: '/',
+          type: 'disk',
+          pool: 'default'
+        }
+      },                    // all
       fingerprint: '',      // only image (bodyFingerprint)
       alias: '',            // only image (bodyAlias)
       oldContainerId: '',   // only migration, copy (bodyMigration, bodyCopy)
@@ -164,7 +170,8 @@ class ContainerCreate extends Component {
       alias: this.state.alias,
       oldContainerId: this.state.oldContainerId,
       containerOnly: this.state.containerOnly,
-      live: this.state.false
+      live: this.state.false,
+      ipv4: '11.11.11.12'  // TODO remove!
     }
     Object.keys(body).forEach(
       key => (body[key] === null || body[key] === undefined ||
