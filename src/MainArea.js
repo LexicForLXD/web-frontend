@@ -133,8 +133,8 @@ class MainArea extends Component {
   /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
-      // if (!obj.isArray) throw 'json is not an array';  // TODO
       // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ containers: obj.jsonData });
     });
@@ -143,6 +143,7 @@ class MainArea extends Component {
   /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest('GET', `containers/${id}/state`, null, obj => {
+      if (obj.httpStatus !== 200) return;
       const containerStates = this.state.containerStates;
       containerStates[id] = obj.jsonData.metadata.status;
       this.setState({ containerStates: containerStates });
@@ -161,6 +162,7 @@ class MainArea extends Component {
   /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, obj => {
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ hosts: obj.jsonData });
     })
@@ -169,6 +171,7 @@ class MainArea extends Component {
   /** Gets profiles */
   httpGetProfiles = () => {
     this.httpRequest('GET', 'profiles', null, obj => {
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ profiles: obj.jsonData });
     })
@@ -177,6 +180,7 @@ class MainArea extends Component {
   /** Gets images */
   httpGetImages = () => {
     this.httpRequest('GET', 'images', null, obj => {
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ images: obj.jsonData });
     })

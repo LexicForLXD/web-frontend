@@ -146,6 +146,7 @@ class ContainerCreate extends Component {
   httpGetAliases = () => {
     const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', url, null, obj => {
+      if (obj.httpStatus !== 200) return;
       const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
       this.setState({ aliases: aliases });
     });
