@@ -33,6 +33,7 @@ class ImagePage extends Component {
       <Grid>
         <Col xs={3} md={2}>
           <Sidebar
+            image
             parent="images"
             refresh={this.props.httpGetImages}
             overview

@@ -181,7 +181,7 @@ class MainArea extends Component {
   httpGetImages = () => {
     this.httpRequest('GET', 'images', null, obj => {
       if (obj.httpStatus !== 200) return;
-      obj.jsonData.sort(this.compareName);
+      // obj.jsonData.sort(this.compareName);
       this.setState({ images: obj.jsonData });
     })
   }

@@ -159,7 +159,7 @@ class ImageCreate extends Component {
         });
       }
     }
-    const path = `hosts/${this.state.hostId}/images/${this.state.type}`;
+    const path = `hosts/${this.state.host}/images/${this.state.type}`;
     // console.log('body', body);
     this.props.httpRequest('POST', path, body, callbackFunction);
   }
