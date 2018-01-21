@@ -171,7 +171,7 @@ class ContainerCreate extends Component {
       oldContainerId: this.state.oldContainerId,
       containerOnly: this.state.containerOnly,
       live: this.state.false,
-      ipv4: '11.11.11.12'  // TODO remove!
+      ipv4: '11.11.11.13'  // TODO remove!
     }
     Object.keys(body).forEach(
       key => (body[key] === null || body[key] === undefined ||
@@ -284,6 +284,7 @@ class ContainerCreate extends Component {
             componentClass="textarea"
             rows={20}
             value={this.state.devices.value}
+            defaultValue={JSON.stringify(this.state.devices, null, 2)}
             placeholder="Enter optional devices JSON object"
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
