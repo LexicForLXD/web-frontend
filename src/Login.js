@@ -47,15 +47,14 @@ class Navigation extends Component {
    * setRefreshToken methods with the POST request'S return values.
    */
   submit = () => {
-    const url = 'https://lxd-api.lleon.de/oauth/v2/token';  // Replace in production
-    fetch(url, {
+    fetch(this.props.apiUrl + 'oauth/v2/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         grant_type: 'password',
-        client_id: '11_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',
+        client_id: '1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',
         client_secret: '4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k',
         username: this.state.username,
         password: this.state.password

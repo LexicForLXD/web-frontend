@@ -30,7 +30,7 @@ class ContainerPage extends Component {
    */
   startContainer = () => {
     this.httpRequest('GET', 'containers', null, obj => {
-      this.setState({ containers: obj.jsonData})
+      this.setState({ containers: obj.jsonData })
     });
   }
 

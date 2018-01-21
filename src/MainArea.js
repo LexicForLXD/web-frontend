@@ -35,7 +35,6 @@ class MainArea extends Component {
   constructor(props) {
     super();
     this.state = {
-      url: 'https://lxd-api.lleon.de/',  // Replace in production
       loading: false,
       error: false,
       containers: [],
@@ -58,7 +57,7 @@ class MainArea extends Component {
     this.setState({
       loading: true
     });
-    fetch(this.state.url + path, {
+    fetch(this.props.apiUrl + path, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
