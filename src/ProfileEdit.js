@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 const JSON5 = require('json5');
 
 /**
@@ -96,9 +97,10 @@ class ProfileEdit extends Component {
         this.props.httpGetProfiles();
         this.setState({ redirect: true });
       }
-    }
+    };
+    const id = queryString.parse(window.location.search).id;
     this.props.httpRequest(
-      'PUT', `profiles/${this.props.profile.id}`, body, callbackFunction
+      'PUT', 'profiles/' + id, body, callbackFunction
     );
   }
 

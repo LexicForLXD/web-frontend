@@ -156,6 +156,7 @@ class MainArea extends Component {
       action: action
     });
     this.httpRequest('PUT', `containers/${id}/state`, body, () => {
+      this.httpGetContainers();
     })
   }
 

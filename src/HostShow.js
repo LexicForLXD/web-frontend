@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import HostEdit from './HostEdit.js';
+import HostAuthorize from './HostAuthorize.js';
 import { Table, Button } from 'react-bootstrap';
 import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
@@ -13,6 +14,7 @@ class HostShow extends Component {
     super();
     this.state = {
       editView: false,
+      authorizeView: false,
       notFound: false,
       host: {
         id: '',
@@ -48,6 +50,10 @@ class HostShow extends Component {
   /** Toggles edit view. */
   toggleEditView = () => {
     this.setState({ editView: !this.state.editView });
+  }
+
+  toggleAuthorizeView = () => {
+    this.setState({ authorizeView: !this.state.authorizeView });
   }
 
   /** Fetches host. */
@@ -119,6 +125,15 @@ class HostShow extends Component {
             >
               <i className="fa fa-edit"></i> Edit Host
             </Button>
+            {!this.state.authenticated &&
+              <Button
+                type="button"
+                className="Button"
+                onClick={() => this.toggleAuthorizeView()}
+              >
+                <i className="fa fa-key"></i> Authorize Host
+              </Button>
+            }
             <Button
               type="button"
               className="Button"
@@ -130,6 +145,13 @@ class HostShow extends Component {
         }
         {!this.state.notFound && this.state.editView &&
           <HostEdit
+            host={this.state.host}
+            httpGetHosts={this.props.httpGetHosts}
+            httpRequest={this.props.httpRequest}
+          />
+        }
+        {!this.state.notFound && this.state.authorizeView &&
+          <HostAuthorize
             host={this.state.host}
             httpGetHosts={this.props.httpGetHosts}
             httpRequest={this.props.httpRequest}

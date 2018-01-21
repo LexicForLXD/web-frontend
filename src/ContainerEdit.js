@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
-
+import queryString from 'query-string';
 
 /**
  * UI component for editing container
@@ -85,9 +85,10 @@ class ContainerEdit extends Component {
         this.setState({ redirect: true });
       }
       // this.props.httpGetContainers();
-    }
+    };
+    const id = queryString.parse(window.location.search).id;
     this.props.httpRequest(
-      'PUT', `containers/${this.props.container.id}`, body, callbackFunction
+      'PUT', 'containers/' + id, body, callbackFunction
     );
   }
 

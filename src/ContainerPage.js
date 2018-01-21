@@ -25,14 +25,14 @@ class ContainerPage extends Component {
   }
 
 
-  /**
-   * Starts container.
-   */
-  startContainer = () => {
-    this.httpRequest('GET', 'containers', null, obj => {
-      this.setState({ containers: obj.jsonData })
-    });
-  }
+  // /**
+  //  * Starts container.
+  //  */
+  // startContainer = () => {
+  //   this.httpRequest('GET', 'containers', null, obj => {
+  //     this.setState({ containers: obj.jsonData })
+  //   });
+  // }
 
   /**
    * Renders the component.

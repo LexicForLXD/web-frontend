@@ -3,6 +3,7 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
+import queryString from 'query-string';
 
 /**
  * UI component for editing images
@@ -97,10 +98,10 @@ class ImageEdit extends Component {
           redirect: true
         });
       }
-    }
-    const path = 'images/' + this.props.image.id;
+    };
+    const id = queryString.parse(window.location.search).id;
     // console.log('body', body);
-    this.props.httpRequest('PUT', path, body, callbackFunction);
+    this.props.httpRequest('PUT', 'images/' + id, body, callbackFunction);
   }
 
   render() {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 
 /**
  * UI component for editing host
@@ -113,9 +114,10 @@ class HostEdit extends Component {
         this.props.httpGetHosts();
         this.setState({ redirect: true });
       }
-    }
+    };
+    const id = queryString.parse(window.location.search).id;
     this.props.httpRequest(
-      'PUT', `hosts/${this.props.host.id}`, body, callbackFunction
+      'PUT', 'hosts/' + id, body, callbackFunction
     );
   }
 
@@ -139,17 +141,19 @@ class HostEdit extends Component {
           />
           <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
-          <ControlLabel>Password</ControlLabel>
-          <FormControl
-            type="password"
-            value={this.state.password.value}
-            placeholder="Enter new password"
-            onChange={this.handlePasswordChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          <HelpBlock>{this.state.errorPassword}</HelpBlock>
-        </FormGroup>
+        {!this.props.host.authenticated &&
+          <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
+            <ControlLabel>Password</ControlLabel>
+            <FormControl
+              type="password"
+              value={this.state.password.value}
+              placeholder="Enter new password"
+              onChange={this.handlePasswordChange}
+              onKeyDown={this.handleKeyPress}
+            />
+            <HelpBlock>{this.state.errorPassword}</HelpBlock>
+          </FormGroup>
+        }
         <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
@@ -202,7 +206,7 @@ class HostEdit extends Component {
           <ControlLabel className="ControlLabel">Port</ControlLabel>
           <FormControl
             type='text'
-            value={this.state.port.value}
+            value={this.state.port ? this.state.port.value : ''}
             placeholder="Enter port"
             onChange={this.handlePortChange}
             onKeyDown={this.handleKeyPress}
