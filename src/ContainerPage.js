@@ -72,6 +72,8 @@ class ContainerPage extends Component {
                               httpRequest={this.props.httpRequest}
                               httpGetProfiles={this.props.httpGetProfiles}
                               profiles={this.props.profiles}
+                              httpGetImages={this.props.httpGetImages}
+                              images={this.props.images}
                             />}
             />
             <Route

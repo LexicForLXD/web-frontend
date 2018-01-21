@@ -207,6 +207,8 @@ class MainArea extends Component {
                           containerStates={this.props.containerStates}
                           httpGetProfiles={this.httpGetProfiles}
                           profiles={this.state.profiles}
+                          httpGetImages={this.httpGetImages}
+                          images={this.state.images}
                         />}
         />
         <Route

@@ -129,7 +129,7 @@ class ImageCreate extends Component {
     reqBody.source.url =
       'https://uk.images.linuxcontainers.org:8443' +
       this.remoteAliasList.value;
-    this.setState({ host: this.remoteAliasList.value });
+    this.setState({ reqBpdy: reqBody });
   }
 
   handleKeyPress = e => {

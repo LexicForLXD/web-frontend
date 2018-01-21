@@ -45,8 +45,9 @@ class ContainerCreate extends Component {
   componentDidMount() {
     this.props.httpGetHosts();
     this.props.httpGetProfiles();
-    this.httpGetAliases();
+    // this.httpGetAliases();
     this.props.httpGetContainers();
+    this.props.httpGetImages();
   }
 
   /** Form change handler */
@@ -142,15 +143,15 @@ class ContainerCreate extends Component {
     this.httpPostContainer();
   }
 
-  /** Fetches aliases */
-  httpGetAliases = () => {
-    const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
-    this.props.httpRequest('GET', url, null, obj => {
-      if (obj.httpStatus !== 200) return;
-      const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
-      this.setState({ aliases: aliases });
-    });
-  }
+  // /** Fetches aliases */
+  // httpGetAliases = () => {
+  //   const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
+  //   this.props.httpRequest('GET', url, null, obj => {
+  //     if (obj.httpStatus !== 200) return;
+  //     const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+  //     this.setState({ aliases: aliases });
+  //   });
+  // }
 
   /** Posts container */
   httpPostContainer = () => {
@@ -302,9 +303,9 @@ class ContainerCreate extends Component {
             inputRef={ list => this.aliasList = list }
           >
             <option value="">...</option>
-            {this.state.aliases instanceof Array &&
-              this.state.aliases.map((alias, index) =>
-                <option key={index} value={alias}>{alias}</option>
+            {this.props.images instanceof Array &&
+              this.props.images.map((image, index) =>
+                <option key={index} value={image.id}>{image.aliases[0].name}</option>
               )
             }
           </FormControl>
