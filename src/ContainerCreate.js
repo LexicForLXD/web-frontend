@@ -25,9 +25,7 @@ class ContainerCreate extends Component {
       // body:
       name: '',             // all
       architecture: 'x86_64', // hardcoded - no other valid values documented!
-      profiles: [
-        null
-      ],                    // all
+      profiles: [],         // all
       ephemeral: false,     // all
       config: '',           // all
       devices: '',          // all
@@ -305,7 +303,7 @@ class ContainerCreate extends Component {
             <option value="">...</option>
             {this.props.images instanceof Array &&
               this.props.images.map((image, index) =>
-                <option key={index} value={image.id}>{image.aliases[0].name}</option>
+                <option key={index} value={image.aliases[0].name}>{image.aliases[0].name}</option>
               )
             }
           </FormControl>

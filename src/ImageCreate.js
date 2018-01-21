@@ -32,7 +32,9 @@ class ImageCreate extends Component {
         source: {
           type: 'container',
           name: '',
-          url: ''
+          mode: 'pull',
+          server: 'https://uk.images.linuxcontainers.org:8443',
+          alias: ''
         }
       },
       containerNames: [],
@@ -51,7 +53,8 @@ class ImageCreate extends Component {
     const path = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus !== 200) return;
-      const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+      let aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
+      aliases = aliases.map(a => a.replace('/1.0/images/aliases/', ''));
       this.setState({ remoteAliases: aliases });
     });
   }
@@ -68,7 +71,7 @@ class ImageCreate extends Component {
   changeType = () => {
     const type = this.state.type === 'remote' ? 'container' : 'remote';
     const reqBody = this.state.reqBody;
-    reqBody.source.type = this.state.type === 'remote' ? 'container' : 'url';
+    reqBody.source.type = this.state.type === 'remote' ? 'container' : 'image';
     this.setState({
       type: type,
       reqBody: reqBody
@@ -126,10 +129,11 @@ class ImageCreate extends Component {
 
   handleRemoteAliasChange = e => {
     const reqBody = this.state.reqBody;
-    reqBody.source.url =
-      'https://uk.images.linuxcontainers.org:8443' +
-      this.remoteAliasList.value;
-    this.setState({ reqBpdy: reqBody });
+    // reqBody.source.url =
+      // 'https://uk.images.linuxcontainers.org:8443' +
+      // this.remoteAliasList.value;
+    reqBody.source.alias = this.remoteAliasList.value;
+    this.setState({ reqBody: reqBody });
   }
 
   handleKeyPress = e => {
@@ -145,8 +149,11 @@ class ImageCreate extends Component {
   httpPostImage = () => {
     const reqBody = this.state.reqBody;
     reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
-    const keyToRemove = this.state.type === 'remote' ? 'name' : 'url'
-    delete reqBody.source[keyToRemove];
+    // const keyToRemove = this.state.type === 'remote' ? 'name' : 'url'
+    // delete reqBody.source[keyToRemove];
+    // Object.keys(reqBody).forEach(
+    //   key => reqBody[key].length === 0 && delete reqBody[key]
+    // );
     const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
       if (obj.httpStatus !== 202) {
@@ -285,7 +292,7 @@ class ImageCreate extends Component {
                 )
               }
             </FormControl>
-            {this.state.reqBody.source.url.length < 1 && 'Please choose a remote image'}
+            {this.state.reqBody.source.alias.length < 1 && 'Please choose a remote image'}
           </FormGroup>
         }
         <Button
@@ -294,7 +301,7 @@ class ImageCreate extends Component {
                     this.state.host.length < 1 ||
                     (this.state.reqBody.source.type === 'container' &&
                     this.state.reqBody.source.name.length < 1) ||
-                    (this.state.reqBody.source.url.length < 1)}
+                    (this.state.reqBody.source.alias.length < 1)}
           onClick={this.submit}
         >
           Submit
