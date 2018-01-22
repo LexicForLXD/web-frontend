@@ -97,8 +97,8 @@ class LogShow extends Component {
           <h6>Log not found!</h6>
         }
         {!this.state.logsNotFound &&
-          <Grid>
-            <Col xs={6} md={8}>
+          <Grid fluid>
+            <Col xs={9} md={10}>
               <Well bsSize="small" className="LogText">
                 <pre>{this.state.logText}</pre>
               </Well>
