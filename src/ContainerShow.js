@@ -66,17 +66,6 @@ class ContainerShow extends Component {
     });
   }
 
-  // /** Puts container state. */
-  // httpPutContainerState = action => {
-  //   const id = queryString.parse(window.location.search).id;
-  //   const body = JSON.stringify({
-  //     action: action
-  //   });
-  //   this.props.httpRequest('PUT', `containers/${id}/state`, body, () => {
-  //     this.httpGetContainerState(id);
-  //   })
-  // }
-
   /** Puts container state */
   httpPutContainerState = action => {
     const body = JSON.stringify({
@@ -164,6 +153,8 @@ class ContainerShow extends Component {
             container={this.state.container}
             httpGetContainers={this.props.httpGetContainers}
             httpRequest={this.props.httpRequest}
+            httpGetProfiles={this.props.httpGetProfiles}
+            profiles={this.props.profiles}
           />
         }
       </div>

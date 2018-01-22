@@ -3,7 +3,6 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css'; // move to index.js if used more than once
 import Toggle from 'react-bootstrap-toggle';
 const JSON5 = require('json5');
 

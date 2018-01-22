@@ -24,16 +24,6 @@ class ContainerPage extends Component {
     this.props.httpGetContainers();
   }
 
-
-  // /**
-  //  * Starts container.
-  //  */
-  // startContainer = () => {
-  //   this.httpRequest('GET', 'containers', null, obj => {
-  //     this.setState({ containers: obj.jsonData })
-  //   });
-  // }
-
   /**
    * Renders the component.
    * @returns {jsx} component html code
@@ -83,6 +73,8 @@ class ContainerPage extends Component {
                               httpGetContainers={this.props.httpGetContainers}
                               httpPutContainerState={this.props.httpPutContainerState}
                               httpRequest={this.props.httpRequest}
+                              httpGetProfiles={this.props.httpGetProfiles}
+                              profiles={this.props.profiles}
                             />}
             />
           </Col>
