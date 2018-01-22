@@ -38,7 +38,7 @@ class LogShow extends Component {
   /** Fetches logs for container. */
   httpGetLogs = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `/monitoring/logs/containers/${id}`, null, obj => {
+    this.props.httpRequest('GET', 'monitoring/logs/containers/' + id, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logsNotFound: true })
       else if (obj.httpStatus === 200)
@@ -49,10 +49,10 @@ class LogShow extends Component {
   /** Fetches log. */
   httpGetLog = log => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `/monitoring/logs/containers/${id}/${log}`, null, obj => {
+    this.props.httpRequest('GET', `monitoring/logs/containers/${id}/${log}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logNotFound: true })
-      else if (obj.httpStatus === 200) 
+      else if (obj.httpStatus === 200)
         this.setState({ logNotFound: false, log: obj.jsonData });
     });
 
