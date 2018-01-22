@@ -23,9 +23,6 @@ class ContainerOverview extends Component {
             <th>Status</th>
             <th>Control</th>
             <th>Host</th>
-            {/* <th>IPv4</th> */}
-            {/* <th>IPv6</th> */}
-            {/* <th>Domain Name</th> */}
           </tr>
         </thead>
         <tbody>
@@ -46,9 +43,6 @@ class ContainerOverview extends Component {
                   </Button>
                 </td>
                 <td>{container.host.name}</td>
-                {/* <td>{container.ipv4}</td> */}
-                {/* <td>{container.ipv6}</td> */}
-                {/* <td>{container.domainName}</td> */}
               </tr>
             )
           }

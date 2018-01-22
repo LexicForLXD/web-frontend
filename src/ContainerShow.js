@@ -20,7 +20,6 @@ class ContainerShow extends Component {
           domainName: ''
         },
         name: '',
-        ipv4: '',
         settings: {},
         state: ''
       }
@@ -67,14 +66,24 @@ class ContainerShow extends Component {
     });
   }
 
-  /** Puts container state. */
+  // /** Puts container state. */
+  // httpPutContainerState = action => {
+  //   const id = queryString.parse(window.location.search).id;
+  //   const body = JSON.stringify({
+  //     action: action
+  //   });
+  //   this.props.httpRequest('PUT', `containers/${id}/state`, body, () => {
+  //     this.httpGetContainerState(id);
+  //   })
+  // }
+
+  /** Puts container state */
   httpPutContainerState = action => {
-    const id = queryString.parse(window.location.search).id;
     const body = JSON.stringify({
       action: action
     });
-    this.props.httpRequest('PUT', `containers/${id}/state`, body, () => {
-      this.httpGetContainerState(id);
+    this.props.httpRequest('PUT', `containers/${this.state.container.id}/state`, body, () => {
+      this.httpGetContainer();
     })
   }
 
@@ -102,7 +111,6 @@ class ContainerShow extends Component {
               <th>Name</th>
               <th>Status</th>
               <th>Control</th>
-              <th>IPv4</th>
               <th>Host</th>
             </tr>
           </thead>
@@ -121,7 +129,6 @@ class ContainerShow extends Component {
                   <i className="fa fa-repeat"></i>
                 </Button>
               </td>
-              <td>{this.state.container.ipv4}</td>
               <td>{this.state.container.host ? this.state.container.host.name : ''}</td>
             </tr>
           </tbody>
