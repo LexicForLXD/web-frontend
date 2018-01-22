@@ -14,7 +14,13 @@ class ProfileCreate extends Component {
       name: '',
       description: '',
       config: '',  // JSON object as string
-      devices: ''  // JSON object as string
+      devices: {
+        root: {
+          path: '/',
+          type: 'disk',
+          pool: 'default'
+        }
+      },
     };
   }
 
@@ -74,12 +80,17 @@ class ProfileCreate extends Component {
 
   /** Posts profile */
   httpPostProfile = () => {
-    const body = JSON.stringify({
+    let body = {
       name: this.state.name,
       description: this.state.description,
       config: this.state.config,
       devices: this.state.devices
-    });
+    };
+    Object.keys(body).forEach(
+      key => (body[key] === null || body[key] === undefined ||
+             body[key].length === 0) && delete body[key]
+    );
+    body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (obj.jsonData.errors) {
         this.setState({
@@ -138,13 +149,13 @@ class ProfileCreate extends Component {
           />
           <HelpBlock>{this.state.errorConfig}</HelpBlock>
         </FormGroup>
-
         <FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
           <ControlLabel className="ControlLabel">Devices</ControlLabel>
           <FormControl
             componentClass="textarea"
             rows={20}
             value={this.state.devices.value}
+            defaultValue={JSON.stringify(this.state.devices, null, 2)}
             placeholder="Enter optional devices JSON object"
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}

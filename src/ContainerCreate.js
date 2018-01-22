@@ -172,7 +172,17 @@ class ContainerCreate extends Component {
       containerOnly: this.state.containerOnly,
       live: this.state.false,
       // ipv4: '11.11.11.13'  // TODO remove!
-    }
+    };
+    if (this.state.type !== 'image') {
+      delete body.fingerprint;
+      delete body.alias;
+    };
+    if (this.state.type !== 'migration' &&
+        this.state.type !== 'copy') {
+      delete body.oldContainerId;
+      delete body.containerOnly;
+    };
+    if (this.state.type !== 'migration') delete body.live;
     Object.keys(body).forEach(
       key => (body[key] === null || body[key] === undefined ||
              body[key].length === 0) && delete body[key]
@@ -229,7 +239,7 @@ class ContainerCreate extends Component {
             <option value="none">None</option>
             <option value="image">Image</option>
             <option value="copy">Copy</option>
-            <option value="migrate">Migrate</option>
+            <option value="migration">Migration</option>
           </FormControl>
         </FormGroup>
         <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
@@ -291,70 +301,82 @@ class ContainerCreate extends Component {
           />
           <HelpBlock>{this.state.errorDevices}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formFingerprint">
-          <ControlLabel>Fingerprint</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.fingerprint.value}
-            placeholder="Enter fingerprint"
-            onChange={this.handleFingerprintChange}
-            onKeyDown={this.handleKeyPress}
-          />
-        </FormGroup>
-        <FormGroup controlId="formAlias">
-          <ControlLabel>Alias</ControlLabel>
-          <FormControl
-            componentClass="select"
-            onChange={this.handleAliasChange}
-            inputRef={ list => this.aliasList = list }
-          >
-            <option value="">...</option>
-            {this.props.images instanceof Array &&
-              this.props.images.map((image, index) =>
-                <option key={index} value={image.aliases[0].name}>{image.aliases[0].name}</option>
-              )
-            }
-          </FormControl>
-        </FormGroup>
-        <FormGroup controlId="formOldContainer">
-          <ControlLabel>Existing Container</ControlLabel>
-          <FormControl
-            componentClass="select"
-            onChange={this.handleOldContainerChange}
-            inputRef={ list => this.oldContainerList = list }
-          >
-            <option value="">...</option>
-            {this.props.containers instanceof Array &&
-              this.props.containers.map(container =>
-                <option key={container.id} value={container.id}>{container.name}</option>
-              )
-            }
-          </FormControl>
-        </FormGroup>
-        <ControlLabel>Container Only</ControlLabel><br />
-        <Toggle
-          onClick={this.toggleContainerOnly}
-          on={<b>True</b>}
-          off={<b>False</b>}
-          size="md"
-          onstyle="success"
-          offstyle="info"
-          active={this.state.containerOnly}
-          className="ToggleBtn"
-          style={{ marginTop: '5px' }}
-        /><br />
-        <ControlLabel>Live</ControlLabel><br />
-        <Toggle
-          onClick={this.toggleLive}
-          on={<b>True</b>}
-          off={<b>False</b>}
-          size="md"
-          onstyle="success"
-          offstyle="info"
-          active={this.state.live}
-          className="ToggleBtn"
-          style={{ marginTop: '5px', marginBottom: '25px' }}
-        /><br />
+        {this.state.type === 'image' &&
+          <div>
+            <FormGroup controlId="formFingerprint">
+              <ControlLabel>Fingerprint</ControlLabel>
+              <FormControl
+                type="text"
+                value={this.state.fingerprint.value}
+                placeholder="Enter fingerprint"
+                onChange={this.handleFingerprintChange}
+                onKeyDown={this.handleKeyPress}
+              />
+            </FormGroup>
+            <FormGroup controlId="formAlias">
+              <ControlLabel>Alias</ControlLabel>
+              <FormControl
+                componentClass="select"
+                onChange={this.handleAliasChange}
+                inputRef={ list => this.aliasList = list }
+              >
+                <option value="">...</option>
+                {this.props.images instanceof Array &&
+                  this.props.images.map((image, index) =>
+                    <option key={index} value={image.aliases[0].name}>{image.aliases[0].name}</option>
+                  )
+                }
+              </FormControl>
+            </FormGroup>
+          </div>
+        }
+        {(this.state.type === 'migration' || this.state.type === 'copy')  &&
+          <div>
+            <FormGroup controlId="formOldContainer">
+              <ControlLabel>Existing Container</ControlLabel>
+              <FormControl
+                componentClass="select"
+                onChange={this.handleOldContainerChange}
+                inputRef={ list => this.oldContainerList = list }
+              >
+                <option value="">...</option>
+                {this.props.containers instanceof Array &&
+                  this.props.containers.map(container =>
+                    <option key={container.id} value={container.id}>{container.name}</option>
+                  )
+                }
+              </FormControl>
+            </FormGroup>
+            <ControlLabel>Container Only</ControlLabel><br />
+            <Toggle
+              onClick={this.toggleContainerOnly}
+              on={<b>True</b>}
+              off={<b>False</b>}
+              size="md"
+              onstyle="success"
+              offstyle="info"
+              active={this.state.containerOnly}
+              className="ToggleBtn"
+              style={{ marginTop: '5px' }}
+            /><br />
+            <ControlLabel>Live</ControlLabel><br />
+          </div>
+        }
+        {(this.state.type === 'migration' || this.state.type === 'copy')  &&
+          <div>
+            <Toggle
+              onClick={this.toggleLive}
+              on={<b>True</b>}
+              off={<b>False</b>}
+              size="md"
+              onstyle="success"
+              offstyle="info"
+              active={this.state.live}
+              className="ToggleBtn"
+              style={{ marginTop: '5px', marginBottom: '25px' }}
+            /><br />
+          </div>
+        }
         <Button
           type="button"
           disabled={this.state.host.length < 1 || this.state.name.length < 1}
