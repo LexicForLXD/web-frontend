@@ -49,14 +49,14 @@ class LogShow extends Component {
   /** Fetches log. */
   httpGetLog = log => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', `monitoring/logs/containers/${id}/${log}`, null, obj => {
-      if (obj.httpStatus === 404)
-        this.setState({ logNotFound: true })
-      else if (obj.httpStatus === 200)
-        this.setState({ logNotFound: false, log: obj.jsonData });
-    });
+    // this.props.httpRequest('GET', `monitoring/logs/containers/${id}/${log}`, null, obj => {
+    //   if (obj.httpStatus === 404)
+    //     this.setState({ logNotFound: true })
+    //   else if (obj.httpStatus === 200)
+    //     this.setState({ logNotFound: false, log: obj });
+    // });
 
-    fetch(`/monitoring/logs/containers/${id}/${this.state.log}`, {
+    fetch(`${this.props.apiUrl}monitoring/logs/containers/${id}/${log}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'text/plain',
@@ -71,10 +71,11 @@ class LogShow extends Component {
       };
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('text/plain'))
-        this.setState({ logText: response });
+        return response.text();
       else
         throw new Error('No text/plain content type!');
     })
+    .then(text => this.setState({ logText: text }))
     .catch(error => {
       console.log('Request failed: ', error.message);
       this.setState({ logText: '' });
@@ -97,9 +98,9 @@ class LogShow extends Component {
         }
         {!this.state.logsNotFound &&
           <Grid>
-            <Col xs={9} md={10}>
+            <Col xs={6} md={8}>
               <Well bsSize="small" className="LogText">
-                {this.state.logText}
+                <pre>{this.state.logText}</pre>
               </Well>
             </Col>
             <Col xs={3} md={2}>

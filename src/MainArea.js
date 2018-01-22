@@ -256,6 +256,7 @@ class MainArea extends Component {
         <Route
           path="/logs"
           render={() => <LogPage
+                          apiUrl={this.props.apiUrl}
                           accessToken={this.props.accessToken}
                           error={this.state.error}
                           httpRequest={this.httpRequest}
