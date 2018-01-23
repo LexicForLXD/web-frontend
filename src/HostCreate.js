@@ -15,6 +15,7 @@ class HostCreate extends Component {
     super();
     this.state = {
       name: '',
+      nagiosName: '',
       password: '',
       ipv4: '',
       ipv6: '',
@@ -23,6 +24,7 @@ class HostCreate extends Component {
       mac: '',
       settings: '',
       errorName: null,
+      errorNagiosName: null,
       errorPassword: null,
       errorIpv4: null,
       errorIpv6: null,
@@ -36,6 +38,11 @@ class HostCreate extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handleNagiosNameChange = e => {
+    this.setState({ nagiosName: e.target.value });
   }
 
   /** Form change handler */
@@ -89,6 +96,7 @@ class HostCreate extends Component {
   httpPostHost = () => {
     let body = {
       name: this.state.name,
+      nagiosName: this.state.nagiosName,
       password: this.state.password,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
@@ -105,6 +113,7 @@ class HostCreate extends Component {
       if (obj.jsonData.errors) {
         this.setState({
           errorName: obj.jsonData.errors.name,
+          errorNagiosName: obj.jsonData.errors.nagiosName,
           errorPassword: obj.jsonData.errors.password,
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
@@ -139,6 +148,17 @@ class HostCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formNagiosName" validationState={this.state.errorNagiosName ? 'error' : null}>
+          <ControlLabel>Nagios Name</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.nagiosName.value}
+            placeholder="Enter Nagios name"
+            onChange={this.handleNagiosNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorNagiosName}</HelpBlock>
         </FormGroup>
         <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
           <ControlLabel>Password</ControlLabel>

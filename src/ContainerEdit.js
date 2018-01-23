@@ -17,6 +17,7 @@ class ContainerEdit extends Component {
     this.state = {
       error: null,
       name: this.props.container.name,
+      nagiosName: this.props.container.nagiosName,
       profiles: this.props.container.settings.profiles,
       ephemeral: this.props.container.settings.ephemeral,
       config: this.props.container.settings.config ? this.props.container.settings.config : '',
@@ -32,6 +33,11 @@ class ContainerEdit extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handleNagiosNameChange = e => {
+    this.setState({ nagiosName: e.target.value });
   }
 
   /** Profiles multi-select change handler */
@@ -93,6 +99,7 @@ class ContainerEdit extends Component {
   httpPutContainer = () => {
     let body = {
       name: this.state.name,
+      nagiosName: this.state.nagiosName,
       ephemeral: this.state.ephemeral,
       config: this.state.config,
       devices: this.state.devices
@@ -130,13 +137,22 @@ class ContainerEdit extends Component {
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
-            defaultValue={this.state.name}
-            value={this.state.name ? this.state.name.value : ''}
+            value={this.state.name}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.name.length < 1 && 'Please enter a name'}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formNagiosName">
+          <ControlLabel>Nagios Name</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.nagiosName}
+            placeholder="Enter Nagios name"
+            onChange={this.handleNagiosNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
         </FormGroup>
         <ControlLabel>Profiles</ControlLabel>
         <Select

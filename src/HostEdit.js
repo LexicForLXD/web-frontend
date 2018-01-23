@@ -12,6 +12,7 @@ class HostEdit extends Component {
     super(props);
     this.state = {
       name: this.props.host.name,
+      nagiosName: this.props.host.nagiosName,
       password: '',
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
@@ -20,6 +21,7 @@ class HostEdit extends Component {
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
+      errorNagiosName: null,
       errorPassword: null,
       errorIpv4: null,
       errorIpv6: null,
@@ -33,6 +35,11 @@ class HostEdit extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handleNagiosNameChange = e => {
+    this.setState({ nagiosName: e.target.value });
   }
 
   /** Form change handler */
@@ -86,6 +93,7 @@ class HostEdit extends Component {
   httpPutHost = () => {
     let body = {
       name: this.state.name,
+      nagiosName: this.state.nagiosName,
       password: this.state.password,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
@@ -102,6 +110,7 @@ class HostEdit extends Component {
       if (obj.jsonData.errors) {
         this.setState({
           errorName: obj.jsonData.errors.name,
+          errorNagiosName: obj.jsonData.errors.nagiosName,
           errorPassword: obj.jsonData.errors.password,
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
@@ -133,13 +142,24 @@ class HostEdit extends Component {
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
-            defaultValue={this.state.name}
-            value={this.state.name ? this.state.name.value : ''}
+            // defaultValue={this.state.name ? this.state.name : ''}
+            value={this.state.name ? this.state.name : ''}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+        </FormGroup>
+        <FormGroup controlId="formNagiosName" validationState={this.state.errorNagiosName ? 'error' : null}>
+          <ControlLabel>Nagios Name</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.nagiosName}
+            placeholder="Enter Nagios name"
+            onChange={this.handleNagiosNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          <HelpBlock>{this.state.errorNagiosName}</HelpBlock>
         </FormGroup>
         {!this.props.host.authenticated &&
           <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
