@@ -62,7 +62,8 @@ class ImageCreate extends Component {
 
   /** Fetches containers from selected host */
   httpGetHostContainers = () => {
-    const path = `hosts/${this.state.host}/containers?fresh=true`;
+    // const path = `hosts/${this.state.host}/containers?fresh=true`;
+    const path = `hosts/${this.state.host}/containers`;
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus !== 200) return;
       this.setState({ hostContainers: obj.jsonData });
@@ -291,7 +292,9 @@ class ImageCreate extends Component {
                 )
               }
             </FormControl>
-            {this.state.reqBody.source.name.length < 1 && 'Please choose a container'}
+            <HelpBlock>
+              {this.state.reqBody.source.name.length < 1 && 'Please choose a container'}
+            </HelpBlock>
           </FormGroup>
         }
         {this.state.type === 'remote' &&
@@ -308,7 +311,9 @@ class ImageCreate extends Component {
                 )
               }
             </FormControl>
-            {this.state.reqBody.source.alias.length < 1 && 'Please choose a remote image'}
+            <HelpBlock>
+              {this.state.reqBody.source.alias.length < 1 && 'Please choose a remote image'}
+            </HelpBlock>
           </FormGroup>
         }
         <Button
