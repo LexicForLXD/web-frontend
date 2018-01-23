@@ -125,7 +125,7 @@ class HostShow extends Component {
             >
               <i className="fa fa-edit"></i> Edit Host
             </Button>
-            {!this.state.authenticated &&
+            {!this.state.host.authenticated &&
               <Button
                 type="button"
                 className="Button"

@@ -65,7 +65,7 @@ class HostAuthorize extends Component {
           <FormControl
             type="password"
             value={this.state.password.value}
-            placeholder="Enter new password"
+            placeholder="Enter password"
             onChange={this.handlePasswordChange}
             onKeyDown={this.handleKeyPress}
           />
