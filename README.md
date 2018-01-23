@@ -45,3 +45,11 @@ Add the following lines to the .conf file in sites-enabled:
     RewriteRule ^ - [L]
 
     RewriteRule ^ /index.html [L]
+
+## Run Tests
+    npm test
+
+## Create JSDoc
+*Note:* JSDoc labels ES6 arrow functions as members instead of methods and therefore doesn't render parameters or return values for such. (Using arrow functions as ES6 class methods is regarded as good practice when developing React apps because they don’t redefine the value of *this* within their function body.)
+
+    npm doc
