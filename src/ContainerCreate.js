@@ -134,13 +134,6 @@ class ContainerCreate extends Component {
     this.setState({ live: live });
   }
 
-  /** Return key press handler - calls submit()*/
-  handleKeyPress = e => {
-    if (e.keyCode === 13 && this.state.name.length > 0) {
-      this.submit();
-    }
-  }
-
   /** Posts container on form submit */
   submit = () => {
     this.httpPostContainer();

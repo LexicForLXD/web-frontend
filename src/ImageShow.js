@@ -15,12 +15,15 @@ class ImageShow extends Component {
       editView: false,
       image: {
         id: '',
-        name: '',
-        ipv4: '',
-        ipv6: '',
-        domainName: '',
-        mac: '',
-        settings: ''
+        fingerprint: '',
+        aliases: [],
+        architecture: '',
+        size: '',
+        public: false,
+        state: '',
+        properties: '',
+        finished: false,
+        hostId: ''
       }
     }
   }
@@ -77,22 +80,48 @@ class ImageShow extends Component {
         <Table bordered responsive striped>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>IPv4</th>
-              <th>IPv6</th>
-              <th>Domain Name</th>
-              <th>MAC</th>
-              <th>Settings</th>
+              <th>Aliases</th>
+              <th>Architecture</th>
+              <th>Size</th>
+              <th>Public</th>
+              <th>Filename</th>
+              <th>Finished</th>
+              <th>Host</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr key={this.state.image.id}>
+              <td>{this.state.image.aliases.map(a => a.name).join(', ')}</td>
+              <td>{this.state.image.architecture}</td>
+              <td>{this.state.image.size}</td>
+              <td>{JSON.stringify(this.state.image.public)}</td>
+              <td>{this.state.image.filename}</td>
+              <td>{JSON.stringify(this.state.image.finished)}</td>
+              <td>{this.state.image.hostId}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>Properties</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{this.state.image.name}</td>
-              <td>{this.state.image.ipv4}</td>
-              <td>{this.state.image.ipv6}</td>
-              <td>{this.state.image.domainName}</td>
-              <td>{this.state.image.mac}</td>
-              <td>{this.state.image.settings}</td>
+              <td>{JSON.stringify(this.state.image.properties, null, 2)}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <Table bordered responsive striped>
+          <thead>
+            <tr>
+              <th>Fingerprint</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.image.fingerprint}</td>
             </tr>
           </tbody>
         </Table>

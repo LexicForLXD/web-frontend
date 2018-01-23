@@ -66,13 +66,6 @@ class ProfileCreate extends Component {
     }
   }
 
-  /** Return key press handler - calls submit()*/
-  handleKeyPress = e => {
-    if (e.keyCode === 13 && this.state.name.length > 0) {
-      this.submit();
-    }
-  }
-
   /** Posts profile on form submit */
   submit = () => {
     this.httpPostProfile();
