@@ -14,6 +14,7 @@ class MonitoringCreate extends Component {
   constructor(props) {
     super();
     this.state = {
+      type: '',
       container: '',   // path: containerId
       host: '',        // path: hostId
       // body:
@@ -29,11 +30,14 @@ class MonitoringCreate extends Component {
    * Gets called once component has mounted. Fetches hosts and aliases.
    */
   componentDidMount() {
-    if (this.props.container)
+    if (this.props.container) {
       this.props.httpGetContainers();
-    else
+      this.setState({ path: `monitoring/containers/create` });
+    } else {
       this.props.httpGetHosts();
-  }
+      this.setState({ type: 'monitoring/hosts/create' });
+    }
+    };
 
   /** Form change handler */
   handleContainerChange = e => {
@@ -82,7 +86,6 @@ class MonitoringCreate extends Component {
     body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (!obj.jsonData.errors) {
-        this.props.httpGetMonitorings();
         this.setState({ redirect: true });
       }
     }
@@ -98,7 +101,7 @@ class MonitoringCreate extends Component {
   render() {
     return (
       <form>
-        {this.state.redirect && <Redirect from="/Monitorings/create" exact to="/Monitorings" />}
+        {this.state.redirect && <Redirect from={this.state.path} exact to="/monitoring" />}
         {this.props.container &&
           <FormGroup controlId="formContainer">
             <ControlLabel>Container</ControlLabel>
