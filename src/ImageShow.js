@@ -16,7 +16,11 @@ class ImageShow extends Component {
       image: {
         id: '',
         fingerprint: '',
-        aliases: [],
+        aliases: [{
+          id: '',
+          name: '',
+          description: ''
+        }],
         architecture: '',
         size: '',
         public: false,
@@ -81,6 +85,7 @@ class ImageShow extends Component {
           <thead>
             <tr>
               <th>Aliases</th>
+              <th>Description</th>
               <th>Architecture</th>
               <th>Size</th>
               <th>Public</th>
@@ -92,6 +97,7 @@ class ImageShow extends Component {
           <tbody>
             <tr key={this.state.image.id}>
               <td>{this.state.image.aliases.map(a => a.name).join(', ')}</td>
+              <td>{this.state.image.aliases[0].description}</td>
               <td>{this.state.image.architecture}</td>
               <td>{this.state.image.size}</td>
               <td>{JSON.stringify(this.state.image.public)}</td>
@@ -142,7 +148,7 @@ class ImageShow extends Component {
         {this.state.editView &&
           <ImageEdit
             image={this.state.image}
-            httpGetImages={this.props.httpGetImages}
+            httpGetImage={this.httpGetImage}
             httpRequest={this.props.httpRequest}
           />
         }

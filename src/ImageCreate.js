@@ -219,7 +219,7 @@ class ImageCreate extends Component {
           {this.state.reqBody.aliases[0].name.length < 1 && 'Please enter at least one alias name'}
         </HelpBlock>
         <FormGroup controlId="formAliasDescription">
-          <ControlLabel>Alias Description</ControlLabel>
+          <ControlLabel>Description</ControlLabel>
           <FormControl
             type="text"
             value={this.state.reqBody.aliases[0].description}

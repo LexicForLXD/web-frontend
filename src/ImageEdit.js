@@ -13,15 +13,15 @@ class ImageEdit extends Component {
     super(props);
     this.state = {
       reqBody: {
-          auto_update: this.props.image.auto_update,
-          "properties": {
-              architecture: this.props.image.architecture,
-              description: this.props.image.description,
-              os: this.props.image.properties,
-              release: this.props.image.release
-          },
-          public: this.props.image.public
+        public: this.props.image.public,
+        properties: {
+          os: this.props.image.properties.os
         }
+        // aliases: [{
+        //   name: '',
+        //   description: ''
+        // }],
+      }
     };
   }
 
@@ -38,43 +38,11 @@ class ImageEdit extends Component {
     this.setState({ reqBody: reqBody });
   }
 
-  handleAliasNamesChange = e => {
-    const reqBody = this.state.reqBody;
-    const description = this.state.reqBody.aliases[0].description;
-    const names = e.target.value.split(','); // Trailing char adds nameless alias -> is removed in httpPostImage()
-    const aliases = names.map(name => {
-      return { name: name.trim(), description: description }
-    });
-    reqBody.aliases = aliases;
-    this.setState({ reqBody: reqBody });
-  }
-
-  handleAliasDescriptionChange = e => {
-    const description = e.target.value;
-    const reqBody = this.state.reqBody;
-    reqBody.aliases = reqBody.aliases.map(alias => {
-      return { name: alias.name, description: description}
-    })
-    this.setState({ reqBody: reqBody });
-  }
-
-  handleHostChange = e => {             // TODO if this is allowed in edit, then read comment below!
-    this.setState({ host: this.hostList.value }, () => {
-      if (this.hostList.value)
-        this.httpGetHostContainers();   // TODO method declared in ImageCreate. method needs to be moved up, if this stays.
-      else
-        this.setState({ containerNames: [] });
-      }
-    )
-  }
-
-  handleRemoteAliasChange = e => {
-    const reqBody = this.state.reqBody;
-    reqBody.source.url =
-      'https://uk.images.linuxcontainers.org:8443' +
-      this.remoteAliasList.value;
-    this.setState({ host: this.remoteAliasList.value });
-  }
+  // handleAliasDescriptionChange = e => {
+  //   const reqBody = this.state.reqBody;
+  //   reqBody.aliases[0].description = e.target.value;
+  //   this.setState({ reqBody: reqBody });
+  // }
 
   handleKeyPress = e => {
     if (e.keyCode === 13) {
@@ -87,12 +55,14 @@ class ImageEdit extends Component {
   }
 
   httpPutImage = () => {
-    const body = JSON.stringify(this.state.reqBody);
+    let body = this.state.reqBody;
+    if (body.properties.os.length === 0) delete body.properties;
+    body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (obj.httpStatus !== 202) {
         this.setState({ resError: obj.jsonData.error.message});
       } else {
-        this.props.httpGetImages();
+        this.props.httpGetImage();
         this.setState({
           resError: null,
           redirect: true
@@ -100,7 +70,7 @@ class ImageEdit extends Component {
       }
     };
     const id = queryString.parse(window.location.search).id;
-    // console.log('body', body);
+    // console.log('body', this.state.reqBody);
     this.props.httpRequest('PUT', 'images/' + id, body, callbackFunction);
   }
 
@@ -122,12 +92,24 @@ class ImageEdit extends Component {
           <ControlLabel>OS</ControlLabel>
           <FormControl
             type="text"
-            value={this.state.reqBody.properties.os}
+            defaultValue={this.state.reqBody.properties && this.state.reqBody.properties.os}
+            // value={this.state.reqBody.properties.os}
             placeholder="Enter OS (optional) e.g. 'Ubuntu'"
             onChange={this.handleOsChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
+        {/* <FormGroup controlId="formDescription">
+          <ControlLabel>Description</ControlLabel>
+          <FormControl
+            type="text"
+            defaultValue={this.state.reqBody.aliases[0].description}
+            value={this.state.reqBody.aliases[0].description}
+            placeholder="Enter description (optional)"
+            onChange={this.handleAliasDescriptionChange}
+            onKeyDown={this.handleKeyPress}
+          />
+        </FormGroup> */}
         <Button
           type="button"
           onClick={this.submit}
