@@ -23,7 +23,6 @@ class ContainerCreate extends Component {
       type: 'none',         // query: image, migration, copy or none (default)
       // body:
       name: '',             // all
-      nagiosName: '',       // all
       architecture: 'x86_64', // hardcoded - no other valid values documented!
       profiles: [],         // all
       ephemeral: false,     // all
@@ -67,11 +66,6 @@ class ContainerCreate extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
-  }
-
-  /** Form change handler */
-  handleNagiosNameChange = e => {
-    this.setState({ nagiosName: e.target.value });
   }
 
   /** Profiles multi-select change handler */
@@ -163,7 +157,6 @@ class ContainerCreate extends Component {
   httpPostContainer = () => {
     let body = {
       name: this.state.name,
-      nagiosName: this.state.nagiosName,
       architecture: this.state.architecture,
       profiles: this.state.profiles,
       ephemeral: this.state.ephemeral,
@@ -255,16 +248,6 @@ class ContainerCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
           <HelpBlock>{this.state.name.length < 1 && 'Please enter a name'}</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="formNagiosName">
-          <ControlLabel>Nagios Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.nagiosName.value}
-            placeholder="Enter Nagios name"
-            onChange={this.handleNagiosNameChange}
-            onKeyDown={this.handleKeyPress}
-          />
         </FormGroup>
         <ControlLabel>Profiles</ControlLabel>
         <Select

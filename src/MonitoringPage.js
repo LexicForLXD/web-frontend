@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
+import MonitoringCreate from './MonitoringCreate.js';
 import MonitoringShow from './MonitoringShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -57,6 +58,7 @@ class MonitoringPage extends Component {
             parent={this.state.toggleContainers ?
                     'monitoring/containers' : 'monitoring/hosts'}
             refresh={this.getContainersAndHosts}
+            create
             items={this.state.toggleContainers ?
                    this.props.containers : this.props.hosts}
             icon={this.state.toggleContainers ?
@@ -64,6 +66,28 @@ class MonitoringPage extends Component {
           />
         </Col>
         <Col xs={9} md={10}>
+          <Route
+            path="/monitoring/containers/create"
+            render={() => <MonitoringCreate
+                            container
+                            httpGetContainers={this.props.httpGetContainers}
+                            containers={this.props.containers}
+                            httpGetHosts={this.props.httpGetHosts}
+                            hosts={this.props.hosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+          <Route
+            path="/monitoring/hosts/create"
+            render={() => <MonitoringCreate
+                            host
+                            httpGetContainers={this.props.httpGetContainers}
+                            containers={this.props.containers}
+                            httpGetHosts={this.props.httpGetHosts}
+                            hosts={this.props.hosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
           <Route
             path={this.state.toggleContainers ?
                   '/monitoring/containers/show' : '/monitoring/hosts/show'}

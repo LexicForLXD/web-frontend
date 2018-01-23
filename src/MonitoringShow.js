@@ -69,9 +69,9 @@ class MonitoringShow extends Component {
 
   /** Fetches graphs for check id */
   httpGetGraph = checkId => {
-    const path = this.prop.toggleContainers ?
-                 `monitoring/checks/${checkId}/containers/graph` :
-                 `monitoring/checks/${checkId}/hosts/graph`;
+    const path = this.props.toggleContainers ?
+                 `monitoring/checks/${checkId}/containers/graph?timerange=-1day` :
+                 `monitoring/checks/${checkId}/hosts/graph?timerange=-1day`;
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus === 404) {
         this.setState({ notFound: true });
