@@ -62,8 +62,7 @@ class ImageCreate extends Component {
 
   /** Fetches containers from selected host */
   httpGetHostContainers = () => {
-    // const path = `hosts/${this.state.host}/containers?fresh=true`;
-    const path = `hosts/${this.state.host}/containers`;
+    const path = `hosts/${this.state.host}/containers?fresh=true`;
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus !== 200) return;
       this.setState({ hostContainers: obj.jsonData });
