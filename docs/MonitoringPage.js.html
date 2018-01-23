@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: HostOverview.js</title>
+    <title>JSDoc: Source: MonitoringPage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: HostOverview.js</h1>
+    <h1 class="page-title">Source: MonitoringPage.js</h1>
 
     
 
@@ -28,14 +28,39 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import Sidebar from './Sidebar.js';
+import MonitoringShow from './MonitoringShow.js';
+import { Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import queryString from 'query-string';
+import Toggle from 'react-bootstrap-toggle';
 
 /**
- *  Host overview UI component
+ *  Monitoring (top level) page component
  */
-class HostOverview extends Component {
+class MonitoringPage extends Component {
   constructor(props) {
     super();
+    this.state = {
+      toggleContainers: true
+    };
+  }
+
+  /** Gets called once component has mounted. Fetches containers and hosts. */
+  componentDidMount() {
+    this.getContainersAndHosts();
+  }
+
+  /** Fetches containers and hosts. */
+  getContainersAndHosts = () => {
+    this.props.httpGetContainers();
+    this.props.httpGetHosts();
+  }
+
+  /** Toggle button change handler */
+  toggleContainers = () => {
+    const toggleContainers = !this.state.toggleContainers;
+    this.setState({ toggleContainers: toggleContainers });
   }
 
   /**
@@ -44,43 +69,49 @@ class HostOverview extends Component {
    */
   render() {
     return (
-      &lt;Table bordered responsive striped>
-        &lt;thead>
-          &lt;tr>
-            &lt;th>Auth.&lt;/th>
-            &lt;th>Name&lt;/th>
-            &lt;th>IPv4&lt;/th>
-            &lt;th>IPv6&lt;/th>
-            &lt;th>Domain Name&lt;/th>
-            &lt;th>Port&lt;/th>
-            &lt;th>MAC&lt;/th>
-            &lt;th>Settings&lt;/th>
-          &lt;/tr>
-        &lt;/thead>
-        &lt;tbody>
-          {this.props.hosts instanceof Array &amp;&amp;
-            this.props.hosts.map(host =>
-              &lt;tr key={host.id}>
-                &lt;td style={host.authenticated ? { 'color': 'green' } : { 'color': 'red' }}>
-                  {host.authenticated ? '\u2713' : '\u2715'}
-                &lt;/td>
-                &lt;td>{host.name}&lt;/td>
-                &lt;td>{host.ipv4}&lt;/td>
-                &lt;td>{host.ipv6}&lt;/td>
-                &lt;td>{host.domainName}&lt;/td>
-                &lt;td>{host.port}&lt;/td>
-                &lt;td>{host.mac}&lt;/td>
-                &lt;td>{host.settings}&lt;/td>
-              &lt;/tr>
-            )
-          }
-        &lt;/tbody>
-      &lt;/Table>
+      &lt;Grid>
+        &lt;Col xs={3} md={2}>
+          &lt;Toggle
+            onClick={this.toggleContainers}
+            on={&lt;b>Containers&lt;/b>}
+            off={&lt;b>Hosts&lt;/b>}
+            size="md"
+            onstyle="success"
+            offstyle="info"
+            active={this.state.toggleContainers}
+            className="ToggleBtn"
+          />
+          &lt;Sidebar
+            parent={this.state.toggleContainers ?
+                    'monitoring/containers' : 'monitoring/hosts'}
+            refresh={this.getContainersAndHosts}
+            items={this.state.toggleContainers ?
+                   this.props.containers : this.props.hosts}
+            icon={this.state.toggleContainers ?
+                  'fa fa-cube' : 'fa fa-server'}
+          />
+        &lt;/Col>
+        &lt;Col xs={9} md={10}>
+          &lt;Route
+            path={this.state.toggleContainers ?
+                  '/monitoring/containers/show' : '/monitoring/hosts/show'}
+            render={() => &lt;MonitoringShow
+                            id={queryString.parse(window.location.search).id}
+                            httpGetHosts={this.httpGetHosts}
+                            hosts={this.state.hosts}
+                            httpGetContainers={this.httpGetContainers}
+                            containers={this.state.containers}
+                            httpRequest={this.props.httpRequest}
+                            toggleContainers={this.state.toggleContainers}
+                          />}
+          />
+        &lt;/Col>
+      &lt;/Grid>
     )
   }
 }
 
-export default HostOverview;
+export default MonitoringPage;
 </code></pre>
         </article>
     </section>

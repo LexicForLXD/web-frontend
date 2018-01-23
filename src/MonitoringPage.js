@@ -18,18 +18,18 @@ class MonitoringPage extends Component {
     };
   }
 
-  /**
-   * Gets called once component has mounted. Fetches containers.
-   */
+  /** Gets called once component has mounted. Fetches containers and hosts. */
   componentDidMount() {
     this.getContainersAndHosts();
   }
 
+  /** Fetches containers and hosts. */
   getContainersAndHosts = () => {
     this.props.httpGetContainers();
     this.props.httpGetHosts();
   }
 
+  /** Toggle button change handler */
   toggleContainers = () => {
     const toggleContainers = !this.state.toggleContainers;
     this.setState({ toggleContainers: toggleContainers });

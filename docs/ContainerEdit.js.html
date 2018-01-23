@@ -30,6 +30,10 @@
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
+import Select from 'react-select';
+import Toggle from 'react-bootstrap-toggle';
+const JSON5 = require('json5');
 
 
 /**
@@ -39,17 +43,18 @@ class ContainerEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: null,
       name: this.props.container.name,
-      ipv4: this.props.container.ipv4,
-      ipv6: this.props.container.ipv6,
-      domain_name: this.props.container.domain_name,
-      // settings: this.props.container.settings,
-      errorName: null,
-      errorIpv4: null,
-      errorIpv6: null,
-      errorDomainName: null,
-      // errorSettings: null
+      profiles: this.props.container.settings.profiles,
+      ephemeral: this.props.container.settings.ephemeral,
+      config: this.props.container.settings.config ? this.props.container.settings.config : '',
+      devices: this.props.container.settings.devices ? this.props.container.settings.devices : ''
     };
+  }
+
+  /** Gets called once component has mounted. Fetches profiles. */
+  componentDidMount() {
+    this.props.httpGetProfiles();
   }
 
   /** Form change handler */
@@ -57,24 +62,47 @@ class ContainerEdit extends Component {
     this.setState({ name: e.target.value });
   }
 
-  /** Form change handler */
-  handleIpv4Change = e => {
-    this.setState({ ipv4: e.target.value });
+  /** Profiles multi-select change handler */
+  handleProfilesChange = selection => {
+    this.setState({ profiles: selection.map(option => option.value) });
+  }
+
+  /** Toggle button change handler */
+  toggleEphemeral = () => {
+    const ephemeral = !this.state.ephemeral;
+    this.setState({ ephemeral: ephemeral });
   }
 
   /** Form change handler */
-  handleIpv6Change = e => {
-    this.setState({ ipv6: e.target.value });
+  handleConfigChange = event => {
+    try {
+      const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        config: config,
+        errorConfig: null
+      });
+    } catch (exception) {
+      this.setState({
+        config: '',
+        errorConfig: 'Not a valid JSON object'
+      });
+    }
   }
 
   /** Form change handler */
-  handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
-  }
-
-  /** Form change handler */
-  handleSettingsChange = e => {
-    this.setState({ settings: e.target.value });
+  handleDevicesChange = event => {
+    try {
+      const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      this.setState({
+        devices: devices,
+        errorDevices: null
+      });
+    } catch (exception) {
+      this.setState({
+        devices: '',
+        errorDevices: 'Not a valid JSON object'
+      });
+    }
   }
 
   /** Return key press handler - calls submit() */
@@ -91,31 +119,30 @@ class ContainerEdit extends Component {
 
   /** Puts edited container */
   httpPutContainer = () => {
-    const body = JSON.stringify({
+    let body = {
       name: this.state.name,
-      ipv4: this.state.ipv4,
-      ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
-      // settings: this.state.settings
-    });
+      ephemeral: this.state.ephemeral,
+      config: this.state.config,
+      devices: this.state.devices
+    };
+    Object.keys(body).forEach(
+      key => (body[key] === null || body[key] === undefined ||
+             body[key].length === 0) &amp;&amp; delete body[key]
+    );
+    body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
+      if (obj.jsonData.error) {
         this.setState({
-          errorName: obj.jsonData.errors.name,
-          errorIpv4: obj.jsonData.errors.ipv4,
-          errorIpv6: obj.jsonData.errors.ipv6,
-          errorDomainName: obj.jsonData.errors.domainName,
-          // errorSettings: json.errors.settings
+          error: obj.jsonData.error.message
         });
       } else {
-        // window.location.href = '/containers/overview';
         this.props.httpGetContainers();
         this.setState({ redirect: true });
       }
-      // this.props.httpGetContainers();
-    }
+    };
+    const id = queryString.parse(window.location.search).id;
     this.props.httpRequest(
-      'PUT', `containers/${this.props.container.id}`, body, callbackFunction
+      'PUT', 'containers/' + id, body, callbackFunction
     );
   }
 
@@ -137,56 +164,57 @@ class ContainerEdit extends Component {
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
-          &lt;HelpBlock>{this.state.errorName || (this.state.name.length &lt; 1 &amp;&amp; 'Please enter a name')}&lt;/HelpBlock>
+          &lt;HelpBlock>{this.state.name.length &lt; 1 &amp;&amp; 'Please enter a name'}&lt;/HelpBlock>
         &lt;/FormGroup>
-        &lt;FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
-          &lt;ControlLabel className="ControlLabel">IPv4 Address&lt;/ControlLabel>
+        &lt;ControlLabel>Profiles&lt;/ControlLabel>
+        &lt;Select
+          multi
+          closeOnSelect={false} // is this default?
+          name="formProfiles"
+          value={this.state.profiles}
+          onChange={this.handleProfilesChange}
+          options={this.props.profiles.map(profile => {
+            return { value: profile.id, label: profile.name }
+          })}
+        />
+        &lt;ControlLabel>Ephemeral&lt;/ControlLabel>&lt;br />
+        &lt;Toggle
+          onClick={this.toggleEphemeral}
+          on={&lt;b>True&lt;/b>}
+          off={&lt;b>False&lt;/b>}
+          size="md"
+          onstyle="success"
+          offstyle="info"
+          active={this.state.ephemeral}
+          className="ToggleBtn"
+          style={{ marginTop: '5px' }}
+        />
+        &lt;FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Config&lt;/ControlLabel>
           &lt;FormControl
-            type='text'
-            defaultValue={this.state.ipv4}
-            value={this.state.ipv4 ? this.state.ipv4.value : ''}
-            placeholder="Enter IPv4 address"
-            onChange={this.handleIpv4Change}
+            componentClass="textarea"
+            rows={20}
+            defaultValue={JSON.stringify(this.state.config, null, 2)}
+            value={this.state.config.value}
+            placeholder="Enter optional config JSON object"
+            onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
-          &lt;HelpBlock>{this.state.errorIpv4}&lt;/HelpBlock>
+          &lt;HelpBlock>{this.state.errorConfig}&lt;/HelpBlock>
         &lt;/FormGroup>
-        &lt;FormGroup controlId="formIpv6" validationState={this.state.errorIpv6 ? 'error' : null}>
-          &lt;ControlLabel className="ControlLabel">IPv6 Address&lt;/ControlLabel>
+        &lt;FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Devices&lt;/ControlLabel>
           &lt;FormControl
-            type='text'
-            defaultValue={this.state.ipv6}
-            value={this.state.ipv6 ? this.state.ipv6.value : ''}
-            placeholder="Enter IPv6 address"
-            onChange={this.handleIpv6Change}
+            componentClass="textarea"
+            rows={20}
+            defaultValue={JSON.stringify(this.state.devices, null, 2)}
+            value={this.state.devices.value}
+            placeholder="Enter optional devices JSON object"
+            onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />
-          &lt;HelpBlock>{this.state.errorIpv6}&lt;/HelpBlock>
+          &lt;HelpBlock>{this.state.errorDevices}&lt;/HelpBlock>
         &lt;/FormGroup>
-        &lt;FormGroup controlId="formDomainName" validationState={this.state.errorDomainName ? 'error' : null}>
-          &lt;ControlLabel className="ControlLabel">Domain Name&lt;/ControlLabel>
-          &lt;FormControl
-            type='text'
-            defaultValue={this.state.domain_name}
-            value={this.state.domain_name ? this.state.domain_name.value : ''}
-            placeholder="Enter domain name"
-            onChange={this.handleDomainNameChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          &lt;HelpBlock>{this.state.errorDomainName}&lt;/HelpBlock>
-        &lt;/FormGroup>
-        {/* &lt;FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
-          &lt;ControlLabel className="ControlLabel">Settings&lt;/ControlLabel>
-          &lt;FormControl
-            type='text'
-            defaultValue={this.state.settings}
-            value={this.state.settings.value}
-            placeholder="Enter settings"
-            onChange={this.handleSettingsChange}
-            onKeyDown={this.handleKeyPress}
-          />
-          &lt;HelpBlock>{this.state.errorSettings}&lt;/HelpBlock>
-        &lt;/FormGroup> */}
         &lt;Button
           type="button"
           disabled={this.state.name.length &lt; 1}
@@ -194,6 +222,7 @@ class ContainerEdit extends Component {
         >
           Submit
         &lt;/Button>
+        &lt;HelpBlock>{this.state.error &amp;&amp; this.state.error}&lt;/HelpBlock>
       &lt;/form>
     )
   }
@@ -210,13 +239,13 @@ export default ContainerEdit;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

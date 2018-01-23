@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: HostOverview.js</title>
+    <title>JSDoc: Source: LogPage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: HostOverview.js</h1>
+    <h1 class="page-title">Source: LogPage.js</h1>
 
     
 
@@ -28,14 +28,26 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import Sidebar from './Sidebar.js';
+import LogShow from './LogShow.js';
+import { Grid, Col } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import queryString from 'query-string';
 
 /**
- *  Host overview UI component
+ *  Log (top level) page component
  */
-class HostOverview extends Component {
+class LogPage extends Component {
   constructor(props) {
     super();
+    this.state = {};
+  }
+
+  /**
+   * Gets called once component has mounted. Fetches containers.
+   */
+  componentDidMount() {
+    this.props.httpGetContainers();
   }
 
   /**
@@ -44,43 +56,33 @@ class HostOverview extends Component {
    */
   render() {
     return (
-      &lt;Table bordered responsive striped>
-        &lt;thead>
-          &lt;tr>
-            &lt;th>Auth.&lt;/th>
-            &lt;th>Name&lt;/th>
-            &lt;th>IPv4&lt;/th>
-            &lt;th>IPv6&lt;/th>
-            &lt;th>Domain Name&lt;/th>
-            &lt;th>Port&lt;/th>
-            &lt;th>MAC&lt;/th>
-            &lt;th>Settings&lt;/th>
-          &lt;/tr>
-        &lt;/thead>
-        &lt;tbody>
-          {this.props.hosts instanceof Array &amp;&amp;
-            this.props.hosts.map(host =>
-              &lt;tr key={host.id}>
-                &lt;td style={host.authenticated ? { 'color': 'green' } : { 'color': 'red' }}>
-                  {host.authenticated ? '\u2713' : '\u2715'}
-                &lt;/td>
-                &lt;td>{host.name}&lt;/td>
-                &lt;td>{host.ipv4}&lt;/td>
-                &lt;td>{host.ipv6}&lt;/td>
-                &lt;td>{host.domainName}&lt;/td>
-                &lt;td>{host.port}&lt;/td>
-                &lt;td>{host.mac}&lt;/td>
-                &lt;td>{host.settings}&lt;/td>
-              &lt;/tr>
-            )
-          }
-        &lt;/tbody>
-      &lt;/Table>
+      &lt;Grid>
+        &lt;Col xs={3} md={2}>
+          &lt;Sidebar
+            parent="logs"
+            refresh={this.props.httpGetContainers}
+            items={this.props.containers}
+            icon={'fa fa-cube'}
+            select={this.select}
+          />
+        &lt;/Col>
+        &lt;Col xs={9} md={10}>
+          &lt;Route
+            path="/logs/show"
+            render={() => &lt;LogShow
+                            apiUrl={this.props.apiUrl}
+                            accessToken={this.props.accessToken}
+                            containerId={queryString.parse(window.location.search).id}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+        &lt;/Col>
+      &lt;/Grid>
     )
   }
 }
 
-export default HostOverview;
+export default LogPage;
 </code></pre>
         </article>
     </section>

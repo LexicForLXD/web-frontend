@@ -32,6 +32,8 @@ import ContainerPage from './ContainerPage.js';
 import ProfilePage from './ProfilePage.js';
 import ImagePage from './ImagePage.js';
 import HostPage from './HostPage.js';
+import MonitoringPage from './MonitoringPage.js';
+import LogPage from './LogPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -61,7 +63,6 @@ class MainArea extends Component {
   constructor(props) {
     super();
     this.state = {
-      url: 'https://lxd-api.lleon.de/',  // Replace in production
       loading: false,
       error: false,
       containers: [],
@@ -84,7 +85,7 @@ class MainArea extends Component {
     this.setState({
       loading: true
     });
-    fetch(this.state.url + path, {
+    fetch(this.props.apiUrl + path, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
@@ -97,9 +98,6 @@ class MainArea extends Component {
       if (response.status === 401) {
         this.props.logout();  // TODO try using refresh token before logging out
         Promise.reject();
-      };
-      if (response.status === 404) {
-        throw(404);
       };
       const obj = {};
       obj.httpStatus = response.status;
@@ -133,7 +131,7 @@ class MainArea extends Component {
       });
     })
     .catch(error => {
-      console.log('Request failed: ', error);
+      console.log('Request failed: ', error.message);
       this.setState({
         loading: false,
         error: error
@@ -146,8 +144,6 @@ class MainArea extends Component {
   showStatus = () => {
     if (this.state.loading)
       return &lt;LoadingView />;
-    else if (this.state.error === 404)
-      return &lt;ErrorView msg="Not found."/>;
     else if (this.state.error)
       return &lt;ErrorView msg="Error loading. Try refreshing."/>;
   }
@@ -165,8 +161,8 @@ class MainArea extends Component {
   /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
-      // if (!obj.isArray) throw 'json is not an array';  // TODO
       // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ containers: obj.jsonData });
     });
@@ -175,6 +171,7 @@ class MainArea extends Component {
   /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest('GET', `containers/${id}/state`, null, obj => {
+      if (obj.httpStatus !== 200) return;
       const containerStates = this.state.containerStates;
       containerStates[id] = obj.jsonData.metadata.status;
       this.setState({ containerStates: containerStates });
@@ -187,12 +184,14 @@ class MainArea extends Component {
       action: action
     });
     this.httpRequest('PUT', `containers/${id}/state`, body, () => {
+      this.httpGetContainers();
     })
   }
 
   /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest('GET', 'hosts', null, obj => {
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ hosts: obj.jsonData });
     })
@@ -201,6 +200,7 @@ class MainArea extends Component {
   /** Gets profiles */
   httpGetProfiles = () => {
     this.httpRequest('GET', 'profiles', null, obj => {
+      if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ profiles: obj.jsonData });
     })
@@ -209,7 +209,8 @@ class MainArea extends Component {
   /** Gets images */
   httpGetImages = () => {
     this.httpRequest('GET', 'images', null, obj => {
-      obj.jsonData.sort(this.compareName);
+      if (obj.httpStatus !== 200) return;
+      // obj.jsonData.sort(this.compareName);
       this.setState({ images: obj.jsonData });
     })
   }
@@ -233,6 +234,10 @@ class MainArea extends Component {
                           httpPutContainerState={this.httpPutContainerState}
                           containers={this.state.containers}
                           containerStates={this.props.containerStates}
+                          httpGetProfiles={this.httpGetProfiles}
+                          profiles={this.state.profiles}
+                          httpGetImages={this.httpGetImages}
+                          images={this.state.images}
                         />}
         />
         &lt;Route
@@ -249,6 +254,8 @@ class MainArea extends Component {
           render={() => &lt;ImagePage
                           error={this.state.error}
                           httpRequest={this.httpRequest}
+                          hosts={this.state.hosts}
+                          httpGetHosts={this.httpGetHosts}
                           httpGetImages={this.httpGetImages}
                           images={this.state.images}
                           httpGetContainers={this.httpGetContainers}
@@ -266,11 +273,24 @@ class MainArea extends Component {
         />
         &lt;Route
           path="/monitoring"
-          render={() => &lt;div>&lt;/div>}
+          render={() => &lt;MonitoringPage
+                          httpGetHosts={this.httpGetHosts}
+                          hosts={this.state.hosts}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
+                          httpRequest={this.httpRequest}
+                        />}
         />
         &lt;Route
           path="/logs"
-          render={() => &lt;div>&lt;/div>}
+          render={() => &lt;LogPage
+                          apiUrl={this.props.apiUrl}
+                          accessToken={this.props.accessToken}
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          httpGetContainers={this.httpGetContainers}
+                          containers={this.state.containers}
+                        />}
         />
         &lt;Route
           path="/backup"
@@ -297,13 +317,13 @@ export default MainArea;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

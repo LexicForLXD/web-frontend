@@ -30,9 +30,7 @@ class HostShow extends Component {
     }
   }
 
-  /**
-   * Gets called once component has mounted. Fetches host.
-   */
+  /** Gets called once component has mounted. Fetches host. */
   componentDidMount () {
     this.httpGetHost();
   }

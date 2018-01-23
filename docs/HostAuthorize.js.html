@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: HostOverview.js</title>
+    <title>JSDoc: Source: HostAuthorize.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: HostOverview.js</h1>
+    <h1 class="page-title">Source: HostAuthorize.js</h1>
 
     
 
@@ -28,14 +28,56 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 /**
- *  Host overview UI component
+ * UI component for authorizing host
  */
-class HostOverview extends Component {
+class HostAuthorize extends Component {
   constructor(props) {
-    super();
+    super(props);
+    this.state = {
+      password: ''
+    };
+  }
+
+  /** Form change handler */
+  handlePasswordChange = e => {
+    this.setState({ password: e.target.value });
+  }
+
+  /** Return key press handler - calls submit() */
+  handleKeyPress = e => {
+    if (e.keyCode === 13 &amp;&amp; this.state.name.length > 0) {
+      this.submit();
+    }
+  }
+
+  /** Puts host on form submit */
+  submit = () => {
+    this.httpPutHost();
+  }
+
+  /** Puts host */
+  httpPutHost = () => {
+    let body = {
+      password: this.state.password,
+    };
+    body = JSON.stringify(body);
+    const callbackFunction = obj => {
+      if (obj.jsonData.errors) {
+        this.setState({
+          error: obj.jsonData.errors,  // correct?
+        });
+      } else {
+        this.props.httpGetHosts();
+        this.setState({ redirect: true });
+      }
+    }
+    this.props.httpRequest(
+      'POST', `hosts/${this.props.host.id}/authorization`, body, callbackFunction
+    );
   }
 
   /**
@@ -44,43 +86,32 @@ class HostOverview extends Component {
    */
   render() {
     return (
-      &lt;Table bordered responsive striped>
-        &lt;thead>
-          &lt;tr>
-            &lt;th>Auth.&lt;/th>
-            &lt;th>Name&lt;/th>
-            &lt;th>IPv4&lt;/th>
-            &lt;th>IPv6&lt;/th>
-            &lt;th>Domain Name&lt;/th>
-            &lt;th>Port&lt;/th>
-            &lt;th>MAC&lt;/th>
-            &lt;th>Settings&lt;/th>
-          &lt;/tr>
-        &lt;/thead>
-        &lt;tbody>
-          {this.props.hosts instanceof Array &amp;&amp;
-            this.props.hosts.map(host =>
-              &lt;tr key={host.id}>
-                &lt;td style={host.authenticated ? { 'color': 'green' } : { 'color': 'red' }}>
-                  {host.authenticated ? '\u2713' : '\u2715'}
-                &lt;/td>
-                &lt;td>{host.name}&lt;/td>
-                &lt;td>{host.ipv4}&lt;/td>
-                &lt;td>{host.ipv6}&lt;/td>
-                &lt;td>{host.domainName}&lt;/td>
-                &lt;td>{host.port}&lt;/td>
-                &lt;td>{host.mac}&lt;/td>
-                &lt;td>{host.settings}&lt;/td>
-              &lt;/tr>
-            )
-          }
-        &lt;/tbody>
-      &lt;/Table>
+      &lt;form>
+        {this.state.redirect &amp;&amp; &lt;Redirect from="/hosts/authorize" exact to="/hosts" />}
+        &lt;FormGroup controlId="formPassword" validationState={this.state.error ? 'error' : null}>
+          &lt;ControlLabel>Password&lt;/ControlLabel>
+          &lt;FormControl
+            type="password"
+            value={this.state.password.value}
+            placeholder="Enter password"
+            onChange={this.handlePasswordChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.error}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;Button
+          type="button"
+          disabled={this.state.password.length &lt; 1}
+          onClick={this.submit}
+        >
+          Submit
+        &lt;/Button>
+      &lt;/form>
     )
   }
 }
 
-export default HostOverview;
+export default HostAuthorize;
 </code></pre>
         </article>
     </section>

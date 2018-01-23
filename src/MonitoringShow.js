@@ -17,13 +17,12 @@ class MonitoringShow extends Component {
     }
   }
 
-  /**
-   * Gets called once component has mounted. Fetches monitoring configuration.
-   */
+  /** Gets called once component has mounted. Fetches monitoring configuration. */
   componentDidMount() {
     this.getChecks();
   }
 
+  /** Fetches either container checks or host checks, depending on container / host toggle state */
   getChecks = () => {
     if (this.props.toggleContainers)
       this.httpGetContainerChecks();
@@ -31,6 +30,7 @@ class MonitoringShow extends Component {
       this.httpGetHostChecks();
   }
 
+  /** Fetches container checks */
   httpGetContainerChecks = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', 'monitoring/checks/containers/' + id, null, obj => {
@@ -45,6 +45,7 @@ class MonitoringShow extends Component {
     })
   }
 
+  /** Fetches host checks */
   httpGetHostChecks = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', 'monitoring/checks/hosts/' + id, null, obj => {
@@ -58,6 +59,7 @@ class MonitoringShow extends Component {
     })
   }
 
+  /** Fetches either container graphs or host graphs, depending on container / host toggle state */
   getGraphs = () => {
     if (this.props.toggleContainers)
       this.state.containerChecks.forEach(cc => this.httpGetGraph(cc.id));
@@ -65,6 +67,7 @@ class MonitoringShow extends Component {
       this.state.hostChecks.forEach(hc => this.httpGetGraph(hc.id));
   }
 
+  /** Fetches graphs for check id */
   httpGetGraph = checkId => {
     const path = this.prop.toggleContainers ?
                  `monitoring/checks/${checkId}/containers/graph` :

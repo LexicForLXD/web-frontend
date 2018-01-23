@@ -43,15 +43,19 @@ class HostCreate extends Component {
     super();
     this.state = {
       name: '',
+      password: '',
       ipv4: '',
       ipv6: '',
-      domain_name: '',
+      domainName: '',
+      port: '',
       mac: '',
       settings: '',
       errorName: null,
+      errorPassword: null,
       errorIpv4: null,
       errorIpv6: null,
       errorDomainName: null,
+      errorPort: null,
       errorMac: null,
       errorSettings: null
     };
@@ -60,6 +64,11 @@ class HostCreate extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handlePasswordChange = e => {
+    this.setState({ password: e.target.value });
   }
 
   /** Form change handler */
@@ -74,7 +83,12 @@ class HostCreate extends Component {
 
   /** Form change handler */
   handleDomainNameChange = e => {
-    this.setState({ domain_name: e.target.value });
+    this.setState({ domainName: e.target.value });
+  }
+
+  /** Form change handler */
+  handlePortChange = e => {
+    this.setState({ port: e.target.value });
   }
 
   /** Form change handler */
@@ -87,7 +101,7 @@ class HostCreate extends Component {
     this.setState({ settings: e.target.value });
   }
 
-  /** Return key press handler - calls submit()*/
+  /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13 &amp;&amp; this.state.name.length > 0) {
       this.submit();
@@ -101,21 +115,29 @@ class HostCreate extends Component {
 
   /** Posts host */
   httpPostHost = () => {
-    const body = JSON.stringify({
+    let body = {
       name: this.state.name,
+      password: this.state.password,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
-      domain_name: this.state.domain_name,
+      domainName: this.state.domainName,
+      port: this.state.port,
       mac: this.state.mac,
       settings: this.state.settings
-    });
+    };
+    Object.keys(body).forEach(
+      key => (body[key] === null || body[key] === undefined || body[key].length) === 0 &amp;&amp; delete body[key]
+    );
+    body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (obj.jsonData.errors) {
         this.setState({
           errorName: obj.jsonData.errors.name,
+          errorPassword: obj.jsonData.errors.password,
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
           errorDomainName: obj.jsonData.errors.domainName,
+          errorPort: obj.jsonData.errors.port,
           errorMac: obj.jsonData.errors.mac,
           errorSettings: obj.jsonData.errors.settings
         });
@@ -146,6 +168,17 @@ class HostCreate extends Component {
           />
           &lt;HelpBlock>{this.state.errorName || (this.state.name.length &lt; 1 &amp;&amp; 'Please enter a name')}&lt;/HelpBlock>
         &lt;/FormGroup>
+        &lt;FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
+          &lt;ControlLabel>Password&lt;/ControlLabel>
+          &lt;FormControl
+            type="password"
+            value={this.state.password.value}
+            placeholder="Enter password"
+            onChange={this.handlePasswordChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorPassword}&lt;/HelpBlock>
+        &lt;/FormGroup>
         &lt;FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
           &lt;ControlLabel className="ControlLabel">IPv4 Address&lt;/ControlLabel>
           &lt;FormControl
@@ -172,9 +205,20 @@ class HostCreate extends Component {
           &lt;ControlLabel className="ControlLabel">Domain Name&lt;/ControlLabel>
           &lt;FormControl
             type='text'
-            value={this.state.domain_name.value}
+            value={this.state.domainName.value}
             placeholder="Enter domain name"
             onChange={this.handleDomainNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorDomainName}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;FormGroup controlId="formPort" validationState={this.state.errorPort ? 'error' : null}>
+          &lt;ControlLabel className="ControlLabel">Port&lt;/ControlLabel>
+          &lt;FormControl
+            type='text'
+            value={this.state.port.value}
+            placeholder="Enter port"
+            onChange={this.handlePortChange}
             onKeyDown={this.handleKeyPress}
           />
           &lt;HelpBlock>{this.state.errorDomainName}&lt;/HelpBlock>
@@ -224,13 +268,13 @@ export default HostCreate;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 10 2018 21:30:59 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

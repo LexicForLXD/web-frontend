@@ -25,6 +25,7 @@ class ImageEdit extends Component {
     };
   }
 
+  /** Toggle button change handler */
   togglePublic = () => {
     const isPublic  = !this.state.reqBody.public;
     const reqBody = this.state.reqBody;
@@ -32,6 +33,7 @@ class ImageEdit extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleOsChange = e => {
     const reqBody = this.state.reqBody;
     reqBody.properties.os = e.target.value;
@@ -44,16 +46,19 @@ class ImageEdit extends Component {
   //   this.setState({ reqBody: reqBody });
   // }
 
+  /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13) {
       this.submit();
     }
   }
 
+  /** Posts host on form submit */
   submit = () => {
     this.httpPutImage();
   }
 
+  /** Puts image */
   httpPutImage = () => {
     let body = this.state.reqBody;
     if (body.properties.os.length === 0) delete body.properties;
@@ -74,6 +79,10 @@ class ImageEdit extends Component {
     this.props.httpRequest('PUT', 'images/' + id, body, callbackFunction);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

@@ -43,6 +43,7 @@ class ImageCreate extends Component {
     };
   }
 
+  /** Gets called once component has mounted. Fetches hosts and remote aliases */
   componentDidMount() {
     this.props.httpGetHosts();
     this.httpGetRemoteAliases();
@@ -68,6 +69,7 @@ class ImageCreate extends Component {
     });
   }
 
+  /** Toggle button change handler */
   changeType = () => {
     const type = this.state.type === 'remote' ? 'container' : 'remote';
     const reqBody = this.state.reqBody;
@@ -78,6 +80,7 @@ class ImageCreate extends Component {
      });
   }
 
+  /** Toggle button change handler */
   togglePublic = () => {
     const isPublic  = !this.state.reqBody.public;
     const reqBody = this.state.reqBody;
@@ -85,18 +88,21 @@ class ImageCreate extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleFilenameChange = e => {
     const reqBody = this.state.reqBody;
     reqBody.filename = e.target.value;
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleOsChange = e => {
     const reqBody = this.state.reqBody;
     reqBody.properties.os = e.target.value;
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleAliasNamesChange = e => {
     const reqBody = this.state.reqBody;
     const description = this.state.reqBody.aliases[0].description;
@@ -108,6 +114,7 @@ class ImageCreate extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleAliasDescriptionChange = e => {
     const description = e.target.value;
     const reqBody = this.state.reqBody;
@@ -117,6 +124,7 @@ class ImageCreate extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  /** Form change handler */
   handleHostChange = e => {
     this.setState({ host: this.hostList.value }, () => {
       if (this.hostList.value)
@@ -127,6 +135,7 @@ class ImageCreate extends Component {
     )
   }
 
+  /** Form change handler */
   handleRemoteAliasChange = e => {
     const reqBody = this.state.reqBody;
     // reqBody.source.url =
@@ -136,16 +145,19 @@ class ImageCreate extends Component {
     this.setState({ reqBody: reqBody });
   }
 
+  /** Return key press handler - calls submit()*/
   handleKeyPress = e => {
     if (e.keyCode === 13) {
       this.submit();
     }
   }
 
+  /** Posts host on form submit */
   submit = () => {
     this.httpPostImage();
   }
 
+  /** Posts image */
   httpPostImage = () => {
     const reqBody = this.state.reqBody;
     reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
@@ -171,6 +183,10 @@ class ImageCreate extends Component {
     this.props.httpRequest('POST', path, body, callbackFunction);
   }
 
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
   render() {
     return (
       <form>

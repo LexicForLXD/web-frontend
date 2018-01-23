@@ -58,6 +58,7 @@ class ContainerCreate extends Component {
     this.setState({ host: this.hostList.value });
   }
 
+  /** Form change handler */
   handleTypeChange = e => {
     this.setState({ type: this.typeList.value });
   }
@@ -72,6 +73,7 @@ class ContainerCreate extends Component {
     this.setState({ profiles: selection.map(option => option.value) });
   }
 
+  /** Toggle button change handler */
   toggleEphemeral = () => {
     const ephemeral = !this.state.ephemeral;
     this.setState({ ephemeral: ephemeral });
@@ -124,11 +126,13 @@ class ContainerCreate extends Component {
     this.setState({ oldContainerId: this.oldContainerList.value });
   }
 
+  /** Toggle button change handler */
   toggleContainerOnly = () => {
     const containerOnly = !this.state.containerOnly;
     this.setState({ containerOnly: containerOnly });
   }
 
+  /** Toggle button change handler */
   toggleLive = () => {
     const live = !this.state.live;
     this.setState({ live: live });

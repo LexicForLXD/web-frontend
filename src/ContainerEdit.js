@@ -24,6 +24,7 @@ class ContainerEdit extends Component {
     };
   }
 
+  /** Gets called once component has mounted. Fetches profiles. */
   componentDidMount() {
     this.props.httpGetProfiles();
   }
@@ -38,6 +39,7 @@ class ContainerEdit extends Component {
     this.setState({ profiles: selection.map(option => option.value) });
   }
 
+  /** Toggle button change handler */
   toggleEphemeral = () => {
     const ephemeral = !this.state.ephemeral;
     this.setState({ ephemeral: ephemeral });
