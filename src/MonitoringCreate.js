@@ -27,7 +27,7 @@ class MonitoringCreate extends Component {
   }
 
   /**
-   * Gets called once component has mounted. Fetches hosts and aliases.
+   * Gets called once component has mounted. Fetches either containers or hosts.
    */
   componentDidMount() {
     if (this.props.container) {
@@ -66,12 +66,12 @@ class MonitoringCreate extends Component {
     }
   }
 
-  /** Posts Monitoring on form submit */
+  /** Posts monitoring configuration on form submit */
   submit = () => {
     this.httpPostMonitoring();
   }
 
-  /** Posts Monitoring */
+  /** Posts monitoring configuration */
   httpPostMonitoring = () => {
     let body = {
       nagiosEnabled: this.state.nagiosEnabled,

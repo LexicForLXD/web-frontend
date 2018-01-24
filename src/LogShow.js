@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
-import { Redirect } from 'react-router-dom';
 import { Grid, Col, Nav, NavItem, Well } from 'react-bootstrap';
 
 /**
@@ -35,10 +34,11 @@ class LogShow extends Component {
     }
   }
 
-  /** Fetches logs for container. */
+  /** Fetches logs. */
   httpGetLogs = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', 'monitoring/logs/containers/' + id, null, obj => {
+    const containersOrHosts = this.props.toggleContainers ? 'containers' : 'hosts';
+    this.props.httpRequest('GET', `monitoring/logs/${containersOrHosts}/${id}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logsNotFound: true })
       else if (obj.httpStatus === 200)
@@ -49,14 +49,8 @@ class LogShow extends Component {
   /** Fetches log. */
   httpGetLog = log => {
     const id = queryString.parse(window.location.search).id;
-    // this.props.httpRequest('GET', `monitoring/logs/containers/${id}/${log}`, null, obj => {
-    //   if (obj.httpStatus === 404)
-    //     this.setState({ logNotFound: true })
-    //   else if (obj.httpStatus === 200)
-    //     this.setState({ logNotFound: false, log: obj });
-    // });
-
-    fetch(`${this.props.apiUrl}monitoring/logs/containers/${id}/${log}`, {
+    const containersOrHosts = this.props.toggleContainers ? 'containers' : 'hosts';
+    fetch(`${this.props.apiUrl}monitoring/logs/${containersOrHosts}/${id}/${log}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'text/plain',
@@ -89,7 +83,6 @@ class LogShow extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect && <Redirect from="/logs/show" exact to="/logs" />}
         {this.state.logsNotFound &&
           <h6>No logs found for the selected container!</h6>
         }

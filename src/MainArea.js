@@ -262,6 +262,8 @@ class MainArea extends Component {
                           httpRequest={this.httpRequest}
                           httpGetContainers={this.httpGetContainers}
                           containers={this.state.containers}
+                          httpGetHosts={this.httpGetHosts}
+                          hosts={this.state.hosts}
                         />}
         />
         <Route

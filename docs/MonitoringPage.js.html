@@ -29,6 +29,7 @@
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
+import MonitoringCreate from './MonitoringCreate.js';
 import MonitoringShow from './MonitoringShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -85,6 +86,7 @@ class MonitoringPage extends Component {
             parent={this.state.toggleContainers ?
                     'monitoring/containers' : 'monitoring/hosts'}
             refresh={this.getContainersAndHosts}
+            create
             items={this.state.toggleContainers ?
                    this.props.containers : this.props.hosts}
             icon={this.state.toggleContainers ?
@@ -92,6 +94,28 @@ class MonitoringPage extends Component {
           />
         &lt;/Col>
         &lt;Col xs={9} md={10}>
+          &lt;Route
+            path="/monitoring/containers/create"
+            render={() => &lt;MonitoringCreate
+                            container
+                            httpGetContainers={this.props.httpGetContainers}
+                            containers={this.props.containers}
+                            httpGetHosts={this.props.httpGetHosts}
+                            hosts={this.props.hosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
+          &lt;Route
+            path="/monitoring/hosts/create"
+            render={() => &lt;MonitoringCreate
+                            host
+                            httpGetContainers={this.props.httpGetContainers}
+                            containers={this.props.containers}
+                            httpGetHosts={this.props.httpGetHosts}
+                            hosts={this.props.hosts}
+                            httpRequest={this.props.httpRequest}
+                          />}
+          />
           &lt;Route
             path={this.state.toggleContainers ?
                   '/monitoring/containers/show' : '/monitoring/hosts/show'}
@@ -122,13 +146,13 @@ export default MonitoringPage;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringCreate.html">MonitoringCreate</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 24 2018 01:41:07 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

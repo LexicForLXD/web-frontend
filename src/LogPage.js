@@ -5,6 +5,7 @@ import LogShow from './LogShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
+import Toggle from 'react-bootstrap-toggle';
 
 /**
  *  Log (top level) page component
@@ -12,14 +13,26 @@ import queryString from 'query-string';
 class LogPage extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      toggleContainers: true
+    };
   }
 
-  /**
-   * Gets called once component has mounted. Fetches containers.
-   */
+  /** Gets called once component has mounted. Fetches containers and hosts. */
   componentDidMount() {
+    this.getContainersAndHosts();
+  }
+
+  /** Fetches containers and hosts. */
+  getContainersAndHosts = () => {
     this.props.httpGetContainers();
+    this.props.httpGetHosts();
+  }
+
+  /** Toggle button change handler */
+  toggleContainers = () => {
+    const toggleContainers = !this.state.toggleContainers;
+    this.setState({ toggleContainers: toggleContainers });
   }
 
   /**
@@ -30,22 +43,36 @@ class LogPage extends Component {
     return (
       <Grid>
         <Col xs={3} md={2}>
+          <Toggle
+            onClick={this.toggleContainers}
+            on={<b>Containers</b>}
+            off={<b>Hosts</b>}
+            size="md"
+            onstyle="success"
+            offstyle="info"
+            active={this.state.toggleContainers}
+            className="ToggleBtn"
+          />
           <Sidebar
-            parent="logs"
-            refresh={this.props.httpGetContainers}
-            items={this.props.containers}
-            icon={'fa fa-cube'}
-            select={this.select}
+            parent={this.state.toggleContainers ?
+                    'logs/containers' : 'logs/hosts'}
+            refresh={this.getContainersAndHosts}
+            items={this.state.toggleContainers ?
+                   this.props.containers : this.props.hosts}
+            icon={this.state.toggleContainers ?
+                  'fa fa-cube' : 'fa fa-server'}
           />
         </Col>
         <Col xs={9} md={10}>
           <Route
-            path="/logs/show"
+            path={this.state.toggleContainers ?
+                  '/logs/containers/show' : '/logs/hosts/show'}
             render={() => <LogShow
                             apiUrl={this.props.apiUrl}
                             accessToken={this.props.accessToken}
                             containerId={queryString.parse(window.location.search).id}
                             httpRequest={this.props.httpRequest}
+                            toggleContainers={this.state.toggleContainers}
                           />}
           />
         </Col>

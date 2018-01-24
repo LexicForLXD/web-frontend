@@ -30,733 +30,6 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>Navigation<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">User login UI component</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="Navigation"><span class="type-signature"></span>new Navigation<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line9">line 9</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="handleKeyPress"><span class="type-signature"></span>handleKeyPress<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Return key press handler - calls submit()
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line42">line 42</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="handlePasswordChange"><span class="type-signature"></span>handlePasswordChange<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Form change handler
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line37">line 37</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="handleUsernameChange"><span class="type-signature"></span>handleUsernameChange<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Form change handler
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="login"><span class="type-signature"></span>login<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Calls the App compnent's login method
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="logout"><span class="type-signature"></span>logout<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Calls the App compnent's logout method
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line27">line 27</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="submit"><span class="type-signature"></span>submit<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Sends a POST request with OAuth2 client id and client secret.
-Calls the App component's setAccessToken, setExpirationDate and
-setRefreshToken methods with the POST request'S return values.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line51">line 51</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {jsx}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Renders the component.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line81">line 81</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    component html code
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jsx</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {jsx}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Renders the component.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Navigation.js.html">Navigation.js</a>, <a href="Navigation.js.html#line18">line 18</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    component html code
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jsx</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>Navigation<span class="signature">()</span><span class="type-signature"></span></h2>
-        
             <div class="class-description">Navigation bar UI component</div>
         
     
@@ -1475,16 +748,743 @@ setRefreshToken methods with the POST request'S return values.
 
 
 
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>Navigation<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">User login UI component</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="Navigation"><span class="type-signature"></span>new Navigation<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="handleKeyPress"><span class="type-signature"></span>handleKeyPress<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Return key press handler - calls submit()
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="handlePasswordChange"><span class="type-signature"></span>handlePasswordChange<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Form change handler
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="handleUsernameChange"><span class="type-signature"></span>handleUsernameChange<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Form change handler
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="login"><span class="type-signature"></span>login<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Calls the App compnent's login method
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="logout"><span class="type-signature"></span>logout<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Calls the App compnent's logout method
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="submit"><span class="type-signature"></span>submit<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Sends a POST request with OAuth2 client id and client secret.
+Calls the App component's setAccessToken, setExpirationDate and
+setRefreshToken methods with the POST request'S return values.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {jsx}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Renders the component.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    component html code
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">jsx</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {jsx}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Renders the component.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Navigation.js.html">Navigation.js</a>, <a href="Navigation.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    component html code
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">jsx</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringCreate.html">MonitoringCreate</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 24 2018 01:41:07 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

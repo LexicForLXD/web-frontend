@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MonitoringCreate.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MonitoringCreate.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import './App.css';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
+
+/**
+ * UI component for creating a new Monitoring
+ */
+class MonitoringCreate extends Component {
+
+  /**
+   * @param {props} props from MonitoringPage
+   */
+  constructor(props) {
+    super();
+    this.state = {
+      type: '',
+      container: '',   // path: containerId
+      host: '',        // path: hostId
+      // body:
+      nagiosEnabled: true,
+      nagiosName: '',
+      nagiosUrl: 'https://nagios.dn.fh-koeln.de/pnp4nagios/',
+      checkName: '',
+      sourceNumber: 0  // hardcoded
+    };
+  }
+
+  /**
+   * Gets called once component has mounted. Fetches either containers or hosts.
+   */
+  componentDidMount() {
+    if (this.props.container) {
+      this.props.httpGetContainers();
+      this.setState({ path: `monitoring/containers/create` });
+    } else {
+      this.props.httpGetHosts();
+      this.setState({ type: 'monitoring/hosts/create' });
+    }
+    };
+
+  /** Form change handler */
+  handleContainerChange = e => {
+    this.setState({ container: this.containerList.value });
+  }
+
+  /** Form change handler */
+  handleHostChange = e => {
+    this.setState({ host: this.hostList.value });
+  }
+
+  /** Form change handler */
+  handleNagiosNameChange = e => {
+    this.setState({ nagiosName: e.target.value });
+  }
+
+  /** Form change handler */
+  handleCheckNameChange = e => {
+    this.setState({ checkName: e.target.value });
+  }
+
+  /** Return key press handler - calls submit() */
+  handleKeyPress = e => {
+    if (e.keyCode === 13 &amp;&amp; this.state.nagiosName.length > 0 &amp;&amp; this.state.checkName.length > 0 ) {
+      this.submit();
+    }
+  }
+
+  /** Posts monitoring configuration on form submit */
+  submit = () => {
+    this.httpPostMonitoring();
+  }
+
+  /** Posts monitoring configuration */
+  httpPostMonitoring = () => {
+    let body = {
+      nagiosEnabled: this.state.nagiosEnabled,
+      nagiosName: this.state.nagiosName,
+      nagiosUrl: this.state.nagiosUrl,
+      checkName: this.state.checkName,
+      sourceNumber: this.state.sourceNumber
+    };
+    Object.keys(body).forEach(
+      key => (body[key] === null || body[key] === undefined || body[key].length) === 0 &amp;&amp; delete body[key]
+    );
+    body = JSON.stringify(body);
+    const callbackFunction = obj => {
+      if (!obj.jsonData.errors) {
+        this.setState({ redirect: true });
+      }
+    }
+    const containersOrHosts = this.props.container ? 'containers' : 'hosts';
+    const id = this.props.container ? this.state.container : this.state.host;
+    this.props.httpRequest('POST', `monitoring/checks/${containersOrHosts}/${id}`, body, callbackFunction);
+  }
+
+  /**
+   * Renders the component.
+   * @returns {jsx} component html code
+   */
+  render() {
+    return (
+      &lt;form>
+        {this.state.redirect &amp;&amp; &lt;Redirect from={this.state.path} exact to="/monitoring" />}
+        {this.props.container &amp;&amp;
+          &lt;FormGroup controlId="formContainer">
+            &lt;ControlLabel>Container&lt;/ControlLabel>
+            &lt;FormControl
+              componentClass="select"
+              onChange={this.handleContainerChange}
+              inputRef={ cl => this.containerList = cl }
+            >
+              &lt;option value="">...&lt;/option>
+              {this.props.containers instanceof Array &amp;&amp;
+                this.props.containers.map((container, index) =>
+                  &lt;option key={index} value={container.id}>{container.name}&lt;/option>
+                )
+              }
+            &lt;/FormControl>
+            &lt;HelpBlock>{this.state.container.length &lt; 1 &amp;&amp; 'Please choose a container'}&lt;/HelpBlock>
+          &lt;/FormGroup>
+        }
+        {!this.props.container &amp;&amp;
+          &lt;FormGroup controlId="formHost">
+            &lt;ControlLabel>Host&lt;/ControlLabel>
+            &lt;FormControl
+              componentClass="select"
+              onChange={this.handleHostChange}
+              inputRef={ hl => this.hostList = hl }
+            >
+              &lt;option value="">...&lt;/option>
+              {this.props.hosts instanceof Array &amp;&amp;
+                this.props.hosts.map((host, index) =>
+                  &lt;option key={index} value={host.id}>{host.name}&lt;/option>
+                )
+              }
+            &lt;/FormControl>
+            &lt;HelpBlock>{this.state.host.length &lt; 1 &amp;&amp; 'Please choose a host'}&lt;/HelpBlock>
+          &lt;/FormGroup>
+        }
+        &lt;FormGroup controlId="formNagiosName">
+          &lt;ControlLabel>Nagios Name&lt;/ControlLabel>
+          &lt;FormControl
+            type="text"
+            value={this.state.nagiosName.value}
+            placeholder="Enter Nagios name"
+            onChange={this.handleNagiosNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.nagiosName.length &lt; 1 &amp;&amp; 'Please enter Nagios name'}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;FormGroup controlId="forCheckName">
+          &lt;ControlLabel>Check Name&lt;/ControlLabel>
+          &lt;FormControl
+            type="text"
+            value={this.state.checkName.value}
+            placeholder="Enter check name"
+            onChange={this.handleCheckNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.checkName.length &lt; 1 &amp;&amp; 'Please enter check name'}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;Button
+          type="button"
+          disabled={this.state.nagiosName.length &lt; 1 &amp;&amp; this.state.checkName.length &lt; 1}
+          onClick={this.submit}
+        >
+          Submit
+        &lt;/Button>
+      &lt;/form>
+    )
+  }
+}
+
+export default MonitoringCreate;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringCreate.html">MonitoringCreate</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 24 2018 01:41:07 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

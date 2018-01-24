@@ -22,7 +22,7 @@ class MonitoringShow extends Component {
     this.getChecks();
   }
 
-  /** Fetches either container checks or host checks, depending on container / host toggle state */
+  /** Fetches either container checks or host checks */
   getChecks = () => {
     if (this.props.toggleContainers)
       this.httpGetContainerChecks();
@@ -59,7 +59,7 @@ class MonitoringShow extends Component {
     })
   }
 
-  /** Fetches either container graphs or host graphs, depending on container / host toggle state */
+  /** Fetches either container graphs or host graphs */
   getGraphs = () => {
     if (this.props.toggleContainers)
       this.state.containerChecks.forEach(cc => this.httpGetGraph(cc.id));

@@ -29,7 +29,6 @@
             <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
-import { Redirect } from 'react-router-dom';
 import { Grid, Col, Nav, NavItem, Well } from 'react-bootstrap';
 
 /**
@@ -63,10 +62,11 @@ class LogShow extends Component {
     }
   }
 
-  /** Fetches logs for container. */
+  /** Fetches logs. */
   httpGetLogs = () => {
     const id = queryString.parse(window.location.search).id;
-    this.props.httpRequest('GET', 'monitoring/logs/containers/' + id, null, obj => {
+    const containersOrHosts = this.props.toggleContainers ? 'containers' : 'hosts';
+    this.props.httpRequest('GET', `monitoring/logs/${containersOrHosts}/${id}`, null, obj => {
       if (obj.httpStatus === 404)
         this.setState({ logsNotFound: true })
       else if (obj.httpStatus === 200)
@@ -77,14 +77,8 @@ class LogShow extends Component {
   /** Fetches log. */
   httpGetLog = log => {
     const id = queryString.parse(window.location.search).id;
-    // this.props.httpRequest('GET', `monitoring/logs/containers/${id}/${log}`, null, obj => {
-    //   if (obj.httpStatus === 404)
-    //     this.setState({ logNotFound: true })
-    //   else if (obj.httpStatus === 200)
-    //     this.setState({ logNotFound: false, log: obj });
-    // });
-
-    fetch(`${this.props.apiUrl}monitoring/logs/containers/${id}/${log}`, {
+    const containersOrHosts = this.props.toggleContainers ? 'containers' : 'hosts';
+    fetch(`${this.props.apiUrl}monitoring/logs/${containersOrHosts}/${id}/${log}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'text/plain',
@@ -117,7 +111,6 @@ class LogShow extends Component {
   render() {
     return (
       &lt;div>
-        {this.state.redirect &amp;&amp; &lt;Redirect from="/logs/show" exact to="/logs" />}
         {this.state.logsNotFound &amp;&amp;
           &lt;h6>No logs found for the selected container!&lt;/h6>
         }
@@ -162,13 +155,13 @@ export default LogShow;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringCreate.html">MonitoringCreate</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 24 2018 01:41:07 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

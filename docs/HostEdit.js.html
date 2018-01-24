@@ -40,6 +40,7 @@ class HostEdit extends Component {
     super(props);
     this.state = {
       name: this.props.host.name,
+      nagiosName: this.props.host.nagiosName,
       password: '',
       ipv4: this.props.host.ipv4,
       ipv6: this.props.host.ipv6,
@@ -48,6 +49,7 @@ class HostEdit extends Component {
       mac: this.props.host.mac,
       settings: this.props.host.settings,
       errorName: null,
+      errorNagiosName: null,
       errorPassword: null,
       errorIpv4: null,
       errorIpv6: null,
@@ -61,6 +63,11 @@ class HostEdit extends Component {
   /** Form change handler */
   handleNameChange = e => {
     this.setState({ name: e.target.value });
+  }
+
+  /** Form change handler */
+  handleNagiosNameChange = e => {
+    this.setState({ nagiosName: e.target.value });
   }
 
   /** Form change handler */
@@ -114,6 +121,7 @@ class HostEdit extends Component {
   httpPutHost = () => {
     let body = {
       name: this.state.name,
+      nagiosName: this.state.nagiosName,
       password: this.state.password,
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
@@ -130,6 +138,7 @@ class HostEdit extends Component {
       if (obj.jsonData.errors) {
         this.setState({
           errorName: obj.jsonData.errors.name,
+          errorNagiosName: obj.jsonData.errors.nagiosName,
           errorPassword: obj.jsonData.errors.password,
           errorIpv4: obj.jsonData.errors.ipv4,
           errorIpv6: obj.jsonData.errors.ipv6,
@@ -161,13 +170,24 @@ class HostEdit extends Component {
           &lt;ControlLabel>Name&lt;/ControlLabel>
           &lt;FormControl
             type="text"
-            defaultValue={this.state.name}
-            value={this.state.name ? this.state.name.value : ''}
+            // defaultValue={this.state.name ? this.state.name : ''}
+            value={this.state.name ? this.state.name : ''}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
           &lt;HelpBlock>{this.state.errorName || (this.state.name.length &lt; 1 &amp;&amp; 'Please enter a name')}&lt;/HelpBlock>
+        &lt;/FormGroup>
+        &lt;FormGroup controlId="formNagiosName" validationState={this.state.errorNagiosName ? 'error' : null}>
+          &lt;ControlLabel>Nagios Name&lt;/ControlLabel>
+          &lt;FormControl
+            type="text"
+            value={this.state.nagiosName}
+            placeholder="Enter Nagios name"
+            onChange={this.handleNagiosNameChange}
+            onKeyDown={this.handleKeyPress}
+          />
+          &lt;HelpBlock>{this.state.errorNagiosName}&lt;/HelpBlock>
         &lt;/FormGroup>
         {!this.props.host.authenticated &amp;&amp;
           &lt;FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
@@ -276,13 +296,13 @@ export default HostEdit;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContainerCreate.html">ContainerCreate</a></li><li><a href="ContainerEdit.html">ContainerEdit</a></li><li><a href="ContainerOverview.html">ContainerOverview</a></li><li><a href="ContainerPage.html">ContainerPage</a></li><li><a href="ContainerShow.html">ContainerShow</a></li><li><a href="HostAuthorize.html">HostAuthorize</a></li><li><a href="HostCreate.html">HostCreate</a></li><li><a href="HostEdit.html">HostEdit</a></li><li><a href="HostOverview.html">HostOverview</a></li><li><a href="HostPage.html">HostPage</a></li><li><a href="HostShow.html">HostShow</a></li><li><a href="ImageCreate.html">ImageCreate</a></li><li><a href="ImageEdit.html">ImageEdit</a></li><li><a href="ImageOverview.html">ImageOverview</a></li><li><a href="ImagePage.html">ImagePage</a></li><li><a href="ImageShow.html">ImageShow</a></li><li><a href="LogPage.html">LogPage</a></li><li><a href="LogShow.html">LogShow</a></li><li><a href="MainArea.html">MainArea</a></li><li><a href="MonitoringCreate.html">MonitoringCreate</a></li><li><a href="MonitoringPage.html">MonitoringPage</a></li><li><a href="MonitoringShow.html">MonitoringShow</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="ProfileCreate.html">ProfileCreate</a></li><li><a href="ProfileEdit.html">ProfileEdit</a></li><li><a href="ProfileOverview.html">ProfileOverview</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProfileShow.html">ProfileShow</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ErrorView">ErrorView</a></li><li><a href="global.html#LoadingView">LoadingView</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 23 2018 19:33:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 24 2018 01:41:07 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
