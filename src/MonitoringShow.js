@@ -75,9 +75,9 @@ class MonitoringShow extends Component {
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus === 404) {
         this.setState({ notFound: true });
-      } else {
+      } else if (obj.httpStatus === 200) {
         const graphs = this.state.graphs;
-        graphs.push(obj.jsonData);
+        graphs.push(obj);
         this.setState({ notFound: false, graphs: graphs })
       };
     })
@@ -98,6 +98,8 @@ class MonitoringShow extends Component {
    * @returns {jsx} component html code
    */
   render() {
+    // const reader = new FileReader();
+    // this.state.graphs[0] && console.log('title', reader.readAsText(this.state.graphs[0].blob));
     return (
       <div>
         {this.state.notFound &&
@@ -105,7 +107,16 @@ class MonitoringShow extends Component {
         }
         {!this.state.notFound &&
           <div>
-            {this.state.graphs.map(graph => <div><Image file={graph}/><br /></div>)}
+            {/* {this.state.graphs.map(graph => <div><Image file={graph.blob} alt='graph'/><br /></div>)} */}
+            {/* {this.state.graphs.map(graph => <img src={'data:image/png;base64,' + reader.readAsText(graph.blob)} />)} */}
+            {/* {
+              this.state.graphs.map(graph => {
+                const image = new Image();
+                image.src = URL.createObjectURL(graph.blob);
+                return <div>{image}</div>;
+              })
+            } */}
+            {this.state.graphs.map(graph => <div><img class="graph" src={URL.createObjectURL(graph.blob)} alt="graph" /><br /></div>)}
           </div>
         }
       </div>

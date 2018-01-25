@@ -76,10 +76,16 @@ class MainArea extends Component {
 
       const contentType = response.headers.get('content-type');
       obj.isJson = (contentType && contentType.includes('application/json'));
+      obj.isPng = (contentType && contentType.includes('image/png'));
 
       if (obj.isJson) {
         return response.json().then(json => {
           obj.jsonData = json;
+          return obj;
+        })
+      } else if (obj.isPng) {
+        return response.blob().then(blob => {
+          obj.blob = blob;
           return obj;
         })
       }
