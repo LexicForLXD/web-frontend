@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
-import Image from 'react-image-file';
 
 /**
  *  Monitoring detail view UI component

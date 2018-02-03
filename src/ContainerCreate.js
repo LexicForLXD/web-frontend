@@ -20,6 +20,7 @@ class ContainerCreate extends Component {
       error: null,          // POST request error message
       aliases: [],          // fetched from linuxcontainers.org
       host: '',             // path: hostId
+      toggleAlias: true,
       type: 'none',         // query: image, migration, copy or none (default)
       // body:
       name: '',             // all
@@ -111,9 +112,15 @@ class ContainerCreate extends Component {
     }
   }
 
+  /** Toggle button change handler */
+  toggleAlias = () => {
+    const toggleAlias = !this.state.toggleAlias;
+    this.setState({ toggleAlias: toggleAlias });
+  }
+
   /** Form change handler */
   handleFingerprintChange = e => {
-    this.setState({ fingerprint: e.target.value });
+    this.setState({ fingerprint: this.fingerprintList.value });
   }
 
   /** Form change handler */
@@ -143,16 +150,6 @@ class ContainerCreate extends Component {
     this.httpPostContainer();
   }
 
-  // /** Fetches aliases */
-  // httpGetAliases = () => {
-  //   const url = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
-  //   this.props.httpRequest('GET', url, null, obj => {
-  //     if (obj.httpStatus !== 200) return;
-  //     const aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
-  //     this.setState({ aliases: aliases });
-  //   });
-  // }
-
   /** Posts container */
   httpPostContainer = () => {
     let body = {
@@ -166,11 +163,12 @@ class ContainerCreate extends Component {
       alias: this.state.alias,
       oldContainerId: this.state.oldContainerId,
       containerOnly: this.state.containerOnly,
-      live: this.state.false,
-      // ipv4: '11.11.11.13'  // TODO remove!
+      live: this.state.false
     };
-    if (this.state.type !== 'image') {
+    if (this.state.type !== 'image' || this.state.toggleAlias) {
       delete body.fingerprint;
+    };
+    if (this.state.type !== 'image' || !this.state.toggleAlias) {
       delete body.alias;
     };
     if (this.state.type !== 'migration' &&
@@ -187,7 +185,7 @@ class ContainerCreate extends Component {
     const callbackFunction = obj => {
       if (obj.jsonData.errors) {
         this.setState({
-          error: 'Error' // TODO set error message
+          error: 'Error'
         });
       } else {
         this.props.httpGetContainers();
@@ -298,33 +296,51 @@ class ContainerCreate extends Component {
           <HelpBlock>{this.state.errorDevices}</HelpBlock>
         </FormGroup>
         {this.state.type === 'image' &&
-          <div>
-            <FormGroup controlId="formFingerprint">
-              <ControlLabel>Fingerprint</ControlLabel>
-              <FormControl
-                type="text"
-                value={this.state.fingerprint.value}
-                placeholder="Enter fingerprint"
-                onChange={this.handleFingerprintChange}
-                onKeyDown={this.handleKeyPress}
-              />
-            </FormGroup>
-            <FormGroup controlId="formAlias">
-              <ControlLabel>Alias</ControlLabel>
-              <FormControl
-                componentClass="select"
-                onChange={this.handleAliasChange}
-                inputRef={ list => this.aliasList = list }
-              >
-                <option value="">...</option>
-                {this.props.images instanceof Array &&
-                  this.props.images.map((image, index) =>
-                    <option key={index} value={image.aliases[0].name}>{image.aliases[0].name}</option>
-                  )
-                }
-              </FormControl>
-            </FormGroup>
-          </div>
+          <Toggle
+            onClick={this.toggleAlias}
+            on={<b>Alias</b>}
+            off={<b>Fingerprint</b>}
+            size="md"
+            onstyle="success"
+            offstyle="info"
+            active={this.state.toggleAlias}
+            className="ToggleBtn"
+            style={{ marginTop: '5px' }}
+          />
+        }
+        {this.state.type === 'image' && !this.state.toggleAlias &&
+          <FormGroup controlId="formFingerprint">
+            <ControlLabel>Fingerprint</ControlLabel>
+            <FormControl
+              componentClass="select"
+              onChange={this.handleFingerprintChange}
+              inputRef={ list => this.fingerprintList = list }
+            >
+              <option value="">...</option>
+              {this.props.images instanceof Array &&
+                this.props.images.map((image, index) =>
+                  <option key={index} value={image.fingerprint}>{image.fingerprint}</option>
+                )
+              }
+            </FormControl>
+          </FormGroup>
+        }
+        {this.state.type === 'image' && this.state.toggleAlias &&
+          <FormGroup controlId="formAlias">
+            <ControlLabel>Alias</ControlLabel>
+            <FormControl
+              componentClass="select"
+              onChange={this.handleAliasChange}
+              inputRef={ list => this.aliasList = list }
+            >
+              <option value="">...</option>
+              {this.props.images instanceof Array &&
+                this.props.images.map((image, index) =>
+                  <option key={index} value={image.aliases[0].name}>{image.aliases[0].name}</option>
+                )
+              }
+            </FormControl>
+          </FormGroup>
         }
         {(this.state.type === 'migration' || this.state.type === 'copy')  &&
           <div>
