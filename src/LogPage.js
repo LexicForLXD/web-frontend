@@ -41,7 +41,7 @@ class LogPage extends Component {
    */
   render() {
     return (
-      <Grid>
+      <Grid fluid>
         <Col xs={3} md={2}>
           <Toggle
             onClick={this.toggleContainers}
