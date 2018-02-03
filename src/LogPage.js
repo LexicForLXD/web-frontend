@@ -65,6 +65,10 @@ class LogPage extends Component {
         </Col>
         <Col xs={9} md={10}>
           <Route
+            exact path="/logs"
+            render={() => <h6>Please choose a container or host from the sidebar</h6>}
+          />
+          <Route
             path={this.state.toggleContainers ?
                   '/logs/containers/show' : '/logs/hosts/show'}
             render={() => <LogShow
