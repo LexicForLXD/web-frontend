@@ -371,11 +371,11 @@ class ContainerCreate extends Component {
               className="ToggleBtn"
               style={{ marginTop: '5px' }}
             /><br />
-            <ControlLabel>Live</ControlLabel><br />
           </div>
         }
-        {(this.state.type === 'migration' || this.state.type === 'copy')  &&
+        {this.state.type === 'migration' &&
           <div>
+            <ControlLabel>Live</ControlLabel><br />
             <Toggle
               onClick={this.toggleLive}
               on={<b>True</b>}
