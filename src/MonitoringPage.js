@@ -67,6 +67,10 @@ class MonitoringPage extends Component {
         </Col>
         <Col xs={9} md={10}>
           <Route
+            exact path="/monitoring"
+            render={() => <h6>Please choose a container or host from the sidebar</h6>}
+          />
+          <Route
             path="/monitoring/containers/create"
             render={() => <MonitoringCreate
                             container
