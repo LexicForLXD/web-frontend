@@ -290,8 +290,8 @@ class ImageCreate extends Component {
             >
               <option value="">...</option>
               {this.state.hostContainers instanceof Array &&
-                this.state.hostContainers.map(container =>
-                  <option value={container.name}>{container.name}</option>
+                this.state.hostContainers.map((container, index) =>
+                  <option key={index} value={container.name}>{container.name}</option>
                 )
               }
             </FormControl>
@@ -309,8 +309,8 @@ class ImageCreate extends Component {
             >
               <option value="">...</option>
               {this.state.remoteAliases instanceof Array &&
-                this.state.remoteAliases.map(alias =>
-                  <option value={alias}>{alias}</option>
+                this.state.remoteAliases.map((alias, index) =>
+                  <option key={index} value={alias}>{alias}</option>
                 )
               }
             </FormControl>
