@@ -13,7 +13,8 @@ class MonitoringShow extends Component {
       notFound: false,
       containerChecks: [],
       hostChecks: [],
-      graphs: []
+      graphs: [],
+      timeRange: '1day'
     }
   }
 
@@ -70,7 +71,7 @@ class MonitoringShow extends Component {
   /** Fetches graphs for check id */
   httpGetGraph = checkId => {
     const path = this.props.toggleContainers ?
-                 `monitoring/checks/${checkId}/containers/graph?timerange=-1day` :
+                 `monitoring/checks/${checkId}/containers/graph?timerange=-${this.state.timeRange}` :
                  `monitoring/checks/${checkId}/hosts/graph?timerange=-1day`;
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus === 404) {
@@ -93,6 +94,11 @@ class MonitoringShow extends Component {
     }
   }
 
+  /** Form change handler */
+  handleTimeRangeChange = e => {
+    this.setState({ timeRange: this.timeRangeList.value }, this.getChecks);
+  }
+
   /**
    * Renders the component.
    * @returns {jsx} component html code
@@ -112,23 +118,18 @@ class MonitoringShow extends Component {
                 <ControlLabel>Time Range</ControlLabel>
                 <FormControl
                   componentClass="select"
-                  onChange={this.handleTimeAmountChange}
-                  inputRef={ tal => this.timeAmountList = tal }
+                  onChange={this.handleTimeRangeChange}
+                  inputRef={ trl => this.timeRangeList = trl }
                   >
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={4}>4</option>
-                    <option value={8}>8</option>
-                    <option value={16}>16</option>
-                </FormControl>
-                <FormControl
-                  componentClass="select"
-                  onChange={this.handleTimeUnitChange}
-                  inputRef={ tul => this.timeUnitList = tul }
-                  >
-                    <option value="days">Days</option>
-                    <option value="weeks">Weeks</option>
-                    <option value="years">Years</option>
+                    <option value="1day">1 Day</option>
+                    <option value="2days">2 Days</option>
+                    <option value="4days">4 Days</option>
+                    <option value="1week">1 Week</option>
+                    <option value="2weeks">2 Weeks</option>
+                    <option value="1month">1 Month</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="12months">1 Year</option>
                 </FormControl>
               </FormGroup>
               </form>
