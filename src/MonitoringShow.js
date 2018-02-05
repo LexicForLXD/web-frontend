@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 /**
  *  Monitoring detail view UI component
@@ -106,15 +107,31 @@ class MonitoringShow extends Component {
         }
         {!this.state.notFound &&
           <div>
-            {/* {this.state.graphs.map(graph => <div><Image file={graph.blob} alt='graph'/><br /></div>)} */}
-            {/* {this.state.graphs.map(graph => <img src={'data:image/png;base64,' + reader.readAsText(graph.blob)} />)} */}
-            {/* {
-              this.state.graphs.map(graph => {
-                const image = new Image();
-                image.src = URL.createObjectURL(graph.blob);
-                return <div>{image}</div>;
-              })
-            } */}
+            <form>
+              <FormGroup controlId="formTimeRange">
+                <ControlLabel>Time Range</ControlLabel>
+                <FormControl
+                  componentClass="select"
+                  onChange={this.handleTimeAmountChange}
+                  inputRef={ tal => this.timeAmountList = tal }
+                  >
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={4}>4</option>
+                    <option value={8}>8</option>
+                    <option value={16}>16</option>
+                </FormControl>
+                <FormControl
+                  componentClass="select"
+                  onChange={this.handleTimeUnitChange}
+                  inputRef={ tul => this.timeUnitList = tul }
+                  >
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="years">Years</option>
+                </FormControl>
+              </FormGroup>
+              </form>
             {this.state.graphs.map(graph => <div><img class="graph" src={URL.createObjectURL(graph.blob)} alt="graph" /><br /></div>)}
           </div>
         }

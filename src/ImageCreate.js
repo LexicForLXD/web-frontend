@@ -62,7 +62,7 @@ class ImageCreate extends Component {
 
   /** Fetches containers from selected host */
   httpGetHostContainers = () => {
-    const path = `hosts/${this.state.host}/containers?fresh=true`;
+    const path = `hosts/${this.state.host}/containers`;
     this.props.httpRequest('GET', path, null, obj => {
       if (obj.httpStatus !== 200) return;
       this.setState({ hostContainers: obj.jsonData });
@@ -136,11 +136,15 @@ class ImageCreate extends Component {
   }
 
   /** Form change handler */
+  handleContainerNameChange = e => {
+    const reqBody = this.state.reqBody;
+    reqBody.source.name = this.containerNameList.value;
+    this.setState({ reqBody: reqBody });
+  }
+
+  /** Form change handler */
   handleRemoteAliasChange = e => {
     const reqBody = this.state.reqBody;
-    // reqBody.source.url =
-      // 'https://uk.images.linuxcontainers.org:8443' +
-      // this.remoteAliasList.value;
     reqBody.source.alias = this.remoteAliasList.value;
     this.setState({ reqBody: reqBody });
   }
@@ -287,7 +291,7 @@ class ImageCreate extends Component {
               <option value="">...</option>
               {this.state.hostContainers instanceof Array &&
                 this.state.hostContainers.map(container =>
-                  <option value={container.id}>{container.name}</option>
+                  <option value={container.name}>{container.name}</option>
                 )
               }
             </FormControl>
@@ -321,7 +325,8 @@ class ImageCreate extends Component {
                     this.state.host.length < 1 ||
                     (this.state.reqBody.source.type === 'container' &&
                     this.state.reqBody.source.name.length < 1) ||
-                    (this.state.reqBody.source.alias.length < 1)}
+                    (this.state.reqBody.source.type === 'image' &&
+                    this.state.reqBody.source.alias.length < 1)}
           onClick={this.submit}
         >
           Submit
