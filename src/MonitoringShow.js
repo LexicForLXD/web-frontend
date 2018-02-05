@@ -117,6 +117,7 @@ class MonitoringShow extends Component {
               <FormGroup controlId="formTimeRange">
                 <ControlLabel>Time Range</ControlLabel>
                 <FormControl
+                  style={{ marginBottom: '10px' }}
                   componentClass="select"
                   onChange={this.handleTimeRangeChange}
                   inputRef={ trl => this.timeRangeList = trl }
