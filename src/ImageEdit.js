@@ -4,6 +4,7 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-b
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
 import queryString from 'query-string';
+import ErrorMessage from './ErrorMessage.js';
 
 /**
  * UI component for editing images
@@ -12,6 +13,7 @@ class ImageEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: null,
       reqBody: {
         public: this.props.image.public,
         properties: {
@@ -54,12 +56,14 @@ class ImageEdit extends Component {
     if (body.properties.os.length === 0) delete body.properties;
     body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (obj.httpStatus !== 202) {
-        this.setState({ resError: obj.jsonData.error.message});
+      if (obj.error) {
+        this.setState({
+          error: obj.error.message
+        });
       } else {
         this.props.httpGetImage();
         this.setState({
-          resError: null,
+          error: null,
           redirect: true
         });
       }
@@ -102,7 +106,7 @@ class ImageEdit extends Component {
         >
           Submit
         </Button>
-        <HelpBlock>{this.state.resError}</HelpBlock>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }

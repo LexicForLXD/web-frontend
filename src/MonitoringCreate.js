@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import ErrorMessage from './ErrorMessage.js';
 
 /**
  * UI component for creating a new Monitoring
@@ -22,7 +23,8 @@ class MonitoringCreate extends Component {
       nagiosName: '',
       nagiosUrl: 'https://nagios.dn.fh-koeln.de/pnp4nagios/',
       checkName: '',
-      sourceNumber: 0  // hardcoded
+      sourceNumber: 0,  // hardcoded
+      error: null
     };
   }
 
@@ -85,8 +87,15 @@ class MonitoringCreate extends Component {
     );
     body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (!obj.jsonData.errors) {
-        this.setState({ redirect: true });
+      if (obj.error) {
+        this.setState({
+          error: obj.error.message
+        })
+      } else {
+        this.setState({
+          error: null,
+          redirect: true
+        });
       }
     }
     const containersOrHosts = this.props.container ? 'containers' : 'hosts';
@@ -167,6 +176,7 @@ class MonitoringCreate extends Component {
         >
           Submit
         </Button>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }

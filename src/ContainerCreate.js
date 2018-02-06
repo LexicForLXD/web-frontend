@@ -4,6 +4,7 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-b
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select';
 import Toggle from 'react-bootstrap-toggle';
+import ErrorMessage from './ErrorMessage.js';
 const JSON5 = require('json5');
 
 /**
@@ -182,9 +183,9 @@ class ContainerCreate extends Component {
     );
     body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
+      if (obj.error) {
         this.setState({
-          error: 'Error'
+          error: obj.error.message
         });
       } else {
         this.props.httpGetContainers();
@@ -394,6 +395,7 @@ class ContainerCreate extends Component {
         >
           Submit
         </Button>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }

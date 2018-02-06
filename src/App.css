@@ -100,3 +100,12 @@ h6 {
 .graph {
   margin-bottom: 25px;
 }
+
+.ErrorString {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.ErrorTable {
+  margin-top: 16px;
+}

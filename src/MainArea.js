@@ -92,6 +92,12 @@ class MainArea extends Component {
       return obj;
     })
     .then(obj => {
+      if (obj.httpStatus && (obj.httpStatus < 200 || obj.httpStatus >= 300)) {
+        if (obj.jsonData && obj.jsonData.error) {
+          obj.error = { message: obj.jsonData.error.message };
+        }
+      }
+
       if (obj.jsonData)
         obj.jsonIsArray = (obj.jsonData instanceof Array) ? true : false;
 

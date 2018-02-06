@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 import Select from 'react-select';
 import Toggle from 'react-bootstrap-toggle';
+import ErrorMessage from './ErrorMessage.js';
 const JSON5 = require('json5');
 
 
@@ -103,9 +104,9 @@ class ContainerEdit extends Component {
     );
     body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (obj.jsonData.error) {
+      if (obj.error) {
         this.setState({
-          error: obj.jsonData.error.message
+          error: obj.error.message
         });
       } else {
         this.props.httpGetContainers();
@@ -126,7 +127,7 @@ class ContainerEdit extends Component {
     return (
       <form>
         {this.state.redirect && <Redirect from="/containers/edit" exact to="/containers" />}
-        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
+        <FormGroup controlId="formName">
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
@@ -160,7 +161,7 @@ class ContainerEdit extends Component {
           className="ToggleBtn"
           style={{ marginTop: '5px' }}
         />
-        <FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
+        <FormGroup controlId="formConfig">
           <ControlLabel className="ControlLabel">Config</ControlLabel>
           <FormControl
             componentClass="textarea"
@@ -171,9 +172,8 @@ class ContainerEdit extends Component {
             onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorConfig}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
+        <FormGroup controlId="formDevices">
           <ControlLabel className="ControlLabel">Devices</ControlLabel>
           <FormControl
             componentClass="textarea"
@@ -184,7 +184,6 @@ class ContainerEdit extends Component {
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorDevices}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
@@ -193,7 +192,7 @@ class ContainerEdit extends Component {
         >
           Submit
         </Button>
-        <HelpBlock>{this.state.error && this.state.error}</HelpBlock>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }

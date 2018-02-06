@@ -3,6 +3,7 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
+import ErrorMessage from './ErrorMessage.js';
 
 /**
  * UI component for creating a new image.
@@ -39,7 +40,7 @@ class ImageCreate extends Component {
       },
       containerNames: [],
       remoteAliases: [],
-      resError: null
+      error: null
     };
   }
 
@@ -53,7 +54,7 @@ class ImageCreate extends Component {
   httpGetRemoteAliases = () => {
     const path = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', path, null, obj => {
-      if (obj.httpStatus !== 200) return;
+      if (obj.errortatus !== 200) return;
       let aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
       aliases = aliases.map(a => a.replace('/1.0/images/aliases/', ''));
       this.setState({ remoteAliases: aliases });
@@ -167,12 +168,14 @@ class ImageCreate extends Component {
     reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
     const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
-      if (obj.httpStatus !== 202) {
-        this.setState({ resError: obj.jsonData.error.message});
+      if (obj.error) {
+        this.setState({
+          error: obj.error.message
+        });
       } else {
         this.props.httpGetImages();
         this.setState({
-          resError: null,
+          error: null,
           redirect: true
         });
       }
@@ -325,7 +328,7 @@ class ImageCreate extends Component {
         >
           Submit
         </Button>
-        <HelpBlock>{this.state.resError}</HelpBlock>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }

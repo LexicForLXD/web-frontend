@@ -3,6 +3,7 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
+import ErrorMessage from './ErrorMessage.js';
 const JSON5 = require('json5');
 
 /**
@@ -16,10 +17,7 @@ class ProfileEdit extends Component {
       description: this.props.profile.description,
       config: this.props.profile.config,
       devices: this.props.profile.devices,
-      errorName: null,
-      errorDescription: null,
-      errorConfig: null,
-      errorDevices: null,
+      error: null
     };
   }
 
@@ -86,12 +84,9 @@ class ProfileEdit extends Component {
       devices: this.state.devices
     });
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
+      if (obj.error) {
         this.setState({
-          errorName: obj.jsonData.errors.name,
-          errorDescription: obj.jsonData.errors.description,
-          errorConfig: obj.jsonData.errors.config,
-          errorDevices: obj.jsonData.errors.devices
+          error: obj.error.message
         });
       } else {
         this.props.httpGetProfiles();
@@ -112,7 +107,7 @@ class ProfileEdit extends Component {
     return (
       <form>
         {this.state.redirect && <Redirect from="/profiles/edit" exact to="/profiles" />}
-        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
+        <FormGroup controlId="formName">
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
@@ -122,9 +117,9 @@ class ProfileEdit extends Component {
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+          <HelpBlock>{this.state.name.length < 1 && 'Please enter a name'}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formDescription" validationState={this.state.errorDescription ? 'error' : null}>
+        <FormGroup controlId="formDescription">
           <ControlLabel className="ControlLabel">Description</ControlLabel>
           <FormControl
             type='text'
@@ -134,9 +129,8 @@ class ProfileEdit extends Component {
             onChange={this.handleDescriptionChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorDescription}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formConfig" validationState={this.state.errorConfig ? 'error' : null}>
+        <FormGroup controlId="formConfig">
           <ControlLabel className="ControlLabel">Config</ControlLabel>
           <FormControl
             componentClass="textarea"
@@ -147,10 +141,9 @@ class ProfileEdit extends Component {
             onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorConfig}</HelpBlock>
         </FormGroup>
 
-        <FormGroup controlId="formDevices" validationState={this.state.errorDevices ? 'error' : null}>
+        <FormGroup controlId="formDevices">
           <ControlLabel className="ControlLabel">Devices</ControlLabel>
           <FormControl
             componentClass="textarea"
@@ -161,7 +154,6 @@ class ProfileEdit extends Component {
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorDevices}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
@@ -172,6 +164,7 @@ class ProfileEdit extends Component {
         >
           Submit
         </Button>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }
