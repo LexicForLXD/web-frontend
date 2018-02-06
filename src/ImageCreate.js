@@ -165,11 +165,6 @@ class ImageCreate extends Component {
   httpPostImage = () => {
     const reqBody = this.state.reqBody;
     reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
-    // const keyToRemove = this.state.type === 'remote' ? 'name' : 'url'
-    // delete reqBody.source[keyToRemove];
-    // Object.keys(reqBody).forEach(
-    //   key => reqBody[key].length === 0 && delete reqBody[key]
-    // );
     const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
       if (obj.httpStatus !== 202) {
@@ -183,7 +178,6 @@ class ImageCreate extends Component {
       }
     }
     const path = `hosts/${this.state.host}/images/${this.state.type}`;
-    // console.log('body', body);
     this.props.httpRequest('POST', path, body, callbackFunction);
   }
 

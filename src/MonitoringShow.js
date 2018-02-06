@@ -104,8 +104,6 @@ class MonitoringShow extends Component {
    * @returns {jsx} component html code
    */
   render() {
-    // const reader = new FileReader();
-    // this.state.graphs[0] && console.log('title', reader.readAsText(this.state.graphs[0].blob));
     return (
       <div>
         {this.state.notFound &&

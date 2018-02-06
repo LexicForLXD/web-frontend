@@ -9,8 +9,9 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
 class Navigation extends Component {
   constructor(props) {
     super();
+    // NOTE: clientId: digit(s) before underscore have to match database value
     this.state = {
-      clientId: '1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',  // digit(s) before underscore might have to match database
+      clientId: '1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',
       clientSecret: '4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k',
       username: '',
       password: '',

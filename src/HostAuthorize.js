@@ -40,7 +40,7 @@ class HostAuthorize extends Component {
     const callbackFunction = obj => {
       if (obj.jsonData.errors) {
         this.setState({
-          error: obj.jsonData.errors,  // correct?
+          error: obj.jsonData.errors
         });
       } else {
         this.props.httpGetHosts();

@@ -139,7 +139,6 @@ class MainArea extends Component {
   /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest('GET', 'containers', null, obj => {
-      // if (!obj.jsonArrayIsEmpty) obj.jsonData.sort(this.compareName);  // TODO
       if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ containers: obj.jsonData });

@@ -49,7 +49,6 @@ class ContainerCreate extends Component {
   componentDidMount() {
     this.props.httpGetHosts();
     this.props.httpGetProfiles();
-    // this.httpGetAliases();
     this.props.httpGetContainers();
     this.props.httpGetImages();
   }
@@ -192,7 +191,6 @@ class ContainerCreate extends Component {
         this.setState({ redirect: true });
       }
     };
-    // console.log('body', body);
     this.props.httpRequest(
       'POST', `hosts/${this.state.host}/containers?type=${this.state.type}`,
       body, callbackFunction
@@ -250,7 +248,7 @@ class ContainerCreate extends Component {
         <ControlLabel>Profiles</ControlLabel>
         <Select
           multi
-          closeOnSelect={false} // is this default?
+          closeOnSelect={false}
           name="formProfiles"
           value={this.state.profiles}
           onChange={this.handleProfilesChange}

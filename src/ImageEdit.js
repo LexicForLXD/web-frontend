@@ -17,10 +17,6 @@ class ImageEdit extends Component {
         properties: {
           os: this.props.image.properties.os
         }
-        // aliases: [{
-        //   name: '',
-        //   description: ''
-        // }],
       }
     };
   }
@@ -39,12 +35,6 @@ class ImageEdit extends Component {
     reqBody.properties.os = e.target.value;
     this.setState({ reqBody: reqBody });
   }
-
-  // handleAliasDescriptionChange = e => {
-  //   const reqBody = this.state.reqBody;
-  //   reqBody.aliases[0].description = e.target.value;
-  //   this.setState({ reqBody: reqBody });
-  // }
 
   /** Return key press handler - calls submit() */
   handleKeyPress = e => {
@@ -75,7 +65,6 @@ class ImageEdit extends Component {
       }
     };
     const id = queryString.parse(window.location.search).id;
-    // console.log('body', this.state.reqBody);
     this.props.httpRequest('PUT', 'images/' + id, body, callbackFunction);
   }
 
@@ -102,23 +91,11 @@ class ImageEdit extends Component {
           <FormControl
             type="text"
             defaultValue={this.state.reqBody.properties && this.state.reqBody.properties.os}
-            // value={this.state.reqBody.properties.os}
             placeholder="Enter OS (optional) e.g. 'Ubuntu'"
             onChange={this.handleOsChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
-        {/* <FormGroup controlId="formDescription">
-          <ControlLabel>Description</ControlLabel>
-          <FormControl
-            type="text"
-            defaultValue={this.state.reqBody.aliases[0].description}
-            value={this.state.reqBody.aliases[0].description}
-            placeholder="Enter description (optional)"
-            onChange={this.handleAliasDescriptionChange}
-            onKeyDown={this.handleKeyPress}
-          />
-        </FormGroup> */}
         <Button
           type="button"
           onClick={this.submit}

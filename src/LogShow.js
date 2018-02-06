@@ -60,7 +60,7 @@ class LogShow extends Component {
     .then(response => {
       console.log('Request response: ', response);
       if (response.status === 401) {
-        this.props.logout();  // TODO try using refresh token before logging out
+        this.props.logout();  // TODO (optional): try using refresh token before logging out
         Promise.reject();
       };
       const contentType = response.headers.get('content-type');

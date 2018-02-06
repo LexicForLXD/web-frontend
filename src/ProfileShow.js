@@ -85,7 +85,6 @@ class ProfileShow extends Component {
             <tr>
               <td>{this.state.profile.name}</td>
               <td>{this.state.profile.description}</td>
-              {/* TODO find host and container names by id and join into string */}
             </tr>
           </tbody>
         </Table>
