@@ -21,8 +21,8 @@ class ErrorMessage extends Component {
       )
     } else if (this.props.message !== null && typeof this.props.message === 'object') {
       return (
-        <Grid>
-          <Col xs={6} xsOffset={3}>
+        <Grid fluid>
+          <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
             <Table className="ErrorTable" bordered condensed>
               <thead style={{ fontWeight: "bold" }}>
                 <tr>

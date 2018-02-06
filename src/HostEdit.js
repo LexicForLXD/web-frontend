@@ -3,6 +3,7 @@ import './App.css';
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
+import ErrorMessage from './ErrorMessage.js';
 
 /**
  * UI component for editing host
@@ -19,14 +20,7 @@ class HostEdit extends Component {
       port: this.props.host.port,
       mac: this.props.host.mac,
       settings: this.props.host.settings,
-      errorName: null,
-      errorPassword: null,
-      errorIpv4: null,
-      errorIpv6: null,
-      errorDomainName: null,
-      errorPort: null,
-      errorMac: null,
-      errorSettings: null
+      error: null
     };
   }
 
@@ -99,16 +93,9 @@ class HostEdit extends Component {
     );
     body = JSON.stringify(body);
     const callbackFunction = obj => {
-      if (obj.jsonData.errors) {
+      if (obj.error) {
         this.setState({
-          errorName: obj.jsonData.errors.name,
-          errorPassword: obj.jsonData.errors.password,
-          errorIpv4: obj.jsonData.errors.ipv4,
-          errorIpv6: obj.jsonData.errors.ipv6,
-          errorDomainName: obj.jsonData.errors.domainName,
-          errorPort: obj.jsonData.errors.port,
-          errorMac: obj.jsonData.errors.mac,
-          errorSettings: obj.jsonData.errors.settings
+          error: obj.error.message
         });
       } else {
         this.props.httpGetHosts();
@@ -129,7 +116,7 @@ class HostEdit extends Component {
     return (
       <form>
         {this.state.redirect && <Redirect from="/hosts/edit" exact to="/hosts" />}
-        <FormGroup controlId="formName" validationState={this.state.errorName ? 'error' : null}>
+        <FormGroup controlId="formName">
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
@@ -138,10 +125,10 @@ class HostEdit extends Component {
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorName || (this.state.name.length < 1 && 'Please enter a name')}</HelpBlock>
+          <HelpBlock>{this.state.name.length < 1 && 'Please enter a name'}</HelpBlock>
         </FormGroup>
         {!this.props.host.authenticated &&
-          <FormGroup controlId="formPassword" validationState={this.state.errorPassword ? 'error' : null}>
+          <FormGroup controlId="formPassword">
             <ControlLabel>Password</ControlLabel>
             <FormControl
               type="password"
@@ -150,10 +137,9 @@ class HostEdit extends Component {
               onChange={this.handlePasswordChange}
               onKeyDown={this.handleKeyPress}
             />
-            <HelpBlock>{this.state.errorPassword}</HelpBlock>
           </FormGroup>
         }
-        <FormGroup controlId="formIpv4" validationState={this.state.errorIpv4 ? 'error' : null}>
+        <FormGroup controlId="formIpv4">
           <ControlLabel className="ControlLabel">IPv4 Address</ControlLabel>
           <FormControl
             type='text'
@@ -163,9 +149,8 @@ class HostEdit extends Component {
             onChange={this.handleIpv4Change}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorIpv4}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formIpv6" validationState={this.state.errorIpv6 ? 'error' : null}>
+        <FormGroup controlId="formIpv6">
           <ControlLabel className="ControlLabel">IPv6 Address</ControlLabel>
           <FormControl
             type='text'
@@ -175,9 +160,8 @@ class HostEdit extends Component {
             onChange={this.handleIpv6Change}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorIpv6}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formDomainName" validationState={this.state.errorDomainName ? 'error' : null}>
+        <FormGroup controlId="formDomainName">
           <ControlLabel className="ControlLabel">Domain Name</ControlLabel>
           <FormControl
             type='text'
@@ -187,9 +171,8 @@ class HostEdit extends Component {
             onChange={this.handleDomainNameChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formMac" validationState={this.state.errorMac ? 'error' : null}>
+        <FormGroup controlId="formMac">
           <ControlLabel className="ControlLabel">MAC Address</ControlLabel>
           <FormControl
             type='text'
@@ -199,9 +182,8 @@ class HostEdit extends Component {
             onChange={this.handleMacChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorMac}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formPort" validationState={this.state.errorPort ? 'error' : null}>
+        <FormGroup controlId="formPort">
           <ControlLabel className="ControlLabel">Port</ControlLabel>
           <FormControl
             type='text'
@@ -210,9 +192,8 @@ class HostEdit extends Component {
             onChange={this.handlePortChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorDomainName}</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="formSettings" validationState={this.state.errorSettings ? 'error' : null}>
+        <FormGroup controlId="formSettings">
           <ControlLabel className="ControlLabel">Settings</ControlLabel>
           <FormControl
             type='text'
@@ -222,7 +203,6 @@ class HostEdit extends Component {
             onChange={this.handleSettingsChange}
             onKeyDown={this.handleKeyPress}
           />
-          <HelpBlock>{this.state.errorSettings}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
@@ -231,6 +211,7 @@ class HostEdit extends Component {
         >
           Submit
         </Button>
+        <ErrorMessage message={this.state.error} />
       </form>
     )
   }
