@@ -54,7 +54,7 @@ class ImageCreate extends Component {
   httpGetRemoteAliases = () => {
     const path = 'corsproxy?url=https://uk.images.linuxcontainers.org:8443/1.0/images/aliases';
     this.props.httpRequest('GET', path, null, obj => {
-      if (obj.errortatus !== 200) return;
+      if (obj.httpStatus !== 200) return;
       let aliases = obj.jsonData.metadata.filter(a => !a.endsWith('/default'));
       aliases = aliases.map(a => a.replace('/1.0/images/aliases/', ''));
       this.setState({ remoteAliases: aliases });
