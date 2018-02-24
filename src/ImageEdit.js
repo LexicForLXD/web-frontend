@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
 import queryString from 'query-string';

@@ -135,10 +135,8 @@ class MainArea extends Component {
 
   /** Compares two object's names. To be used in Array.sort method */
   compareName = (a, b) => {
-    if (a.name < b.name)
-      return -1;
-    if (a.name > b.name)
-      return 1;
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
     return 0;
   }
 

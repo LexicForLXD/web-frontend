@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 /**
  *  Image overview UI component
@@ -8,6 +8,17 @@ import { Table } from 'react-bootstrap';
 class ImageOverview extends Component {
   constructor(props) {
     super();
+    this.state = {
+      sortProperty: 'name'
+    }
+  }
+
+  /** Compares two object's properties. To be used in Array.sort method */
+  compareFunction = (a, b) => {
+    const sortProperty = this.state.sortProperty;
+    if (a[sortProperty] < b[sortProperty]) return -1;
+    if (a[sortProperty] > b[sortProperty]) return 1;
+    return 0;
   }
 
   /**
@@ -19,11 +30,51 @@ class ImageOverview extends Component {
       <Table bordered responsive striped>
         <thead>
           <tr>
-            <th>Aliases</th>
-            <th>Public</th>
-            <th>Filename</th>
-            <th>Finished</th>
-            <th>Host</th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'aliases' })}
+              >
+                Aliases
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'public' })}
+              >
+                Public
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'filename' })}
+              >
+                Filename
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'finished' })}
+              >
+                Finished
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'hostId' })}
+              >
+                Host
+              </Button>
+            </th>
           </tr>
         </thead>
         <tbody>

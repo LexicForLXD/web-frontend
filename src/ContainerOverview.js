@@ -13,14 +13,18 @@ class ContainerOverview extends Component {
     }
   }
 
-  /** Compares two object's names. To be used in Array.sort method */
+  /** Compares two object's properties. To be used in Array.sort method */
   compareFunction = (a, b) => {
     const sortProperty = this.state.sortProperty;
-    if (a[sortProperty] < b[sortProperty])
-      return -1;
-    if (a[sortProperty] > b[sortProperty])
-      return 1;
-    return 0;
+    if (sortProperty !== 'hostName') {
+      if (a[sortProperty] < b[sortProperty]) return -1;
+      if (a[sortProperty] > b[sortProperty]) return 1;
+      return 0;
+    } else {
+      if (a.host.name < b.host.name) return -1;
+      if (a.host.name > b.host.name) return 1;
+      return 0;
+    }
   }
 
   /**
@@ -62,7 +66,7 @@ class ContainerOverview extends Component {
               <Button
                 type="button"
                 className="TableHeaderButton"
-                onClick={() => this.setState({ sortProperty: 'host' })}
+                onClick={() => this.setState({ sortProperty: 'hostName' })}
               >
                 Host
               </Button>
