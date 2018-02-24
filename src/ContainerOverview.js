@@ -8,6 +8,19 @@ import { Table, Button } from 'react-bootstrap';
 class ContainerOverview extends Component {
   constructor(props) {
     super();
+    this.state = {
+      sortProperty: 'name'
+    }
+  }
+
+  /** Compares two object's names. To be used in Array.sort method */
+  compareFunction = (a, b) => {
+    const sortProperty = this.state.sortProperty;
+    if (a[sortProperty] < b[sortProperty])
+      return -1;
+    if (a[sortProperty] > b[sortProperty])
+      return 1;
+    return 0;
   }
 
   /**
@@ -19,15 +32,46 @@ class ContainerOverview extends Component {
       <Table bordered responsive striped>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Control</th>
-            <th>Host</th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'name' })}
+              >
+                Name
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'state' })}
+              >
+                Status
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+              >
+                Control
+              </Button>
+            </th>
+            <th>
+              <Button
+                type="button"
+                className="TableHeaderButton"
+                onClick={() => this.setState({ sortProperty: 'host' })}
+              >
+                Host
+              </Button>
+            </th>
           </tr>
         </thead>
         <tbody>
           {this.props.containers instanceof Array &&
-            this.props.containers.map(container =>
+            this.props.containers.sort(this.compareFunction).map(container =>
               <tr key={container.id}>
                 <td>{container.name}</td>
                 <td>{container.state}</td>

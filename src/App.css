@@ -109,3 +109,9 @@ h6 {
 .ErrorTable {
   margin-top: 16px;
 }
+
+.TableHeaderButton {
+  background-color: Transparent;
+  border: none;
+  font-weight: bold;
+}
