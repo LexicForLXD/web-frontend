@@ -115,7 +115,7 @@ class ImageShow extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>{JSON.stringify(this.state.image.properties, null, 2)}</td>
+              <td style={{textAlign: 'left'}}><pre>{JSON.stringify(this.state.image.properties, null, 2)}</pre></td>
             </tr>
           </tbody>
         </Table>
