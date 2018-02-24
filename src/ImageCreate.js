@@ -165,6 +165,8 @@ class ImageCreate extends Component {
   /** Posts image */
   httpPostImage = () => {
     const reqBody = this.state.reqBody;
+    if (reqBody.source.alias.length > 0)
+      reqBody.properties.source = reqBody.source.alias;
     reqBody.aliases = reqBody.aliases.filter(a => a.name); // remove aliases with empty name
     const body = JSON.stringify(this.state.reqBody);
     const callbackFunction = obj => {
@@ -240,7 +242,7 @@ class ImageCreate extends Component {
           <FormControl
             type="text"
             value={this.state.reqBody.aliases[0].description}
-            placeholder="Enter alias description (optional)"
+            placeholder="Enter alias description"
             onChange={this.handleAliasDescriptionChange}
             onKeyDown={this.handleKeyPress}
           />
