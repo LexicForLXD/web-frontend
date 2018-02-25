@@ -98,6 +98,14 @@ class ImageCreate extends Component {
   /** Form change handler */
   handlePropertiesChange = event => {
     const reqBody = this.state.reqBody;
+    if (event.target.value === '') {
+      reqBody.properties = {},
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: null
+      });
+      return;
+    }
     try {
       const properties = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
       reqBody.properties = properties;

@@ -48,6 +48,13 @@ class ContainerEdit extends Component {
 
   /** Form change handler */
   handleConfigChange = event => {
+    if (event.target.value === '') {
+      this.setState({
+        config: '',
+        errorConfig: null
+      });
+      return;
+    }
     try {
       const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
       this.setState({
@@ -64,6 +71,13 @@ class ContainerEdit extends Component {
 
   /** Form change handler */
   handleDevicesChange = event => {
+    if (event.target.value === '') {
+      this.setState({
+        devices: '',
+        errorDevices: null
+      });
+      return;
+    }
     try {
       const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
       this.setState({
@@ -187,7 +201,9 @@ class ContainerEdit extends Component {
         </FormGroup>
         <Button
           type="button"
-          disabled={this.state.name.length < 1}
+          disabled={this.state.name.length < 1 ||
+                    this.state.errorConfig ||
+                    this.state.errorDevices}
           onClick={this.submit}
         >
           Submit

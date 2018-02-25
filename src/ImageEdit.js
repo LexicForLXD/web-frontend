@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
 import queryString from 'query-string';
 import ErrorMessage from './ErrorMessage.js';
+const JSON5 = require('json5');
 
 /**
  * UI component for editing images
@@ -16,9 +17,7 @@ class ImageEdit extends Component {
       error: null,
       reqBody: {
         public: this.props.image.public,
-        properties: {
-          os: this.props.image.properties.os
-        }
+        properties: this.props.image.properties
       }
     };
   }
@@ -32,16 +31,29 @@ class ImageEdit extends Component {
   }
 
   /** Form change handler */
-  handleOsChange = e => {
+  handlePropertiesChange = event => {
     const reqBody = this.state.reqBody;
-    reqBody.properties.os = e.target.value;
-    this.setState({ reqBody: reqBody });
-  }
-
-  /** Return key press handler - calls submit() */
-  handleKeyPress = e => {
-    if (e.keyCode === 13) {
-      this.submit();
+    if (event.target.value === '') {
+      reqBody.properties = {},
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: null
+      });
+      return;
+    }
+    try {
+      const properties = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      reqBody.properties = properties;
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: null
+      });
+    } catch (exception) {
+      reqBody.properties = {};
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: 'Not a valid JSON object'
+      });
     }
   }
 
@@ -53,7 +65,6 @@ class ImageEdit extends Component {
   /** Puts image */
   httpPutImage = () => {
     let body = this.state.reqBody;
-    if (body.properties.os.length === 0) delete body.properties;
     body = JSON.stringify(body);
     const callbackFunction = obj => {
       if (obj.error) {
@@ -90,18 +101,22 @@ class ImageEdit extends Component {
           active={this.state.reqBody.public}
           className="ToggleBtn"
         />
-        <FormGroup controlId="formOS">
-          <ControlLabel>OS</ControlLabel>
+        <FormGroup controlId="formProperties">
+          <ControlLabel className="ControlLabel">Properties</ControlLabel>
           <FormControl
-            type="text"
-            defaultValue={this.state.reqBody.properties && this.state.reqBody.properties.os}
-            placeholder="Enter OS (optional) e.g. 'Ubuntu'"
-            onChange={this.handleOsChange}
+            componentClass="textarea"
+            rows={10}
+            defaultValue={JSON.stringify(this.state.reqBody.properties, null, 2)}
+            value={this.state.reqBody.value}
+            placeholder="Enter optional config JSON object"
+            onChange={this.handlePropertiesChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorProperties}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
+          disabled={this.state.errorProperties}
           onClick={this.submit}
         >
           Submit

@@ -33,6 +33,13 @@ class ProfileEdit extends Component {
 
   /** Form change handler */
   handleConfigChange = event => {
+    if (event.target.value === '') {
+      this.setState({
+        config: '',
+        errorConfig: null
+      });
+      return;
+    }
     try {
       const config = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
       this.setState({
@@ -49,6 +56,13 @@ class ProfileEdit extends Component {
 
   /** Form change handler */
   handleDevicesChange = event => {
+    if (event.target.value === '') {
+      this.setState({
+        devices: '',
+        errorDevices: null
+      });
+      return;
+    }
     try {
       const devices = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
       this.setState({
@@ -141,6 +155,7 @@ class ProfileEdit extends Component {
             onChange={this.handleConfigChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorConfig}</HelpBlock>
         </FormGroup>
 
         <FormGroup controlId="formDevices">
@@ -154,6 +169,7 @@ class ProfileEdit extends Component {
             onChange={this.handleDevicesChange}
             onKeyDown={this.handleKeyPress}
           />
+          <HelpBlock>{this.state.errorDevices}</HelpBlock>
         </FormGroup>
         <Button
           type="button"
