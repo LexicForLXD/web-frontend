@@ -4,6 +4,7 @@ import { Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-b
 import { Redirect } from 'react-router-dom';
 import Toggle from 'react-bootstrap-toggle';
 import ErrorMessage from './ErrorMessage.js';
+const JSON5 = require('json5');
 
 /**
  * UI component for creating a new image.
@@ -21,9 +22,7 @@ class ImageCreate extends Component {
       reqBody: {
         filename: '',
         public: false,
-        properties: {
-          os: ''
-        },
+        properties: {},
         aliases: [
           {
             name: '',
@@ -97,10 +96,22 @@ class ImageCreate extends Component {
   }
 
   /** Form change handler */
-  handleOsChange = e => {
+  handlePropertiesChange = event => {
     const reqBody = this.state.reqBody;
-    reqBody.properties.os = e.target.value;
-    this.setState({ reqBody: reqBody });
+    try {
+      const properties = JSON5.parse(event.target.value);  // using JSON5 to accept keys without quotes
+      reqBody.properties = properties;
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: null
+      });
+    } catch (exception) {
+      reqBody.properties = {};
+      this.setState({
+        reqBody: reqBody,
+        errorProperties: 'Not a valid JSON object'
+      });
+    }
   }
 
   /** Form change handler */
@@ -148,13 +159,6 @@ class ImageCreate extends Component {
     const reqBody = this.state.reqBody;
     reqBody.source.alias = this.remoteAliasList.value;
     this.setState({ reqBody: reqBody });
-  }
-
-  /** Return key press handler - calls submit()*/
-  handleKeyPress = e => {
-    if (e.keyCode === 13) {
-      this.submit();
-    }
   }
 
   /** Posts host on form submit */
@@ -214,13 +218,14 @@ class ImageCreate extends Component {
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
-        <FormGroup controlId="formOS">
-          <ControlLabel>OS</ControlLabel>
+        <FormGroup controlId="formProperties">
+          <ControlLabel className="ControlLabel">Properties</ControlLabel>
           <FormControl
-            type="text"
-            value={this.state.reqBody.properties.os}
-            placeholder="Enter OS (optional) e.g. 'Ubuntu'"
-            onChange={this.handleOsChange}
+            componentClass="textarea"
+            rows={10}
+            value={this.state.reqBody.properties.value}
+            placeholder="Enter optional config JSON object"
+            onChange={this.handlePropertiesChange}
             onKeyDown={this.handleKeyPress}
           />
         </FormGroup>
@@ -325,7 +330,8 @@ class ImageCreate extends Component {
                     (this.state.reqBody.source.type === 'container' &&
                     this.state.reqBody.source.name.length < 1) ||
                     (this.state.reqBody.source.type === 'image' &&
-                    this.state.reqBody.source.alias.length < 1)}
+                    this.state.reqBody.source.alias.length < 1) ||
+                    this.state.errorProperties}
           onClick={this.submit}
         >
           Submit

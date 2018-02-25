@@ -285,7 +285,7 @@ class ContainerCreate extends Component {
           <ControlLabel className="ControlLabel">Devices</ControlLabel>
           <FormControl
             componentClass="textarea"
-            rows={20}
+            rows={10}
             value={this.state.devices.value}
             defaultValue={JSON.stringify(this.state.devices, null, 2)}
             placeholder="Enter optional devices JSON object"
