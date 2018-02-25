@@ -50,22 +50,25 @@ class MonitoringShow extends Component {
   httpGetHostChecks = () => {
     const id = queryString.parse(window.location.search).id;
     this.props.httpRequest('GET', 'monitoring/checks/hosts/' + id, null, obj => {
-      if (obj.httpStatus === 404)
-        this.setState({ notFound: true });
-      else if (obj.httpStatus === 200)
+      if (obj.httpStatus === 200) {
         this.setState(
           { notFound: false, hostChecks: obj.jsonData },
           () => this.getGraphs()
         );
+      } else {
+        this.setState({ notFound: true });
+      }
     })
   }
 
   /** Fetches either container graphs or host graphs */
   getGraphs = () => {
-    if (this.props.toggleContainers)
-      this.state.containerChecks.forEach(cc => this.httpGetGraph(cc.id));
-    else
-      this.state.hostChecks.forEach(hc => this.httpGetGraph(hc.id));
+    this.setState({ graphs: [] }, () => {
+      if (this.props.toggleContainers)
+        this.state.containerChecks.forEach(cc => this.httpGetGraph(cc.id));
+      else
+        this.state.hostChecks.forEach(hc => this.httpGetGraph(hc.id));
+    })
   }
 
   /** Fetches graphs for check id */
