@@ -6,6 +6,9 @@ import ImagePage from './ImagePage.js';
 import HostPage from './HostPage.js';
 import MonitoringPage from './MonitoringPage.js';
 import LogPage from './LogPage.js';
+import BackupPage from './BackupPage.js';
+import BackupSchedulesPage from './BackupSchedulePage.js';
+import UserPage from './UserPage.js';
 import { Well, Grid, Col } from 'react-bootstrap';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -196,6 +199,24 @@ class MainArea extends Component {
     })
   }
 
+  /** Gets backups */
+  httpGetBackups = () => {
+    this.httpRequest('GET', 'backups', null, obj => {
+      if (obj.httpStatus !== 200) return;
+      // obj.jsonData.sort(this.compareName);
+      this.setState({ backups: obj.jsonData });
+    })
+  }
+
+  /** Gets backup schedules */
+  httpGetBackupSchedules = () => {
+    this.httpRequest('GET', 'backups/schedules', null, obj => {
+      if (obj.httpStatus !== 200) return;
+      // obj.jsonData.sort(this.compareName);
+      this.setState({ backupSchedules: obj.jsonData });
+    })
+  }
+
   /**
    * Renders the component.
    * @returns {jsx} component html code
@@ -276,8 +297,35 @@ class MainArea extends Component {
                         />}
         />
         <Route
-          path="/backup"
-          render={() => <div></div>}
+          path="/backups"
+          render={() => <BackupPage
+                          apiUrl={this.props.apiUrl}
+                          accessToken={this.props.accessToken}
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          httpGetBackups={this.httpGetBackups}
+                          backups={this.state.backups}
+                        />}
+        />
+        <Route
+          path="/backup-schedules"
+          render={() => <BackupSchedulesPage
+                          apiUrl={this.props.apiUrl}
+                          accessToken={this.props.accessToken}
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                          httpGetBackupSchedules={this.httpGetBackupSchedules}
+                          backupSchedules={this.state.backupSchedules}
+                        />}
+        />
+        <Route
+          path="/users"
+          render={() => <UserPage
+                          apiUrl={this.props.apiUrl}
+                          accessToken={this.props.accessToken}
+                          error={this.state.error}
+                          httpRequest={this.httpRequest}
+                        />}
         />
         <Grid>
           <Col xs={9} xsOffset={3} md={10} mdOffset={2}>
