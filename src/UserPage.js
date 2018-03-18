@@ -46,7 +46,9 @@ class UserPage extends Component {
             refresh={this.state.httpGetUsers}
             overview
             create
-            items={this.state.users}
+            items={this.state.users && this.state.users.map(user => {
+              return { id: user.id, name: user.username }
+            })}
             icon={'fa fa-user'}
             select={this.select}
           />
