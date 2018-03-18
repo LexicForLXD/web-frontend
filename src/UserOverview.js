@@ -36,7 +36,9 @@ class UserOverview extends Component {
                 <td>{user.lastName}</td>
                 <td>{user.email}</td>
                 <td>{user.roles.join(', ')}</td>
-                <td>{user.isActive}</td>
+                <td style={user.isActive ? { 'color': 'green' } : { 'color': 'red' }}>
+                  {user.isActive ? '\u2713' : '\u2715'}
+                </td>
               </tr>
             )
           }

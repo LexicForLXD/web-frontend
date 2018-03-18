@@ -3,7 +3,7 @@ import './App.css';
 import Sidebar from './Sidebar.js';
 import UserOverview from './UserOverview.js';
 import UserCreate from './UserCreate.js';
-// import UserShow from './UserShow.js';
+import UserShow from './UserShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 import queryString from 'query-string';
@@ -66,14 +66,14 @@ class UserPage extends Component {
                             httpRequest={this.props.httpRequest}
                           />}
           />
-          {/* <Route
+          <Route
             path="/users/show"
             render={() => <UserShow
                             id={queryString.parse(window.location.search).id} // still needed?
                             httpGetUsers={this.props.httpGetUsers}
                             httpRequest={this.props.httpRequest}
                           />}
-          /> */}
+          />
         </Col>
       </Grid>
     )

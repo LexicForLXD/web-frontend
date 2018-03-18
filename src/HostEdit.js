@@ -120,7 +120,7 @@ class HostEdit extends Component {
           <ControlLabel>Name</ControlLabel>
           <FormControl
             type="text"
-            value={this.state.name ? this.state.name : ''}
+            value={this.state.name ? this.state.name.value : ''}
             placeholder="Enter name"
             onChange={this.handleNameChange}
             onKeyDown={this.handleKeyPress}
