@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
 import UserOverview from './UserOverview.js';
-// import UserCreate from './UserCreate.js';
+import UserCreate from './UserCreate.js';
 // import UserShow from './UserShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -58,7 +58,7 @@ class UserPage extends Component {
             exact path="/users"
             render={() => <UserOverview users={this.state.users} />}
           />
-          {/* <Route
+          <Route
             path="/users/create"
             render={() => <UserCreate
                             httpGetUsers={this.props.httpGetUsers}
@@ -66,7 +66,7 @@ class UserPage extends Component {
                             httpRequest={this.props.httpRequest}
                           />}
           />
-          <Route
+          {/* <Route
             path="/users/show"
             render={() => <UserShow
                             id={queryString.parse(window.location.search).id} // still needed?
