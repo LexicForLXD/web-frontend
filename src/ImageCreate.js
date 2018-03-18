@@ -99,7 +99,7 @@ class ImageCreate extends Component {
   handlePropertiesChange = event => {
     const reqBody = this.state.reqBody;
     if (event.target.value === '') {
-      reqBody.properties = {},
+      reqBody.properties = {};
       this.setState({
         reqBody: reqBody,
         errorProperties: null
