@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Sidebar from './Sidebar.js';
 import BackupScheduleOverview from './BackupScheduleOverview.js';
-// import BackupScheduleCreate from './BackupScheduleCreate.js';
+import BackupScheduleCreate from './BackupScheduleCreate.js';
 // import BackupScheduleShow from './BackupScheduleShow.js';
 import { Grid, Col } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -33,7 +33,7 @@ class BackupSchedulePage extends Component {
       <Grid>
         <Col xs={3} md={2}>
           <Sidebar
-            parent="backupSchedules"
+            parent="backup-schedules"
             refresh={this.props.httpGetBackupSchedules}
             overview
             create
@@ -47,16 +47,16 @@ class BackupSchedulePage extends Component {
             exact path="/backup-schedules"
             render={() => <BackupScheduleOverview backupSchedules={this.props.backupSchedules} />}
           />
-          {/* <Route
-            path="/backupSchedules/create"
+          <Route
+            path="/backup-schedules/create"
             render={() => <BackupScheduleCreate
                             httpGetBackupSchedules={this.props.httpGetBackupSchedules}
                             backupSchedules={this.state.backupSchedules}
                             httpRequest={this.props.httpRequest}
                           />}
           />
-          <Route
-            path="/backupSchedules/show"
+          {/* <Route
+            path="/backup-schedules/show"
             render={() => <BackupScheduleShow
                             id={queryString.parse(window.location.search).id} // still needed?
                             httpGetBackupSchedules={this.props.httpGetBackupSchedules}
