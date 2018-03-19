@@ -16,7 +16,7 @@ class Sidebar extends Component {
     this.props.items.map((item, index) =>
       <LinkContainer to={`/${this.props.parent}/show?id=${item.id}`} key={index}>
         <NavItem>
-          <i className={this.props.icon}></i> {item.name}
+          <i className={this.props.icon}></i> {this.props.image ? item.aliases[0].name : item.name}
         </NavItem>
       </LinkContainer>
     );

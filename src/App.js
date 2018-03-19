@@ -21,6 +21,7 @@ class App extends Component {
     const loggedIn = accessToken &&
                      Date.now() < localStorage.getItem('expirationDate');
     this.state = {
+      apiUrl: 'https://localhost:443/',
       accessToken: accessToken,
       expirationDate: localStorage.getItem('expirationDate'),
       refreshToken: localStorage.getItem('refreshToken'),
@@ -90,6 +91,7 @@ class App extends Component {
           <h1 className="App-title"><b>LEXIC</b></h1>
         </header>
         <Login
+          apiUrl={this.state.apiUrl}
           loggedIn={this.state.loggedIn}
           login={this.login}
           logout={this.logout}
@@ -104,6 +106,7 @@ class App extends Component {
             </div>
             <div className="MainArea">
               <MainArea
+                apiUrl={this.state.apiUrl}
                 accessToken={this.state.accessToken}
                 refreshToken={this.state.refreshToken}
                 logout={this.logout}

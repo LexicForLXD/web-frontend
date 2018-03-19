@@ -48,9 +48,19 @@ class Navigation extends Component {
             <i className="fa fa-pencil"></i> Logs
           </NavItem>
         </LinkContainer>
-        <LinkContainer to="/backup">
+        <LinkContainer to="/backups">
           <NavItem>
-            <i className="fa fa-hdd-o"></i> Backup
+            <i className="fa fa-hdd-o"></i> Backups
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/backup-schedules">
+          <NavItem>
+            <i className="fa fa-calendar"></i> Backup Schedules
+          </NavItem>
+        </LinkContainer>
+        <LinkContainer to="/users">
+          <NavItem>
+            <i className="fa fa-user"></i> Users
           </NavItem>
         </LinkContainer>
       </Nav>

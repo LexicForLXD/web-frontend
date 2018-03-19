@@ -1,17 +1,28 @@
-import React, { Component } from 'react';
-import './App.css';
-import { Button, FormGroup, ControlLabel, FormControl, HelpBlock,
-         Grid, Row, Col } from 'react-bootstrap';
+import React, { Component } from "react";
+import "./App.css";
+import {
+  Button,
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  HelpBlock,
+  Grid,
+  Row,
+  Col
+} from "react-bootstrap";
 
 /**
-*  User login UI component
-*/
+ *  User login UI component
+ */
 class Navigation extends Component {
   constructor(props) {
     super();
+    // NOTE: clientId: digit(s) before underscore have to match database value
     this.state = {
-      username: '',
-      password: '',
+      clientId: "1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4",
+      clientSecret: "4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k",
+      username: "",
+      password: "",
       errorDescription: null
     };
   }
@@ -19,27 +30,27 @@ class Navigation extends Component {
   /** Calls the App compnent's login method */
   login = () => {
     this.props.login();
-  }
+  };
 
   /** Calls the App compnent's logout method */
   logout = () => {
     this.props.logout();
-  }
+  };
 
   /** Form change handler */
   handleUsernameChange = e => {
     this.setState({ username: e.target.value });
-  }
+  };
 
   /** Form change handler */
   handlePasswordChange = e => {
     this.setState({ password: e.target.value });
-  }
+  };
 
   /** Return key press handler - calls submit() */
   handleKeyPress = e => {
     if (e.keyCode === 13) this.submit();
-  }
+  };
 
   /**
    * Sends a POST request with OAuth2 client id and client secret.
@@ -47,31 +58,30 @@ class Navigation extends Component {
    * setRefreshToken methods with the POST request'S return values.
    */
   submit = () => {
-    const url = 'https://lxd-api.lleon.de/oauth/v2/token';  // Replace in production
-    fetch(url, {
-      method: 'POST',
+    fetch(this.props.apiUrl + "oauth/v2/token", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        grant_type: 'password',
-        client_id: '11_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4',
-        client_secret: '4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k',
+        grant_type: "password",
+        client_id: this.state.clientId,
+        client_secret: this.state.clientSecret,
         username: this.state.username,
         password: this.state.password
       })
     })
-    .then(response => response.json())
-    .then(json => {
-      console.log('Response body: ', json); // Remove in production
-      this.setState({ errorDescription: json.error_description });
-      this.props.setAccessToken(json.access_token);
-      this.props.setExpirationDate(json.expires_in);
-      this.props.setRefreshToken(json.refresh_token);
-      if (json.access_token) this.login();
-    })
-    .catch(error => console.log('Request failed: ', error)); // Remove in production
-  }
+      .then(response => response.json())
+      .then(json => {
+        console.log("Response body: ", json); // Remove in production
+        this.setState({ errorDescription: json.error_description });
+        this.props.setAccessToken(json.access_token);
+        this.props.setExpirationDate(json.expires_in);
+        this.props.setRefreshToken(json.refresh_token);
+        if (json.access_token) this.login();
+      })
+      .catch(error => console.log("Request failed: ", error)); // Remove in production
+  };
 
   /**
    * Renders the component.
@@ -84,7 +94,8 @@ class Navigation extends Component {
           type="button"
           className="Logout"
           bsSize="xsmall"
-          onClick={this.logout}>
+          onClick={this.logout}
+        >
           Logout
         </Button>
       );
@@ -94,7 +105,10 @@ class Navigation extends Component {
           <Row>
             <Col xs={6} xsOffset={3}>
               <form>
-                <FormGroup controlId="formLoginUsername" validationState={this.state.errorDescription ? 'error' : null}>
+                <FormGroup
+                  controlId="formLoginUsername"
+                  validationState={this.state.errorDescription ? "error" : null}
+                >
                   <ControlLabel>Username</ControlLabel>
                   <FormControl
                     type="text"
@@ -105,10 +119,13 @@ class Navigation extends Component {
                     autoFocus
                   />
                 </FormGroup>
-                <FormGroup controlId="formLoginPassword" validationState={this.state.errorDescription ? 'error' : null}>
+                <FormGroup
+                  controlId="formLoginPassword"
+                  validationState={this.state.errorDescription ? "error" : null}
+                >
                   <ControlLabel className="ControlLabel">Password</ControlLabel>
                   <FormControl
-                    type='password'
+                    type="password"
                     value={this.state.password.value}
                     placeholder="Enter password"
                     onChange={this.handlePasswordChange}
@@ -116,12 +133,14 @@ class Navigation extends Component {
                   />
                   <HelpBlock>{this.state.errorDescription}</HelpBlock>
                 </FormGroup>
-                <Button type="button" onClick={this.submit}>Submit</Button>
+                <Button type="button" onClick={this.submit}>
+                  Submit
+                </Button>
               </form>
             </Col>
           </Row>
         </Grid>
-      )
+      );
     }
   }
 }
