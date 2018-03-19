@@ -77,7 +77,7 @@ class BackupScheduleCreate extends Component {
         this.setState({ redirect: true });
       }
     }
-    this.props.httpRequest('POST', 'backup-schedules', body, callbackFunction);
+    this.props.httpRequest('POST', 'schedules', body, callbackFunction);
   }
 
   /**

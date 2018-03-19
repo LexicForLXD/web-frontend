@@ -208,7 +208,7 @@ class MainArea extends Component {
 
   /** Gets backup schedules */
   httpGetBackupSchedules = () => {
-    this.httpRequest("GET", "backups/schedules", null, obj => {
+    this.httpRequest("GET", "schedules", null, obj => {
       if (obj.httpStatus !== 200) return;
       // obj.jsonData.sort(this.compareName);
       this.setState({ backupSchedules: obj.jsonData });
