@@ -92,7 +92,7 @@ class HostCreate extends Component {
       ipv4: this.state.ipv4,
       ipv6: this.state.ipv6,
       domainName: this.state.domainName,
-      port: this.state.port,
+      port: Number(this.state.port),
       mac: this.state.mac,
       settings: this.state.settings
     };
