@@ -8,6 +8,7 @@ import MonitoringPage from "../Monitoring/MonitoringPage.js";
 import LogPage from "../Monitoring/LogPage.js";
 import BackupPage from "../Backup/BackupPage.js";
 import BackupSchedulesPage from "../BackupSchedule/BackupSchedulePage.js";
+import BackupDestinationPage from "../BackupDestination/BackupDestinationPage.js";
 import UserPage from "../User/UserPage.js";
 import { Well, Grid, Col } from "react-bootstrap";
 import { Route, Redirect } from "react-router-dom";
@@ -144,6 +145,9 @@ class MainArea extends Component {
   /** Gets containers */
   httpGetContainers = () => {
     this.httpRequest("GET", "containers", null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ containers: [] });
+      }
       if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ containers: obj.jsonData });
@@ -173,6 +177,9 @@ class MainArea extends Component {
   /** Gets hosts */
   httpGetHosts = () => {
     this.httpRequest("GET", "hosts", null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ hosts: [] });
+      }
       if (obj.httpStatus !== 200) return;
       obj.jsonData.sort(this.compareName);
       this.setState({ hosts: obj.jsonData });
@@ -200,6 +207,9 @@ class MainArea extends Component {
   /** Gets backups */
   httpGetBackups = () => {
     this.httpRequest("GET", "backups", null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ backups: [] });
+      }
       if (obj.httpStatus !== 200) return;
       // obj.jsonData.sort(this.compareName);
       this.setState({ backups: obj.jsonData });
@@ -209,9 +219,25 @@ class MainArea extends Component {
   /** Gets backup schedules */
   httpGetBackupSchedules = () => {
     this.httpRequest("GET", "schedules", null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ backupSchedules: [] });
+      }
       if (obj.httpStatus !== 200) return;
       // obj.jsonData.sort(this.compareName);
       this.setState({ backupSchedules: obj.jsonData });
+    });
+  };
+
+  /** Gets backup destinations */
+  httpGetBackupDestinations = () => {
+    this.httpRequest("GET", "backupdestinations", null, obj => {
+      if (obj.httpStatus === 404) {
+        this.setState({ backupDestinations: [] });
+      }
+      if (obj.httpStatus !== 200) return;
+      // obj.jsonData.sort(this.compareName);
+
+      this.setState({ backupDestinations: obj.jsonData });
     });
   };
 
@@ -329,6 +355,19 @@ class MainArea extends Component {
               httpRequest={this.httpRequest}
               httpGetBackupSchedules={this.httpGetBackupSchedules}
               backupSchedules={this.state.backupSchedules}
+            />
+          )}
+        />
+        <Route
+          path="/backup-destinations"
+          render={() => (
+            <BackupDestinationPage
+              apiUrl={this.props.apiUrl}
+              accessToken={this.props.accessToken}
+              error={this.state.error}
+              httpRequest={this.httpRequest}
+              httpGetBackupDestinations={this.httpGetBackupDestinations}
+              backupDestinations={this.state.backupDestinations}
             />
           )}
         />
