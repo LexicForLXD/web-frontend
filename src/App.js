@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Navigation from './Navigation.js';
-import MainArea from './MainArea.js';
+import Navigation from './Layout/Navigation.js';
+import MainArea from './Layout/MainArea.js';
 import Login from './Login.js';
 
 

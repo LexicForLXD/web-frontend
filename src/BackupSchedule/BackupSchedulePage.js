@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Sidebar from "../Sidebar.js";
+import Sidebar from "../Layout/Sidebar.js";
 import BackupScheduleOverview from "./BackupScheduleOverview.js";
 import BackupScheduleCreate from "./BackupScheduleCreate.js";
 // import BackupScheduleShow from './BackupScheduleShow.js';

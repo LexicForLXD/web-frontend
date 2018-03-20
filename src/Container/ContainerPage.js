@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Sidebar from '../Sidebar.js';
+import Sidebar from '../Layout/Sidebar.js';
 import ContainerOverview from './ContainerOverview.js';
 import ContainerCreate from './ContainerCreate.js';
 import ContainerShow from './ContainerShow.js';

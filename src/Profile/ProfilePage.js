@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import '../App.css';
-import Sidebar from '../Sidebar.js';
+import Sidebar from '../Layout/Sidebar.js';
 import ProfileOverview from './ProfileOverview.js';
 import ProfileCreate from './ProfileCreate.js';
 import ProfileShow from './ProfileShow.js';

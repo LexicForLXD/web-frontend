@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Sidebar from '../Sidebar.js';
+import Sidebar from '../Layout/Sidebar.js';
 import BackupOverview from './BackupOverview.js';
 // import BackupCreate from './BackupCreate.js';
 // import BackupShow from './BackupShow.js';

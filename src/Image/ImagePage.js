@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Sidebar from '../Sidebar.js';
+import Sidebar from '../Layout/Sidebar.js';
 import ImageOverview from './ImageOverview.js';
 import ImageCreate from './ImageCreate.js';
 import ImageShow from './ImageShow.js';

@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import "./App.css";
-import ContainerPage from "./Container/ContainerPage.js";
-import ProfilePage from "./Profile/ProfilePage.js";
-import ImagePage from "./Image/ImagePage.js";
-import HostPage from "./Host/HostPage.js";
-import MonitoringPage from "./Monitoring/MonitoringPage.js";
-import LogPage from "./Monitoring/LogPage.js";
-import BackupPage from "./Backup/BackupPage.js";
-import BackupSchedulesPage from "./BackupSchedule/BackupSchedulePage.js";
-import UserPage from "./User/UserPage.js";
+import "../App.css";
+import ContainerPage from "../Container/ContainerPage.js";
+import ProfilePage from "../Profile/ProfilePage.js";
+import ImagePage from "../Image/ImagePage.js";
+import HostPage from "../Host/HostPage.js";
+import MonitoringPage from "../Monitoring/MonitoringPage.js";
+import LogPage from "../Monitoring/LogPage.js";
+import BackupPage from "../Backup/BackupPage.js";
+import BackupSchedulesPage from "../BackupSchedule/BackupSchedulePage.js";
+import UserPage from "../User/UserPage.js";
 import { Well, Grid, Col } from "react-bootstrap";
 import { Route, Redirect } from "react-router-dom";
 

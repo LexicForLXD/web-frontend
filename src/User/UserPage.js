@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Sidebar from "../Sidebar.js";
+import Sidebar from "../Layout/Sidebar.js";
 import UserOverview from "./UserOverview.js";
 import UserCreate from "./UserCreate.js";
 import UserShow from "./UserShow.js";

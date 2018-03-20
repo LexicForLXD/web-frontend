@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Sidebar from "../Sidebar.js";
+import Sidebar from "../Layout/Sidebar.js";
 import MonitoringCreate from "./MonitoringCreate.js";
 import MonitoringShow from "./MonitoringShow.js";
 import { Grid, Col } from "react-bootstrap";

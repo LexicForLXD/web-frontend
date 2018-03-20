@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Sidebar from "../Sidebar.js";
+import Sidebar from "../Layout/Sidebar.js";
 import HostOverview from "./HostOverview.js";
 import HostCreate from "./HostCreate.js";
 import HostShow from "./HostShow.js";

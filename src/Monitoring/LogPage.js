@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Sidebar from "../Sidebar.js";
+import Sidebar from "../Layout/Sidebar.js";
 import LogShow from "./LogShow.js";
 import { Grid, Col } from "react-bootstrap";
 import { Route } from "react-router-dom";
