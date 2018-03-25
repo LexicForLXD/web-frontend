@@ -14,14 +14,41 @@ class BackupScheduleCreate extends Component {
    * @param {props} props from BackupSchedulePage
    */
   constructor(props) {
-    super();
+    super(props);
     this.state = {
+        hostId: '',
+        //body
       name: '',
       description: '',
       executionTime: '',
-      type: ''
+      type: '',
+        destination: '',
+        containerIds: []
     }
   }
+
+    componentDidMount() {
+        this.props.httpGetHosts();
+        this.props.httpGetBackupDestinations();
+    }
+
+
+
+    /** Containers multi-select change handler */
+    handleContainersChange = selection => {
+        this.setState({ containerIds: selection.map(option => option.value) });
+    }
+
+    /** Form change handler */
+    handleHostChange = e => {
+        this.setState({ hostId: this.hostList.value });
+        this.props.httpGetContainersFromHost(this.hostList.value);
+    }
+
+    /** Form change handler */
+    handleDestinationChange = e => {
+        this.setState({ destination: this.destList.value });
+    }
 
   /** Form change handler */
   handleNameChange = e => {
@@ -61,7 +88,9 @@ class BackupScheduleCreate extends Component {
       name: this.state.name,
       description: this.state.description,
       executionTime: this.state.executionTime,
-      type: this.state.type
+      type: this.state.type,
+      destination: Number(this.state.destination),
+      containers: this.state.containerIds
     };
     Object.keys(body).forEach(
       key => (body[key] === null || body[key] === undefined || body[key].length) === 0 && delete body[key]
@@ -130,6 +159,56 @@ class BackupScheduleCreate extends Component {
             { value: 'incremental', label: 'incremental' },
           ]}
         />
+
+          <FormGroup controlId="formHost">
+              <ControlLabel>Host</ControlLabel>
+              <FormControl
+                  componentClass="select"
+                  onChange={this.handleHostChange}
+                  inputRef={ hl => this.hostList = hl }
+              >
+                  <option value="">...</option>
+                  {this.props.hosts instanceof Array &&
+                  this.props.hosts.map((host, index) =>
+                      <option key={index} value={host.id}>{host.name}</option>
+                  )
+                  }
+              </FormControl>
+              <HelpBlock>{this.state.hostId.length < 1 && 'Please choose a host'}</HelpBlock>
+          </FormGroup>
+
+
+          <FormGroup controlId="formContainers">
+              <ControlLabel>Containers</ControlLabel>
+              <Select
+                  multi
+                  closeOnSelect={false}
+                  name="formContainers"
+                  value={this.state.containerIds}
+                  onChange={this.handleContainersChange}
+                  options={this.props.containers.map(container => {
+                      return { value: container.id, label: container.name }
+                  })}
+              />
+          </FormGroup>
+
+          <FormGroup controlId="formDestination">
+              <ControlLabel>Destination</ControlLabel>
+              <FormControl
+                  componentClass="select"
+                  onChange={this.handleDestinationChange}
+                  inputRef={ hl => this.destList = hl }
+              >
+                  <option value="">...</option>
+                  {this.props.backupDestinations instanceof Array &&
+                  this.props.backupDestinations.map((dest, index) =>
+                      <option key={index} value={dest.id}>{dest.name}</option>
+                  )
+                  }
+              </FormControl>
+          </FormGroup>
+
+
         <Button
           type="button"
           onClick={this.submit}
