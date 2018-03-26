@@ -3,6 +3,7 @@ import './App.css';
 import Navigation from './Layout/Navigation.js';
 import MainArea from './Layout/MainArea.js';
 import Login from './Login.js';
+import {API_URL} from "./config";
 
 
 /**
@@ -21,7 +22,7 @@ class App extends Component {
     const loggedIn = accessToken &&
                      Date.now() < localStorage.getItem('expirationDate');
     this.state = {
-      apiUrl: 'https://localhost:443/',
+      apiUrl: API_URL,
       accessToken: accessToken,
       expirationDate: localStorage.getItem('expirationDate'),
       refreshToken: localStorage.getItem('refreshToken'),

@@ -1,0 +1,4 @@
+
+export const CLIENT_ID = '';
+export const CLIENT_KEY = '';
+export const API_URL = '';
