@@ -56,7 +56,13 @@ class BackupSchedulePage extends Component {
             path="/backup-schedules/create"
             render={() => (
               <BackupScheduleCreate
+                  hosts={this.props.hosts}
+                  containers={this.props.containers}
                 httpGetBackupSchedules={this.props.httpGetBackupSchedules}
+                httpGetBackupDestinations={this.props.httpGetBackupDestinations}
+                backupDestinations={this.props.backupDestinations}
+                httpGetHosts={this.props.httpGetHosts}
+                httpGetContainersFromHost={this.props.httpGetContainersFromHost}
                 backupSchedules={this.state.backupSchedules}
                 httpRequest={this.props.httpRequest}
               />

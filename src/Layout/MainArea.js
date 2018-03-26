@@ -154,6 +154,18 @@ class MainArea extends Component {
     });
   };
 
+    /** Gets containers from single Host*/
+    httpGetContainersFromHost = (id) => {
+        this.httpRequest("GET", "hosts/"+id+"/containers", null, obj => {
+            if (obj.httpStatus === 404) {
+                this.setState({ containers: [] });
+            }
+            if (obj.httpStatus !== 200) return;
+            obj.jsonData.sort(this.compareName);
+            this.setState({ containers: obj.jsonData });
+        });
+    };
+
   /** Gets container state */
   httpGetContainerState = id => {
     this.httpRequest("GET", `containers/${id}/state`, null, obj => {
@@ -352,8 +364,14 @@ class MainArea extends Component {
               apiUrl={this.props.apiUrl}
               accessToken={this.props.accessToken}
               error={this.state.error}
+              hosts={this.state.hosts}
+              containers={this.state.containers}
               httpRequest={this.httpRequest}
+              httpGetHosts={this.httpGetHosts}
+              httpGetContainersFromHost={this.httpGetContainersFromHost}
               httpGetBackupSchedules={this.httpGetBackupSchedules}
+              httpGetBackupDestinations={this.httpGetBackupDestinations}
+              backupDestinations={this.state.backupDestinations}
               backupSchedules={this.state.backupSchedules}
             />
           )}

@@ -10,6 +10,7 @@ import {
   Row,
   Col
 } from "react-bootstrap";
+import { CLIENT_ID, CLIENT_KEY } from "./config";
 
 /**
  *  User login UI component
@@ -19,8 +20,8 @@ class Navigation extends Component {
     super();
     // NOTE: clientId: digit(s) before underscore have to match database value
     this.state = {
-      clientId: "1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4",
-      clientSecret: "4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k",
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_KEY,
       username: "",
       password: "",
       errorDescription: null
