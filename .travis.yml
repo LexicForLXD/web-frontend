@@ -1,14 +1,8 @@
-language: node_js
-node_js:
-  - "iojs"
-  - "7"
-
 jobs:
   include:
     - stage: tests
       language: node_js
       node_js:
-        - "iojs"
         - "7"
       install:
         - npm install
@@ -18,7 +12,6 @@ jobs:
       if: branch = master AND type != pull_request
       language: node_js
       node_js:
-        - "iojs"
         - "7"
       install:
         - npm install
