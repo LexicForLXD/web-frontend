@@ -3,7 +3,7 @@ import "../App.css";
 import Sidebar from "../Layout/Sidebar.js";
 import BackupScheduleOverview from "./BackupScheduleOverview.js";
 import BackupScheduleCreate from "./BackupScheduleCreate.js";
-// import BackupScheduleShow from './BackupScheduleShow.js';
+import BackupScheduleShow from './BackupScheduleShow.js';
 import { Grid, Col } from "react-bootstrap";
 import { Route } from "react-router-dom";
 import queryString from "query-string";
@@ -68,14 +68,14 @@ class BackupSchedulePage extends Component {
               />
             )}
           />
-          {/* <Route
+          <Route
             path="/backup-schedules/show"
             render={() => <BackupScheduleShow
                             id={queryString.parse(window.location.search).id} // still needed?
                             httpGetBackupSchedules={this.props.httpGetBackupSchedules}
                             httpRequest={this.props.httpRequest}
                           />}
-          /> */}
+          />
         </Col>
       </Grid>
     );
