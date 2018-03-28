@@ -56,6 +56,7 @@ export default {
           this.$store.dispatch('initShared');
 
           this.$router.push("/")
+            location.reload();
 
         })
 
