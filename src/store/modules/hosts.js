@@ -12,6 +12,7 @@ const state = {
         deleted: false,
     },
     hostsList: [],
+    hostErrors: {}
 
 }
 
@@ -21,13 +22,16 @@ const getters = {
         return _.map(hostsList, id => hosts[keyForHost(id)])
     },
 
+    getHostErrors({hostErrors}) {
+        return hostErrors;
+    }
+
 }
 
 const actions = {
     setHosts({commit}) {
         hostApi.fetch().then((res) => {
             commit(types.HOST_SET_ALL, {hostsData: res.data});
-
         }).catch((err) => {
             console.warn('Could not fetch hosts')
             console.log(err)
@@ -52,24 +56,41 @@ const actions = {
         const savedHosts = state.hosts;
         const savedHostsList = state.hostsList;
         commit(types.LOADING_BEGIN);
-        hostApi.create(data).then((res) => {
-            commit(types.HOST_ADD_NEW, {host: res.data});
-            commit(types.LOADING_FINISH);
-        }).catch((res) => {
-            console.warn('Could not add new host');
-            commit(types.HOST_ADD_NEW_FAILURE, {savedHosts, savedHostsList});
-            commit(types.LOADING_FINISH);
+        return new Promise((resolve, reject) => {
+            hostApi.create(data).then((res) => {
+                commit(types.HOST_ADD_NEW, {host: res.data});
+                commit(types.LOADING_FINISH);
+                resolve();
+            }).catch((error) => {
+                console.warn('Could not add new host');
+                commit(types.HOST_ADD_NEW_FAILURE, {savedHosts, savedHostsList, error: error});
+                commit(types.LOADING_FINISH);
+                reject();
+            })
         })
     },
 
 
     updateHost({commit}, data) {
         commit(types.LOADING_BEGIN);
-        hostApi.update(id, data).then((res) => {
-            commit(types.HOST_UPDATE_SUCCESS, {hosts: res.data});
+        hostApi.update(data.host_id, data).then((res) => {
+            commit(types.HOST_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not update host');
+            commit(types.LOADING_FINISH);
+        })
+    },
+
+    authHost({commit}, data) {
+        commit(types.LOADING_BEGIN);
+        hostApi.auth(data.host_id, data.password).then((res) => {
+            hostApi.show(data.host_id).then((res) => {
+                commit(types.HOST_UPDATE_SUCCESS, res.data);
+                commit(types.LOADING_FINISH);
+            })
+        }).catch((err) => {
+            console.warn('Could not authenticate host');
             commit(types.LOADING_FINISH);
         })
     }
@@ -99,6 +120,7 @@ const mutations = {
 
     [types.HOST_SET_ALL]({hosts, hostsList}, {hostsData}) {
         forEach(hostsData, function (value) {
+
             const key = keyForHost(value.id)
 
             if (!hosts[key]) {
@@ -121,13 +143,17 @@ const mutations = {
             Vue.set(hosts, key, host)
             hostsList.push(host.id)
         }
+        console.log('new success')
+        state.hostErrors = {};
     },
 
     [types.HOST_ADD_NEW_SUCCESS](state) {
         console.log('new success')
+        state.hostErrors = {};
     },
 
-    [types.HOST_ADD_NEW_FAILURE](state, {savedHosts, savedHostsList}) {
+    [types.HOST_ADD_NEW_FAILURE](state, {savedHosts, savedHostsList, error}) {
+        state.hostErrors = error.response.data;
         state.hosts = savedHosts;
         state.hostsList = savedHostsList;
     }
