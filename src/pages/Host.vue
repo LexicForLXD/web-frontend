@@ -1,11 +1,16 @@
 <template>
-  <div>
     <div>
-      <button @click="newHost" class="button">New Host</button>
-      <button @click="refresh" class="button">Refresh</button>
-      <router-view></router-view>
+        <div>
+            <div v-if="this.$store.state.route.path != '/hosts/new'">
+                <button @click="newHost" class="button">New Host</button>
+                <button @click="refresh" class="button">Refresh</button>
+            </div>
+            <div class="content">
+                <router-view></router-view>
+            </div>
+
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
