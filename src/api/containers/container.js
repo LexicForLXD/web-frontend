@@ -4,8 +4,11 @@ export default {
   fetch () {
     return client.withAuth().get('/containers')
   },
-  page (url) {
-    return client.withAuth().get(url)
+  refreshSingle (id) {
+    return client.withAuth().get('/containers/'+id+'?fresh=true')
+  },
+  refreshAll () {
+    return client.withAuth().get('/containers?fresh=true')
   },
   delete (containerId) {
     return client.withAuth().delete('/containers/'+containerId)
