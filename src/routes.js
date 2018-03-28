@@ -39,7 +39,7 @@ const router = new VueRouter({
                 {
                     path: '',
                     name: 'containerOverview',
-                    component: Vue.component('Overview', require('./components/container/ContainerList.vue'))
+                    component: Vue.component('OverviewContainer', require('./components/container/ContainerList.vue'))
                 },
                 {
                     path: 'new',
@@ -103,7 +103,16 @@ const router = new VueRouter({
                     name: 'hostNew',
                     component: Vue.component('NewHost', require('./components/host/NewHost.vue')),
                 },
-
+                {
+                    path: ':index',
+                    name: 'hostSingle',
+                    component: Vue.component('SingleHost', require('./components/host/SingleHost.vue')),
+                },
+                {
+                    path: ':index/authenticate',
+                    name: 'hostAuth',
+                    component: Vue.component('AuthHost', require('./components/host/AuthHost.vue'))
+                }
             ]
         },
 
@@ -128,7 +137,7 @@ const router = new VueRouter({
         }
     ],
 
-    linkExactActiveClass: 'is-active'
+    linkActiveClass: 'is-active'
 });
 
 //Coach rule
