@@ -18,9 +18,12 @@ const state = {
 // getters
 const getters = {
     getContainers({ containers, containersList }) {
-      return _.map(containersList, id => containers[keyForContainer(id)])
+        return _.map(containersList, id => containers[keyForContainer(id)])
     },
 
+    getSingleContainerById: (state) => (ids) => {
+        return _.map(ids, id => state.containers[keyForContainer(id)])
+    }
 }
 
 const actions = {
