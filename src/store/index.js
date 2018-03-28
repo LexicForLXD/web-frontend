@@ -4,6 +4,7 @@ import user from './modules/user'
 import shared from './modules/shared'
 import containers from './modules/containers'
 import hosts from './modules/hosts'
+import profiles from './modules/profiles'
 // import createLogger from '../../../src/plugins/logger'
 
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
         user,
         shared,
         containers,
-        hosts
+        hosts,
+        profiles
     },
 //   strict: debug,
 //   plugins: debug ? [createLogger()] : []
