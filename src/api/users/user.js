@@ -10,10 +10,10 @@ export default {
     delete (id) {
         return client.withAuth().delete('/users/'+id)
     },
-    create (host) {
-        return client.withAuth().post('/users', host)
+    create (user) {
+        return client.withAuth().post('/users', user)
     },
-    update (id, host) {
-        return client.withAuth().put('/users/'+id, host)
+    update (id, user) {
+        return client.withAuth().put('/users/'+id, user)
     }
 }
