@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import profileApi from '../../api/profiles/profile'
-import {map, forEach, findIndex} from 'lodash'
+import {map, forEach, pull} from 'lodash'
 
 function keyForProfile(id) {
     return `profile_${id}`
@@ -89,8 +89,7 @@ const mutations = {
         const key = keyForProfile(id)
         Vue.delete(profiles, key);
 
-        const index = findIndex(profilesList, id);
-        profilesList.splice(index, 1);
+        _.pull(profilesList, id);
     },
 
     [types.PROFILE_DELETE_FAILURE](state, {savedProfiles, savedProfilesList}) {

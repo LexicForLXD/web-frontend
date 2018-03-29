@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import containerApi from '../../api/containers/container'
-import { map, forEach, findIndex } from 'lodash'
+import { map, forEach, pull } from 'lodash'
 
 function keyForContainer(id) {
     return `container_${id}`
@@ -55,7 +55,7 @@ const actions = {
     const savedContainers = state.containers;
     const savedContainersList = state.containersList;
     commit(types.LOADING_BEGIN);
-    containerApi.create(data).then((res) => {
+    containerApi.create(data.hostId, data, data.type).then((res) => {
       commit(types.CONTAINER_ADD_NEW, { container: res.data });
       commit(types.LOADING_FINISH);
     }).catch((res) => {
@@ -68,7 +68,7 @@ const actions = {
 
   updateContainer({ commit }, data) {
     commit(types.LOADING_BEGIN);
-    workoutsApi.update(id, data).then((res) => {
+    containerApi.update(data.hostId, data).then((res) => {
       commit(types.CONTAINER_UPDATE_SUCCESS, { containers: res.data });
       commit(types.LOADING_FINISH);
     }).catch((res) => {
@@ -84,8 +84,7 @@ const mutations = {
         const key = keyForContainer(id)
         Vue.delete(containers, key);
 
-        const index = findIndex(containersList, id);
-        containersList.splice(index, 1);
+        _.pull(containersList, id);
       },
 
       [types.CONTAINER_DELETE_FAILURE](state, { savedContainers, savedContainersList }) {

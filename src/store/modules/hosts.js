@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import hostApi from '../../api/hosts/host'
-import {map, forEach, findIndex} from 'lodash'
+import {map, forEach, pull} from 'lodash'
 
 function keyForHost(id) {
     return `host_${id}`
@@ -102,8 +102,7 @@ const mutations = {
         const key = keyForHost(id)
         Vue.delete(hosts, key);
 
-        const index = findIndex(hostsList, id);
-        hostsList.splice(index, 1);
+        _.pull(hostsList, id);
     },
 
     [types.HOST_DELETE_FAILURE](state, {savedHosts, savedHostsList}) {
