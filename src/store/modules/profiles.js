@@ -32,9 +32,12 @@ const actions = {
     setProfiles({commit}) {
         profileApi.fetch().then((res) => {
             commit(types.PROFILE_SET_ALL, {profilesData: res.data});
-        }).catch((err) => {
-            console.warn('Could not fetch hosts')
-            console.log(err)
+        }).catch((error) => {
+            if(error.response.status != 404) {
+                console.warn('Could not fetch profiles');
+            } else {
+                console.log(error.response.data.error.message)
+            }
         })
     },
 

@@ -32,9 +32,12 @@ const actions = {
     setHosts({commit}) {
         hostApi.fetch().then((res) => {
             commit(types.HOST_SET_ALL, {hostsData: res.data});
-        }).catch((err) => {
-            console.warn('Could not fetch hosts')
-            console.log(err)
+        }).catch((error) => {
+            if(error.response.status != 404) {
+                console.warn('Could not fetch hosts');
+            } else {
+                console.log(error.response.data.error.message)
+            }
         })
     },
 
@@ -73,7 +76,7 @@ const actions = {
 
     updateHost({commit}, data) {
         commit(types.LOADING_BEGIN);
-        hostApi.update(data.host_id, data).then((res) => {
+        hostApi.update(data.host_id, data.host).then((res) => {
             commit(types.HOST_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((res) => {

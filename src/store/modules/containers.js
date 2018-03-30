@@ -31,9 +31,12 @@ const actions = {
     containerApi.fetch().then((res) => {
       commit(types.CONTAINER_SET_ALL, { containersData: res.data });
 
-    }).catch((err) => {
-      console.warn('Could not fetch containers')
-      console.log(err)
+    }).catch((error) => {
+        if(error.response.status != 404) {
+            console.warn('Could not fetch containers');
+        } else {
+            console.log(error.response.data.error.message)
+        }
     })
   },
 
@@ -44,7 +47,7 @@ const actions = {
     commit(types.CONTAINER_DELETE, id)
     containerApi.delete(id).then((res) => {
       commit(types.CONTAINER_DELETE_SUCCESS);
-    }).catch((res) => {
+    }).catch((error) => {
       console.warn('Could not delete container');
       commit(types.CONTAINER_DELETE_FAILURE, { savedContainers, savedContainersList });
     })
