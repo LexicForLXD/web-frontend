@@ -24,6 +24,7 @@ const actions = {
                 dispatch('setHosts');
                 dispatch('setProfiles');
                 dispatch('initUser');
+                dispatch('setImages');
 
 
                 commit(types.INIT_READY);
