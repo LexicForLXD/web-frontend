@@ -176,8 +176,8 @@
                     name: this.name,
                     hostId: Number(this.selectedHost),
                     ephemeral: this.ephemeral,
-                    config: this.config,
-                    devices: this.devices,
+                    config: JSON.parse(this.config),
+                    devices: JSON.parse(this.devices),
                     type: this.selectedType
                 }
 
