@@ -20,15 +20,12 @@ const actions = {
         return new Promise((resolve, reject) => {
             // initApi.fetch().then((res) => {
             if (!state.initiated) {
-                // dispatch('initUser', { currentUser: res.data.data.currentUser })
-
-                // dispatch('initTypes', { types: res.data.data.types })
-
-                // // dispatch('initWorkouts', {workoutsInit: res.data.data.workoutsData})
                 dispatch('setContainers');
                 dispatch('setHosts');
                 dispatch('setProfiles');
-                // dispatch('setCurrentAthleteWorkouts', res.data.data.currentUser.id)
+                dispatch('initUser');
+
+
                 commit(types.INIT_READY);
             }
 
