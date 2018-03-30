@@ -60,28 +60,34 @@ const router = new VueRouter({
                 {
                     path: '',
                     name: 'scheduleOverview',
-                    component: Vue.component('Overview', require('./components/backup-schedule/BackupScheduleList.vue'))
+                    component: Vue.component('OverviewSchedule', require('./components/backup-schedule/BackupScheduleList.vue'))
                 },
-                // {
-                //     path: 'workouts',
-                //     name: 'athleteWorkouts',
-                //     component: Vue.component('Workouts', require('./components/athlete/workouts/WorkoutList.vue'))
-                // },
-                // {
-                //     path: 'workouts/new',
-                //     name: 'athleteNewWorkout',
-                //     component: Vue.component('NewWorkout', require('./components/athlete/workouts/NewWorkout.vue'))
-                // },
-                // {
-                //     path: 'workouts/:index',
-                //     name: 'athleteSingleWorkout',
-                //     component: Vue.component('Workout', require('./components/athlete/workouts/Workout.vue'))
-                // },
-                // {
-                //     path: 'workoutplans',
-                //     name: 'athleteWorkoutPlans',
-                //     component: Vue.component('WorkoutPlans', require('./components/athlete/workoutplans/Calendar.vue'))
-                // },
+                {
+                    path: 'new',
+                    name: 'scheduleNew',
+                    component: Vue.component('NewSchedule', require('./components/backup-schedule/NewBackupSchedule.vue'))
+                },
+            ]
+        },
+
+
+        /**
+         * Backup destination routes
+         */
+        {
+            path: '/backup-dests',
+            component: Vue.component('BackupDestinationPage', require('./pages/BackupDestination.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'destinationOverview',
+                    component: Vue.component('OverviewDestination', require('./components/backup-destination/BackupDestinationList.vue'))
+                },
+                {
+                    path: 'new',
+                    name: 'destinationNew',
+                    component: Vue.component('NewDestination', require('./components/backup-destination/NewBackupDestination.vue'))
+                },
             ]
         },
 
@@ -137,7 +143,7 @@ const router = new VueRouter({
         }
     ],
 
-    linkActiveClass: 'is-active'
+    linkExactActiveClass: 'is-active'
 });
 
 //Coach rule
