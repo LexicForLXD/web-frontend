@@ -8,6 +8,7 @@
         <p class="menu-label">Backup</p>
         <ul class="menu-list">
             <schedule-menu></schedule-menu>
+            <dest-menu></dest-menu>
         </ul>
     </aside>
 </template>
@@ -16,12 +17,14 @@
     import hostMenu from './HostMenu'
     import containerMenu from './ContainerMenu'
     import scheduleMenu from './ScheduleMenu'
+    import destMenu from './DestinationMenu'
 
     export default {
         components: {
             hostMenu,
             containerMenu,
-            scheduleMenu
+            scheduleMenu,
+            destMenu
         },
 
 
