@@ -1,17 +1,17 @@
 <template>
     <div id="app" class="container">
-        <site-header class="header"></site-header>
+        <site-header class="site-header"></site-header>
         <site-nav class="sidebar"></site-nav>
         <router-view class="content"></router-view>
-        <site-footer class="footer"></site-footer>
+        <site-footer class="site-footer"></site-footer>
     </div>
 </template>
 
 <script>
 // Imports
 import authApi from "./api/auth/auth";
-import siteHeader from "./components/header/Header";
-import siteFooter from "./components/footer/Footer";
+import siteHeader from "./components/header/SiteHeader";
+import siteFooter from "./components/footer/SiteFooter";
 import siteNav from "./components/sidebar/Sidebar";
 
 // import {sharedStore, userStore, typesStore} from './store'
