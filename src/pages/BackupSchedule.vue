@@ -2,7 +2,7 @@
   <div>
     <div>
       <div v-if="this.$store.state.route.path != '/backup-schedules/new'">
-        <button @click="refresh" class="button">Refresh</button>
+        <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
       </div>
       <div class="content">
         <router-view></router-view>
