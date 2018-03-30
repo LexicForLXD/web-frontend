@@ -3,9 +3,10 @@
         <div v-if="!editing">
             <div v-if="hosts[index]" class="card">
                 <header class="card-header">
-                   <h2 class="card-header-title">
+                   <div class="card-header-title">
                        Name: {{hosts[index].name}}
-                   </h2>
+                   </div>
+                    <i v-bind:class="{ 'fa-times': !hosts[index].authenticated, 'fa-check': hosts[index].authenticated}" class="fa card-header-icon"> </i>
                 </header>
                 <div class="card-content">
                     <p v-if="hosts[index].domainName">DomainName: {{hosts[index].domainName}}</p>
@@ -21,9 +22,9 @@
 
                 </div>
                 <footer class="card-footer">
-                    <a href="#" class="button card-footer-item" @click="onEdit">Edit</a>
-                    <router-link  class="button card-footer-item"  :to="{name: 'hostAuth', params: {index: index}}">Authenticate</router-link>
-                    <a href="#" class="button card-footer-item" @click="onDelete">Delete</a>
+                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
+                    <router-link  class="card-footer-item"  :to="{name: 'hostAuth', params: {index: index}}">Authenticate</router-link>
+                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
                 </footer>
             </div>
         </div>
@@ -91,7 +92,7 @@
             },
             onUpdate() {
                 this.$store.dispatch("updateHost", {
-                    host_id: this.id,
+                    host_id: this.hosts[this.index].id,
                     host: {
                         name: this.editName,
                         ipv4: this.editIpv4,
