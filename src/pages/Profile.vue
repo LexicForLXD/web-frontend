@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <div v-if="this.$store.state.route.path != '/containers/new'">
+            <div v-if="this.$store.state.route.path != '/profiles/new'">
                 <button @click="refresh" class="button">Refresh</button>
             </div>
             <div class="content">
@@ -16,7 +16,7 @@
     export default {
         methods: {
             refresh() {
-                this.$store.dispatch("setContainers");
+                this.$store.dispatch("setProfiles");
             }
         }
     }

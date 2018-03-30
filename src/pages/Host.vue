@@ -2,8 +2,7 @@
     <div>
         <div>
             <div v-if="this.$store.state.route.path != '/hosts/new'">
-                <button @click="newHost" class="button">New Host</button>
-                <button @click="refresh" class="button">Refresh</button>
+                <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
             </div>
             <div class="content">
                 <router-view></router-view>
@@ -16,10 +15,6 @@
 <script>
     export default {
         methods: {
-            newHost() {
-                this.$router.push({name: "hostNew"});
-            },
-
             refresh() {
                 this.$store.dispatch("setHosts");
             }
