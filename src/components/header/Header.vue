@@ -1,26 +1,46 @@
 <template>
-  <div>
-    LEXIC
-    <user-badge></user-badge>
-  </div>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-item">LEXIC</a>
+            <a class="navbar-burger" @click="mobileMenu" v-bind:class="{'is-active': menuExpanded}">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+        </div>
+        <div class="navbar-menu" v-bind:class="{'is-active': menuExpanded}">
+            <user-badge></user-badge>
+        </div>
+    </nav>
+
 </template>
 
 <script>
-import userBadge from './UserBadge'
+    import userBadge from './UserBadge'
 
-export default {
-  name: 'header',
-  components: {
-    userBadge
-  }
+    export default {
+        name: 'header',
+        data () {
+            return {
+                menuExpanded: false
+            }
+        },
+        components: {
+            userBadge
+        },
+        methods: {
+            mobileMenu() {
+                this.menuExpanded = !this.menuExpanded
+            }
+        }
 
-}
+    }
 </script>
 
 <style>
-.header {
-    grid-area: header;
-    background: red;
-    padding: 10px;
-}
+    .header {
+        grid-area: header;
+        background: red;
+        padding: 10px;
+    }
 </style>

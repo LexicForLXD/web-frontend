@@ -1,8 +1,13 @@
 <template>
-  <div class="right" v-show="isAuthenticated">
-    Hallo {{firstName}}
-    <button class="button is-small" @click="logout">
-    Logout</button>
+  <div class="navbar-end" v-show="isAuthenticated">
+    <a class="navbar-item">
+      Hallo {{firstName}}
+    </a>
+
+    <a class="navbar-item" @click="logout">
+        Logout
+    </a>
+
   </div>
 
 </template>
@@ -13,7 +18,7 @@ export default {
 
   computed: {
     firstName() {
-      return this.$store.state.user.currentUser.first_name;
+      return this.$store.state.user.currentUser.firstName;
     },
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
