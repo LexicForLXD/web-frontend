@@ -9,13 +9,14 @@
 
 
         <div class="field">
-            <label class="label">Type</label>
+            <label class="label">Source type</label>
             <div class="control">
                 <div class="select">
                     <select name="type_select" v-model="selectedType">
                         <option value="migration">Migration</option>
                         <option value="copy">Copy</option>
                         <option value="image">Image</option>
+                        <option value="none">None</option>
                     </select>
                 </div>
             </div>
@@ -153,7 +154,7 @@
                 //data
                 selectedType: "image",
                 selectedProfiles: [],
-                selectedHost: [],
+                selectedHost: "",
                 ephemeral: false,
                 name: "",
                 config: "",
@@ -173,11 +174,11 @@
             onSubmit() {
                 let body = {
                     name: this.name,
-                    ipv4: this.ipv4,
-                    ipv6: this.ipv6,
-                    domainName: this.domainName,
-                    port: Number(this.port),
-                    password: this.password
+                    hostId: Number(this.selectedHost),
+                    ephemeral: this.ephemeral,
+                    config: this.config,
+                    devices: this.devices,
+                    type: this.selectedType
                 }
 
                 Object.keys(body).forEach(
@@ -188,7 +189,7 @@
 
 
                 this.$store.dispatch("createContainer", body).then(() => {
-                    this.$router.push({name: "hostOverview"})
+                    this.$router.push({name: "containerOverview"})
                 }).catch(() => {
 
                 });
