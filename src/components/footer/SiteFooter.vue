@@ -11,14 +11,14 @@
 
 <script>
 export default {
-  name: 'footer'
+  name: 'site-footer'
 
 }
 </script>
 
 <style>
 
-.footer {
+.site-footer {
   grid-area: footer;
   background: yellow;
 }

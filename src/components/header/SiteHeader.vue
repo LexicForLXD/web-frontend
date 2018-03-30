@@ -19,7 +19,7 @@
     import userBadge from './UserBadge'
 
     export default {
-        name: 'header',
+        name: 'site-header',
         data () {
             return {
                 menuExpanded: false
@@ -38,7 +38,7 @@
 </script>
 
 <style>
-    .header {
+    .site-header {
         grid-area: header;
         background: red;
         padding: 10px;
