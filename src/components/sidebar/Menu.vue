@@ -1,24 +1,36 @@
 <template>
-    <div>
-        <!--<div class="menu-label"></div>-->
+    <aside class="menu">
+        <p class="menu-label">General</p>
         <ul class="menu-list">
-            <router-link :to="{name: 'containerOverview'}">Containers</router-link>
-            <router-link :to="{name: 'scheduleOverview'}">Backup Schedules</router-link>
-            <router-link :to="{name: 'hostOverview'}">Hosts</router-link>
+            <host-menu></host-menu>
+            <container-menu></container-menu>
         </ul>
-    </div>
+        <p class="menu-label">Backup</p>
+        <ul class="menu-list">
+            <schedule-menu></schedule-menu>
+        </ul>
+    </aside>
 </template>
 
 <script>
+    import hostMenu from './HostMenu'
+    import containerMenu from './ContainerMenu'
+    import scheduleMenu from './ScheduleMenu'
 
     export default {
+        components: {
+            hostMenu,
+            containerMenu,
+            scheduleMenu
+        },
+
 
     }
 </script>
 
 <style>
-    .router-link-active {
-        background: blue;
-        color: white;
-    }
+    /*.router-link-active {*/
+        /*background: blue;*/
+        /*color: white;*/
+    /*}*/
 </style>
