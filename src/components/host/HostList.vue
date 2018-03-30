@@ -4,14 +4,15 @@
       <div v-for="(host, index) in hosts" :key="host.id">
         <div class="card">
           <header class="card-header">
-            <router-link :to="{name: 'hostSingle', params: {index: index}}" class="card-header-title">{{host.name}} {{host.id}}</router-link>
+            <router-link :to="{name: 'hostSingle', params: {index: index}}" class="card-header-title">Host: {{host.name}}</router-link>
+            <i v-bind:class="{ 'fa-times': !host.authenticated, 'fa-check': host.authenticated}" class="fa card-header-icon"> </i>
           </header>
           <div class="card-content">
             <p>Authenticated: {{host.authenticated}}</p>
           </div>
           <footer class="card-footer">
-            <router-link class="button card-footer-item"  :to="{name: 'hostSingle', params: {index: index}}">More</router-link>
-            <a href="#" @click="deleteHost(host.id)" class="button card-footer-item">Delete</a>
+            <router-link class=" card-footer-item"  :to="{name: 'hostSingle', params: {index: index}}">More</router-link>
+            <a href="#" @click="deleteHost(host.id)" class="card-footer-item">Delete</a>
           </footer>
         </div>
         <p></p>
