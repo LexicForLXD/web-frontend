@@ -18,18 +18,18 @@ const state = {
 
 // getters
 const getters = {
-    getHosts({images, imagesList}) {
+    getImages({images, imagesList}) {
         return _.map(imagesList, id => images[keyForImage(id)])
     },
 
-    getHostErrors({imageErrors}) {
+    getImageErrors({imageErrors}) {
         return imageErrors;
     }
 
 }
 
 const actions = {
-    setHosts({commit}) {
+    setImages({commit}) {
         imageApi.fetch().then((res) => {
             commit(types.IMAGE_SET_ALL, {imagesData: res.data});
         }).catch((error) => {
@@ -42,7 +42,7 @@ const actions = {
     },
 
 
-    deleteHost({commit, state}, id) {
+    deleteImage({commit, state}, id) {
         const savedImages = state.images;
         const savedImagesList = state.imagesList;
         commit(types.IMAGE_DELETE, id)
@@ -55,7 +55,7 @@ const actions = {
     },
 
 
-    createHost({commit}, data) {
+    createImage({commit}, data) {
         const savedImages = state.images;
         const savedImagesList = state.imagesList;
         commit(types.LOADING_BEGIN);
@@ -74,7 +74,7 @@ const actions = {
     },
 
 
-    updateHost({commit}, data) {
+    updateImage({commit}, data) {
         commit(types.LOADING_BEGIN);
         imageApi.update(data.image_id, data.image).then((res) => {
             commit(types.IMAGE_UPDATE_SUCCESS, res.data);
@@ -85,18 +85,7 @@ const actions = {
         })
     },
 
-    authHost({commit}, data) {
-        commit(types.LOADING_BEGIN);
-        imageApi.auth(data.image_id, data.password).then((res) => {
-            imageApi.show(data.image_id).then((res) => {
-                commit(types.IMAGE_UPDATE_SUCCESS, res.data);
-                commit(types.LOADING_FINISH);
-            })
-        }).catch((err) => {
-            console.warn('Could not authenticate image');
-            commit(types.LOADING_FINISH);
-        })
-    }
+
 }
 
 
