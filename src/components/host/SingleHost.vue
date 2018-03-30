@@ -77,7 +77,8 @@
         },
         methods: {
             onDelete() {
-                this.$store.dispatch("deleteHost", this.id);
+                this.$store.dispatch("deleteHost", this.hosts[this.index].id);
+                this.$router.push({ name: 'hostOverview'});
             },
             onEdit() {
                 this.editIpv4 = this.hosts[this.index].ipv4;
