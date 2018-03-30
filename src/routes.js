@@ -46,6 +46,7 @@ const router = new VueRouter({
                     name: 'containerNew',
                     component: Vue.component('NewContainer', require('./components/container/NewContainer.vue'))
                 },
+
             ]
         },
 
@@ -67,6 +68,63 @@ const router = new VueRouter({
                     name: 'scheduleNew',
                     component: Vue.component('NewSchedule', require('./components/backup-schedule/NewBackupSchedule.vue'))
                 },
+                {
+                    path: ':index',
+                    name: 'scheduleSingle',
+                    component: Vue.component('SingleSchedule', require('./components/backup-schedule/SingleBackupSchedule.vue')),
+                },
+            ]
+        },
+
+
+        /**
+         * Profile routes
+         */
+        {
+            path: '/profiles',
+            component: Vue.component('ProfilePage', require('./pages/Profile.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'profileOverview',
+                    component: Vue.component('OverviewProfile', require('./components/profile/ProfileList.vue'))
+                },
+                {
+                    path: 'new',
+                    name: 'profileNew',
+                    component: Vue.component('NewProfile', require('./components/profile/NewProfile.vue'))
+                },
+                {
+                    path: ':index',
+                    name: 'profileSingle',
+                    component: Vue.component('SingleProfile', require('./components/profile/SingleProfile.vue')),
+                },
+            ]
+        },
+
+
+        /**
+         * Image routes
+         */
+        {
+            path: '/images',
+            component: Vue.component('ImagePage', require('./pages/Image.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'imageOverview',
+                    component: Vue.component('OverviewImage', require('./components/image/ImageList.vue'))
+                },
+                {
+                    path: 'new',
+                    name: 'imageNew',
+                    component: Vue.component('NewImage', require('./components/image/NewImage.vue'))
+                },
+                {
+                    path: ':index',
+                    name: 'imageSingle',
+                    component: Vue.component('SingleImage', require('./components/image/SingleImage.vue')),
+                },
             ]
         },
 
@@ -87,6 +145,36 @@ const router = new VueRouter({
                     path: 'new',
                     name: 'destinationNew',
                     component: Vue.component('NewDestination', require('./components/backup-destination/NewBackupDestination.vue'))
+                },
+                {
+                    path: ':index',
+                    name: 'destinationSingle',
+                    component: Vue.component('SingleDestination', require('./components/backup-destination/SingleBackupDestination.vue')),
+                },
+            ]
+        },
+
+        /**
+         * Backup routes
+         */
+        {
+            path: '/backups',
+            component: Vue.component('BackupPage', require('./pages/Backup.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'backupOverview',
+                    component: Vue.component('OverviewBackup', require('./components/backup/BackupList.vue'))
+                },
+                {
+                    path: 'new',
+                    name: 'backupNew',
+                    component: Vue.component('NewBackup', require('./components/backup/NewBackup.vue'))
+                },
+                {
+                    path: ':index',
+                    name: 'backupSingle',
+                    component: Vue.component('SingleBackup', require('./components/backup/SingleBackup.vue')),
                 },
             ]
         },
