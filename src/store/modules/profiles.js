@@ -12,7 +12,12 @@ const state = {
         deleted: false,
     },
     profilesList: [],
-    profileErrors: {}
+    profileErrors: {
+        name: "",
+        description: "",
+        config: "",
+        devices: ""
+    }
 
 }
 
@@ -33,7 +38,7 @@ const actions = {
         profileApi.fetch().then((res) => {
             commit(types.PROFILE_SET_ALL, {profilesData: res.data});
         }).catch((error) => {
-            if(error.response.status != 404) {
+            if (error.response.status != 404) {
                 console.warn('Could not fetch profiles');
             } else {
                 console.log(error.response.data.error.message)
@@ -76,7 +81,7 @@ const actions = {
 
     updateProfile({commit}, data) {
         commit(types.LOADING_BEGIN);
-        profileApi.update(data.profile_id, data).then((res) => {
+        profileApi.update(data.profile_id, data.profile).then((res) => {
             commit(types.PROFILE_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((res) => {
@@ -124,6 +129,29 @@ const mutations = {
         const key = keyForProfile(profile.id)
 
         state.profiles[key] = profile;
+
+        state.profileErrors = {
+            name: "",
+            description: "",
+            config: "",
+            devices: ""
+        };
+    },
+
+
+    [types.PROFILE_UPDATE_FAILURE](state, error) {
+        if (error.response.data.error.message.name) {
+            state.profileErrors.name = error.response.data.error.message.name;
+        }
+        if (error.response.data.error.message.description) {
+            state.profileErrors.description = error.response.data.error.message.description;
+        }
+        if (error.response.data.error.message.config) {
+            state.profileErrors.config = error.response.data.error.message.config;
+        }
+        if (error.response.data.error.message.devices) {
+            state.profileErrors.devices = error.response.data.error.message.devices;
+        };
     },
 
     [types.PROFILE_ADD_NEW]({profiles, profilesList}, profile) {
@@ -133,18 +161,40 @@ const mutations = {
             profilesList.push(profile.id)
         }
         console.log('new success')
-        state.profileErrors = {};
+        state.profileErrors = {
+            name: "",
+            description: "",
+            config: "",
+            devices: ""
+        };
     },
 
     [types.PROFILE_ADD_NEW_SUCCESS](state) {
         console.log('new success')
-        state.profileErrors = {};
+        state.profileErrors = {
+            name: "",
+            description: "",
+            config: "",
+            devices: ""
+        };
     },
 
-    [types.PROFILE_ADD_NEW_FAILURE](state, {savedPorfiles, savedProfilesList, error}) {
-        state.profileErrors = error.response.data;
-        state.profiles = savedPorfiles;
+    [types.PROFILE_ADD_NEW_FAILURE](state, {savedProfiles, savedProfilesList, error}) {
+        state.profiles = savedProfiles;
         state.profilesList = savedProfilesList;
+
+        if (error.response.data.error.message.name) {
+            state.profileErrors.name = error.response.data.error.message.name;
+        }
+        if (error.response.data.error.message.description) {
+            state.profileErrors.description = error.response.data.error.message.description;
+        }
+        if (error.response.data.error.message.config) {
+            state.profileErrors.config = error.response.data.error.message.config;
+        }
+        if (error.response.data.error.message.devices) {
+            state.profileErrors.devices = error.response.data.error.message.devices;
+        }
     }
 
 }
