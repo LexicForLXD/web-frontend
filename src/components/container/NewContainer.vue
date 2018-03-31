@@ -73,6 +73,18 @@
 
         <div v-if="selectedType == 'image'">
 
+            <div class="field">
+                <label class="label">Image</label>
+                <div class="control" v-if="images.length > 0">
+                    <div class="select">
+                        <select name="image_select" v-model="selectedImage">
+                            <option v-for="image in images" v-bind:key="image.id" v-bind:value="image.fingerprint">
+                                {{ image.fingerprint.substring(0,10) }}...
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -95,41 +107,6 @@
         <button class="button" @click="onSubmit">Save</button>
     </div>
 
-    <!--<label class="label">Type</label>-->
-    <!-- <div class="select">
-      <select name="workout_typ_id" v-model="selectedWorkoutType">
-        <option v-for="(workoutType, index) in workoutTypes" v-bind:key="workoutType.id" v-bind:value="workoutType.id">
-          {{ workoutType.name }}
-        </option>
-      </select>
-    </div>
-
-    <label class="label">Gesundheit</label>
-    <div class="select">
-      <select class="select" name="health" v-model="selectedHealthType">
-        <option v-for="(health, index) in healthTypes" v-bind:key="health.id" v-bind:value="health.id">
-          {{ health.name }}
-        </option>
-      </select>
-    </div>
-    <label class="label">Mentale Belastung</label>
-    <div class="select">
-      <select class="select" name="mental" v-model="selectedMentalType">
-        <option v-for="(mental, index) in mentalTypes" v-bind:key="mental.id" v-bind:value="mental.id">
-          {{ mental.name }}
-        </option>
-      </select>
-    </div>
-
-    <label class="label">Physische Belastung</label>
-    <div class="select">
-      <select class="select" name="physical" v-model="selectedPhysicalType">
-        <option v-for="(physical, index) in physicalTypes" v-bind:key="physical.id" v-bind:value="physical.id">
-          {{ physical.name }}
-        </option>
-      </select>
-    </div> -->
-
 
 </template>
 
@@ -142,6 +119,7 @@
                 hosts: "getHosts",
                 containers: "getContainers",
                 profiles: "getProfiles",
+                images: "getImages",
             })
         },
 
@@ -155,6 +133,7 @@
                 selectedType: "image",
                 selectedProfiles: [],
                 selectedHost: "",
+                selectedImage: "",
                 ephemeral: false,
                 name: "",
                 config: "",
@@ -172,23 +151,27 @@
 
         methods: {
             onSubmit() {
-                let body = {
-                    name: this.name,
+                let data = {
+                    container: {
+                        name: this.name,
+                        ephemeral: this.ephemeral,
+                        config: JSON.parse(this.config),
+                        devices: JSON.parse(this.devices),
+                        fingerprint: this.selectedImage,
+                        profiles: this.selectedProfiles,
+                    },
                     hostId: Number(this.selectedHost),
-                    ephemeral: this.ephemeral,
-                    config: JSON.parse(this.config),
-                    devices: JSON.parse(this.devices),
-                    type: this.selectedType
+                    type: this.selectedType,
                 }
 
-                Object.keys(body).forEach(
+                Object.keys(data).forEach(
                     key =>
-                        (body[key] === null || body[key] === undefined || body[key].length) ===
-                        0 && delete body[key]
+                        (data[key] === null || data[key] === undefined || data[key].length) ===
+                        0 && delete data[key]
                 );
 
 
-                this.$store.dispatch("createContainer", body).then(() => {
+                this.$store.dispatch("createContainer", data).then(() => {
                     this.$router.push({name: "containerOverview"})
                 }).catch(() => {
 
