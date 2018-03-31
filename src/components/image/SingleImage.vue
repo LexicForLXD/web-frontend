@@ -3,9 +3,10 @@
         <div v-if="!editing">
             <div v-if="image" class="card">
                 <header class="card-header">
-                   <div class="card-header-title">
+                   <div class="card-header-title" v-if="image.fingerprint">
                        Fingerprint: {{image.fingerprint.substring(0,20)}}...
                    </div>
+                    <div class="card-header-title" v-else>Image not finished</div>
                 </header>
                 <div class="card-content">
                     <p v-if="image.fingerprint">Fringerprint: {{image.fingerprint}}</p>
@@ -59,9 +60,7 @@
             ...mapGetters({
                 images: "getImages",
             }),
-            // containersForHost () {
-            //     return this.$store.getters.getSingleContainerById(this.images[this.index].containerId)
-            // }
+
             image() {
                 return this.images[this.index];
             }
@@ -81,21 +80,22 @@
         },
         methods: {
             onDelete() {
-                this.$store.dispatch("deleteHost", this.id);
+                this.$store.dispatch("deleteImage", this.image.id);
+                this.$router.push({name: 'imageOverview'});
             },
             onEdit() {
-                this.editIpv4 = this.images[this.index].ipv4;
-                this.editIpv6 = this.images[this.index].ipv6;
-                this.editDomainName = this.images[this.index].domainName;
-                this.editName = this.images[this.index].name;
-                this.editPort = this.images[this.index].port;
+                this.editIpv4 = this.images.ipv4;
+                this.editIpv6 = this.images.ipv6;
+                this.editDomainName = this.images.domainName;
+                this.editName = this.images.name;
+                this.editPort = this.images.port;
                 this.editing = true;
             },
             onCancel() {
                 this.editing = false;
             },
             onUpdate() {
-                this.$store.dispatch("updateHost", {
+                this.$store.dispatch("updateImage", {
                     host_id: this.images[this.index].id,
                     host: {
                         name: this.editName,

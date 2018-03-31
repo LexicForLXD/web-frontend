@@ -15,7 +15,8 @@
                              :key="image.id"
                              :to="{name: 'imageSingle', params: {index: index}}"
                              tag="tr">
-                    <td>{{image.fingerprint.substring(0,11)}}...</td>
+                    <td v-if="image.finished">{{image.fingerprint.substring(0,11)}}...</td>
+                    <td v-else></td>
                     <td>{{image.architecture}}</td>
                     <td><i v-bind:class="{ 'fa-times': !image.finished, 'fa-check': image.finished}"
                            class="fa"> </i></td>
