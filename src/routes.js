@@ -46,7 +46,11 @@ const router = new VueRouter({
                     name: 'containerNew',
                     component: Vue.component('NewContainer', require('./components/container/NewContainer.vue'))
                 },
-
+                {
+                    path: ':index',
+                    name: 'containerSingle',
+                    component: Vue.component('SingleContainer', require('./components/container/SingleContainer.vue')),
+                },
             ]
         },
 
