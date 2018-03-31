@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import hostApi from '../../api/hosts/host'
-import {map, forEach, pull} from 'lodash'
+import {map, forEach, pull, find, findIndex} from 'lodash'
 
 function keyForHost(id) {
     return `host_${id}`
@@ -24,6 +24,14 @@ const getters = {
 
     getHostErrors({hostErrors}) {
         return hostErrors;
+    },
+
+    getHostById({hosts, hostsList}, hostId) {
+        return _.find(hosts, ['id', hostId]);
+    },
+
+    getHostIndexById: ({hostsList}) => (hostId) => {
+        return hostsList.findIndex(host => host == hostId);
     }
 
 }
@@ -33,11 +41,14 @@ const actions = {
         hostApi.fetch().then((res) => {
             commit(types.HOST_SET_ALL, {hostsData: res.data});
         }).catch((error) => {
-            if(error.response.status != 404) {
-                console.warn('Could not fetch hosts');
+            if(error.response) {
+                if(error.response.status != 404) {
+                    console.warn('Could not fetch hosts');
+                }
             } else {
-                console.log(error.response.data.error.message)
+                console.log(error);
             }
+
         })
     },
 

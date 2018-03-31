@@ -24,7 +24,7 @@ export default new Vuex.Store({
         profiles,
         images
     },
-//   strict: debug,
+  strict: true,
 //   plugins: debug ? [createLogger()] : []
 
 })

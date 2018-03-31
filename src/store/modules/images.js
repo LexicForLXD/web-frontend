@@ -33,7 +33,7 @@ const actions = {
         imageApi.fetch().then((res) => {
             commit(types.IMAGE_SET_ALL, {imagesData: res.data});
         }).catch((error) => {
-            if(error.response.status != 404) {
+            if (error.response.status != 404) {
                 console.warn('Could not fetch images');
             } else {
                 console.log(error.response.data.error.message)
@@ -59,17 +59,31 @@ const actions = {
         const savedImages = state.images;
         const savedImagesList = state.imagesList;
         commit(types.LOADING_BEGIN);
+
         return new Promise((resolve, reject) => {
-            imageApi.create(data).then((res) => {
-                commit(types.IMAGE_ADD_NEW, {image: res.data});
-                commit(types.LOADING_FINISH);
-                resolve();
-            }).catch((error) => {
-                console.warn('Could not add new image');
-                commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
-                commit(types.LOADING_FINISH);
-                reject();
-            })
+            if (data.image.source.type == "image") {
+                imageApi.createFromRemoteImage(data.hostId, data.image).then((res) => {
+                    commit(types.IMAGE_ADD_NEW, {image: res.data});
+                    commit(types.LOADING_FINISH);
+                    resolve();
+                }).catch((error) => {
+                    console.warn('Could not add new image');
+                    commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
+                    commit(types.LOADING_FINISH);
+                    reject();
+                })
+            } else {
+                imageApi.createFromContainer(data.hostId, data.image).then((res) => {
+                    commit(types.IMAGE_ADD_NEW, {image: res.data});
+                    commit(types.LOADING_FINISH);
+                    resolve();
+                }).catch((error) => {
+                    console.warn('Could not add new image');
+                    commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
+                    commit(types.LOADING_FINISH);
+                    reject();
+                })
+            }
         })
     },
 

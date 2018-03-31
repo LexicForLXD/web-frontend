@@ -44,6 +44,7 @@ export default {
           console.warn("could not refresh token");
           localStorage.removeItem("access_token");
           localStorage.removeItem("expiration");
+          location.reload();
         });
     } else {
       this.$router.push("/login");
