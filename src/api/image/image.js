@@ -10,11 +10,14 @@ export default {
     show(imageId) {
         return client.withAuth().get('/images/'+imageId)
     },
-    delete(id) {
-        return client.withAuth().delete('/containers/' + containerId)
+    delete(imageId) {
+        return client.withAuth().delete('/images/' + imageId)
     },
-    create(hostId, image, type) {
-        return client.withAuth().post('/hosts/' + hostId + '/images/' + type, image)
+    createFromContainer(hostId, image) {
+        return client.withAuth().post('/hosts/' + hostId + '/images/container', image)
+    },
+    createFromRemoteImage(hostId, image) {
+        return client.withAuth().post('/hosts/' + hostId + '/images/remote', image)
     },
     update(imageId, image) {
         return client.withAuth().put('/images/' + imageId, image)
