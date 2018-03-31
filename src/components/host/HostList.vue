@@ -44,7 +44,6 @@
         },
 
         components: {
-            // "site-workout": Workout
         },
 
         methods: {

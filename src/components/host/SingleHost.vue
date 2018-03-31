@@ -59,7 +59,7 @@
                 hosts: "getHosts",
             }),
             containersForHost () {
-                return this.$store.getters.getSingleContainerById(this.hosts[this.index].containerId)
+                return this.$store.getters.getContainersByIds(this.hosts[this.index].containerId)
             }
         },
         data() {
