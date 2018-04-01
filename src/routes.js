@@ -214,6 +214,37 @@ const router = new VueRouter({
             ]
         },
 
+        /**
+         * User routes
+         */
+        {
+            path: '/users',
+            component: Vue.component('UserPage', require('./pages/User.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'userOverview',
+                    component: Vue.component('UserOverview', require('./components/user/UserList.vue'))
+                },
+                {
+                    path: 'new',
+                    name: 'userNew',
+                    component: Vue.component('NewUser', require('./components/user/NewUser.vue')),
+                },
+                {
+                    path: 'current',
+                    name: 'userCurrent',
+                    component: Vue.component('CurrentUser', require('./components/user/CurrentUser.vue'))
+                },
+                {
+                    path: ':index',
+                    name: 'userSingle',
+                    component: Vue.component('SingleUser', require('./components/user/SingleUser.vue')),
+                },
+
+            ]
+        },
+
 
         /*
 
