@@ -14,7 +14,7 @@ switch( process.env.NODE_ENV ){
   break;
 }
 
-export const TRAINDB_CONFIG = {
+export const LEXIC_CONFIG = {
   API_URL: api_url,
   CLIENT_ID: client_id,
   CLIENT_KEY: client_key,
