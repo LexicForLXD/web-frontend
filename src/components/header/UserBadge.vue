@@ -1,43 +1,42 @@
 <template>
-  <div class="navbar-end" v-show="isAuthenticated">
-    <a class="navbar-item">
-      Hallo {{firstName}}
-    </a>
+    <div class="navbar-end" v-if="isAuthenticated && firstName">
+        <router-link :to="{name: 'userCurrent'}" class="navbar-item">Hallo {{firstName}}</router-link>
 
-    <a class="navbar-item" @click="logout">
-        Logout
-    </a>
+        <a class="navbar-item" @click="logout">
+            Logout
+        </a>
 
-  </div>
+    </div>
 
 </template>
 
 <script>
-export default {
-  name: 'header-user',
 
-  computed: {
-    firstName() {
-      return this.$store.state.user.currentUser.firstName;
-    },
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
-    }
-  },
+    import {mapGetters} from 'vuex'
 
-  methods: {
-    logout() {
-      this.$router.push('/login');
-      location.reload();
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('expiration');
+    export default {
+        name: 'header-user',
+
+        computed: {
+            ...mapGetters({
+                firstName: "getCurrentFirstName",
+                isAuthenticated: "isAuthenticated"
+            }),
+        },
+
+        methods: {
+            logout() {
+                this.$router.push('/login');
+                location.reload();
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('expiration');
+            }
+        }
     }
-  }
-}
 </script>
 
 <style scoped>
-.right {
-  float: right;
-}
+    .right {
+        float: right;
+    }
 </style>
