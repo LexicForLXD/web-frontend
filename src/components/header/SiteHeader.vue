@@ -25,13 +25,15 @@
                 menuExpanded: false
             }
         },
+
+
         components: {
             userBadge
         },
         methods: {
             mobileMenu() {
                 this.menuExpanded = !this.menuExpanded
-            }
+            },
         }
 
     }
@@ -40,7 +42,8 @@
 <style>
     .site-header {
         grid-area: header;
-        background: red;
+        background: #FBB731;
         padding: 10px;
     }
+
 </style>

@@ -20,6 +20,6 @@ export default {
 
 .site-footer {
   grid-area: footer;
-  background: yellow;
+  background: #FBB731;
 }
 </style>
