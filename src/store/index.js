@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import user from './modules/user'
+import users from './modules/users'
 import shared from './modules/shared'
 import containers from './modules/containers'
 import hosts from './modules/hosts'
@@ -17,7 +17,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
-        user,
+        users,
         shared,
         containers,
         hosts,
