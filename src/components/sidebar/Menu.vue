@@ -13,6 +13,10 @@
             <schedule-menu></schedule-menu>
             <dest-menu></dest-menu>
         </ul>
+        <p class="menu-label">Sonstiges</p>
+        <ul class="menu-list">
+            <user-menu></user-menu>
+        </ul>
     </aside>
 </template>
 
@@ -24,6 +28,7 @@
     import profileMenu from './ProfileMenu'
     import imageMenu from './ImageMenu'
     import backupMenu from './BackupMenu'
+    import userMenu from './UserMenu'
 
     export default {
         components: {
@@ -33,7 +38,8 @@
             destMenu,
             profileMenu,
             imageMenu,
-            backupMenu
+            backupMenu,
+            userMenu
         },
 
 
@@ -42,7 +48,7 @@
 
 <style>
     /*.router-link-active {*/
-        /*background: blue;*/
-        /*color: white;*/
+    /*background: blue;*/
+    /*color: white;*/
     /*}*/
 </style>
