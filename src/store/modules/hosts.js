@@ -12,7 +12,12 @@ const state = {
         deleted: false,
     },
     hostsList: [],
-    hostErrors: {}
+    hostErrors: {},
+    hostLoading: {
+        isLoading: false,
+        hasLoadingErrors: false,
+    }
+
 
 }
 
@@ -26,23 +31,48 @@ const getters = {
         return hostErrors;
     },
 
-    getHostById({hosts, hostsList}, hostId) {
+    getHostById: ({hosts}) => (hostId) => {
         return _.find(hosts, ['id', hostId]);
     },
 
     getHostIndexById: ({hostsList}) => (hostId) => {
         return hostsList.findIndex(host => host == hostId);
-    }
+    },
+
+    getHostLoading({hostLoading}) {
+        return hostLoading;
+    },
 
 }
 
 const actions = {
     setHosts({commit}) {
+        commit(types.HOST_LOADING_START);
+        commit(types.LOADING_BEGIN);
+        hostApi.fetch().then((res) => {
+            commit(types.HOST_SET_ALL, {hostsData: res.data});
+            commit(types.HOST_LOADING_SUCCESS);
+            commit(types.LOADING_FINISH);
+        }).catch((error) => {
+            commit(types.HOST_LOADING_FAILURE);
+            commit(types.LOADING_FAIL);
+            if(error.response) {
+                if(error.response.status != 404) {
+                    console.warn('Could not fetch hosts');
+                }
+            } else {
+                console.log(error);
+            }
+
+        })
+    },
+
+    initHosts({commit}) {
         hostApi.fetch().then((res) => {
             commit(types.HOST_SET_ALL, {hostsData: res.data});
         }).catch((error) => {
-            if(error.response) {
-                if(error.response.status != 404) {
+            if (error.response) {
+                if (error.response.status != 404) {
                     console.warn('Could not fetch hosts');
                 }
             } else {
@@ -56,12 +86,15 @@ const actions = {
     deleteHost({commit, state}, id) {
         const savedHosts = state.hosts;
         const savedHostsList = state.hostsList;
-        commit(types.HOST_DELETE, id)
+        commit(types.HOST_DELETE, id);
+        commit(types.LOADING_BEGIN);
         hostApi.delete(id).then((res) => {
             commit(types.HOST_DELETE_SUCCESS);
+            commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not delete host');
             commit(types.HOST_DELETE_FAILURE, {savedHosts, savedHostsList});
+            commit(types.LOADING_FAIL);
         })
     },
 
@@ -78,7 +111,7 @@ const actions = {
             }).catch((error) => {
                 console.warn('Could not add new host');
                 commit(types.HOST_ADD_NEW_FAILURE, {savedHosts, savedHostsList, error: error});
-                commit(types.LOADING_FINISH);
+                commit(types.LOADING_FAIL);
                 reject();
             })
         })
@@ -92,7 +125,7 @@ const actions = {
             commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not update host');
-            commit(types.LOADING_FINISH);
+            commit(types.LOADING_FAIL);
         })
     },
 
@@ -105,7 +138,7 @@ const actions = {
             })
         }).catch((err) => {
             console.warn('Could not authenticate host');
-            commit(types.LOADING_FINISH);
+            commit(types.LOADING_FAIL);
         })
     }
 }
@@ -169,7 +202,23 @@ const mutations = {
         state.hostErrors = error.response.data;
         state.hosts = savedHosts;
         state.hostsList = savedHostsList;
+    },
+
+    [types.HOST_LOADING_START] ({hostLoading}) {
+        hostLoading.isLoading = true;
+        hostLoading.hasLoadingErrors = false;
+    },
+
+    [types.HOST_LOADING_SUCCESS] ({hostLoading}) {
+        hostLoading.isLoading = false;
+        hostLoading.hasLoadingErrors = false;
+    },
+
+    [types.HOST_LOADING_FAILURE] ({hostLoading}) {
+        hostLoading.isLoading = false;
+        hostLoading.hasLoadingErrors = true;
     }
+
 
 }
 

@@ -35,6 +35,21 @@ const getters = {
 
 const actions = {
     setProfiles({commit}) {
+        commit(types.LOADING_BEGIN);
+        profileApi.fetch().then((res) => {
+            commit(types.PROFILE_SET_ALL, {profilesData: res.data});
+            commit(types.LOADING_FINISH);
+        }).catch((error) => {
+            commit(types.LOADING_FAIL)
+            if (error.response.status != 404) {
+                console.warn('Could not fetch profiles');
+            } else {
+                console.log(error.response.data.error.message)
+            }
+        })
+    },
+
+    initProfiles({commit}) {
         profileApi.fetch().then((res) => {
             commit(types.PROFILE_SET_ALL, {profilesData: res.data});
         }).catch((error) => {
@@ -51,9 +66,12 @@ const actions = {
         const savedProfiles = state.profiles;
         const savedProfilesList = state.profilesList;
         commit(types.PROFILE_DELETE, id)
+        commit(types.LOADING_BEGIN);
         profileApi.delete(id).then((res) => {
+            commit(types.LOADING_FINISH);
             commit(types.PROFILE_DELETE_SUCCESS);
         }).catch((res) => {
+            commit(types.LOADING_FAIL);
             console.warn('Could not delete profile');
             commit(types.PROFILE_DELETE_FAILURE, {savedProfiles, savedProfilesList});
         })
@@ -72,7 +90,7 @@ const actions = {
             }).catch((error) => {
                 console.warn('Could not add new profile');
                 commit(types.PROFILE_ADD_NEW_FAILURE, {savedProfiles, savedProfilesList, error: error});
-                commit(types.LOADING_FINISH);
+                commit(types.LOADING_FAIL);
                 reject();
             })
         })
@@ -86,7 +104,7 @@ const actions = {
             commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not update profile');
-            commit(types.LOADING_FINISH);
+            commit(types.LOADING_FAIL);
         })
     }
 }
@@ -151,7 +169,8 @@ const mutations = {
         }
         if (error.response.data.error.message.devices) {
             state.profileErrors.devices = error.response.data.error.message.devices;
-        };
+        }
+        ;
     },
 
     [types.PROFILE_ADD_NEW]({profiles, profilesList}, profile) {

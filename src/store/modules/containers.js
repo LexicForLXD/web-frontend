@@ -11,8 +11,13 @@ const state = {
     containers: {
         deleted: false,
     },
-    deletedContainer:{},
+    deletedContainer: {},
     containersList: [],
+    containerLoading: {
+        isLoading: false,
+        hasLoadingErrors: false,
+    }
+
 
 }
 
@@ -32,11 +37,34 @@ const getters = {
 
     getContainerIndexById: ({containersList}) => (containerId) => {
         return containersList.findIndex(container => container == containerId)
-    }
+    },
+
+    getContainerLoading({containerLoading}) {
+        return containerLoading;
+    },
 }
 
 const actions = {
     setContainers({commit}) {
+        commit(types.LOADING_BEGIN);
+        commit(types.CONTAINER_LOADING_START);
+        containerApi.fetch().then((res) => {
+            commit(types.CONTAINER_SET_ALL, {containersData: res.data});
+            commit(types.CONTAINER_LOADING_SUCCESS);
+            commit(types.LOADING_FINISH);
+
+        }).catch((error) => {
+            commit(types.CONTAINER_LOADING_FAILURE);
+            commit(types.LOADING_FAIL);
+            if (error.response.status != 404) {
+                console.warn('Could not fetch containers');
+            } else {
+                console.log(error.response.data.error.message)
+            }
+        })
+    },
+
+    initContainers({commit}) {
         containerApi.fetch().then((res) => {
             commit(types.CONTAINER_SET_ALL, {containersData: res.data});
         }).catch((error) => {
@@ -51,11 +79,14 @@ const actions = {
 
     deleteContainer({commit, state}, id) {
         commit(types.CONTAINER_DELETE, id)
+        commit(types.LOADING_BEGIN);
         containerApi.delete(id).then((res) => {
             commit(types.CONTAINER_DELETE_SUCCESS);
+            commit(types.LOADING_FINISH);
         }).catch((error) => {
             console.warn('Could not delete container');
             commit(types.CONTAINER_DELETE_FAILURE);
+            commit(types.LOADING_FAIL);
         })
     }
     ,
@@ -73,7 +104,7 @@ const actions = {
             }).catch((res) => {
                 console.warn('Could not add new container');
                 commit(types.CONTAINER_ADD_NEW_FAILURE, {savedContainers, savedContainersList});
-                commit(types.LOADING_FINISH);
+                commit(types.LOADING_FAIL);
                 reject();
             })
         })
@@ -88,7 +119,7 @@ const actions = {
             commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not update container');
-            commit(types.LOADING_FINISH);
+            commit(types.LOADING_FAIL);
         })
     }
 }
@@ -146,7 +177,23 @@ const mutations = {
     [types.CONTAINER_ADD_NEW_FAILURE](state, {savedContainers, savedContainersList}) {
         state.containers = savedContainers;
         state.containersList = savedContainersList;
+    },
+
+    [types.CONTAINER_LOADING_START]({containerLoading}) {
+        containerLoading.isLoading = true;
+        containerLoading.hasLoadingErrors = false;
+    },
+
+    [types.CONTAINER_LOADING_SUCCESS]({containerLoading}) {
+        containerLoading.isLoading = false;
+        containerLoading.hasLoadingErrors = false;
+    },
+
+    [types.CONTAINER_LOADING_FAILURE]({containerLoading}) {
+        containerLoading.isLoading = false;
+        containerLoading.hasLoadingErrors = true;
     }
+
 
 }
 

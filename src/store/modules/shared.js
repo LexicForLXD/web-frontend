@@ -1,6 +1,5 @@
 import * as types from '../mutation-types'
-import initApi from '../../api/init/init'
-// import { userStore } from './user'
+import app from '../../app'
 import {assign} from 'lodash'
 
 // initial state
@@ -20,11 +19,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             // initApi.fetch().then((res) => {
             if (!state.initiated) {
-                dispatch('setContainers');
-                dispatch('setHosts');
-                dispatch('setProfiles');
+                dispatch('initContainers');
+                dispatch('initHosts');
+                dispatch('initProfiles');
                 dispatch('initUser');
-                dispatch('setImages');
+                dispatch('initImages');
 
 
                 commit(types.INIT_READY);
@@ -48,10 +47,17 @@ const mutations = {
 
     [types.LOADING_BEGIN](state) {
         state.loading = true;
+        app.$Progress.start();
     },
 
     [types.LOADING_FINISH](state) {
         state.loading = false;
+        app.$Progress.finish();
+    },
+
+    [types.LOADING_FAIL](state) {
+        state.loading = false;
+        app.$Progress.fail()
     },
 
 }

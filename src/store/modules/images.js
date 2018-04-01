@@ -30,6 +30,21 @@ const getters = {
 
 const actions = {
     setImages({commit}) {
+        commit(types.LOADING_BEGIN);
+        imageApi.fetch().then((res) => {
+            commit(types.IMAGE_SET_ALL, {imagesData: res.data});
+            commit(types.LOADING_FINISH);
+        }).catch((error) => {
+            commit(types.LOADING_FAIL);
+            if (error.response.status != 404) {
+                console.warn('Could not fetch images');
+            } else {
+                console.log(error.response.data.error.message)
+            }
+        })
+    },
+
+    initImages({commit}) {
         imageApi.fetch().then((res) => {
             commit(types.IMAGE_SET_ALL, {imagesData: res.data});
         }).catch((error) => {
@@ -46,9 +61,12 @@ const actions = {
         const savedImages = state.images;
         const savedImagesList = state.imagesList;
         commit(types.IMAGE_DELETE, id)
+        commit(types.LOADING_BEGIN);
         imageApi.delete(id).then((res) => {
+            commit(types.LOADING_FINISH);
             commit(types.IMAGE_DELETE_SUCCESS);
         }).catch((res) => {
+            commit(types.LOADING_FAIL);
             console.warn('Could not delete image');
             commit(types.IMAGE_DELETE_FAILURE, {savedImages, savedImagesList});
         })
@@ -69,7 +87,7 @@ const actions = {
                 }).catch((error) => {
                     console.warn('Could not add new image');
                     commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
-                    commit(types.LOADING_FINISH);
+                    commit(types.LOADING_FAIL);
                     reject();
                 })
             } else {
@@ -80,7 +98,7 @@ const actions = {
                 }).catch((error) => {
                     console.warn('Could not add new image');
                     commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
-                    commit(types.LOADING_FINISH);
+                    commit(types.LOADING_FAIL);
                     reject();
                 })
             }
@@ -95,7 +113,7 @@ const actions = {
             commit(types.LOADING_FINISH);
         }).catch((res) => {
             console.warn('Could not update image');
-            commit(types.LOADING_FINISH);
+            commit(types.LOADING_FAIL);
         })
     },
 
