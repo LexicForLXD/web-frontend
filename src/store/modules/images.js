@@ -45,14 +45,18 @@ const actions = {
     },
 
     initImages({commit}) {
-        imageApi.fetch().then((res) => {
-            commit(types.IMAGE_SET_ALL, {imagesData: res.data});
-        }).catch((error) => {
-            if (error.response.status != 404) {
-                console.warn('Could not fetch images');
-            } else {
-                console.log(error.response.data.error.message)
-            }
+        return new Promise((resolve, reject) => {
+            imageApi.fetch().then((res) => {
+                commit(types.IMAGE_SET_ALL, {imagesData: res.data});
+                resolve();
+            }).catch((error) => {
+                if (error.response.status != 404) {
+                    console.warn('Could not fetch images');
+                } else {
+                    console.log(error.response.data.error.message)
+                }
+                reject(error);
+            })
         })
     },
 

@@ -16,26 +16,20 @@ const getters = {}
 // actions
 const actions = {
     initShared({commit, dispatch, state, rootState}) {
-        return new Promise((resolve, reject) => {
-            // initApi.fetch().then((res) => {
-            if (!state.initiated) {
-                dispatch('initContainers');
-                dispatch('initHosts');
-                dispatch('initProfiles');
-                dispatch('initUser');
-                dispatch('initImages');
-
-
-                commit(types.INIT_READY);
-            }
-
-            resolve()
-            // }).catch((err) => {
-            //   reject()
-            //   console.log(err)
-            //   console.warn('not able to fetch init data');
-            // })
+        return Promise.all([
+            dispatch('initContainers'),
+            dispatch('initHosts'),
+            dispatch('initProfiles'),
+            dispatch('initUser'),
+            dispatch('initImages'),
+        ]).then(() => {
+            console.log('init ready');
+            commit(types.INIT_READY);
+        }).catch((reason) => {
+            console.warn('not able to fetch init data');
+            console.log(reason)
         })
+
     }
 }
 

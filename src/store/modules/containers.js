@@ -65,14 +65,18 @@ const actions = {
     },
 
     initContainers({commit}) {
-        containerApi.fetch().then((res) => {
-            commit(types.CONTAINER_SET_ALL, {containersData: res.data});
-        }).catch((error) => {
-            if (error.response.status != 404) {
-                console.warn('Could not fetch containers');
-            } else {
-                console.log(error.response.data.error.message)
-            }
+        return new Promise((resolve, reject) => {
+            containerApi.fetch().then((res) => {
+                commit(types.CONTAINER_SET_ALL, {containersData: res.data});
+                resolve();
+            }).catch((error) => {
+                if (error.response.status != 404) {
+                    console.warn('Could not fetch containers');
+                } else {
+                    console.log(error.response.data.error.message)
+                }
+                reject(error);
+            })
         })
     },
 

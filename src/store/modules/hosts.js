@@ -68,18 +68,23 @@ const actions = {
     },
 
     initHosts({commit}) {
-        hostApi.fetch().then((res) => {
-            commit(types.HOST_SET_ALL, {hostsData: res.data});
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != 404) {
-                    console.warn('Could not fetch hosts');
+        return new Promise((resolve, reject) => {
+            hostApi.fetch().then((res) => {
+                commit(types.HOST_SET_ALL, {hostsData: res.data});
+                resolve();
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != 404) {
+                        console.warn('Could not fetch hosts');
+                    }
+                } else {
+                    console.log(error);
+                    reject(error);
                 }
-            } else {
-                console.log(error);
-            }
 
-        })
+            })
+        });
+
     },
 
 

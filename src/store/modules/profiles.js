@@ -50,14 +50,18 @@ const actions = {
     },
 
     initProfiles({commit}) {
-        profileApi.fetch().then((res) => {
-            commit(types.PROFILE_SET_ALL, {profilesData: res.data});
-        }).catch((error) => {
-            if (error.response.status != 404) {
-                console.warn('Could not fetch profiles');
-            } else {
-                console.log(error.response.data.error.message)
-            }
+        return new Promise((resolve, reject) => {
+            profileApi.fetch().then((res) => {
+                commit(types.PROFILE_SET_ALL, {profilesData: res.data});
+                resolve();
+            }).catch((error) => {
+                if (error.response.status != 404) {
+                    console.warn('Could not fetch profiles');
+                } else {
+                    console.log(error.response.data.error.message)
+                }
+                reject(error);
+            })
         })
     },
 
@@ -75,7 +79,8 @@ const actions = {
             console.warn('Could not delete profile');
             commit(types.PROFILE_DELETE_FAILURE, {savedProfiles, savedProfilesList});
         })
-    },
+    }
+    ,
 
 
     createProfile({commit}, data) {
@@ -94,7 +99,8 @@ const actions = {
                 reject();
             })
         })
-    },
+    }
+    ,
 
 
     updateProfile({commit}, data) {

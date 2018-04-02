@@ -4,7 +4,6 @@ import authApi from '../../api/auth/auth'
 import userApi from '../../api/users/user'
 
 
-
 function keyForUser(id) {
     return `user_${id}`
 }
@@ -34,7 +33,7 @@ const getters = {
     },
 
     getCurrentFirstName({currentUserId, users}) {
-        if(users[keyForUser(currentUserId)]) {
+        if (users[keyForUser(currentUserId)]) {
             return users[keyForUser(currentUserId)].firstName;
         }
         return "Loading";
@@ -59,22 +58,32 @@ const getters = {
 // actions
 const actions = {
     initUser({commit}) {
-        authApi.getUser().then((res) => {
-            commit(types.USER_SET_CURRENT, res.data);
-        }).catch(() => {
-            commit(types.USER_SET_CURRENT_FAILED);
-        })
+        return Promise.all([
+            new Promise((resolve, reject) => {
+                authApi.getUser().then((res) => {
+                    commit(types.USER_SET_CURRENT, res.data);
+                    resolve();
+                }).catch(() => {
+                    commit(types.USER_SET_CURRENT_FAILED);
+                    reject('user data');
+                })
+            }),
+            new Promise((resolve, reject) => {
+                userApi.fetch().then((res) => {
+                    commit(types.USER_SET_ALL, {usersData: res.data});
+                    resolve();
+                }).catch((error) => {
+                    if (error.response.status != 404) {
+                        console.warn('Could not fetch users');
+                    } else {
+                        console.log(error.response.data.error.message)
+                    }
+                    reject('all users');
+                })
+            })
+        ])
 
 
-        userApi.fetch().then((res) => {
-            commit(types.USER_SET_ALL, {usersData: res.data});
-        }).catch((error) => {
-            if (error.response.status != 404) {
-                console.warn('Could not fetch users');
-            } else {
-                console.log(error.response.data.error.message)
-            }
-        })
     },
 
     getUsers({commit}) {
@@ -217,17 +226,17 @@ const mutations = {
         state.usersList = savedUsersList;
     },
 
-    [types.USER_LOADING_START] ({userLoading}) {
+    [types.USER_LOADING_START]({userLoading}) {
         userLoading.isLoading = true;
         userLoading.hasLoadingErrors = false;
     },
 
-    [types.USER_LOADING_SUCCESS] ({userLoading}) {
+    [types.USER_LOADING_SUCCESS]({userLoading}) {
         userLoading.isLoading = false;
         userLoading.hasLoadingErrors = false;
     },
 
-    [types.USER_LOADING_FAILURE] ({userLoading}) {
+    [types.USER_LOADING_FAILURE]({userLoading}) {
         userLoading.isLoading = false;
         userLoading.hasLoadingErrors = true;
     }
