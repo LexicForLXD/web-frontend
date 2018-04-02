@@ -1,10 +1,17 @@
 <template>
-    <div id="app" class="container">
-        <vue-progress-bar></vue-progress-bar>
-        <site-header class="site-header"></site-header>
-        <site-nav class="sidebar"></site-nav>
-        <router-view class="content"></router-view>
-        <site-footer class="site-footer"></site-footer>
+    <div id="app">
+        <div v-if="isInitiated || !isAuthenticated" class="container">
+            <vue-progress-bar></vue-progress-bar>
+            <site-header class="site-header"></site-header>
+            <site-nav class="sidebar"></site-nav>
+            <router-view class="content"></router-view>
+            <site-footer class="site-footer"></site-footer>
+        </div>
+        <div v-else>
+            Waiting for initialization.
+
+            Loading screen
+        </div>
     </div>
 </template>
 
@@ -14,6 +21,7 @@
     import siteHeader from "./components/header/SiteHeader";
     import siteFooter from "./components/footer/SiteFooter";
     import siteNav from "./components/sidebar/Sidebar";
+    import {mapGetters} from 'vuex'
 
 
     export default {
@@ -24,6 +32,12 @@
             siteNav
         },
 
+        computed: {
+            ...mapGetters({
+                isInitiated: "getInitiated",
+                isAuthenticated: "isAuthenticated"
+            })
+        },
 
         created() {
 

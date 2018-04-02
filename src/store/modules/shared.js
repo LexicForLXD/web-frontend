@@ -10,7 +10,11 @@ const state = {
 
 
 // getters
-const getters = {}
+const getters = {
+    getInitiated({initiated}) {
+        return initiated;
+    }
+}
 
 
 // actions
