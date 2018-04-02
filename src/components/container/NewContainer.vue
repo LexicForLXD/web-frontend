@@ -37,9 +37,10 @@
 
         <div class="field">
             <label class="label">Host</label>
-            <div class="control" v-if="hosts.length > 0">
-                <div class="select">
+            <div class="control">
+                <div class="select" v-bind:class="{'is-loading': hostLoading.isLoading}">
                     <select name="host_select" v-model="selectedHost">
+                        <option value="-1" disabled>Select a host...</option>
                         <option v-for="host in hosts" v-bind:key="host.id" v-bind:value="host.id">
                             {{ host.name }}
                         </option>
@@ -74,12 +75,29 @@
         <div v-if="selectedType == 'image'">
 
             <div class="field">
-                <label class="label">Image</label>
-                <div class="control" v-if="images.length > 0">
+                <label class="label">Fingerprint</label>
+                <div class="control" v-bind:class="{'is-loading': imageLoading.isLoading}">
                     <div class="select">
-                        <select name="image_select" v-model="selectedImage">
+                        <select name="fingerprint_select" v-model="selectedFingerprint">
+                            <option value="-1" disabled>Select a fingerprint</option>
                             <option v-for="image in images" v-bind:key="image.id" v-bind:value="image.fingerprint">
                                 {{ image.fingerprint.substring(0,10) }}...
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            OR
+
+            <div class="field">
+                <label class="label">Alias</label>
+                <div class="control" >
+                    <div class="select">
+                        <select name="alias_select" v-model="selectedAlias">
+                            <option value="-1" disabled>Select a alias</option>
+                            <option v-for="image in imageAliases" v-bind:key="image.aliases[0].id" v-bind:value="image.aliases[0].name">
+                                {{image.aliases[0].name}}
                             </option>
                         </select>
                     </div>
@@ -91,8 +109,8 @@
         <div v-if="selectedType == 'copy' || selectedType == 'migration'">
             <div class="field">
                 <label class="label">Containers</label>
-                <div class="control" v-if="containers.length > 0">
-                    <div class="select">
+                <div class="control" >
+                    <div class="select" v-bind:class="{'is-loading': containerLoading.isLoading}">
                         <select name="container_select" v-model="selectedContainer">
                             <option v-for="container in containers" v-bind:key="container.id" v-bind:value="container.id">
                                 {{ container.name }}
@@ -101,6 +119,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="field">
+                <label class="label" for="containerOnly">Container only</label>
+                <div class="control">
+                    <input type="checkbox" id="containerOnly" v-model="containerOnly">
+                    <label for="containerOnly">Container only</label>
+                </div>
+            </div>
+
+            <div class="field" v-if="selectedType === 'migration'">
+                <label class="label" for="live">Live</label>
+                <div class="control">
+                    <input type="checkbox" id="live" v-model="live">
+                    <label for="live">Live</label>
+                </div>
+            </div>
+
         </div>
 
 
@@ -119,8 +154,17 @@
                 hosts: "getHosts",
                 containers: "getContainers",
                 profiles: "getProfiles",
-                images: "getImages",
-            })
+                containerLoading: "getContainerLoading",
+                hostLoading: "getHostLoading",
+                imageLoading: "getImageLoading",
+            }),
+            images () {
+                return this.$store.getters.getImagesForHost(this.selectedHost)
+            },
+            imageAliases () {
+                return this.$store.getters.getImagesWithAliasesForHost(this.selectedHost)
+            }
+
         },
 
         data() {
@@ -128,12 +172,16 @@
                 // bool
                 fingerprintBool: false,
                 aliasBool: false,
+                selectedType: "image",
 
                 //data
-                selectedType: "image",
                 selectedProfiles: [],
-                selectedHost: "",
-                selectedImage: "",
+                selectedHost: "-1",
+                selectedFingerprint: "-1",
+                selectedAlias: "-1",
+                selectedContainer: "-1",
+                containerOnly: true,
+                live: false,
                 ephemeral: false,
                 name: "",
                 config: "",
@@ -144,6 +192,7 @@
                 "       \"pool\": \"default\"\n" +
                 "    } \n" +
                 "}",
+                architecture: "",
 
 
             };
@@ -152,22 +201,62 @@
         methods: {
             onSubmit() {
                 let data = {
-                    container: {
+                    container: {},
+                    hostId: Number(this.selectedHost),
+                    type: this.selectedType
+                };
+
+                if(this.selectedType == 'none') {
+                    data.container = {
                         name: this.name,
+                        architecture: this. architecture,
                         ephemeral: this.ephemeral,
                         config: JSON.parse(this.config),
                         devices: JSON.parse(this.devices),
-                        fingerprint: this.selectedImage,
+                        profiles: this.selectedProfiles
+                    }
+                } else if(this.selectedType == 'image')
+                {
+
+                    data.container = {
+                        name: this.name,
+                        architecture: this. architecture,
+                        ephemeral: this.ephemeral,
+                        config: JSON.parse(this.config),
+                        devices: JSON.parse(this.devices),
                         profiles: this.selectedProfiles,
-                    },
-                    hostId: Number(this.selectedHost),
-                    type: this.selectedType,
+                        fingerprint: this.selectedFingerprint,
+                        alias: this.selectedAlias,
+                    }
+                } else if(this.selectedType === 'copy') {
+                    data.container = {
+                        name: this.name,
+                        architecture: this. architecture,
+                        ephemeral: this.ephemeral,
+                        config: JSON.parse(this.config),
+                        devices: JSON.parse(this.devices),
+                        profiles: this.selectedProfiles,
+                        oldContainerId: this.selectedContainer,
+                        containerOnly: this.containerOnly
+                    }
+                } else if(this.selectedType === 'migration') {
+                    data.container = {
+                        name: this.name,
+                        architecture: this. architecture,
+                        ephemeral: this.ephemeral,
+                        config: JSON.parse(this.config),
+                        devices: JSON.parse(this.devices),
+                        profiles: this.selectedProfiles,
+                        oldContainerId: this.selectedContainer,
+                        containerOnly: this.containerOnly,
+                        live: this.live
+                    }
                 }
 
                 Object.keys(data).forEach(
                     key =>
-                        (data[key] === null || data[key] === undefined || data[key].length) ===
-                        0 && delete data[key]
+                        (data.container[key] === null || data.container[key] === "-1" ||  data.container[key] === undefined || data.container[key].length) ===
+                        0 && delete data.container[key]
                 );
 
 
