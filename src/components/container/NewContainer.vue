@@ -200,6 +200,24 @@
 
         methods: {
             onSubmit() {
+                let bodyConfig = {};
+                let bodyDevices =  {};
+
+
+
+                try {
+                    bodyConfig = JSON.parse(this.config);
+                } catch(err) {
+                    bodyConfig = ""
+                }
+
+                try {
+                    bodyDevices = JSON.parse(this.devices);
+                } catch(err) {
+                    bodyDevices = ""
+                }
+
+
                 let data = {
                     container: {},
                     hostId: Number(this.selectedHost),
@@ -211,8 +229,8 @@
                         name: this.name,
                         architecture: this. architecture,
                         ephemeral: this.ephemeral,
-                        config: JSON.parse(this.config),
-                        devices: JSON.parse(this.devices),
+                        config: bodyConfig,
+                        devices: bodyDevices,
                         profiles: this.selectedProfiles
                     }
                 } else if(this.selectedType == 'image')
@@ -222,8 +240,8 @@
                         name: this.name,
                         architecture: this. architecture,
                         ephemeral: this.ephemeral,
-                        config: JSON.parse(this.config),
-                        devices: JSON.parse(this.devices),
+                        config: bodyConfig,
+                        devices: bodyDevices,
                         profiles: this.selectedProfiles,
                         fingerprint: this.selectedFingerprint,
                         alias: this.selectedAlias,
@@ -233,8 +251,8 @@
                         name: this.name,
                         architecture: this. architecture,
                         ephemeral: this.ephemeral,
-                        config: JSON.parse(this.config),
-                        devices: JSON.parse(this.devices),
+                        config: bodyConfig,
+                        devices: bodyDevices,
                         profiles: this.selectedProfiles,
                         oldContainerId: this.selectedContainer,
                         containerOnly: this.containerOnly
@@ -244,8 +262,8 @@
                         name: this.name,
                         architecture: this. architecture,
                         ephemeral: this.ephemeral,
-                        config: JSON.parse(this.config),
-                        devices: JSON.parse(this.devices),
+                        config: bodyConfig,
+                        devices: bodyDevices,
                         profiles: this.selectedProfiles,
                         oldContainerId: this.selectedContainer,
                         containerOnly: this.containerOnly,
@@ -253,7 +271,7 @@
                     }
                 }
 
-                Object.keys(data).forEach(
+                Object.keys(data.container).forEach(
                     key =>
                         (data.container[key] === null || data.container[key] === "-1" ||  data.container[key] === undefined || data.container[key].length) ===
                         0 && delete data.container[key]
