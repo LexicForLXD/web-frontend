@@ -1,6 +1,6 @@
 import * as types from '../mutation-types'
 import imageApi from '../../api/image/image'
-import {map, forEach, pull} from 'lodash'
+import {map, forEach, pull, filter} from 'lodash'
 
 function keyForImage(id) {
     return `image_${id}`
@@ -12,7 +12,11 @@ const state = {
         deleted: false,
     },
     imagesList: [],
-    imageErrors: {}
+    imageErrors: {},
+    imageLoading: {
+        isLoading: false,
+        hasLoadingErrors: false,
+    }
 
 }
 
@@ -24,7 +28,22 @@ const getters = {
 
     getImageErrors({imageErrors}) {
         return imageErrors;
-    }
+    },
+
+    getImageLoading({imageLoading}) {
+        return imageLoading;
+    },
+
+    getImagesForHost: ({images}) => (hostId) => {
+        return _.filter(images, ['hostId', hostId]);
+    },
+
+    getImagesWithAliasesForHost: ({images}) => (hostId) => {
+        const filteredImages = _.filter(images, ['hostId', hostId]);
+        return _.filter(filteredImages, function(image) {
+            return image.aliases.length > 0
+        })
+    },
 
 }
 
