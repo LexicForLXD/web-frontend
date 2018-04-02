@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="loginform">
         <div class="card">
             <header class="card-header">
                 <div class="card-header-title">
@@ -18,7 +18,7 @@
                 </div>
 
                 <div>
-                    <a href="#" class="button is-success" @click="login">Login</a>
+                    <button class="button is-success" @click="login">Login</button>
                 </div>
 
             </div>
@@ -67,6 +67,10 @@
     }
 </script>
 
-<style>
+<style scoped>
+
+    .loginform {
+        padding: 20px;
+    }
 
 </style>
