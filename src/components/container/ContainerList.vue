@@ -19,7 +19,7 @@
                     <td>{{container.name}}</td>
                     <td>{{container.state}}</td>
                     <td>{{container.architecture}}</td>
-                    <td>{{container.host.name}}</td>
+                    <td>{{getHostFromContainer(container.hostId).name}}</td>
                 </router-link>
                 </tbody>
             </table>
@@ -59,6 +59,10 @@
 
             deleteContainer(containerId) {
                 this.$store.dispatch("deleteContainer", containerId);
+            },
+
+            getHostFromContainer(hostId) {
+                return this.$store.getters.getHostById(hostId)
             }
         }
     };

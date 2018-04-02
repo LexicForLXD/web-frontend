@@ -12,12 +12,15 @@
                     <p v-if="container.config">Config: {{container.config}}</p>
                     <p v-if="container.devices">Devices: {{container.devices}}</p>
                     <p v-if="container.state">State: {{container.state}}</p>
-                    <p v-if="container.host">
-                        Host: <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{container.host.name}}</router-link>
+                    <p>
+                        Host:
+                        <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
+                        </router-link>
                     </p>
 
                     <a href="#" class="button" @click="onStart" v-bind:disabled="container.state != 'stopped'">Start</a>
-                    <a href="#" class="button" @click="onRestart" v-bind:disabled="container.state == 'stopped'">Restart</a>
+                    <a href="#" class="button" @click="onRestart"
+                       v-bind:disabled="container.state == 'stopped'">Restart</a>
                     <a href="#" class="button" @click="onStop" v-bind:disabled="container.state == 'stopped'">Stop</a>
                 </div>
                 <footer class="card-footer">
@@ -57,12 +60,12 @@
             ...mapGetters({
                 containers: "getContainers",
             }),
-            // host() {
-            //     return this.$store.getters.getHostById(this.container.host.id);
-            // },
+            host() {
+                return this.$store.getters.getHostById(this.container.hostId);
+            },
 
             hostIndex() {
-                return this.$store.getters.getHostIndexById(this.container.host.id)
+                return this.$store.getters.getHostIndexById(this.container.hostId)
             },
 
             container() {
