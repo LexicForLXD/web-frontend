@@ -28,5 +28,6 @@ export default {
 .sidebar {
   grid-area: sidebar;
   background: #F48B31;
+  padding: 10px;
 }
 </style>
