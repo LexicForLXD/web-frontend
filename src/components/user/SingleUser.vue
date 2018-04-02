@@ -71,6 +71,7 @@
                 editEmail: "",
                 editActive: "",
                 editing: false,
+                index: this.$route.params.index,
             }
         },
 
