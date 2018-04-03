@@ -16,8 +16,16 @@ const state = {
     containerLoading: {
         isLoading: false,
         hasLoadingErrors: false,
+    },
+    containerErrors: {
+        ipv4: "",
+        ipv6: "",
+        domainName: "",
+        name: "",
+        architecture: "",
+        config: "",
+        devices: "",
     }
-
 
 }
 
@@ -52,7 +60,7 @@ const actions = {
             commit(types.CONTAINER_SET_ALL, {containersData: res.data});
             commit(types.CONTAINER_LOADING_SUCCESS);
             commit(types.LOADING_FINISH);
-
+            commit(types.CONTAINER_NO_ERRORS);
         }).catch((error) => {
             commit(types.CONTAINER_LOADING_FAILURE);
             commit(types.LOADING_FAIL);
@@ -70,10 +78,15 @@ const actions = {
                 commit(types.CONTAINER_SET_ALL, {containersData: res.data});
                 resolve();
             }).catch((error) => {
-                if (error.response.status != 404) {
-                    console.warn('Could not fetch containers');
-                } else {
-                    console.log(error.response.data.error.message)
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        console.warn('Could not fetch containers');
+                        if (error.response.data.error.code === 404) {
+                            resolve();
+                        }
+                    } else {
+                        console.log(error.response.data.error.message)
+                    }
                 }
                 reject(error);
             })
@@ -87,6 +100,7 @@ const actions = {
         containerApi.delete(id).then((res) => {
             commit(types.CONTAINER_DELETE_SUCCESS);
             commit(types.LOADING_FINISH);
+            commit(types.CONTAINER_NO_ERRORS);
         }).catch((error) => {
             console.warn('Could not delete container');
             commit(types.CONTAINER_DELETE_FAILURE);
@@ -104,11 +118,13 @@ const actions = {
             containerApi.create(data.hostId, data.container, data.type).then((res) => {
                 commit(types.CONTAINER_ADD_NEW, {container: res.data});
                 commit(types.LOADING_FINISH);
+                commit(types.CONTAINER_NO_ERRORS);
                 resolve();
-            }).catch((res) => {
+            }).catch((error) => {
                 console.warn('Could not add new container');
                 commit(types.CONTAINER_ADD_NEW_FAILURE, {savedContainers, savedContainersList});
                 commit(types.LOADING_FAIL);
+                commit(types.CONTAINER_ERRORS, error);
                 reject();
             })
         })
@@ -121,9 +137,11 @@ const actions = {
         containerApi.update(data.hostId, data).then((res) => {
             commit(types.CONTAINER_UPDATE_SUCCESS, {containers: res.data});
             commit(types.LOADING_FINISH);
-        }).catch((res) => {
+            commit(types.CONTAINER_NO_ERRORS);
+        }).catch((error) => {
             console.warn('Could not update container');
             commit(types.LOADING_FAIL);
+            commit(types.CONTAINER_ERRORS, error);
         })
     }
 }
@@ -196,6 +214,43 @@ const mutations = {
     [types.CONTAINER_LOADING_FAILURE]({containerLoading}) {
         containerLoading.isLoading = false;
         containerLoading.hasLoadingErrors = true;
+    },
+
+
+    [types.CONTAINER_ERRORS]({containerErrors}, error) {
+        if (error.response.data.error.message.name) {
+            containerErrors.name = error.response.data.error.message.name;
+        }
+        if (error.response.data.error.message.ipv4) {
+            containerErrors.ipv4 = error.response.data.error.message.ipv4;
+        }
+        if (error.response.data.error.message.ipv6) {
+            containerErrors.ipv6 = error.response.data.error.message.ipv6;
+        }
+        if (error.response.data.error.message.domainName) {
+            containerErrors.domainName = error.response.data.error.message.domainName;
+        }
+        if (error.response.data.error.message.architecture) {
+            containerErrors.architecture = error.response.data.error.message.architecture;
+        }
+        if (error.response.data.error.message.config) {
+            containerErrors.config = error.response.data.error.message.config;
+        }
+        if (error.response.data.error.message.devices) {
+            containerErrors.devices = error.response.data.error.message.devices;
+        }
+    },
+
+    [types.CONTAINER_NO_ERRORS]({containerErrors}) {
+        containerErrors = {
+            ipv4: "",
+            ipv6: "",
+            domainName: "",
+            name: "",
+            architecture: "",
+            config: "",
+            devices: "",
+        };
     }
 
 

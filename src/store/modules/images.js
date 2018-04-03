@@ -12,7 +12,11 @@ const state = {
         deleted: false,
     },
     imagesList: [],
-    imageErrors: {},
+    imageErrors: {
+        public: "",
+        filename: "",
+        properties: "",
+    },
     imageLoading: {
         isLoading: false,
         hasLoadingErrors: false,
@@ -26,11 +30,19 @@ const getters = {
         return _.map(imagesList, id => images[keyForImage(id)])
     },
 
-    getImageErrors({imageErrors}) {
+    getFinishedImages: (state, getters) => {
+        return _.filter(getters.getImages, ['finished', true]);
+    },
+
+    getUnfinishedImages: (state, getters) => {
+        return _.filter(getters.getImages, ['finished', false]);
+    },
+
+    getImageErrors: ({imageErrors}) => {
         return imageErrors;
     },
 
-    getImageLoading({imageLoading}) {
+    getImageLoading: ({imageLoading}) => {
         return imageLoading;
     },
 
@@ -40,7 +52,7 @@ const getters = {
 
     getImagesWithAliasesForHost: ({images}) => (hostId) => {
         const filteredImages = _.filter(images, ['hostId', hostId]);
-        return _.filter(filteredImages, function(image) {
+        return _.filter(filteredImages, function (image) {
             return image.aliases.length > 0
         })
     },
@@ -69,10 +81,15 @@ const actions = {
                 commit(types.IMAGE_SET_ALL, {imagesData: res.data});
                 resolve();
             }).catch((error) => {
-                if (error.response.status != 404) {
-                    console.warn('Could not fetch images');
-                } else {
-                    console.log(error.response.data.error.message)
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        console.warn('Could not fetch images');
+                        if (error.response.data.error.code === 404) {
+                            resolve();
+                        }
+                    } else {
+                        console.log(error.response.data.error.message)
+                    }
                 }
                 reject(error);
             })
@@ -88,6 +105,7 @@ const actions = {
         imageApi.delete(id).then((res) => {
             commit(types.LOADING_FINISH);
             commit(types.IMAGE_DELETE_SUCCESS);
+            commit(types.IMAGE_NO_ERRORS);
         }).catch((res) => {
             commit(types.LOADING_FAIL);
             console.warn('Could not delete image');
@@ -102,29 +120,18 @@ const actions = {
         commit(types.LOADING_BEGIN);
 
         return new Promise((resolve, reject) => {
-            if (data.image.source.type == "image") {
-                imageApi.createFromRemoteImage(data.hostId, data.image).then((res) => {
-                    commit(types.IMAGE_ADD_NEW, {image: res.data});
-                    commit(types.LOADING_FINISH);
-                    resolve();
-                }).catch((error) => {
-                    console.warn('Could not add new image');
-                    commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
-                    commit(types.LOADING_FAIL);
-                    reject();
-                })
-            } else {
-                imageApi.createFromContainer(data.hostId, data.image).then((res) => {
-                    commit(types.IMAGE_ADD_NEW, {image: res.data});
-                    commit(types.LOADING_FINISH);
-                    resolve();
-                }).catch((error) => {
-                    console.warn('Could not add new image');
-                    commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList, error: error});
-                    commit(types.LOADING_FAIL);
-                    reject();
-                })
-            }
+            imageApi.create(data.hostId, data.image).then((res) => {
+                commit(types.IMAGE_ADD_NEW, {image: res.data});
+                commit(types.LOADING_FINISH);
+                commit(types.IMAGE_NO_ERRORS);
+                resolve();
+            }).catch((error) => {
+                console.warn('Could not add new image');
+                commit(types.IMAGE_ADD_NEW_FAILURE, {savedImages, savedImagesList});
+                commit(types.LOADING_FAIL);
+                commit(types.IMAGE_ERRORS, error);
+                reject();
+            })
         })
     },
 
@@ -134,9 +141,11 @@ const actions = {
         imageApi.update(data.image_id, data.image).then((res) => {
             commit(types.IMAGE_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
-        }).catch((res) => {
+            commit(types.IMAGE_NO_ERRORS);
+        }).catch((error) => {
             console.warn('Could not update image');
             commit(types.LOADING_FAIL);
+            commit(types.IMAGE_ERRORS, error);
         })
     },
 
@@ -183,25 +192,45 @@ const mutations = {
         state.images[key] = image;
     },
 
-    [types.IMAGE_ADD_NEW]({images, imagesList}, {image}) {
+    [types.IMAGE_ADD_NEW]({images, imagesList}, image) {
         const key = keyForImage(image.id)
         if (!images[key]) {
             Vue.set(images, key, image)
             imagesList.push(image.id)
+            console.log('new success')
+        } else {
+            console.log("image already in cache");
         }
-        console.log('new success')
-        state.imageErrors = {};
+
     },
 
-    [types.IMAGE_ADD_NEW_SUCCESS](state) {
+    [types.IMAGE_ADD_NEW_SUCCESS]() {
         console.log('new success')
-        state.imageErrors = {};
     },
 
-    [types.IMAGE_ADD_NEW_FAILURE](state, {savedImages, savedImagesList, error}) {
-        state.imageErrors = error.response.data;
+    [types.IMAGE_ADD_NEW_FAILURE](state, {savedImages, savedImagesList}) {
         state.images = savedImages;
         state.imagesList = savedImagesList;
+    },
+
+    [types.IMAGE_ERRORS]({imageErrors}, error) {
+        if (error.response.data.error.message.public) {
+            imageErrors.public = error.response.data.error.message.public;
+        }
+        if (error.response.data.error.message.filename) {
+            imageErrors.filename = error.response.data.error.message.filename;
+        }
+        if (error.response.data.error.message.properties) {
+            imageErrors.properties = error.response.data.error.message.properties;
+        }
+    },
+
+    [types.IMAGE_NO_ERRORS]({imageErrors}) {
+        imageErrors = {
+            public: "",
+            filename: "",
+            properties: "",
+        }
     }
 
 }

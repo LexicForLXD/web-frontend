@@ -74,8 +74,11 @@ const actions = {
                 resolve();
             }).catch((error) => {
                 if (error.response) {
-                    if (error.response.status != 404) {
+                    if (error.response.status === 404) {
                         console.warn('Could not fetch hosts');
+                        if(error.response.data.error.code === 404) {
+                            resolve();
+                        }
                     }
                 } else {
                     console.log(error);

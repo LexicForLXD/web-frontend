@@ -26,6 +26,7 @@ const actions = {
             dispatch('initProfiles'),
             dispatch('initUser'),
             dispatch('initImages'),
+            dispatch('initBackupDestinations'),
         ]).then(() => {
             console.log('init ready');
             commit(types.INIT_READY);

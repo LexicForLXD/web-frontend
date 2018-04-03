@@ -55,10 +55,16 @@ const actions = {
                 commit(types.PROFILE_SET_ALL, {profilesData: res.data});
                 resolve();
             }).catch((error) => {
-                if (error.response.status != 404) {
-                    console.warn('Could not fetch profiles');
-                } else {
-                    console.log(error.response.data.error.message)
+                if(error.response) {
+                    if (error.response.status === 404) {
+                        console.warn('Could not fetch profiles');
+                        if (error.response.data.error.code === 404) {
+                            resolve();
+                        }
+
+                    } else {
+                        console.log(error.response.data.error.message)
+                    }
                 }
                 reject(error);
             })
@@ -91,11 +97,13 @@ const actions = {
             profileApi.create(data).then((res) => {
                 commit(types.PROFILE_ADD_NEW, res.data);
                 commit(types.LOADING_FINISH);
+                commit(types.PROFILE_NO_ERRORS);
                 resolve();
             }).catch((error) => {
                 console.warn('Could not add new profile');
-                commit(types.PROFILE_ADD_NEW_FAILURE, {savedProfiles, savedProfilesList, error: error});
+                commit(types.PROFILE_ADD_NEW_FAILURE, {savedProfiles, savedProfilesList});
                 commit(types.LOADING_FAIL);
+                commit(types.PROFILE_ERRORS, error);
                 reject();
             })
         })
@@ -108,9 +116,11 @@ const actions = {
         profileApi.update(data.profile_id, data.profile).then((res) => {
             commit(types.PROFILE_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
-        }).catch((res) => {
+            commit(types.PROFILE_NO_ERRORS);
+        }).catch((error) => {
             console.warn('Could not update profile');
             commit(types.LOADING_FAIL);
+            commit(types.PROFILE_ERRORS, error);
         })
     }
 }
@@ -153,30 +163,11 @@ const mutations = {
         const key = keyForProfile(profile.id)
 
         state.profiles[key] = profile;
-
-        state.profileErrors = {
-            name: "",
-            description: "",
-            config: "",
-            devices: ""
-        };
     },
 
 
-    [types.PROFILE_UPDATE_FAILURE](state, error) {
-        if (error.response.data.error.message.name) {
-            state.profileErrors.name = error.response.data.error.message.name;
-        }
-        if (error.response.data.error.message.description) {
-            state.profileErrors.description = error.response.data.error.message.description;
-        }
-        if (error.response.data.error.message.config) {
-            state.profileErrors.config = error.response.data.error.message.config;
-        }
-        if (error.response.data.error.message.devices) {
-            state.profileErrors.devices = error.response.data.error.message.devices;
-        }
-        ;
+    [types.PROFILE_UPDATE_FAILURE]() {
+        console.log("profile update failed");
     },
 
     [types.PROFILE_ADD_NEW]({profiles, profilesList}, profile) {
@@ -185,41 +176,41 @@ const mutations = {
             Vue.set(profiles, key, profile)
             profilesList.push(profile.id)
         }
-        console.log('new success')
-        state.profileErrors = {
-            name: "",
-            description: "",
-            config: "",
-            devices: ""
-        };
+        console.log('new success');
     },
 
     [types.PROFILE_ADD_NEW_SUCCESS](state) {
         console.log('new success')
-        state.profileErrors = {
-            name: "",
-            description: "",
-            config: "",
-            devices: ""
-        };
     },
 
     [types.PROFILE_ADD_NEW_FAILURE](state, {savedProfiles, savedProfilesList, error}) {
         state.profiles = savedProfiles;
         state.profilesList = savedProfilesList;
+    },
 
+    [types.PROFILE_ERRORS]({profileErrors}, error) {
         if (error.response.data.error.message.name) {
-            state.profileErrors.name = error.response.data.error.message.name;
+            profileErrors.name = error.response.data.error.message.name;
         }
         if (error.response.data.error.message.description) {
-            state.profileErrors.description = error.response.data.error.message.description;
+            profileErrors.description = error.response.data.error.message.description;
         }
         if (error.response.data.error.message.config) {
-            state.profileErrors.config = error.response.data.error.message.config;
+            profileErrors.config = error.response.data.error.message.config;
         }
         if (error.response.data.error.message.devices) {
-            state.profileErrors.devices = error.response.data.error.message.devices;
+            profileErrors.devices = error.response.data.error.message.devices;
         }
+    },
+
+
+    [types.PROFILE_NO_ERRORS](state) {
+        state.profileErrors = {
+            name: "",
+            description: "",
+            config: "",
+            devices: ""
+        };
     }
 
 }

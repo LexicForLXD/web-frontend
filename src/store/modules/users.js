@@ -73,10 +73,15 @@ const actions = {
                     commit(types.USER_SET_ALL, {usersData: res.data});
                     resolve();
                 }).catch((error) => {
-                    if (error.response.status != 404) {
-                        console.warn('Could not fetch users');
-                    } else {
-                        console.log(error.response.data.error.message)
+                    if(error.response) {
+                        if (error.response.status === 404) {
+                            console.warn('Could not fetch users');
+                            if (error.response.data.error.code === 404) {
+                                resolve();
+                            }
+                        } else {
+                            console.log(error.response.data.error.message)
+                        }
                     }
                     reject('all users');
                 })
@@ -98,8 +103,9 @@ const actions = {
             commit(types.USER_LOADING_FAILURE);
             commit(types.LOADING_FAIL);
 
-            if (error.response.status != 404) {
+            if (error.response.status === 404) {
                 console.warn('Could not fetch users');
+
             } else {
                 console.log(error.response.data.error.message)
             }
