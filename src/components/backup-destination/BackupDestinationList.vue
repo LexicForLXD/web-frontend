@@ -1,23 +1,25 @@
 <template>
   <div>
-    <div v-if="hosts.length > 0">
-      <div v-for="(host, index) in hosts" :key="host.id">
-        <div class="card">
-          <header class="card-header">
-            <router-link :to="{name: 'athleteSingleWorkout', params: {index: index}}" class="card-header-title">{{host.name}} {{host.id}}</router-link>
-          </header>
-          <div class="card-content">
-            <p>Authenticated: {{host.authenticated}}</p>
-            <p>Port: {{host.port }}</p>
-            <!-- Trainingsart: {{workout.workout_type.name}} -->
-          </div>
-          <footer class="card-footer">
-            <router-link class="card-footer-item"  :to="{name: 'athleteSingleWorkout', params: {index: index}}">More</router-link>
-            <a href="#" @click="deleteHost(host.id)" class="card-footer-item">Delete</a>
-          </footer>
-        </div>
-        <p></p>
-      </div>
+    <div v-if="backupDests.length > 0">
+      <table class="table is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Protocol</th>
+          <th>Path</th>
+        </tr>
+        </thead>
+        <tbody>
+        <router-link v-for="(backupDest, index) in backupDests"
+                     :key="backupDest.id"
+                     :to="{name: 'destinationSingle', params: {index: index}}"
+                     tag="tr">
+          <td>{{backupDest.name}}</td>
+          <td>{{backupDest.protocol}}</td>
+          <td>{{backupDest.path}}</td>
+        </router-link>
+        </tbody>
+      </table>
     </div>
 
 
@@ -37,7 +39,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      hosts: "getHosts",
+      backupDests: "getBackupDestinations",
 
     })
   },
