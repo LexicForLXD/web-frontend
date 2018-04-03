@@ -6,6 +6,7 @@ import containers from './modules/containers'
 import hosts from './modules/hosts'
 import profiles from './modules/profiles'
 import images from './modules/images'
+import backupDestinations from "./modules/backupDestinations";
 // import createLogger from '../../../src/plugins/logger'
 
 
@@ -22,7 +23,8 @@ export default new Vuex.Store({
         containers,
         hosts,
         profiles,
-        images
+        images,
+        backupDestinations,
     },
   strict: true,
 //   plugins: debug ? [createLogger()] : []
