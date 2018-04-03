@@ -199,24 +199,38 @@ const mutations = {
     [types.BACKUPDEST_ERRORS](state, error) {
         if (error.response.data.error.message.name) {
             state.backupDestinationErrors.name = error.response.data.error.message.name;
+        } else {
+            state.backupDestinationErrors.name = "";
         }
         if (error.response.data.error.message.description) {
             state.backupDestinationErrors.description = error.response.data.error.message.description;
+        } else {
+            state.backupDestinationErrors.description = "";
         }
         if (error.response.data.error.message.protocol) {
             state.backupDestinationErrors.protocol = error.response.data.error.message.protocol;
+        } else {
+            state.backupDestinationErrors.protocol = "";
         }
         if (error.response.data.error.message.username) {
             state.backupDestinationErrors.username = error.response.data.error.message.username;
+        } else {
+            state.backupDestinationErrors.username = "";
         }
         if (error.response.data.error.message.password) {
             state.backupDestinationErrors.password = error.response.data.error.message.password;
+        } else {
+            state.backupDestinationErrors.password = "";
         }
         if (error.response.data.error.message.hostname) {
             state.backupDestinationErrors.hostname = error.response.data.error.message.hostname;
+        } else {
+            state.backupDestinationErrors.hostname = "";
         }
         if (error.response.data.error.message.path) {
             state.backupDestinationErrors.path = error.response.data.error.message.path;
+        } else {
+            state.backupDestinationErrors.path = "";
         }
     },
 

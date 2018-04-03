@@ -1,82 +1,116 @@
 <template>
-  <div>
-    <label class="label">containers.js</label>
-      <input class="input" type="date" v-model="date">
+    <div>
+        <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+                <input class="input" type="text" v-model="name">
+            </div>
+            <div v-if="backupDestErrors.name.length > 0" class="help is-danger">
+                {{backupDestErrors.name}}
+            </div>
+        </div>
 
-      <label class="label">Time</label>
-      <input class="input" type="time" v-model="time">
+        <div class="field">
+            <label class="label">Protocol</label>
+            <div class="control">
+                <input class="input" type="text" v-model="protocol">
+            </div>
+            <div v-if="backupDestErrors.protocol.length > 0" class="help is-danger">
+                {{backupDestErrors.protocol}}
+            </div>
+        </div>
 
-      <label class="label">Dauer</label>
-      <input class="input" type="number" v-model="duration">
+        <div class="field">
+            <label class="label">Path</label>
+            <div class="control">
+                <input class="input" type="text" v-model="path">
+            </div>
+            <div v-if="backupDestErrors.path.length > 0" class="help is-danger">
+                {{backupDestErrors.path}}
+            </div>
+        </div>
 
-      <label class="label">Gewicht</label>
-      <input class="input" type="number" v-model="weight">
+        <div class="field">
+            <label class="label">Hostname</label>
+            <div class="control">
+                <input class="input" type="text" v-model="hostname">
+            </div>
+            <div v-if="backupDestErrors.hostname.length > 0" class="help is-danger">
+                {{backupDestErrors.hostname}}
+            </div>
+        </div>
 
-      <label class="label">Trainingsart</label>
-      <!-- <div class="select">
-        <select name="workout_typ_id" v-model="selectedWorkoutType">
-          <option v-for="(workoutType, index) in workoutTypes" v-bind:key="workoutType.id" v-bind:value="workoutType.id">
-            {{ workoutType.name }}
-          </option>
-        </select>
-      </div>
+        <div class="field">
+            <label class="label">Username</label>
+            <div class="control">
+                <input class="input" type="text" v-model="username">
+            </div>
+            <div v-if="backupDestErrors.username.length > 0" class="help is-danger">
+                {{backupDestErrors.username}}
+            </div>
+        </div>
 
-      <label class="label">Gesundheit</label>
-      <div class="select">
-        <select class="select" name="health" v-model="selectedHealthType">
-          <option v-for="(health, index) in healthTypes" v-bind:key="health.id" v-bind:value="health.id">
-            {{ health.name }}
-          </option>
-        </select>
-      </div>
-      <label class="label">Mentale Belastung</label>
-      <div class="select">
-        <select class="select" name="mental" v-model="selectedMentalType">
-          <option v-for="(mental, index) in mentalTypes" v-bind:key="mental.id" v-bind:value="mental.id">
-            {{ mental.name }}
-          </option>
-        </select>
-      </div>
+        <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+                <input class="input" type="password" v-model="password">
+            </div>
+            <div v-if="backupDestErrors.password.length > 0" class="help is-danger">
+                {{backupDestErrors.password}}
+            </div>
+        </div>
 
-      <label class="label">Physische Belastung</label>
-      <div class="select">
-        <select class="select" name="physical" v-model="selectedPhysicalType">
-          <option v-for="(physical, index) in physicalTypes" v-bind:key="physical.id" v-bind:value="physical.id">
-            {{ physical.name }}
-          </option>
-        </select>
-      </div> -->
-
-  </div>
+        <button class="button" @click="onSubmit">Save</button>
+    </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex'
 
-export default {
-  computed: {
-    ...mapGetters({
-    //   userid: "getUserid",
-    //   workoutTypes: "getWorkoutTypes",
-    //   healthTypes: "getHealthTypes",
-    //   mentalTypes: "getMentalTypes",
-    //   physicalTypes: "getPhysicalTypes"
-    })
-  },
+    export default {
+        computed: {
+            ...mapGetters({
+                backupDestErrors: "getBackupDestinationErrors"
+            })
+        },
 
-  data() {
-    return {
-      date: "",
-      duration: "",
-      time: "",
-      weight: "",
-      selectedHealthType: "",
-      selectedMentalType: "",
-      selectedPhysicalType: "",
-      selectedWorkoutType: "",
-    };
-  },
-}
+        data() {
+            return {
+                name: "",
+                protocol: "",
+                path: "",
+                hostname: "",
+                username: "",
+                password: "",
+            };
+        },
+
+        methods: {
+            onSubmit() {
+                let body = {
+                    name: this.name,
+                    protocol: this.protocol,
+                    path: this.path,
+                    hostname: this.hostname,
+                    username: this.username,
+                    password: this.password,
+                }
+
+                Object.keys(body).forEach(
+                    key =>
+                        (body[key] === null || body[key] === undefined || body[key].length) ===
+                        0 && delete body[key]
+                );
+
+
+                this.$store.dispatch("createBackupDestination", body).then(() => {
+                    this.$router.push({ name: "destinationOverview"})
+                }).catch(() => {
+
+                });
+            }
+        },
+    }
 </script>
 
 <style>

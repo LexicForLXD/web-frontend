@@ -16,7 +16,7 @@
     export default {
         methods: {
             refresh() {
-                // this.$store.dispatch("setContainers");
+                this.$store.dispatch("setBackupDestinations");
             }
         }
     }
