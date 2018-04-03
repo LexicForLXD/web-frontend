@@ -5,9 +5,11 @@
                 <thead>
                 <tr>
                     <th>Fingerprint</th>
+                    <th>Alias</th>
                     <th><abbr title="Architecture">ARCH</abbr></th>
                     <th>Finished</th>
                     <th>Public</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -16,6 +18,8 @@
                              :to="{name: 'imageSingle', params: {index: index}}"
                              tag="tr">
                     <td v-if="image.finished">{{image.fingerprint.substring(0,11)}}...</td>
+                    <td v-else></td>
+                    <td v-if="image.aliases.length > 0">{{image.aliases[0].name}}</td>
                     <td v-else></td>
                     <td>{{image.architecture}}</td>
                     <td><i v-bind:class="{ 'fa-times': !image.finished, 'fa-check': image.finished}"
