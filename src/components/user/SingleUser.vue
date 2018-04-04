@@ -19,22 +19,53 @@
                 </div>
                 <footer class="card-footer">
                     <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
+                    <a v-if="currentUser.id !== user.id" href="#" class="card-footer-item" @click="onDelete">Delete</a>
                 </footer>
             </div>
         </div>
         <div v-if="editing">
-            <label class="label">First name</label>
-            <input class="input" type="text" v-model="editFirstName">
+            <div class="field">
+                <label class="label">First name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="editFirstName" v-bind:class="{'is-danger': userErrors.firstName.length > 0}">
+                </div>
+                <div v-if="userErrors.firstName.length > 0" class="help is-danger">
+                    {{userErrors.firstName}}
+                </div>
+            </div>
 
-            <label class="label">Last name</label>
-            <input class="input" type="text" v-model="editLastName">
 
-            <label class="label">Username</label>
-            <input class="input" type="text" v-model="editLastName">
 
-            <label class="label">Email</label>
-            <input class="input" type="email" v-model="editEmail">
+            <div class="field">
+                <label class="label">Last name</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="editLastName" v-bind:class="{'is-danger': userErrors.lastName.length > 0}">
+                </div>
+                <div v-if="userErrors.lastName.length > 0" class="help is-danger">
+                    {{userErrors.lastName}}
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="editUsername" v-bind:class="{'is-danger': userErrors.username.length > 0}">
+                </div>
+                <div v-if="userErrors.username.length > 0" class="help is-danger">
+                    {{userErrors.username}}
+                </div>
+            </div>
+
+
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="email" v-model="editEmail" v-bind:class="{'is-danger': userErrors.email.length > 0}">
+                </div>
+                <div v-if="userErrors.email.length > 0" class="help is-danger">
+                    {{userErrors.email}}
+                </div>
+            </div>
 
             <div class="field">
                 <label class="label" for="active">Active</label>
@@ -56,7 +87,9 @@
     export default {
         computed: {
             ...mapGetters({
-                users: "getUsers"
+                users: "getUsers",
+                userErrors: "getUserErrors",
+                currentUser: "getCurrentUser",
             }),
             user() {
                 return this.users[this.index];

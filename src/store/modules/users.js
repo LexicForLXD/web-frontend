@@ -18,6 +18,15 @@ const state = {
     userLoading: {
         isLoading: false,
         hasLoadingErrors: false,
+    },
+    loginError: "",
+    userErrors: {
+        firstName: "",
+        lastName: "",
+        username:"",
+        email: "",
+        password: "",
+        roles: "",
     }
 }
 
@@ -50,6 +59,10 @@ const getters = {
     getUserIndexById: ({usersList}) => (userId) => {
         return usersList.findIndex(user => user == userId)
     },
+
+    getUserErrors: ({userErrors}) => {
+        return userErrors;
+    }
 
 
 }
@@ -137,16 +150,18 @@ const actions = {
         commit(types.LOADING_BEGIN);
         commit(types.USER_LOADING_START);
         return new Promise((resolve, reject) => {
-            userApi.create(data.hostId, data.user, data.type).then((res) => {
+            userApi.create(data).then((res) => {
                 commit(types.USER_ADD_NEW, {user: res.data});
                 commit(types.LOADING_FINISH);
                 commit(types.USER_LOADING_SUCCESS);
+                commit(types.USER_NO_ERRORS);
                 resolve();
-            }).catch((res) => {
+            }).catch((error) => {
                 console.warn('Could not add new user');
                 commit(types.USER_ADD_NEW_FAILURE, {savedUsers, savedUsersList});
                 commit(types.LOADING_FAIL);
                 commit(types.USER_LOADING_FAILURE);
+                commit(types.USER_ERRORS, error);
                 reject();
             })
         })
@@ -161,10 +176,12 @@ const actions = {
             commit(types.USER_UPDATE_SUCCESS, {user: res.data});
             commit(types.LOADING_FINISH);
             commit(types.USER_LOADING_SUCCESS);
-        }).catch((res) => {
+            commit(types.USER_NO_ERRORS);
+        }).catch((error) => {
             console.warn('Could not update user');
             commit(types.LOADING_FAIL);
             commit(types.USER_LOADING_FAILURE);
+            commit(types.USER_ERRORS, error);
         })
     }
 }
@@ -245,7 +262,54 @@ const mutations = {
     [types.USER_LOADING_FAILURE]({userLoading}) {
         userLoading.isLoading = false;
         userLoading.hasLoadingErrors = true;
-    }
+    },
+
+
+    [types.USER_ERRORS]({userErrors}, error) {
+        if (error.response.data.error.message.firstName) {
+            userErrors.firstName = error.response.data.error.message.firstName;
+        } else {
+            userErrors.firstName = "";
+        }
+        if (error.response.data.error.message.lastName) {
+            userErrors.lastName = error.response.data.error.message.lastName;
+        } else {
+            userErrors.lastName = "";
+        }
+        if (error.response.data.error.message.username) {
+            userErrors.username = error.response.data.error.message.username;
+        } else {
+            userErrors.username = "";
+        }
+        if (error.response.data.error.message.email) {
+            userErrors.email = error.response.data.error.message.email;
+        } else {
+            userErrors.email = "";
+        }
+        if (error.response.data.error.message.password) {
+            userErrors.password = error.response.data.error.message.password;
+        } else {
+            userErrors.password = "";
+        }
+        if (error.response.data.error.message.roles) {
+            userErrors.roles = error.response.data.error.message.roles;
+        } else {
+            userErrors.roles = "";
+        }
+    },
+
+
+    [types.USER_NO_ERRORS](state) {
+        state.userErrors = {
+            firstName: "",
+            lastName: "",
+            username:"",
+            email: "",
+            password: "",
+            roles: "",
+        };
+    },
+
 }
 
 
