@@ -8,9 +8,7 @@
             <site-footer class="site-footer"></site-footer>
         </div>
         <div v-else>
-            Waiting for initialization.
-
-            Loading screen
+            <site-loading/>
         </div>
     </div>
 </template>
@@ -21,6 +19,7 @@
     import siteHeader from "./components/header/SiteHeader";
     import siteFooter from "./components/footer/SiteFooter";
     import siteNav from "./components/sidebar/Sidebar";
+    import siteLoading from "./pages/Loading";
     import {mapGetters} from 'vuex'
 
 
@@ -29,7 +28,8 @@
         components: {
             siteHeader,
             siteFooter,
-            siteNav
+            siteNav,
+            siteLoading
         },
 
         computed: {
