@@ -1,82 +1,150 @@
 <template>
-  <div>
-    <label class="label">containers.js</label>
-      <input class="input" type="date" v-model="date">
+    <div>
+        <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+                <input class="input" type="text" v-model="name"
+                       v-bind:class="{'is-danger': scheduleErrors.name.length > 0}">
+            </div>
+            <div v-if="scheduleErrors.name.length > 0" class="help is-danger">
+                {{scheduleErrors.name}}
+            </div>
+        </div>
 
-      <label class="label">Time</label>
-      <input class="input" type="time" v-model="time">
 
-      <label class="label">Dauer</label>
-      <input class="input" type="number" v-model="duration">
+        <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+                <input class="input" type="text" v-model="description"
+                       v-bind:class="{'is-danger': scheduleErrors.description.length > 0}">
+            </div>
+            <div v-if="scheduleErrors.description.length > 0" class="help is-danger">
+                {{scheduleErrors.description}}
+            </div>
+        </div>
 
-      <label class="label">Gewicht</label>
-      <input class="input" type="number" v-model="weight">
+        <div class="field">
+            <label class="label">Type</label>
+            <div class="control">
+                <div class="select" v-bind:class="{'is-danger': scheduleErrors.type.length > 0}">
+                    <select name="type_select" v-model="type">
+                        <option value="full">Full</option>
+                        <option value="incremental">Incremental</option>
+                    </select>
+                </div>
+            </div>
+            <div v-if="scheduleErrors.type.length > 0" class="help is-danger">
+                {{scheduleErrors.type}}
+            </div>
+        </div>
 
-      <label class="label">Trainingsart</label>
-      <!-- <div class="select">
-        <select name="workout_typ_id" v-model="selectedWorkoutType">
-          <option v-for="(workoutType, index) in workoutTypes" v-bind:key="workoutType.id" v-bind:value="workoutType.id">
-            {{ workoutType.name }}
-          </option>
-        </select>
-      </div>
+        <div class="field">
+            <label class="label">Execution time</label>
+            <div class="control">
+                <div class="select" v-bind:class="{'is-danger': scheduleErrors.executionTime.length > 0}">
+                    <select name="type_select" v-model="executionTime">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+            <div v-if="scheduleErrors.executionTime.length > 0" class="help is-danger">
+                {{scheduleErrors.executionTime}}
+            </div>
+        </div>
 
-      <label class="label">Gesundheit</label>
-      <div class="select">
-        <select class="select" name="health" v-model="selectedHealthType">
-          <option v-for="(health, index) in healthTypes" v-bind:key="health.id" v-bind:value="health.id">
-            {{ health.name }}
-          </option>
-        </select>
-      </div>
-      <label class="label">Mentale Belastung</label>
-      <div class="select">
-        <select class="select" name="mental" v-model="selectedMentalType">
-          <option v-for="(mental, index) in mentalTypes" v-bind:key="mental.id" v-bind:value="mental.id">
-            {{ mental.name }}
-          </option>
-        </select>
-      </div>
+        <div class="field">
+            <label class="label">Containers</label>
+            <div class="control" v-if="containers.length > 0">
+                <div class="select is-multiple" v-bind:class="{'is-danger': scheduleErrors.containers.length > 0}">
+                    <select multiple name="containers_select" v-model="selectedContainers"
+                            v-bind:size="containers.length">
+                        <option v-for="container in containers" v-bind:key="container.id" v-bind:value="container.id">
+                            {{ container.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div v-if="scheduleErrors.containers.length > 0" class="help is-danger">
+                {{scheduleErrors.containers}}
+            </div>
+        </div>
 
-      <label class="label">Physische Belastung</label>
-      <div class="select">
-        <select class="select" name="physical" v-model="selectedPhysicalType">
-          <option v-for="(physical, index) in physicalTypes" v-bind:key="physical.id" v-bind:value="physical.id">
-            {{ physical.name }}
-          </option>
-        </select>
-      </div> -->
 
-  </div>
+        <div class="field">
+            <label class="label">Destination</label>
+            <div class="control">
+                <div class="select" v-bind:class="{'is-danger': scheduleErrors.destination.length > 0}">
+                    <select name="destination_select" v-model="selectedDestination">
+                        <option value="-1" disabled>Select a destination...</option>
+                        <option v-for="destination in destinations" v-bind:key="destination.id" v-bind:value="destination.id">
+                            {{ destination.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div v-if="scheduleErrors.destination.length > 0" class="help is-danger">
+                {{scheduleErrors.destination}}
+            </div>
+        </div>
+
+        <button class="button" @click="onSubmit">Save</button>
+    </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
 
-export default {
-  computed: {
-    ...mapGetters({
-    //   userid: "getUserid",
-    //   workoutTypes: "getWorkoutTypes",
-    //   healthTypes: "getHealthTypes",
-    //   mentalTypes: "getMentalTypes",
-    //   physicalTypes: "getPhysicalTypes"
-    })
-  },
+    export default {
+        computed: {
+            ...mapGetters({
+                scheduleErrors: "getBackupScheduleErrors",
+                destinations: "getBackupDestinations",
+                containers: "getContainers",
+            })
+        },
 
-  data() {
-    return {
-      date: "",
-      duration: "",
-      time: "",
-      weight: "",
-      selectedHealthType: "",
-      selectedMentalType: "",
-      selectedPhysicalType: "",
-      selectedWorkoutType: "",
-    };
-  },
-}
+        data() {
+            return {
+                name: "",
+                description: "",
+                executionTime: "",
+                type: "",
+                selectedDestination: "-1",
+                selectedContainers: [],
+            };
+        },
+
+        methods: {
+            ...mapActions({
+                createSchedule: "createBackupSchedule"
+            }),
+
+            onSubmit() {
+                const body = {
+                    name: this.name,
+                    description: this.description,
+                    executionTime: this.executionTime,
+                    type: this.type,
+                    destination: this.selectedDestination,
+                    containers: this.selectedContainers,
+                }
+
+                Object.keys(body).forEach(
+                    key =>
+                        (body[key] === null || body[key] === "-1" || body[key] === undefined || body[key].length) ===
+                        0 && delete body[key]
+                );
+
+                this.createSchedule(body).then(() => {
+                    this.$router.push({name: "scheduleOverview"})
+                }).catch(() => {
+
+                });
+            }
+        },
+    }
 </script>
 
 <style>
