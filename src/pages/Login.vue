@@ -9,12 +9,22 @@
             <div class="card-content">
                 <div class="field">
                     <label class="label">Username</label>
-                    <input class="input" type="text" v-model="email">
+                    <div class="control">
+                        <input class="input" type="text" v-model="email">
+                    </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Password</label>
-                    <input class="input" type="password" v-model="password">
+                    <div class="control">
+                        <input class="input" type="password" v-model="password">
+                    </div>
+                </div>
+
+                <div v-if="error.length > 0" class="message is-danger">
+                    <div class="message-body">
+                        {{error}}
+                    </div>
                 </div>
 
                 <div>
@@ -37,30 +47,37 @@
         data() {
             return {
                 email: '',
-                password: ''
+                password: '',
+                error: "",
             }
         },
 
 
         methods: {
             login() {
-                var data = {
+                const data = {
                     email: this.email,
                     password: this.password
-                }
+                };
+                this.$store.commit("LOADING_BEGIN");
                 authApi.login(data)
                     .then(res => {
+                        this.error= "";
                         const expiration = (res.data.expires_in * 1000) + Date.now();
-                        localStorage.setItem('access_token', res.data.access_token)
-                        localStorage.setItem('expiration', expiration)
+                        localStorage.setItem('access_token', res.data.access_token);
+                        localStorage.setItem('expiration', expiration);
                         this.$store.dispatch('initShared');
-
+                        this.$store.commit("LOADING_FINISH");
                         this.$router.push("/")
-                        // location.reload();
-
                     })
 
-                    .catch((error) => console.log(error));
+                    .catch((error) => {
+                        if (error.response.data.error_description) {
+                            this.error = error.response.data.error_description;
+                        }
+                        this.$store.commit("LOADING_FAIL");
+                        console.log(error);
+                    });
 
             }
         }

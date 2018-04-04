@@ -56,7 +56,7 @@
                         );
                         this.init();
                     })
-                    .catch(res => {
+                    .catch(() => {
                         console.warn("could not refresh token");
                         localStorage.removeItem("access_token");
                         localStorage.removeItem("expiration");
@@ -95,6 +95,7 @@
     @import "~bulma/sass/components/pagination";
     @import "~bulma/sass/components/panel";
     @import "~bulma/sass/components/card";
+    @import "~bulma/sass/components/message";
 
     .container {
         display: grid;
