@@ -77,7 +77,7 @@
             <div class="field">
                 <label class="label">Image protocol</label>
                 <div class="control">
-                    <input class="input" type="text" v-model="source.protocol" placeholer="lxd"/>
+                    <input class="input" type="text" v-model="source.protocol" placeholder="lxd"/>
                 </div>
             </div>
 
@@ -170,7 +170,7 @@
                 source: {
                     type: "",
                     mode: "pull",
-                    server: "",
+                    server: "https://uk.images.linuxcontainers.org:8443",
                     protocol: "",
                     alias: "",
                     name: "",
