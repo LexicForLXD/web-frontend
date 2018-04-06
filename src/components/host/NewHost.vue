@@ -1,61 +1,86 @@
 <template>
-    <div>
-        <label class="label">Name</label>
-        <input class="input" type="text" v-model="name">
-        <div v-if="hostErrors.error">
-            <p v-if="hostErrors.error.message.name">
-                {{hostErrors.error.message.name}}
-            </p>
-        </div>
+  <div>
+    <label class="label">Name</label>
+    <input
+      class="input"
+      type="text"
+      v-model="name">
+    <p
+      class="help is-danger"
+      v-if="hostErrors.name">
+      {{ hostErrors.name }}
+    </p>
 
 
-        <label class="label">DomainName</label>
-        <input class="input" type="text" v-model="domainName">
-        <div v-if="hostErrors.error">
-            <p class="help is-danger" v-if="hostErrors.error.message.uri">
-                {{hostErrors.error.message.uri}}
-            </p>
-            <p class="help is-danger" v-if="hostErrors.error.message.domainName">
-                {{hostErrors.error.message.domainName}}
-            </p>
-        </div>
-
-        <label class="label">ipv4</label>
-        <input class="input" type="text" v-model="ipv4">
-        <div v-if="hostErrors.error">
-            <p v-if="hostErrors.error.message.uri">
-                {{hostErrors.error.message.uri}}
-            </p>
-            <p v-if="hostErrors.error.message.ipv4">
-                {{hostErrors.error.message.ipv4}}
-            </p>
-        </div>
-
-        <label class="label">ipv6</label>
-        <input class="input" type="text" v-model="ipv6">
-        <div v-if="hostErrors.error">
-            <p v-if="hostErrors.error.message.uri">
-                {{hostErrors.error.message.uri}}
-            </p>
-            <p v-if="hostErrors.error.message.ipv6">
-                {{hostErrors.error.message.ipv6}}
-            </p>
-        </div>
-
-        <label class="label">Port</label>
-        <input class="input" type="number" v-model="port">
-        <div v-if="hostErrors.error">
-            <p v-if="hostErrors.error.message.port">
-                {{hostErrors.error.message.port}}
-            </p>
-        </div>
-
-        <label class="label">Password</label>
-        <input class="input" type="password" v-model="password">
-
-        <button class="button" @click="onSubmit">Save</button>
-
+    <label class="label">DomainName</label>
+    <input
+      class="input"
+      type="text"
+      v-model="domainName">
+    <div v-if="hostErrors.error">
+      <p
+        class="help is-danger"
+        v-if="hostErrors.error.message.uri">
+        {{ hostErrors.uri }}
+      </p>
+      <p
+        class="help is-danger"
+        v-if="hostErrors.error.message.domainName">
+        {{ hostErrors.domainName }}
+      </p>
     </div>
+
+    <label class="label">ipv4</label>
+    <input
+      class="input"
+      type="text"
+      v-model="ipv4">
+    <div v-if="hostErrors.error">
+      <p v-if="hostErrors.error.message.uri">
+        {{ hostErrors.error.message.uri }}
+      </p>
+      <p v-if="hostErrors.error.message.ipv4">
+        {{ hostErrors.error.message.ipv4 }}
+      </p>
+    </div>
+
+    <label class="label">ipv6</label>
+    <input
+      class="input"
+      type="text"
+      v-model="ipv6">
+    <div v-if="hostErrors.error">
+      <p v-if="hostErrors.error.message.uri">
+        {{ hostErrors.error.message.uri }}
+      </p>
+      <p v-if="hostErrors.error.message.ipv6">
+        {{ hostErrors.error.message.ipv6 }}
+      </p>
+    </div>
+
+    <label class="label">Port</label>
+    <input
+      class="input"
+      type="number"
+      v-model="port">
+    <div v-if="hostErrors.error">
+      <p v-if="hostErrors.error.message.port">
+        {{ hostErrors.error.message.port }}
+      </p>
+    </div>
+
+    <label class="label">Password</label>
+    <input
+      class="input"
+      type="password"
+      v-model="password">
+
+    <button
+      class="button"
+      @click="onSubmit">Save
+    </button>
+
+  </div>
 </template>
 
 <script>
@@ -98,7 +123,7 @@
 
 
                 this.$store.dispatch("createHost", body).then(() => {
-                    this.$router.push({ name: "hostOverview"})
+                    this.$router.push({name: "hostOverview"})
                 }).catch(() => {
 
                 });

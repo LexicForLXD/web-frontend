@@ -93,7 +93,6 @@
                             this.error = error.response.data.error_description;
                         }
                         this.$store.commit("LOADING_FAIL");
-                        console.log(error);
                     });
 
             }
