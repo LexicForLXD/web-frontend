@@ -13,6 +13,7 @@ const options = {
     autoRevert: true,
     location: 'top',
     inverse: false,
-}
+    autoFinish: false,
+};
 
-Vue.use(VueProgressBar, options)
+Vue.use(VueProgressBar, options);
