@@ -9,6 +9,7 @@ const state = {
     users: {},
     usersList: [],
     deletedUser: {},
+    createdUser: {},
     userLoading: {
         isLoading: false,
         hasLoadingErrors: false,
@@ -22,7 +23,7 @@ const state = {
         password: "",
         roles: "",
     }
-}
+};
 
 export function keyForUser(id) {
     return `user_${id}`
