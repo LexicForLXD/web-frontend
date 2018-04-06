@@ -1,55 +1,87 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="image" class="card">
-                <header class="card-header">
-                   <div class="card-header-title" v-if="image.fingerprint">
-                       Fingerprint: {{image.fingerprint.substring(0,20)}}...
-                   </div>
-                    <div class="card-header-title" v-else>Image not finished</div>
-                </header>
-                <div class="card-content">
-                    <p v-if="image.fingerprint">Fringerprint: {{image.fingerprint}}</p>
-                    <p v-if="image.architecture">Architecture: {{image.architecture}}</p>
-                    <p v-if="image.size">Size: {{image.size}} bytes</p>
-                    <p v-if="image.public">Public: {{image.public}}</p>
-                    <p v-if="image.finished">Finished: {{image.finished}}</p>
-                    <p v-if="image.filename">Filename: {{image.filename}}</p>
-                    <p v-if="image.properties">Properties: {{JSON.stringify(image.properties)}}</p>
-                    <div v-if="image.aliases.length > 0">
-                        Aliases:
-                        <ul v-for="alias in image.aliases">
-                            <li>{{alias.name}}</li>
-                        </ul>
-                    </div>
+  <div>
+    <div v-if="!editing">
+      <div 
+        v-if="image" 
+        class="card">
+        <header class="card-header">
+          <div 
+            class="card-header-title" 
+            v-if="image.fingerprint">
+            Fingerprint: {{ image.fingerprint.substring(0,20) }}...
+          </div>
+          <div 
+            class="card-header-title" 
+            v-else>Image not finished</div>
+        </header>
+        <div class="card-content">
+          <p v-if="image.fingerprint">Fringerprint: {{ image.fingerprint }}</p>
+          <p v-if="image.architecture">Architecture: {{ image.architecture }}</p>
+          <p v-if="image.size">Size: {{ image.size }} bytes</p>
+          <p v-if="image.public">Public: {{ image.public }}</p>
+          <p v-if="image.finished">Finished: {{ image.finished }}</p>
+          <p v-if="image.filename">Filename: {{ image.filename }}</p>
+          <p v-if="image.properties">Properties: {{ JSON.stringify(image.properties) }}</p>
+          <p v-if="image.hostId">Host: {{ hosts[image.hostId].name }} </p>
+          <div v-if="image.aliases.length > 0">
+            Aliases:
+            <ul v-for="alias in image.aliases">
+              <li>{{ alias.name }}</li>
+            </ul>
+          </div>
 
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
         </div>
-        <div v-if="editing">
-            <label class="label">Name</label>
-            <input class="input" type="text" v-model="editName">
-
-            <label class="label">DomainName</label>
-            <input class="input" type="text" v-model="editDomainName">
-
-            <label class="label">ipv4</label>
-            <input class="input" type="text" v-model="editIpv4">
-
-            <label class="label">ipv6</label>
-            <input class="input" type="text" v-model="editIpv6">
-
-            <label class="label">Port</label>
-            <input class="input" type="number" v-model="editPort">
-
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
+        <footer class="card-footer">
+          <a 
+            href="#" 
+            class="card-footer-item" 
+            @click="onEdit">Edit</a>
+          <a 
+            href="#" 
+            class="card-footer-item" 
+            @click="onDelete">Delete</a>
+        </footer>
+      </div>
     </div>
+    <div v-if="editing">
+      <label class="label">Name</label>
+      <input 
+        class="input" 
+        type="text" 
+        v-model="editName">
+
+      <label class="label">DomainName</label>
+      <input 
+        class="input" 
+        type="text" 
+        v-model="editDomainName">
+
+      <label class="label">ipv4</label>
+      <input 
+        class="input" 
+        type="text" 
+        v-model="editIpv4">
+
+      <label class="label">ipv6</label>
+      <input 
+        class="input" 
+        type="text" 
+        v-model="editIpv6">
+
+      <label class="label">Port</label>
+      <input 
+        class="input" 
+        type="number" 
+        v-model="editPort">
+
+      <button 
+        class="button" 
+        @click="onUpdate">Save</button>
+      <button 
+        class="button" 
+        @click="onCancel">Abort</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -59,6 +91,7 @@
         computed: {
             ...mapGetters({
                 images: "getImages",
+                hosts: "getHosts",
             }),
 
             image() {
