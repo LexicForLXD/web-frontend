@@ -1,42 +1,49 @@
 <template>
-    <div class="navbar-end" v-if="isAuthenticated && firstName">
-        <router-link :to="{name: 'userCurrent'}" class="navbar-item">Hallo {{firstName}}</router-link>
+  <div
+    class="navbar-end"
+    v-if="isAuthenticated && firstName">
+    <router-link
+      :to="{name: 'userCurrent'}"
+      class="navbar-item">Hallo {{ firstName }}
+    </router-link>
 
-        <a class="navbar-item" @click="logout">
-            Logout
-        </a>
+    <a
+      href="#"
+      class="navbar-item"
+      @click="logout">
+      Logout
+    </a>
 
-    </div>
+  </div>
 
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 
-    import {mapGetters} from 'vuex'
+export default {
+  name: "HeaderUser",
 
-    export default {
-        name: 'header-user',
+  computed: {
+    ...mapGetters({
+      firstName: "getCurrentFirstName",
+      isAuthenticated: "isAuthenticated"
+    })
+  },
 
-        computed: {
-            ...mapGetters({
-                firstName: "getCurrentFirstName",
-                isAuthenticated: "isAuthenticated"
-            }),
-        },
-
-        methods: {
-            logout() {
-                this.$router.push('/login');
-                location.reload();
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('expiration');
-            }
-        }
+  methods: {
+    logout() {
+      this.$router.push("/login");
+      location.reload();
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("expiration");
     }
+  }
+};
 </script>
 
 <style scoped>
-    .right {
-        float: right;
-    }
+.right {
+  float: right;
+}
 </style>
