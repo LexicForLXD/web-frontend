@@ -9,11 +9,7 @@ export default {
             commit(types.LOADING_FINISH);
         }).catch((error) => {
             commit(types.LOADING_FAIL);
-            if (error.response.status !== 404) {
-                console.warn('Could not fetch images');
-            } else {
-                console.log(error.response.data.error.message)
-            }
+            commit(types.IMAGE_SET_ALL_FAILURE, error);
         })
     },
 
@@ -24,6 +20,7 @@ export default {
                 resolve();
             }).catch((error) => {
                 if (error.response) {
+                    commit(types.IMAGE_SET_ALL_FAILURE, {general: error.response.data.error.message});
                     if (error.response.status === 404) {
                         if (error.response.data.error.code === 404) {
                             resolve();

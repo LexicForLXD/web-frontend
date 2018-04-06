@@ -22,14 +22,19 @@ export default {
     },
 
 
-    [types.IMAGE_SET_ALL]({images, imagesList}, {imagesData}) {
+    [types.IMAGE_SET_ALL]({images, imagesList, imageErrors}, {imagesData}) {
         forEach(imagesData, function (value) {
             const key = keyForImage(value.id);
             if (!images[key]) {
                 imagesList.push(value.id)
             }
             Vue.set(images, key, value)
-        })
+        });
+        clearErrors(imageErrors);
+    },
+
+    [types.IMAGE_SET_ALL_FAILURE] ({imageErrors}, error) {
+        setErrors(imageErrors, error);
     },
 
     [types.IMAGE_UPDATE_SUCCESS](state, image) {
@@ -81,6 +86,21 @@ function setErrors(imageErrors, error) {
     } else {
         imageErrors.type = "";
     }
+    if (error.response.data.error.message.name) {
+        imageErrors.aliasName = error.response.data.error.message.name;
+    } else {
+        imageErrors.aliasName = "";
+    }
+    if (error.response.data.error.message.description) {
+        imageErrors.aliasDescription = error.response.data.error.message.description;
+    } else {
+        imageErrors.aliasDescription = "";
+    }
+    if (error.general) {
+        imageErrors.general = error.general;
+    } else {
+        imageErrors.general = "";
+    }
 }
 
 function clearErrors(imageErrors) {
@@ -88,4 +108,8 @@ function clearErrors(imageErrors) {
     imageErrors.filename = "";
     imageErrors.properties = "";
     imageErrors.type = "";
+    imageErrors.aliasDescription = "";
+    imageErrors.aliasName = "";
+    imageErrors.general = "";
+
 }

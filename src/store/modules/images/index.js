@@ -18,6 +18,9 @@ const state = {
         filename: "",
         properties: "",
         type: "",
+        general: "",
+        aliasName: "",
+        aliasDescription: "",
     },
     imageLoading: {
         isLoading: false,
