@@ -10,123 +10,110 @@ export default {
         pull(state.hostsList, id);
     },
 
-    [types.HOST_DELETE_FAILURE](state) {
+    [types.HOST_DELETE_FAILURE](state, error) {
         state.hostsList.push(state.deletedHost.id);
         Vue.set(state.hosts, keyForHost(state.deletedHost.id), state.deletedHost);
         state.deletedHost = {};
+        setErrors(state, error);
     },
 
     [types.HOST_DELETE_SUCCESS](state) {
         state.deleteHost = {};
+        clearErrors(state);
     },
 
 
-    [types.HOST_SET_ALL]({hosts, hostsList}, {hostsData}) {
+    [types.HOST_SET_ALL]({hosts, hostsList, hostErrors}, {hostsData}) {
         forEach(hostsData, function (value) {
             if (!hosts[keyForHost(value.id)]) {
                 hostsList.push(value.id)
             }
             Vue.set(hosts, keyForHost(value.id), value);
-
+            clearErrors(hostErrors);
         })
     },
 
     [types.HOST_UPDATE_SUCCESS](state, host) {
+        state.hosts[keyForHost(host.id)] = host;
+        clearErrors(state);
+    },
+
+    [types.HOST_UPDATE_FAILURE](state, error) {
+        setErrors(state, error);
+    },
+
+    [types.HOST_ADD_NEW](state, {host}) {
         const key = keyForHost(host.id);
-
-        state.hosts[key] = host;
-    },
-
-    [types.HOST_ADD_NEW]({hosts, hostsList}, {host}) {
-        const key = keyForHost(host.id);
-        if (!hosts[key]) {
-            Vue.set(hosts, key, host);
-            hostsList.push(host.id);
+        if (!state.hosts[key]) {
+            Vue.set(state.hosts, key, host);
+            state.hostsList.push(host.id);
         }
+        clearErrors(state);
     },
 
-    [types.HOST_ADD_NEW_SUCCESS]() {
+    [types.HOST_ADD_NEW_SUCCESS](state) {
+        clearErrors(state);
     },
 
-    [types.HOST_ADD_NEW_FAILURE](state, {savedHosts, savedHostsList, error}) {
-        state.hostErrors = error.response.data;
-        state.hosts = savedHosts;
-        state.hostsList = savedHostsList;
+    [types.HOST_ADD_NEW_FAILURE](state, error) {
+        setErrors(state, error);
     },
+}
 
-    [types.HOST_LOADING_START]({hostLoading}) {
-        hostLoading.isLoading = true;
-        hostLoading.hasLoadingErrors = false;
-    },
 
-    [types.HOST_LOADING_SUCCESS]({hostLoading}) {
-        hostLoading.isLoading = false;
-        hostLoading.hasLoadingErrors = false;
-    },
-
-    [types.HOST_LOADING_FAILURE]({hostLoading}) {
-        hostLoading.isLoading = false;
-        hostLoading.hasLoadingErrors = true;
-    },
-
-    [types.HOST_ERRORS]({hostErrors}, error) {
-        if (error.response) {
-            if (error.response.data.error.message.ipv4) {
-                hostErrors.ipv4 = error.response.data.error.message.ipv4;
-            } else {
-                hostErrors.ipv4 = "";
-            }
-            if (error.response.data.error.message.ipv6) {
-                hostErrors.ipv6 = error.response.data.error.message.ipv6;
-            } else {
-                hostErrors.ipv6 = "";
-            }
-            if (error.response.data.error.message.domainName) {
-                hostErrors.domainName = error.response.data.error.message.domainName;
-            } else {
-                hostErrors.domainName = "";
-            }
-            if (error.response.data.error.message.name) {
-                hostErrors.name = error.response.data.error.message.name;
-            } else {
-                hostErrors.name = "";
-            }
-            if (error.response.data.error.message.port) {
-                hostErrors.port = error.response.data.error.message.port;
-            } else {
-                hostErrors.port = "";
-            }
-            if (error.response.data.error.message.settings) {
-                hostErrors.settings = error.response.data.error.message.settings;
-            } else {
-                hostErrors.settings = "";
-            }
-            if (error.response.data.error.message.auth) {
-                hostErrors.auth = error.response.data.error.message.auth;
-            } else {
-                hostErrors.auth = "";
-            }
-
-            if (error.response.data.error.message) {
-                hostErrors.general = error.response.data.error.message;
-            } else {
-                hostErrors.general = "";
-            }
+function setErrors (state, error) {
+    if (error.response) {
+        if (error.response.data.error.message.ipv4) {
+            state.hostErrors.ipv4 = error.response.data.error.message.ipv4;
+        } else {
+            state.hostErrors.ipv4 = "";
         }
-    },
+        if (error.response.data.error.message.ipv6) {
+            state.hostErrors.ipv6 = error.response.data.error.message.ipv6;
+        } else {
+            state.hostErrors.ipv6 = "";
+        }
+        if (error.response.data.error.message.domainName) {
+            state.hostErrors.domainName = error.response.data.error.message.domainName;
+        } else {
+            state.hostErrors.domainName = "";
+        }
+        if (error.response.data.error.message.name) {
+            state.hostErrors.name = error.response.data.error.message.name;
+        } else {
+            state.hostErrors.name = "";
+        }
+        if (error.response.data.error.message.port) {
+            state.hostErrors.port = error.response.data.error.message.port;
+        } else {
+            state.hostErrors.port = "";
+        }
+        if (error.response.data.error.message.settings) {
+            state.hostErrors.settings = error.response.data.error.message.settings;
+        } else {
+            state.hostErrors.settings = "";
+        }
+        if (error.response.data.error.message.auth) {
+            state.hostErrors.auth = error.response.data.error.message.auth;
+        } else {
+            state.hostErrors.auth = "";
+        }
 
-    [types.HOST_NO_ERRORS](state) {
-        state.hostErrors = {
-            ipv4: "",
-            ipv6: "",
-            domainName: "",
-            name: "",
-            port: "",
-            settings: "",
-            auth: "",
-            general: "",
-        };
+        // if (error.response.data.error.message) {
+        //     state.hostErrors.general = error.response.data.error.message;
+        // } else {
+        //     state.hostErrors.general = "";
+        // }
     }
+}
 
-
+function clearErrors (hostErrors) {
+    hostErrors.ipv4 ="";
+    hostErrors.ipv6 ="";
+    hostErrors.domainName ="";
+    hostErrors.name ="";
+    hostErrors.port ="";
+    hostErrors.settings ="";
+    hostErrors.auth ="";
+    hostErrors.general ="";
 }

@@ -4,15 +4,12 @@ import hostApi from "../../../api/hosts/host";
 
 export default {
     setHosts({commit}) {
-        commit(types.HOST_LOADING_START);
         commit(types.LOADING_BEGIN);
         hostApi.fetch().then((res) => {
             commit(types.HOST_SET_ALL, {hostsData: res.data});
             commit(types.LOADING_FINISH);
-            commit(types.HOST_NO_ERRORS);
-        }).catch((error) => {
+        }).catch(() => {
             commit(types.LOADING_FAIL);
-            commit(types.HOST_ERRORS, error);
         })
     },
 
@@ -44,11 +41,9 @@ export default {
         hostApi.delete(id).then(() => {
             commit(types.HOST_DELETE_SUCCESS);
             commit(types.LOADING_FINISH);
-            commit(types.HOST_NO_ERRORS);
         }).catch((error) => {
-            commit(types.HOST_DELETE_FAILURE);
+            commit(types.HOST_DELETE_FAILURE, error);
             commit(types.LOADING_FAIL);
-            commit(types.HOST_ERRORS, error);
         })
     },
 
@@ -59,11 +54,9 @@ export default {
             hostApi.create(data).then((res) => {
                 commit(types.HOST_ADD_NEW, {host: res.data});
                 commit(types.LOADING_FINISH);
-                commit(types.HOST_NO_ERRORS);
                 resolve();
             }).catch((error) => {
-                commit(types.HOST_ADD_NEW_FAILURE);
-                commit(types.HOST_ERRORS, error);
+                commit(types.HOST_ADD_NEW_FAILURE, error);
                 commit(types.LOADING_FAIL);
                 reject();
             })
@@ -77,7 +70,7 @@ export default {
             commit(types.HOST_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((error) => {
-            commit(types.HOST_ERRORS, error);
+            commit(types.HOST_UPDATE_FAILURE, error);
             commit(types.LOADING_FAIL);
         })
     },
@@ -85,14 +78,16 @@ export default {
     authHost({commit}, data) {
         commit(types.LOADING_BEGIN);
         hostApi.auth(data.host_id, data.password).then(() => {
+            commit(types.HOST_AUTH_SUCCESS);
             hostApi.show(data.host_id).then((res) => {
                 commit(types.HOST_UPDATE_SUCCESS, res.data);
                 commit(types.LOADING_FINISH);
+            }).catch(error => {
+                commit(types.HOST_UPDATE_FAILURE, error);
             });
-            commit(types.HOST_NO_ERRORS);
         }).catch((error) => {
             commit(types.LOADING_FAIL);
-            commit(types.HOST_ERRORS, error);
+            commit(types.HOST_AUTH_FAILURE, error);
         })
     }
 }
