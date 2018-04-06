@@ -1,0 +1,91 @@
+import * as types from "../../mutation-types";
+import {forEach, pull} from "lodash";
+import {keyForImage} from "./index";
+
+export default {
+    [types.IMAGE_DELETE](state, id) {
+        state.deletedImage = state.images[keyForImage(id)];
+        Vue.delete(state.images, keyForImage(id));
+        pull(state.imagesList, id);
+    },
+
+    [types.IMAGE_DELETE_FAILURE](state, error) {
+        state.imagesList.push(state.deletedImage.id);
+        Vue.set(state.images, keyForImage(state.deletedImage.id), state.deletedImage);
+        state.deletedImage = {};
+        setErrors(state.imageErrors, error);
+    },
+
+    [types.IMAGE_DELETE_SUCCESS](state) {
+        state.deletedImage = {};
+        clearErrors(state.imageErrors);
+    },
+
+
+    [types.IMAGE_SET_ALL]({images, imagesList}, {imagesData}) {
+        forEach(imagesData, function (value) {
+            const key = keyForImage(value.id);
+            if (!images[key]) {
+                imagesList.push(value.id)
+            }
+            Vue.set(images, key, value)
+        })
+    },
+
+    [types.IMAGE_UPDATE_SUCCESS](state, image) {
+        state.images[keyForImage(image.id)] = image;
+        clearErrors(state.imageErrors);
+    },
+
+    [types.IMAGE_UPDATE_FAILURE](state, error) {
+        setErrors(state.imageErrors, error);
+    },
+
+    [types.IMAGE_ADD_NEW]({images, imagesList}, image) {
+        const key = keyForImage(image.id);
+        if (!images[key]) {
+            imagesList.push(image.id);
+        }
+        Vue.set(images, key, image);
+
+    },
+
+    [types.IMAGE_ADD_NEW_SUCCESS](state) {
+        clearErrors(state.imageErrors);
+    },
+
+    [types.IMAGE_ADD_NEW_FAILURE](state, error) {
+        setErrors(state.imageErrors, error);
+    },
+
+}
+
+function setErrors(imageErrors, error) {
+    if (error.response.data.error.message.public) {
+        imageErrors.public = error.response.data.error.message.public;
+    } else {
+        imageErrors.public = "";
+    }
+    if (error.response.data.error.message.filename) {
+        imageErrors.filename = error.response.data.error.message.filename;
+    } else {
+        imageErrors.filename = "";
+    }
+    if (error.response.data.error.message.properties) {
+        imageErrors.properties = error.response.data.error.message.properties;
+    } else {
+        imageErrors.properties = "";
+    }
+    if (error.response.data.error.message.type) {
+        imageErrors.type = error.response.data.error.message.type;
+    } else {
+        imageErrors.type = "";
+    }
+}
+
+function clearErrors(imageErrors) {
+    imageErrors.public ="";
+    imageErrors.filename = "";
+    imageErrors.properties = "";
+    imageErrors.type = "";
+}
