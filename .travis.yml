@@ -15,10 +15,10 @@ jobs:
         - "7"
       install:
         - npm install
-      script: npm run build
+      script: npm run prod
       deploy:
         provider: pages
         skip-cleanup: true
         github-token: $GITHUB_TOKEN
         keep-history: true
-        local-dir: build
+        local-dir: public
