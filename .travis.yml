@@ -6,6 +6,8 @@ jobs:
         - "7"
       install:
         - npm install
+
+      before_scipt: cp config.js.EXAMPLE config.js
       script: npm run test
 
     - stage: deploy
