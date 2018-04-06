@@ -20,8 +20,7 @@
     import siteFooter from "./components/footer/SiteFooter";
     import siteNav from "./components/sidebar/Sidebar";
     import siteLoading from "./pages/Loading";
-    import {mapGetters} from 'vuex'
-
+    import {mapGetters} from "vuex";
 
     export default {
         name: "app",
@@ -40,7 +39,6 @@
         },
 
         created() {
-
             const token = localStorage.getItem("access_token");
             const expiration = localStorage.getItem("expiration");
             if (token && expiration > Date.now()) {
@@ -67,7 +65,6 @@
             }
         },
 
-
         methods: {
             async init() {
                 //Loadingscreen
@@ -77,7 +74,7 @@
 
                     //Let all other components know, that init is finished
                 } catch (err) {
-                    console.log(err)
+                    console.log(err);
                 }
             }
         }
@@ -96,13 +93,13 @@
     @import "~bulma/sass/components/panel";
     @import "~bulma/sass/components/card";
     @import "~bulma/sass/components/message";
+    @import "~bulma/sass/grid/columns";
 
     .container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: auto;
         grid-template-areas: "sidebar header header header" "sidebar content content content" "sidebar footer footer footer";
-
     }
 
     .content {
