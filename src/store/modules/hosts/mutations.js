@@ -1,6 +1,7 @@
 import * as types from "../../mutation-types";
 import {forEach, pull} from "lodash";
 import {keyForHost} from "./index";
+import Vue from 'vue';
 
 export default {
     [types.HOST_DELETE](state, id) {

@@ -1,6 +1,7 @@
 import * as types from "../../mutation-types";
 import {forEach, pull} from "lodash";
 import {keyForImage} from "./index";
+import Vue from 'vue';
 
 export default {
     [types.IMAGE_DELETE](state, id) {

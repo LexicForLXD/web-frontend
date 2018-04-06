@@ -1,6 +1,7 @@
 import * as types from "../../mutation-types";
 import {forEach, pull} from "lodash";
 import {keyForSchedule} from "./index";
+import Vue from 'vue';
 
 export default {
     [types.BACKUPSCHEDULE_DELETE]({backupSchedules, backupSchedulesList, deletedBackupSchedule}, id) {

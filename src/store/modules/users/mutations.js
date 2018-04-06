@@ -1,6 +1,7 @@
 import * as types from "../../mutation-types";
 import {forEach, pull} from "lodash";
 import {keyForUser} from "./index";
+import Vue from 'vue';
 
 export default {
     [types.USER_SET_CURRENT](state, currentUser) {

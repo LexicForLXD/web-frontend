@@ -1,6 +1,7 @@
 import * as types from "../../mutation-types";
 import {forEach, pull} from "lodash";
 import {keyForContainer} from "./index";
+import Vue from 'vue';
 
 export default {
     [types.CONTAINER_DELETE]({containers, containersList, deletedContainer}, id) {
