@@ -6,7 +6,6 @@ jobs:
         - "7"
       install:
         - npm install
-
       before_script: cp src/config.js.EXAMPLE src/config.js
       script: npm run test
 
@@ -19,9 +18,11 @@ jobs:
         - npm install
       before_script: cp src/config.js.EXAMPLE src/config.js
       script: npm run prod
+
       deploy:
         provider: pages
         skip-cleanup: true
         github-token: $GITHUB_TOKEN
         keep-history: true
         local-dir: public
+
