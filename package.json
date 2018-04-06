@@ -1,33 +1,67 @@
 {
-  "name": "lexic",
-  "version": "0.1.0",
+  "name": "lexic-web",
+  "version": "1.0.0",
+  "description": "Web-frontend for Lexic",
+  "author": "Léon Lenzen",
   "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "test" : "jest"
+  },
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "enzyme": "^3.1.0",
-    "enzyme-adapter-react-16": "^1.0.2",
-    "font-awesome": "^4.7.0",
-    "jest-enzyme": "^4.0.1",
-    "json5": "^0.5.1",
-    "query-string": "^5.0.1",
-    "react": "^16.2.0",
-    "react-bootstrap": "^0.31.3",
-    "react-bootstrap-toggle": "^2.2.5",
-    "react-dom": "^16.2.0",
-    "react-image-file": "^0.1.0",
-    "react-router-bootstrap": "^0.24.4",
-    "react-router-dom": "^4.2.2",
-    "react-select": "^1.2.1",
-    "react-test-renderer": "^16.0.0"
+    "axios": "^0.18.0",
+    "bulma": "^0.6.0",
+    "cross-env": "^5.1.0",
+    "laravel-mix": "^2.1.11",
+    "lodash": "^4.17.4",
+    "vue": "^2.5.16",
+    "vue-progressbar": "^0.7.4",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.14"
+    "@vue/test-utils": "^1.0.0-beta.13",
+    "babel-jest": "^22.4.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-vue": "^4.4.0",
+    "jest": "^22.4.3",
+    "jest-serializer-vue": "^1.0.0",
+    "vue-jest": "^2.3.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "doc": "jsdoc src -r -d docs"
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ]
   }
 }
+
