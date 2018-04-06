@@ -1,0 +1,98 @@
+import * as types from "../../mutation-types";
+import hostApi from "../../../api/hosts/host";
+
+
+export default {
+    setHosts({commit}) {
+        commit(types.HOST_LOADING_START);
+        commit(types.LOADING_BEGIN);
+        hostApi.fetch().then((res) => {
+            commit(types.HOST_SET_ALL, {hostsData: res.data});
+            commit(types.LOADING_FINISH);
+            commit(types.HOST_NO_ERRORS);
+        }).catch((error) => {
+            commit(types.LOADING_FAIL);
+            commit(types.HOST_ERRORS, error);
+        })
+    },
+
+    initHosts({commit}) {
+        return new Promise((resolve, reject) => {
+            hostApi.fetch().then((res) => {
+                commit(types.HOST_SET_ALL, {hostsData: res.data});
+                resolve();
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        if(error.response.data.error.code === 404) {
+                            resolve();
+                        }
+                    }
+                } else {
+                    reject(error);
+                }
+
+            })
+        });
+
+    },
+
+
+    deleteHost({commit}, id) {
+        commit(types.HOST_DELETE, id);
+        commit(types.LOADING_BEGIN);
+        hostApi.delete(id).then(() => {
+            commit(types.HOST_DELETE_SUCCESS);
+            commit(types.LOADING_FINISH);
+            commit(types.HOST_NO_ERRORS);
+        }).catch((error) => {
+            commit(types.HOST_DELETE_FAILURE);
+            commit(types.LOADING_FAIL);
+            commit(types.HOST_ERRORS, error);
+        })
+    },
+
+
+    createHost({commit}, data) {
+        commit(types.LOADING_BEGIN);
+        return new Promise((resolve, reject) => {
+            hostApi.create(data).then((res) => {
+                commit(types.HOST_ADD_NEW, {host: res.data});
+                commit(types.LOADING_FINISH);
+                commit(types.HOST_NO_ERRORS);
+                resolve();
+            }).catch((error) => {
+                commit(types.HOST_ADD_NEW_FAILURE);
+                commit(types.HOST_ERRORS, error);
+                commit(types.LOADING_FAIL);
+                reject();
+            })
+        })
+    },
+
+
+    updateHost({commit}, data) {
+        commit(types.LOADING_BEGIN);
+        hostApi.update(data.host_id, data.host).then((res) => {
+            commit(types.HOST_UPDATE_SUCCESS, res.data);
+            commit(types.LOADING_FINISH);
+        }).catch((error) => {
+            commit(types.HOST_ERRORS, error);
+            commit(types.LOADING_FAIL);
+        })
+    },
+
+    authHost({commit}, data) {
+        commit(types.LOADING_BEGIN);
+        hostApi.auth(data.host_id, data.password).then(() => {
+            hostApi.show(data.host_id).then((res) => {
+                commit(types.HOST_UPDATE_SUCCESS, res.data);
+                commit(types.LOADING_FINISH);
+            });
+            commit(types.HOST_NO_ERRORS);
+        }).catch((error) => {
+            commit(types.LOADING_FAIL);
+            commit(types.HOST_ERRORS, error);
+        })
+    }
+}
