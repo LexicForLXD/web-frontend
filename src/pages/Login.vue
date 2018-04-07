@@ -1,60 +1,50 @@
 <template>
-  <div class="loginform">
-    <div class="card">
-      <header class="card-header">
-        <div class="card-header-title">
-          <h3> Login </h3>
-        </div>
-      </header>
-      <div class="card-content">
-        <form 
-          @submit="login"
-          @submit.prevent>
-          <div class="field">
-            <label class="label">Username</label>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                v-model="email"
-                required>
-            </div>
-          </div>
+    <v-card class="elevation-12">
+        <v-toolbar>
+            <v-toolbar-title>
+                Login
+            </v-toolbar-title>
+        </v-toolbar>
 
-          <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-              <input
-                class="input"
-                type="password"
-                v-model="password"
-                required>
-            </div>
-          </div>
+        <v-card-text>
+            <v-form v-model="valid">
+                <v-text-field
+                        label="Email or username"
+                        v-model="email"
+                        :rules="[v => !!v || 'Email or username is required']"
+                        required
+                />
 
-          <div
-            v-if="error.length > 0"
-            class="message is-danger">
+                <v-text-field
+                        label="Password"
+                        v-model="password"
+                        :type="e1 ? 'password' : 'text'"
+                        :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                        :append-icon-cb="() => (e1 = !e1)"
+                        :rules="[v => !!v || 'Password is required']"
+                        required
+                ></v-text-field>
+
+                <v-btn
+                        @click="submit"
+                        :disabled="!valid"
+                >
+                    Submit
+                </v-btn>
+
+            </v-form>
+        </v-card-text>
+
+        <div
+                v-if="error.length > 0"
+                class="message is-danger">
             <div class="message-body">
-              {{ error }}
+                {{ error }}
             </div>
-          </div>
+        </div>
 
-          <div>
-            <button
-              type="submit"
-              class="button is-success"
-              @click="login">Login</button>
-          </div>
-        </form>
+    </v-card>
 
-      </div>
-
-
-      <!--<router-link to="/forget-password">Password vergessen?</router-link>-->
-
-    </div>
-  </div>
 </template>
 
 <script>
@@ -66,12 +56,14 @@
                 email: '',
                 password: '',
                 error: "",
+                valid: false,
+                e1: true
             }
         },
 
 
         methods: {
-            login() {
+            submit() {
                 const data = {
                     email: this.email,
                     password: this.password
