@@ -1,6 +1,6 @@
 <template>
 
-    <v-toolbar-items class="hidden-sm-and-down">
+    <v-toolbar-items class="hidden-sm-and-down" v-if="isAuthenticated">
         <v-btn flat :to="{name: 'userCurrent'}">Hallo {{firstName}}</v-btn>
         <v-btn flat @click="logout">Logout</v-btn>
     </v-toolbar-items>
@@ -33,7 +33,8 @@
         computed: {
             ...mapGetters({
                 firstName: "getCurrentFirstName",
-                isAuthenticated: "isAuthenticated"
+                isAuthenticated: "isAuthenticated",
+                isInitiated: "getInitiated",
             })
         },
 
