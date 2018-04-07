@@ -1,86 +1,51 @@
 <template>
-  <div>
-    <label class="label">Name</label>
-    <input
-      class="input"
-      type="text"
-      v-model="name">
-    <p
-      class="help is-danger"
-      v-if="hostErrors.name">
-      {{ hostErrors.name }}
-    </p>
+    <v-form v-model="valid">
+        <v-text-field
+            label="Name"
+            v-model="name"
+            :rules="[v => !!v || 'Name is required']"
+            :error="nameError"
+            required
+            >
+        </v-text-field>
+        <v-text-field
+            label="ipv4"
+            v-model="ipv4"
+        >
+        </v-text-field>
+        <v-text-field
+            label="ipv6"
+            v-model="ipv6"
+        >
+        </v-text-field>
+        <v-text-field
+            label="Domainname"
+            v-model="domainName"
+        >
+        </v-text-field>
+        <v-text-field
+            label="Port"
+            v-model="port"
+            :rules="[v => (v>=0 && v<=65555) || 'Port must be valid port number']"
+        ></v-text-field>
 
+        <v-text-field
+            label="Password"
+            v-model="password"
+            :type="e1 ? 'password' : 'text'"
+            :append-icon="e1 ? 'visibility' : 'visibility_off'"
+            :append-icon-cb="() => (e1 = !e1)"
+        ></v-text-field>
 
-    <label class="label">DomainName</label>
-    <input
-      class="input"
-      type="text"
-      v-model="domainName">
-    <div v-if="hostErrors.error">
-      <p
-        class="help is-danger"
-        v-if="hostErrors.error.message.uri">
-        {{ hostErrors.uri }}
-      </p>
-      <p
-        class="help is-danger"
-        v-if="hostErrors.error.message.domainName">
-        {{ hostErrors.domainName }}
-      </p>
-    </div>
+        <v-btn
+            @click="onSubmit"
+            :disabled="!valid"
+        >
+            Submit
+        </v-btn>
 
-    <label class="label">ipv4</label>
-    <input
-      class="input"
-      type="text"
-      v-model="ipv4">
-    <div v-if="hostErrors.error">
-      <p v-if="hostErrors.error.message.uri">
-        {{ hostErrors.error.message.uri }}
-      </p>
-      <p v-if="hostErrors.error.message.ipv4">
-        {{ hostErrors.error.message.ipv4 }}
-      </p>
-    </div>
+    </v-form>
 
-    <label class="label">ipv6</label>
-    <input
-      class="input"
-      type="text"
-      v-model="ipv6">
-    <div v-if="hostErrors.error">
-      <p v-if="hostErrors.error.message.uri">
-        {{ hostErrors.error.message.uri }}
-      </p>
-      <p v-if="hostErrors.error.message.ipv6">
-        {{ hostErrors.error.message.ipv6 }}
-      </p>
-    </div>
-
-    <label class="label">Port</label>
-    <input
-      class="input"
-      type="number"
-      v-model="port">
-    <div v-if="hostErrors.error">
-      <p v-if="hostErrors.error.message.port">
-        {{ hostErrors.error.message.port }}
-      </p>
-    </div>
-
-    <label class="label">Password</label>
-    <input
-      class="input"
-      type="password"
-      v-model="password">
-
-    <button
-      class="button"
-      @click="onSubmit">Save
-    </button>
-
-  </div>
 </template>
 
 <script>
@@ -90,17 +55,23 @@
         computed: {
             ...mapGetters({
                 hostErrors: "getHostErrors"
-            })
+            }),
+
+            nameError () {
+                return this.hostErrors.name.length > 0;
+            }
         },
 
         data() {
             return {
+                valid: false,
                 name: "",
                 ipv4: "",
                 ipv6: "",
                 domainName: "",
                 port: "",
                 password: "",
+                e1: true,
             };
         },
 
