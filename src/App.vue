@@ -25,8 +25,7 @@
     import siteFooter from "./components/footer/SiteFooter";
     import siteNav from "./components/sidebar/Sidebar";
     import siteLoading from "./pages/Loading";
-    import {mapGetters} from 'vuex'
-
+    import {mapGetters} from "vuex";
 
     export default {
         name: "app",
@@ -45,7 +44,6 @@
         },
 
         created() {
-
             const token = localStorage.getItem("access_token");
             const expiration = localStorage.getItem("expiration");
             if (token && expiration > Date.now()) {
@@ -72,7 +70,6 @@
             }
         },
 
-
         methods: {
             async init() {
                 //Loadingscreen
@@ -82,7 +79,7 @@
 
                     //Let all other components know, that init is finished
                 } catch (err) {
-                    console.log(err)
+                    console.log(err);
                 }
             }
         }
@@ -90,6 +87,7 @@
 </script>
 
 <style lang="scss">
+
     /*@import "~bulma/sass/utilities/_all";*/
     /*@import "~bulma/sass/elements/button";*/
     /*@import "~bulma/sass/elements/table";*/
@@ -109,6 +107,7 @@
     /*grid-template-areas: "sidebar header header header" "sidebar content content content" "sidebar footer footer footer";*/
 
     /*}*/
+
 
     /*.content {*/
     /*grid-area: content;*/
