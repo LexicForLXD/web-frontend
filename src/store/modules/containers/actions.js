@@ -4,10 +4,8 @@ import * as types from "../../mutation-types";
 export default {
     setContainers({commit}) {
         commit(types.LOADING_BEGIN);
-        commit(types.CONTAINER_LOADING_START);
         containerApi.fetch().then((res) => {
             commit(types.CONTAINER_SET_ALL, {containersData: res.data});
-            commit(types.CONTAINER_LOADING_SUCCESS);
             commit(types.LOADING_FINISH);
         }).catch((error) => {
             commit(types.CONTAINER_SET_ALL_FAILURE, error);
