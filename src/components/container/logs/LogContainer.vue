@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="columns">
-      <!-- <router-view/> -->
       <log-list class="column"/>
       <router-view class="column is-three-quarters"/>
 
