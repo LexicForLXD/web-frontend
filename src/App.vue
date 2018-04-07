@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <v-app>
+            <vue-progress-bar></vue-progress-bar>
             <site-nav/>
             <site-header/>
             <v-content>
