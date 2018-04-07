@@ -1,73 +1,76 @@
 <template>
-    <div>
-        <v-flex>
-            <v-card v-if="container" p3>
-                <v-toolbar>
-                    <v-toolbar-title>
-                        Name: {{container.name}}
-                    </v-toolbar-title>
-                </v-toolbar>
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12>
+                <v-card v-if="container" class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Name: {{container.name}}
+                        </v-toolbar-title>
+                    </v-toolbar>
 
-                <v-card-text  v-if="!editing && !editName">
-                    <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
-                    <p v-if="container.config">Config: {{container.config}}</p>
-                    <p v-if="container.devices">Devices: {{container.devices}}</p>
-                    <p v-if="container.state">State: {{container.state}}</p>
-                    <p>
-                        Host:
-                        <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
-                        </router-link>
-                    </p>
+                    <v-card-text v-if="!editing && !editName">
+                        <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
+                        <p v-if="container.config">Config: {{container.config}}</p>
+                        <p v-if="container.devices">Devices: {{container.devices}}</p>
+                        <p v-if="container.state">State: {{container.state}}</p>
+                        <p>
+                            Host:
+                            <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
+                            </router-link>
+                        </p>
 
-                    <a href="#" class="button" @click="onStart" v-bind:disabled="container.state != 'stopped'">Start</a>
-                    <a href="#" class="button" @click="onRestart"
-                       v-bind:disabled="container.state == 'stopped'">Restart</a>
-                    <a href="#" class="button" @click="onStop" v-bind:disabled="container.state == 'stopped'">Stop</a>
-                </v-card-text>
+                        <a href="#" class="button" @click="onStart"
+                           v-bind:disabled="container.state != 'stopped'">Start</a>
+                        <a href="#" class="button" @click="onRestart"
+                           v-bind:disabled="container.state == 'stopped'">Restart</a>
+                        <a href="#" class="button" @click="onStop"
+                           v-bind:disabled="container.state == 'stopped'">Stop</a>
+                    </v-card-text>
 
 
-                <v-card-text v-if="editName">
-                    <v-text-field
-                            label="Name"
-                            v-model="name"
-                            :rules="[v => !!v || 'Name is required']"
-                            required
-                    />
+                    <v-card-text v-if="editName">
+                        <v-text-field
+                                label="Name"
+                                v-model="name"
+                                :rules="[v => !!v || 'Name is required']"
+                                required
+                        />
 
-                    <v-btn @click="onChangeNameSubmit">Save</v-btn>
+                        <v-btn @click="onChangeNameSubmit">Save</v-btn>
 
-                </v-card-text>
+                    </v-card-text>
 
-                <v-card-actions>
-                    <v-btn flat @click="onEdit">Edit</v-btn>
-                    <v-btn flat @click="onDelete">Delete</v-btn>
-                    <v-btn flat @click="onChangeName">Change name</v-btn>
-                </v-card-actions>
+                    <v-card-actions>
+                        <v-btn flat @click="onEdit">Edit</v-btn>
+                        <v-btn flat @click="onDelete">Delete</v-btn>
+                        <v-btn flat @click="onChangeName">Change name</v-btn>
+                    </v-card-actions>
 
-            </v-card>
-        </v-flex>
+                </v-card>
+            </v-flex>
 
-        <v-spacer/>
-        <v-flex>
-            <v-card p3>
-                <v-toolbar>
-                    <v-toolbar-title>
-                        Monitoring
-                    </v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                    <v-tabs v-model="active">
-                        <v-tab key="logs">Logs</v-tab>
-                        <v-tab key="nagios">Nagios</v-tab>
+            <v-flex xs12>
+                <v-card class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Monitoring
+                        </v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-tabs v-model="active">
+                            <v-tab key="logs">Logs</v-tab>
+                            <v-tab key="nagios">Nagios</v-tab>
 
-                        <v-tab-item key="logs">
-                            <log-container :containerId="container.id"/>
-                        </v-tab-item>
-                    </v-tabs>
-                </v-card-text>
-            </v-card>
-        </v-flex>
-    </div>
+                            <v-tab-item key="logs">
+                                <log-container :containerId="container.id"/>
+                            </v-tab-item>
+                        </v-tabs>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
