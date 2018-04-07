@@ -1,10 +1,24 @@
-import client from '../client'
+import client from "../client";
 
 export default {
-    listLogs(containerId) {
-        return client.withAuth().get('/monitoring/logs/containers/'+containerId)
-    },
-    getLogFile(containerId, logName) {
-        return client.withAuth().get('/monitoring/logs/containers/'+containerId+'/'+logName)
-    }
-}
+  /**
+   * List all log files from a container
+   *
+   * @param {int} containerId
+   */
+  listLogs(containerId) {
+    return client.withAuth().get("/monitoring/logs/containers/" + containerId);
+  },
+
+  /**
+   * Get the content of a single logfile
+   *
+   * @param {int} containerId
+   * @param {string} logName
+   */
+  getLogFile(containerId, logName) {
+    return client
+      .withAuth()
+      .get("/monitoring/logs/containers/" + containerId + "/" + logName);
+  }
+};

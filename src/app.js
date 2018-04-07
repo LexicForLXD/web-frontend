@@ -3,9 +3,10 @@ import App from './App.vue'
 import router from './routes.js'
 import store from './store'
 import {sync} from 'vuex-router-sync'
+import Vuetify from 'vuetify'
 import progressbar from './progressbar'
 
-window.Vue = Vue
+window.Vue = Vue;
 
 window.axios = require('axios');
 window.axios.defaults.headers.common = {
@@ -13,7 +14,8 @@ window.axios.defaults.headers.common = {
 };
 // window.axios.defaults.withCredentials = true;
 
-sync(store, router)
+Vue.use(Vuetify);
+sync(store, router);
 
 export default new Vue({
     el: '#app',

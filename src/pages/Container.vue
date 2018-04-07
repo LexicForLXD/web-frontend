@@ -1,10 +1,10 @@
 <template>
     <div>
         <div>
-            <div v-if="this.$store.state.route.path != '/containers/new'">
+            <div v-if="this.$store.state.route.path !== '/containers/new'">
                 <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
             </div>
-            <div class="content">
+            <div>
                 <router-view></router-view>
             </div>
 

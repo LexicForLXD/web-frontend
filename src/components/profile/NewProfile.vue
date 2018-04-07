@@ -1,51 +1,39 @@
 <template>
-    <div>
-        <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="name">
-            </div>
-            <div v-if="profileErrors.name.length > 0" class="help is-danger">
-                {{profileErrors.name}}
-            </div>
-        </div>
+    <v-form v-model="valid">
+        <v-text-field
+                label="Name"
+                v-model="name"
+                :rules="[v => !!v || 'Name is required']"
+                required
+        />
 
+        <v-text-field
+                label="Description"
+                v-model="description"
+        />
 
+        <v-text-field
+                label="Config"
+                v-model="config"
+                multi-line
+                placeholder='{"limits.cpu": "2"}'
+        />
 
-        <div class="field">
-            <label class="label">Description</label>
-            <div class="control">
-                <input class="input" type="text" v-model="description">
-            </div>
-            <div v-if="profileErrors.description.length > 0" class="help is-danger">
-                {{profileErrors.description}}
-            </div>
-        </div>
+        <v-text-field
+                label="Devices"
+                v-model="devices"
+                multi-line
+                placeholder='{}'
+        />
 
-        <div class="field">
-            <label class="label">Config</label>
-            <div class="control">
-                <textarea class="textarea" v-model="config"/>
-            </div>
-            <div v-if="profileErrors.config.length > 0" class="help is-danger">
-                {{profileErrors.config}}
-            </div>
-        </div>
+        <v-btn
+                @click="onSubmit"
+                :disabled="!valid"
+        >
+            Submit
+        </v-btn>
 
-
-        <div class="field">
-            <label class="label">Devices</label>
-            <div class="control">
-                <textarea class="textarea" v-model="devices"/>
-            </div>
-            <div v-if="profileErrors.devices.length > 0" class="help is-danger">
-                {{profileErrors.devices}}
-            </div>
-        </div>
-
-        <button class="button" @click="onSubmit">Save</button>
-
-    </div>
+    </v-form>
 </template>
 
 <script>
@@ -60,6 +48,7 @@
 
         data() {
             return {
+                valid: false,
                 name: "",
                 description: "",
                 config: "{}",
@@ -84,7 +73,7 @@
 
 
                 this.$store.dispatch("createProfile", body).then(() => {
-                    this.$router.push({ name: "profileOverview"})
+                    this.$router.push({name: "profileOverview"})
                 }).catch(() => {
 
                 });

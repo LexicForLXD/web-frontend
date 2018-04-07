@@ -1,35 +1,26 @@
 <template>
     <div>
-        <div v-if="containers.length > 0">
-
-            <table class="table is-hoverable is-fullwidth">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>State</th>
-                    <th><abbr title="Architecture">ARCH</abbr></th>
-                    <th>Host</th>
-                </tr>
-                </thead>
-                <tbody>
-                <router-link v-for="(container, index) in containers"
-                             :key="container.id"
-                             :to="{name: 'containerSingle', params: {index: index}}"
-                             tag="tr">
-                    <td>{{container.name}}</td>
-                    <td>{{container.state}}</td>
-                    <td>{{container.architecture}}</td>
-                    <td>{{getHostFromContainer(container.hostId).name}}</td>
-                </router-link>
-                </tbody>
-            </table>
-        </div>
-
-
-        <div v-else>
-            Keine Einträge vorhanden
-        </div>
-
+        <v-data-table
+                :headers="headers"
+                :items="containers"
+        >
+            <template slot="items" slot-scope="props">
+                <td>
+                    <router-link
+                            :to="{ name: 'containerSingle', params: {index: props.index}}">
+                        {{ props.item.name }}
+                    </router-link>
+                </td>
+                <td>{{ props.item.state }}</td>
+                <td>{{ props.item.architecture }}</td>
+                <td>
+                    <router-link
+                            :to="{ name: 'hostSingle', params: {index: getHostIndex(props.item.hostId)}}">
+                        {{ getHostFromContainer(props.item.hostId).name }}
+                    </router-link>
+                </td>
+            </template>
+        </v-data-table>
     </div>
 </template>
 
@@ -38,14 +29,37 @@
     // import Workout from "./Workout";
 
     export default {
+        data() {
+            return {
+                headers: [
+                    {
+                        text: "Name",
+                        value: "name"
+                    },
+                    {
+                        text: "State",
+                        value: "state"
+                    },
+                    {
+                        text: "Architecture",
+                        value: "architecture"
+                    },
+                    {
+                        text: "Host",
+                        value: "getHostFromContainer(hostId).name"
+                    },
+                ]
+            }
+        },
+
         mounted() {
         },
 
         computed: {
             ...mapGetters({
                 containers: "getContainers",
+            }),
 
-            })
         },
 
         components: {
@@ -63,6 +77,12 @@
 
             getHostFromContainer(hostId) {
                 return this.$store.getters.getHostById(hostId)
+            },
+            getContainerIndex(id) {
+                return this.$store.getters.getContainerIndexById(id);
+            },
+            getHostIndex(id) {
+                return this.$store.getters.getHostIndexById(id);
             }
         }
     };
