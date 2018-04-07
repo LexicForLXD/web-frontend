@@ -1,17 +1,15 @@
 <template>
-  <div>
     <div>
-      <div v-if="this.$store.state.route.path != '/images/new'">
-        <button 
-          @click="refresh" 
-          class="button"><i class="fa fa-retweet"/></button>
-      </div>
-      <div class="content">
-        <router-view/>
-      </div>
+        <div>
+            <div v-if="this.$store.state.route.path !== '/images/new'">
+                <button
+                        @click="refresh"
+                        class="button"><i class="fa fa-retweet"/></button>
+            </div>
+            <router-view/>
 
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
