@@ -20,14 +20,12 @@
 
 <script>
     import logView from "./LogView.vue";
-    import logList from "./LogList.vue";
     import containerLogApi from '../../../api/monitoring/containerMonitoring.js'
 
 
     export default {
         components: {
             logView,
-            logList
         },
 
         props: [
