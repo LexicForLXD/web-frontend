@@ -1,13 +1,14 @@
 <template>
     <div>
         <div v-if="!editing">
-            <div v-if="container" class="card">
-                <header class="card-header">
-                    <div class="card-header-title">
+            <v-card v-if="container">
+                <v-toolbar>
+                    <v-toolbar-title>
                         Name: {{container.name}}
-                    </div>
-                </header>
-                <div class="card-content">
+                    </v-toolbar-title>
+                </v-toolbar>
+
+                <v-card-text>
                     <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
                     <p v-if="container.config">Config: {{container.config}}</p>
                     <p v-if="container.devices">Devices: {{container.devices}}</p>
@@ -22,12 +23,12 @@
                     <a href="#" class="button" @click="onRestart"
                        v-bind:disabled="container.state == 'stopped'">Restart</a>
                     <a href="#" class="button" @click="onStop" v-bind:disabled="container.state == 'stopped'">Stop</a>
-                </div>
+                </v-card-text>
                 <footer class="card-footer">
                     <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
                     <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
                 </footer>
-            </div>
+            </v-card>
         </div>
         <div v-if="editing">
             <label class="label">Name</label>
@@ -48,6 +49,23 @@
             <button class="button" @click="onUpdate">Save</button>
             <button class="button" @click="onCancel">Abort</button>
         </div>
+
+
+        <v-card>
+            <v-toolbar>
+                <v-toolbar-title>
+                    Monitoring
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+                <v-tabs v-model="active">
+                    <v-tab :key="logs">Logs</v-tab>
+                    <v-tab :key="nagios">Nagios</v-tab>
+
+                    <v-tab-item :key="logs"></v-tab-item>
+                </v-tabs>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 
@@ -56,6 +74,10 @@
     import stateApi from "../../api/containers/containerState"
 
     export default {
+        components: {
+
+        },
+
         computed: {
             ...mapGetters({
                 containers: "getContainers",
