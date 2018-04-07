@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div v-if="!editing">
-            <v-card v-if="container">
+        <v-flex>
+            <v-card v-if="container" p3>
                 <v-toolbar>
                     <v-toolbar-title>
                         Name: {{container.name}}
                     </v-toolbar-title>
                 </v-toolbar>
 
-                <v-card-text>
+                <v-card-text  v-if="!editing && !editName">
                     <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
                     <p v-if="container.config">Config: {{container.config}}</p>
                     <p v-if="container.devices">Devices: {{container.devices}}</p>
@@ -24,58 +24,60 @@
                        v-bind:disabled="container.state == 'stopped'">Restart</a>
                     <a href="#" class="button" @click="onStop" v-bind:disabled="container.state == 'stopped'">Stop</a>
                 </v-card-text>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
+
+
+                <v-card-text v-if="editName">
+                    <v-text-field
+                            label="Name"
+                            v-model="name"
+                            :rules="[v => !!v || 'Name is required']"
+                            required
+                    />
+
+                    <v-btn @click="onChangeNameSubmit">Save</v-btn>
+
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-btn flat @click="onEdit">Edit</v-btn>
+                    <v-btn flat @click="onDelete">Delete</v-btn>
+                    <v-btn flat @click="onChangeName">Change name</v-btn>
+                </v-card-actions>
+
             </v-card>
-        </div>
-        <div v-if="editing">
-            <label class="label">Name</label>
-            <input class="input" type="text" v-model="editName">
+        </v-flex>
 
-            <label class="label">DomainName</label>
-            <input class="input" type="text" v-model="editDomainName">
+        <v-spacer/>
+        <v-flex>
+            <v-card p3>
+                <v-toolbar>
+                    <v-toolbar-title>
+                        Monitoring
+                    </v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                    <v-tabs v-model="active">
+                        <v-tab key="logs">Logs</v-tab>
+                        <v-tab key="nagios">Nagios</v-tab>
 
-            <label class="label">ipv4</label>
-            <input class="input" type="text" v-model="editIpv4">
-
-            <label class="label">ipv6</label>
-            <input class="input" type="text" v-model="editIpv6">
-
-            <label class="label">Port</label>
-            <input class="input" type="number" v-model="editPort">
-
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-
-
-        <v-card>
-            <v-toolbar>
-                <v-toolbar-title>
-                    Monitoring
-                </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
-                <v-tabs v-model="active">
-                    <v-tab :key="logs">Logs</v-tab>
-                    <v-tab :key="nagios">Nagios</v-tab>
-
-                    <v-tab-item :key="logs"></v-tab-item>
-                </v-tabs>
-            </v-card-text>
-        </v-card>
+                        <v-tab-item key="logs">
+                            <log-container :containerId="container.id"/>
+                        </v-tab-item>
+                    </v-tabs>
+                </v-card-text>
+            </v-card>
+        </v-flex>
     </div>
 </template>
 
 <script>
     import {mapGetters} from "vuex";
     import stateApi from "../../api/containers/containerState"
+    import LogContainer from "./logs/LogContainer"
 
     export default {
         components: {
-
+            LogContainer
         },
 
         computed: {
@@ -96,16 +98,18 @@
         },
         data() {
             return {
+                name: "",
                 editing: false,
                 editIpv4: "",
                 editIpv6: "",
                 editDomainName: "",
-                editName: "",
+                editName: false,
                 editPort: "",
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
                 // hostIndex: "",
+                active: null,
             };
         },
         methods: {
@@ -123,6 +127,7 @@
             },
             onCancel() {
                 this.editing = false;
+                this.editName = false;
             },
             onUpdate() {
                 this.$store.dispatch("updateImage", {
@@ -136,6 +141,19 @@
                     }
                 });
                 this.editing = false;
+            },
+
+            onChangeName() {
+                this.editName = !this.editName;
+            },
+
+            onChangeNameSubmit() {
+                this.$store.dispatch("updateContainer", {
+                    containerId: this.container.id,
+                    container: {
+                        name: this.name
+                    }
+                })
             },
 
             onStart() {

@@ -1,13 +1,13 @@
 <template>
-  <div v-if="log !== ''">
-    {{ log }}
-  </div>
-  <div v-else>
-    <div v-if="error !== ''">
-      {{ error.response.data }}
+    <div v-if="log !== ''">
+        {{ log }}
     </div>
-    Select a log file on the left
-  </div>
+    <div v-else>
+        <div v-if="error !== ''">
+            {{ error.response.data }}
+        </div>
+        Select a log file on the left
+    </div>
 
 </template>
 
@@ -25,6 +25,11 @@
             }
         },
 
+        props: [
+            'logName',
+            'containerId'
+        ],
+
 
         computed: {
             ...mapGetters({
@@ -32,26 +37,14 @@
 
             }),
 
-            name() {
-                return this.$route.params.name;
-            },
-
-            index() {
-                return this.$route.params.index;
-            },
-
 
         },
 
 
         watch: {
-            name: function () {
+            logName: function () {
                 this.getLogFile();
             }
-        },
-
-        mounted: function () {
-            this.getLogFile();
         },
 
 
@@ -64,7 +57,7 @@
 
             getLogFile() {
                 this.startLoading();
-                containerLogApi.getLogFile(this.containers[this.index].id, this.name).then(res => {
+                containerLogApi.getLogFile(this.containerId, this.logName).then(res => {
                     this.stopLoading();
                     this.log = res.data;
                     this.error = "";
