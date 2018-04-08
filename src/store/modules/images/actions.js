@@ -23,7 +23,7 @@ export default {
                     commit(types.IMAGE_SET_ALL_FAILURE, {general: error.response.data.error.message});
                     if (error.response.status === 404) {
                         if (error.response.data.error.code === 404) {
-                            resolve();
+                            resolve(error.response.data.error.messages);
                         }
                     }
                 }
