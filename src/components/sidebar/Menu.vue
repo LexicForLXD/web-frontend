@@ -100,7 +100,7 @@
                         route: "containerOverview",
                         items: [
                             {
-                                title: "New Host",
+                                title: "New Container",
                                 route: "containerNew"
                             }
                         ]
