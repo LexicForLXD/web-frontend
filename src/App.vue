@@ -8,7 +8,7 @@
                 <v-container fluid>
                     <router-view v-if="isInitiated || !isAuthenticated"></router-view>
                     <div v-else>
-                        <site-loading/>
+                        <site-loading :error="initError"/>
                     </div>
                 </v-container>
             </v-content>
@@ -42,6 +42,12 @@
                 isInitiated: "getInitiated",
                 isAuthenticated: "isAuthenticated"
             })
+        },
+
+        data() {
+            return {
+                initError: ""
+            }
         },
 
         created() {
@@ -81,6 +87,7 @@
                     //Let all other components know, that init is finished
                 } catch (err) {
                     console.log(err);
+                    this.initError = err;
                 }
             }
         }
