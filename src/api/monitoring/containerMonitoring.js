@@ -19,6 +19,11 @@ export default {
   getLogFile(containerId, logName) {
     return client
       .withAuth()
-      .get("/monitoring/logs/containers/" + containerId + "/" + logName);
+      .get(
+          "/monitoring/logs/containers/" + containerId + "/" + logName,
+          {},
+          {},
+          'text'
+      );
   }
 };
