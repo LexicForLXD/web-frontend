@@ -58,7 +58,7 @@
                         </v-toolbar-title>
                     </v-toolbar>
                     <v-card-text>
-                        <v-tabs v-model="active">
+                        <v-tabs v-model="active" fixed-tabs grow>
                             <v-tab key="logs">Logs</v-tab>
                             <v-tab key="nagios">Nagios</v-tab>
 
