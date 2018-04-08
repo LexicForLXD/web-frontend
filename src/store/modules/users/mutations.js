@@ -44,6 +44,11 @@ export default {
         clearErrors(userErrors);
     },
 
+
+    [types.USER_SET_ALL_FAILURE]({userErrors}, error) {
+        setErrors(userErrors, error);
+    },
+
     [types.USER_UPDATE_SUCCESS](state, {user}) {
         state.users[keyForUser(user.id)] = user;
         clearErrors(state.userErrors);
@@ -74,36 +79,45 @@ export default {
 
 
 function setErrors(userErrors, error) {
-    if (error.response.data.error.message.firstName) {
-        userErrors.firstName = error.response.data.error.message.firstName;
-    } else {
-        userErrors.firstName = "";
+    if (error.response) {
+        if (error.response.data) {
+            if (error.response.data.error) {
+                if (error.response.data.error.message) {
+                    if (error.response.data.error.message.firstName) {
+                        userErrors.firstName = error.response.data.error.message.firstName;
+                    } else {
+                        userErrors.firstName = "";
+                    }
+                    if (error.response.data.error.message.lastName) {
+                        userErrors.lastName = error.response.data.error.message.lastName;
+                    } else {
+                        userErrors.lastName = "";
+                    }
+                    if (error.response.data.error.message.username) {
+                        userErrors.username = error.response.data.error.message.username;
+                    } else {
+                        userErrors.username = "";
+                    }
+                    if (error.response.data.error.message.email) {
+                        userErrors.email = error.response.data.error.message.email;
+                    } else {
+                        userErrors.email = "";
+                    }
+                    if (error.response.data.error.message.password) {
+                        userErrors.password = error.response.data.error.message.password;
+                    } else {
+                        userErrors.password = "";
+                    }
+                    if (error.response.data.error.message.roles) {
+                        userErrors.roles = error.response.data.error.message.roles;
+                    } else {
+                        userErrors.roles = "";
+                    }
+                }
+            }
+        }
     }
-    if (error.response.data.error.message.lastName) {
-        userErrors.lastName = error.response.data.error.message.lastName;
-    } else {
-        userErrors.lastName = "";
-    }
-    if (error.response.data.error.message.username) {
-        userErrors.username = error.response.data.error.message.username;
-    } else {
-        userErrors.username = "";
-    }
-    if (error.response.data.error.message.email) {
-        userErrors.email = error.response.data.error.message.email;
-    } else {
-        userErrors.email = "";
-    }
-    if (error.response.data.error.message.password) {
-        userErrors.password = error.response.data.error.message.password;
-    } else {
-        userErrors.password = "";
-    }
-    if (error.response.data.error.message.roles) {
-        userErrors.roles = error.response.data.error.message.roles;
-    } else {
-        userErrors.roles = "";
-    }
+
 }
 
 function clearErrors(userErrors) {

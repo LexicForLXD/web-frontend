@@ -62,59 +62,65 @@ export default {
 }
 
 
-function setErrors (state, error) {
+function setErrors(state, error) {
     if (error.response) {
-        if (error.response.data.error.message.ipv4) {
-            state.hostErrors.ipv4 = error.response.data.error.message.ipv4;
-        } else {
-            state.hostErrors.ipv4 = "";
-        }
-        if (error.response.data.error.message.ipv6) {
-            state.hostErrors.ipv6 = error.response.data.error.message.ipv6;
-        } else {
-            state.hostErrors.ipv6 = "";
-        }
-        if (error.response.data.error.message.domainName) {
-            state.hostErrors.domainName = error.response.data.error.message.domainName;
-        } else {
-            state.hostErrors.domainName = "";
-        }
-        if (error.response.data.error.message.name) {
-            state.hostErrors.name = error.response.data.error.message.name;
-        } else {
-            state.hostErrors.name = "";
-        }
-        if (error.response.data.error.message.port) {
-            state.hostErrors.port = error.response.data.error.message.port;
-        } else {
-            state.hostErrors.port = "";
-        }
-        if (error.response.data.error.message.settings) {
-            state.hostErrors.settings = error.response.data.error.message.settings;
-        } else {
-            state.hostErrors.settings = "";
-        }
-        if (error.response.data.error.message.auth) {
-            state.hostErrors.auth = error.response.data.error.message.auth;
-        } else {
-            state.hostErrors.auth = "";
-        }
+        if (error.response.data) {
+            if (error.response.data.error) {
+                if (error.response.data.error.message) {
+                    if (error.response.data.error.message.ipv4) {
+                        state.hostErrors.ipv4 = error.response.data.error.message.ipv4;
+                    } else {
+                        state.hostErrors.ipv4 = "";
+                    }
+                    if (error.response.data.error.message.ipv6) {
+                        state.hostErrors.ipv6 = error.response.data.error.message.ipv6;
+                    } else {
+                        state.hostErrors.ipv6 = "";
+                    }
+                    if (error.response.data.error.message.domainName) {
+                        state.hostErrors.domainName = error.response.data.error.message.domainName;
+                    } else {
+                        state.hostErrors.domainName = "";
+                    }
+                    if (error.response.data.error.message.name) {
+                        state.hostErrors.name = error.response.data.error.message.name;
+                    } else {
+                        state.hostErrors.name = "";
+                    }
+                    if (error.response.data.error.message.port) {
+                        state.hostErrors.port = error.response.data.error.message.port;
+                    } else {
+                        state.hostErrors.port = "";
+                    }
+                    if (error.response.data.error.message.settings) {
+                        state.hostErrors.settings = error.response.data.error.message.settings;
+                    } else {
+                        state.hostErrors.settings = "";
+                    }
+                    if (error.response.data.error.message.auth) {
+                        state.hostErrors.auth = error.response.data.error.message.auth;
+                    } else {
+                        state.hostErrors.auth = "";
+                    }
 
-        // if (error.response.data.error.message) {
-        //     state.hostErrors.general = error.response.data.error.message;
-        // } else {
-        //     state.hostErrors.general = "";
-        // }
+                    // if (error.response.data.error.message) {
+                    //     state.hostErrors.general = error.response.data.error.message;
+                    // } else {
+                    //     state.hostErrors.general = "";
+                    // }
+                }
+            }
+        }
     }
 }
 
-function clearErrors (hostErrors) {
-    hostErrors.ipv4 ="";
-    hostErrors.ipv6 ="";
-    hostErrors.domainName ="";
-    hostErrors.name ="";
-    hostErrors.port ="";
-    hostErrors.settings ="";
-    hostErrors.auth ="";
-    hostErrors.general ="";
+function clearErrors(hostErrors) {
+    hostErrors.ipv4 = "";
+    hostErrors.ipv6 = "";
+    hostErrors.domainName = "";
+    hostErrors.name = "";
+    hostErrors.port = "";
+    hostErrors.settings = "";
+    hostErrors.auth = "";
+    hostErrors.general = "";
 }

@@ -21,7 +21,6 @@
 
 <script>
     // Imports
-    import authApi from "./api/auth/auth";
     import siteHeader from "./components/header/SiteHeader";
     import siteFooter from "./components/footer/SiteFooter";
     import siteNav from "./components/sidebar/Sidebar";
@@ -56,39 +55,21 @@
             if (token && expiration > Date.now()) {
                 this.init();
             } else if (token && expiration < Date.now()) {
-                authApi
-                    .refresh()
-                    .then(res => {
-                        localStorage.setItem("access_token", res.data.access_token);
-                        localStorage.setItem(
-                            "expiration",
-                            res.data.expires_in * 1000 + Date.now()
-                        );
-                        this.init();
-                    })
-                    .catch(() => {
-                        console.warn("could not refresh token");
-                        localStorage.removeItem("access_token");
-                        localStorage.removeItem("expiration");
-                        location.reload();
-                    });
+                console.warn("could not refresh token");
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("expiration");
+                location.reload();
             } else {
                 this.$router.push("/login");
             }
         },
 
         methods: {
-            async init() {
-                //Loadingscreen
-                try {
-                    await this.$store.dispatch("initShared");
-                    //disable Loadingscreen
-
-                    //Let all other components know, that init is finished
-                } catch (err) {
-                    console.log(err);
-                    this.initError = err;
-                }
+            init() {
+                this.$store.dispatch("initShared").catch(error => {
+                    console.log(error);
+                    this.initError = error;
+                });
             }
         }
     };
@@ -115,7 +96,6 @@
     /*grid-template-areas: "sidebar header header header" "sidebar content content content" "sidebar footer footer footer";*/
 
     /*}*/
-
 
     /*.content {*/
     /*grid-area: content;*/

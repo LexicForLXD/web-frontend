@@ -36,7 +36,7 @@ export default {
         clearErrors(profileErrors);
     },
 
-    [types.PROFILE_SET_ALL_FAILURE] ({profileErrors}, error) {
+    [types.PROFILE_SET_ALL_FAILURE]({profileErrors}, error) {
         setErrors(profileErrors, error);
     },
 
@@ -69,23 +69,30 @@ export default {
 }
 
 
-
-function setErrors (profileErrors, error) {
-    if (error.response.data.error.message.name) {
-        profileErrors.name = error.response.data.error.message.name;
-    }
-    if (error.response.data.error.message.description) {
-        profileErrors.description = error.response.data.error.message.description;
-    }
-    if (error.response.data.error.message.config) {
-        profileErrors.config = error.response.data.error.message.config;
-    }
-    if (error.response.data.error.message.devices) {
-        profileErrors.devices = error.response.data.error.message.devices;
+function setErrors(profileErrors, error) {
+    if (error.response) {
+        if (error.response.data) {
+            if (error.response.data.error) {
+                if (error.response.data.error.message) {
+                    if (error.response.data.error.message.name) {
+                        profileErrors.name = error.response.data.error.message.name;
+                    }
+                    if (error.response.data.error.message.description) {
+                        profileErrors.description = error.response.data.error.message.description;
+                    }
+                    if (error.response.data.error.message.config) {
+                        profileErrors.config = error.response.data.error.message.config;
+                    }
+                    if (error.response.data.error.message.devices) {
+                        profileErrors.devices = error.response.data.error.message.devices;
+                    }
+                }
+            }
+        }
     }
 }
 
-function clearErrors (profileErrors) {
+function clearErrors(profileErrors) {
     profileErrors.name = "";
     profileErrors.description = "";
     profileErrors.config = "";
