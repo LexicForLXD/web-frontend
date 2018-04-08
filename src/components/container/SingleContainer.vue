@@ -63,7 +63,11 @@
                             <v-tab key="nagios">Nagios</v-tab>
 
                             <v-tab-item key="logs">
-                                <log-container :containerId="container.id"/>
+                                <log-container v-if="container" :containerId="container.id"/>
+                            </v-tab-item>
+
+                            <v-tab-item key="nagios">
+                                <nagios-container v-if="container" :containerId="container.id"/>
                             </v-tab-item>
                         </v-tabs>
                     </v-card-text>
@@ -77,10 +81,12 @@
     import {mapGetters} from "vuex";
     import stateApi from "../../api/containers/containerState"
     import LogContainer from "./logs/LogContainer"
+    import NagiosContainer from "./nagios/NagiosContainer"
 
     export default {
         components: {
-            LogContainer
+            LogContainer,
+            NagiosContainer,
         },
 
         computed: {
