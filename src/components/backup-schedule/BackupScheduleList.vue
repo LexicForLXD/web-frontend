@@ -1,61 +1,63 @@
 <template>
-  <div>
-    <div v-if="hosts.length > 0">
-      <div v-for="(host, index) in hosts" :key="host.id">
-        <div class="card">
-          <header class="card-header">
-            <router-link :to="{name: 'athleteSingleWorkout', params: {index: index}}" class="card-header-title">{{host.name}} {{host.id}}</router-link>
-          </header>
-          <div class="card-content">
-            <p>Authenticated: {{host.authenticated}}</p>
-            <p>Port: {{host.port }}</p>
-            <!-- Trainingsart: {{workout.workout_type.name}} -->
-          </div>
-          <footer class="card-footer">
-            <router-link class="card-footer-item"  :to="{name: 'athleteSingleWorkout', params: {index: index}}">More</router-link>
-            <a href="#" @click="deleteHost(host.id)" class="card-footer-item">Delete</a>
-          </footer>
-        </div>
-        <p></p>
-      </div>
-    </div>
+    <v-data-table
+        :headers="headers"
+        :items="backupSchedules"
+    >
+        <template slot="items" slot-scope="props">
+            <td>
+                <router-link
+                        :to="{ name: 'scheduleSingle', params: {index: props.index}}">
+                    {{ props.item.name }}
+                </router-link>
+            </td>
+            <td>
+                {{props.item.type}}
+            </td>
+            <td>
+                {{props.item.executionTime}}
+            </td>
+        </template>
+    </v-data-table>
 
 
-    <div v-else>
-      Keine Einträge vorhanden
-    </div>
-
-  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-// import Workout from "./Workout";
+    import {mapGetters} from "vuex";
 
-export default {
-  mounted() {},
+    export default {
+        computed: {
+            ...mapGetters({
+                backupSchedules: "getBackupSchedules",
 
-  computed: {
-    ...mapGetters({
-      hosts: "getHosts",
+            })
+        },
 
-    })
-  },
+        data() {
+            return {
+                headers: [
+                    {
+                        text: "Name",
+                        value: "name",
+                    },
+                    {
+                        text: "Type",
+                        value: "type",
+                    },
+                    {
+                        text: "Execution Time",
+                        value: "executionTime",
+                    },
+                ]
+            }
+        },
 
-  components: {
-    // "site-workout": Workout
-  },
+        components: {
+        },
 
-  methods: {
-    newContainer() {
-      this.$router.push({ name: "newContainer" });
-    },
-
-    deleteContainer(containerId) {
-      this.$store.dispatch("deleteContainer", containerId);
-    }
-  }
-};
+        methods: {
+        }
+    };
 </script>
 
 <style lang="scss">
