@@ -7,7 +7,7 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <router-link
-                            :to="{ name: 'profileSingle', params: {index: props.index}}">
+                            :to="{ name: 'profileSingle', params: {index: getProfileIndex(props.item.id)}}">
                         {{ props.item.name }}
                     </router-link>
                 </td>
@@ -60,6 +60,9 @@
 
             deleteProfile(id) {
                 this.$store.dispatch("deleteProfile", id);
+            },
+            getProfileIndex(id) {
+                return this.$store.getters.getProfileIndexById(id);
             }
         }
     };

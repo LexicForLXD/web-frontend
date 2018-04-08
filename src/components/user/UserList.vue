@@ -7,7 +7,7 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <router-link
-                            :to="{ name: 'userSingle', params: {index: props.index}}">
+                            :to="{ name: 'userSingle', params: {index: getUserIndex(props.item.id)}}">
                         {{ props.item.firstName }} {{ props.item.lastName}}
                     </router-link>
                 </td>
@@ -58,6 +58,10 @@
 
             deleteUser(id) {
                 this.$store.dispatch("deleteUser", id);
+            }
+            ,
+            getUserIndex(id) {
+                return this.$store.getters.getUserIndexById(id);
             }
         }
     };

@@ -6,7 +6,7 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <router-link
-                            :to="{ name: 'hostSingle', params: {index: props.index}}">
+                            :to="{ name: 'hostSingle', params: {index: getHostIndex(props.item.id)}}">
                         {{ props.item.name }}
                     </router-link>
                 </td>

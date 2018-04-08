@@ -6,7 +6,7 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <router-link
-                            :to="{ name: 'destinationSingle', params: {index: props.index}}">
+                            :to="{ name: 'destinationSingle', params: {index: getBackupDestIndex(props.item.id)}}">
                         {{ props.item.name }}
                     </router-link>
                 </td>
@@ -66,6 +66,9 @@
 
             deleteContainer(containerId) {
                 this.$store.dispatch("deleteContainer", containerId);
+            },
+            getBackupDestIndex(id) {
+                return this.$store.getters.getBackupDestinationIndexById(id);
             }
         }
     };

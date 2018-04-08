@@ -6,7 +6,7 @@
             <template slot="items" slot-scope="props">
                 <td v-if="props.item.finished">
                     <router-link
-                            :to="{ name: 'imageSingle', params: {index: props.index}}">
+                            :to="{ name: 'imageSingle', params: {index: getImageIndex(props.item.id)}}">
                         {{ props.item.fingerprint.substring(0,11) }}...
                     </router-link>
                 </td>
@@ -87,6 +87,9 @@
 
             deleteHost(id) {
                 this.$store.dispatch("deleteHost", id);
+            },
+            getImageIndex(id) {
+                return this.$store.getters.getImageIndexById(id);
             }
         }
     };

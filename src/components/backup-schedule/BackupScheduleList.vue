@@ -1,12 +1,12 @@
 <template>
     <v-data-table
-        :headers="headers"
-        :items="backupSchedules"
+            :headers="headers"
+            :items="backupSchedules"
     >
         <template slot="items" slot-scope="props">
             <td>
                 <router-link
-                        :to="{ name: 'scheduleSingle', params: {index: props.index}}">
+                        :to="{ name: 'scheduleSingle', params: {index: getBackupScheduleIndex(props.item.id)}}">
                     {{ props.item.name }}
                 </router-link>
             </td>
@@ -52,10 +52,13 @@
             }
         },
 
-        components: {
-        },
+        components: {},
 
         methods: {
+
+            getBackupScheduleIndex(id) {
+                return this.$store.getters.getBackupScheduleIndexById(id);
+            }
         }
     };
 </script>
