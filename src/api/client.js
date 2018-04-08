@@ -14,7 +14,7 @@ const client = {
 
 ['get', 'post', 'put', 'delete'].forEach((verb) => {
 
-    client[verb] = (url, data = {}, headers = {}) => {
+    client[verb] = (url, data = {}, headers = {}, responseType = 'json', responseEncoding = 'utf8') => {
         return new Promise((resolve, reject) => {
             if (!url.startsWith("http")) {
                 url = LEXIC_CONFIG.API_URL + url
@@ -23,7 +23,9 @@ const client = {
                 method: verb,
                 url,
                 data,
-                headers: client.auth ? Object.assign({}, {'Authorization': `Bearer ` + localStorage.getItem('access_token')}, headers) : headers
+                headers: client.auth ? Object.assign({}, {'Authorization': `Bearer ` + localStorage.getItem('access_token')}, headers) : headers,
+                responseType: responseType,
+                responseEncoding: responseEncoding
             }).then((res) => {
                 client.auth = false
                 resolve(res)

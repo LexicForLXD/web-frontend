@@ -23,7 +23,13 @@ export default {
         "/monitoring/checks/" +
           checkId +
           "/containers/graph?timerange=" +
-          timerange
+          timerange,
+          {},
+          {
+              'mime-type': 'image/png',
+              'Content-Type': 'image/png'
+          },
+          'arraybuffer'
       );
   },
 
