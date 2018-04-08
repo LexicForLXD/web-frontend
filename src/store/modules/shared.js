@@ -28,6 +28,7 @@ const actions = {
             dispatch('initImages'),
             dispatch('initBackupDestinations'),
             dispatch('initBackupSchedules'),
+            dispatch('initBackups'),
         ]).then(() => {
             console.log('init ready');
             commit(types.INIT_READY);
