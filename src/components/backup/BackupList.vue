@@ -1,61 +1,96 @@
 <template>
-  <div>
-    <div v-if="hosts.length > 0">
-      <div v-for="(host, index) in hosts" :key="host.id">
-        <div class="card">
-          <header class="card-header">
-            <router-link :to="{name: 'athleteSingleWorkout', params: {index: index}}" class="card-header-title">{{host.name}} {{host.id}}</router-link>
-          </header>
-          <div class="card-content">
-            <p>Authenticated: {{host.authenticated}}</p>
-            <p>Port: {{host.port }}</p>
-            <!-- Trainingsart: {{workout.workout_type.name}} -->
-          </div>
-          <footer class="card-footer">
-            <router-link class="card-footer-item"  :to="{name: 'athleteSingleWorkout', params: {index: index}}">More</router-link>
-            <a href="#" @click="deleteHost(host.id)" class="card-footer-item">Delete</a>
-          </footer>
-        </div>
-        <p></p>
-      </div>
-    </div>
-
-
-    <div v-else>
-      Keine Einträge vorhanden
-    </div>
-
-  </div>
+    <v-data-table
+            :headers="headers"
+            :items="backups">
+        <template slot="items" slot-scope="props">
+            <td>
+                <router-link
+                        :to="{ name: 'backupSingle', params: {index: getBackupIndex(props.item.id)}}">
+                    {{ props.item.timestamp }}
+                </router-link>
+            </td>
+            <td>
+                <router-link
+                        :to="{ name: 'destinationSingle', params: {index: getBackupDestIndex(props.item.destinationId)}}">
+                    {{getDestination(props.item.destinationId).name}}
+                </router-link>
+            </td>
+            <td>
+                <router-link
+                        :to="{ name: 'scheduleSingle', params: {index: getBackupScheduleIndex(props.item.backupScheduleId)}}">
+                    {{getBackupSchedule(props.item.backupScheduleId).name}}
+                </router-link>
+            </td>
+        </template>
+    </v-data-table>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-// import Workout from "./Workout";
+    import {mapGetters} from "vuex";
+    // import Workout from "./Workout";
 
-export default {
-  mounted() {},
+    export default {
+        mounted() {
+        },
 
-  computed: {
-    ...mapGetters({
-      hosts: "getHosts",
+        computed: {
+            ...mapGetters({
+                backups: "getBackups",
+            })
+        },
 
-    })
-  },
+        data() {
+            return {
+                headers: [
+                    {
+                        text: "Timestamp",
+                        value: "timestamp"
+                    },
+                    {
+                        text: "Destination",
+                        value: "destinationId"
+                    },
+                    {
+                        text: "Backup Schedule",
+                        value: "backupScheduleId"
+                    },
+                ]
+            }
+        },
 
-  components: {
-    // "site-workout": Workout
-  },
+        components: {
+            // "site-workout": Workout
+        },
 
-  methods: {
-    newContainer() {
-      this.$router.push({ name: "newContainer" });
-    },
+        methods: {
+            newContainer() {
+                this.$router.push({name: "newContainer"});
+            },
 
-    deleteContainer(containerId) {
-      this.$store.dispatch("deleteContainer", containerId);
-    }
-  }
-};
+            deleteContainer(containerId) {
+                this.$store.dispatch("deleteContainer", containerId);
+            },
+            getBackupIndex(id) {
+                return this.$store.getters.getBackupIndexById(id);
+            },
+
+            getDestination(id) {
+                return this.$store.getters.getBackupDestinationById(id);
+            },
+
+            getBackupSchedule(id) {
+                return this.$store.getters.getBackupScheduleById(id);
+            },
+
+            getBackupDestIndex(id) {
+                return this.$store.getters.getBackupDestinationIndexById(id);
+            },
+
+            getBackupScheduleIndex(id) {
+                return this.$store.getters.getBackupScheduleIndexById(id);
+            }
+        }
+    };
 </script>
 
 <style lang="scss">
