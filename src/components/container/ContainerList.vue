@@ -42,11 +42,12 @@
                     },
                     {
                         text: "Architecture",
-                        value: "architecture"
+                        value: "architecture",
+                        sortable: false,
                     },
                     {
                         text: "Host",
-                        value: "getHostFromContainer(hostId).name"
+                        value: "hostId"
                     },
                 ]
             }
