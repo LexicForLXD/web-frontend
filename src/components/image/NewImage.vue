@@ -3,8 +3,6 @@
         <v-text-field
                 label="Filename"
                 v-model="filename"
-                :rules="[v => !!v || 'Filename is required']"
-                required
         />
 
         <v-checkbox
@@ -130,7 +128,7 @@
             },
 
             remoteAliases() {
-                let aliases
+                let aliases;
                 remoteImageApi.fetch().then((res) => {
                     aliases = res.data.metadata;
                     console.log(aliases);
