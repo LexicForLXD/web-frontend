@@ -1,12 +1,9 @@
 <template>
     <div>
-        <div>
-            <div v-if="this.$store.state.route.path != '/backup-dests/new'">
-                <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
-            </div>
-            <router-view></router-view>
-
+        <div v-if="this.$store.state.route.path != '/backup-dests/new'">
+            <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
         </div>
+        <router-view></router-view>
     </div>
 </template>
 
