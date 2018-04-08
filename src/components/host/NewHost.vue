@@ -4,7 +4,6 @@
             label="Name"
             v-model="name"
             :rules="[v => !!v || 'Name is required']"
-            :error="nameError"
             required
             >
         </v-text-field>
