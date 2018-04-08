@@ -222,7 +222,7 @@
                         profiles: this.selectedProfiles
                     };
                 } else if (this.selectedType === "image") {
-                    if (this.selectedFingerprint !== "-1") {
+                    if (this.selectedFingerprint !== "") {
                         data.container = {
                             name: this.name,
                             architecture: this.architecture,
@@ -233,7 +233,7 @@
                             fingerprint: this.selectedFingerprint
                         };
                     }
-                    if (this.selectedAlias !== "-1") {
+                    if (this.selectedAlias !== "") {
                         data.container = {
                             name: this.name,
                             architecture: this.architecture,
