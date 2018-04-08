@@ -77,6 +77,14 @@ const router = new VueRouter({
                                 "NagiosContainerView",
                                 require("./components/container/nagios/NagiosView.vue")
                             )
+                        },
+                        {
+                            path: "nagios/:checkId/update",
+                            name: "containerSingleNagiosUpdate",
+                            component: Vue.component(
+                                "NagiosContainerUpdate",
+                                require("./components/container/nagios/NagiosUpdate.vue")
+                            )
                         }
                     ]
                 },

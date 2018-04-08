@@ -1,8 +1,22 @@
 <template>
-    <div v-if="graph.length > 0">
-        <img :src="imageUrl" alt="graph"/>
-    </div>
+    <v-layout row wrap>
+        <v-flex xs12>
+            <v-btn
+                    @click="onDelete"
+            >
+                Delete Check
+            </v-btn>
 
+            <v-btn
+                :to="{name: 'containerSingleNagiosUpdate', params: {index: index, checkId: checkId}}"
+                >Update Check</v-btn>
+        </v-flex>
+        <v-flex xs12>
+            <div v-if="graph.length > 0">
+                <img :src="imageUrl" alt="graph"/>
+            </div>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -41,13 +55,24 @@
                     this.stopLoading();
 
                     this.graph = Buffer.from(res.data, 'binary').toString('base64');
-                    this.imageUrl = 'data:image/png;base64,'+this.graph;
+                    this.imageUrl = 'data:image/png;base64,' + this.graph;
                     this.error = "";
                 }).catch(error => {
                     this.failLoading();
                     this.error = error;
                     console.log(error);
                     this.graph = "";
+                })
+            },
+
+            onDelete() {
+                this.startLoading();
+                containerNagiosApi.delete(this.checkId).then(res => {
+                    this.stopLoading();
+                    this.$router.push({name: 'containerSingle', params: {index: this.index}});
+                }).catch(error => {
+                    this.error = error.response.data.message;
+                    this.failLoading();
                 })
             }
         }
