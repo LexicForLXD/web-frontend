@@ -1,5 +1,5 @@
 import {keyForSchedule} from "./index";
-import {map} from "lodash";
+import {find, map} from "lodash";
 
 export default {
     getBackupSchedules({backupSchedules, backupSchedulesList}) {
@@ -13,4 +13,12 @@ export default {
     getBackupScheduleIndexById: ({backupSchedulesList}) => (id) => {
         return backupSchedulesList.findIndex(schedule => schedule === id);
     },
+
+    getBackupScheduleById: ({backupSchedules}) => (id) => {
+        return find(backupSchedules, ['id', id]);
+    },
+
+    getBackupScheduleByIndex: (state, getters) => (index) => {
+        return getters.getBackupSchedules[index];
+    }
 }

@@ -13,4 +13,8 @@ export default {
     getBackupIndexById: ({backupsList}) => (id) => {
         return backupsList.findIndex(backup => backup === id);
     },
+
+    getBackupByIndex: (state, getters) => (index) => {
+        return getters.getBackups[index];
+    }
 }
