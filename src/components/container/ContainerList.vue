@@ -78,9 +78,6 @@
             getHostFromContainer(hostId) {
                 return this.$store.getters.getHostById(hostId)
             },
-            getContainerIndex(id) {
-                return this.$store.getters.getContainerIndexById(id);
-            },
             getHostIndex(id) {
                 return this.$store.getters.getHostIndexById(id);
             }
