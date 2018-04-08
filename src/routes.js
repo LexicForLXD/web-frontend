@@ -60,23 +60,27 @@ const router = new VueRouter({
                     component: Vue.component(
                         "SingleContainer",
                         require("./components/container/SingleContainer.vue")
-                    )
-                },
-                {
-                    path: ":index/logs",
-                    name: "containerLogs",
-                    component: Vue.component(
-                        "LogContainer",
-                        require("./components/container/logs/LogContainer.vue")
                     ),
                     children: [
                         {
-                            path: ":name",
-                            name: "showLog",
-                            component: Vue.component("LogView", require("./components/container/logs/LogView"))
+                            path: "nagios/new",
+                            name: "containerNewNagios",
+                            component: Vue.component(
+                                "NagiosContainerNew",
+                                require("./components/container/nagios/NagiosNew.vue")
+                            )
+                        },
+                        {
+                            path: "nagios/:checkId",
+                            name: "containerSingleNagios",
+                            component: Vue.component(
+                                "NagiosContainerView",
+                                require("./components/container/nagios/NagiosView.vue")
+                            )
                         }
                     ]
-                }
+                },
+
             ]
         },
 
