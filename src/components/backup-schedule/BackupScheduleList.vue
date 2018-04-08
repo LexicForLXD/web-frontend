@@ -16,6 +16,12 @@
             <td>
                 {{props.item.executionTime}}
             </td>
+            <td>
+                <router-link
+                        :to="{ name: 'destinationSingle', params: {index: getBackupDestIndex(props.item.destination.id)}}">
+                    {{ props.item.destination.name }}
+                </router-link>
+            </td>
         </template>
     </v-data-table>
 
@@ -48,6 +54,10 @@
                         text: "Execution Time",
                         value: "executionTime",
                     },
+                    {
+                        text: "Destination",
+                        value: "destinationId"
+                    }
                 ]
             }
         },
@@ -58,6 +68,14 @@
 
             getBackupScheduleIndex(id) {
                 return this.$store.getters.getBackupScheduleIndexById(id);
+            },
+
+            getBackupDestById(id) {
+                return this.$store.getters.getBackupScheduleById(id);
+            },
+
+            getBackupDestIndex(id) {
+                return this.$store.getters.getBackupDestinationIndexById(id);
             }
         }
     };
