@@ -7,7 +7,7 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <router-link
-                            :to="{ name: 'containerSingle', params: {index: props.index}}">
+                            :to="{ name: 'containerSingle', params: {index: getContainerIndex(props.item.id)}}">
                         {{ props.item.name }}
                     </router-link>
                 </td>
@@ -80,6 +80,9 @@
             },
             getHostIndex(id) {
                 return this.$store.getters.getHostIndexById(id);
+            },
+            getContainerIndex(id) {
+                return this.$store.getters.getContainerIndexById(id);
             }
         }
     };
