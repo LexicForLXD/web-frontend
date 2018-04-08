@@ -10,8 +10,8 @@
                     </v-toolbar>
 
                     <v-card-text v-if="!editing && !editName">
-                        <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
-                        <p v-if="container.config">Config: {{container.config}}</p>
+                        <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
+                        <p v-if="container.config"><b>Config:</b> {{container.config}}</p>
                         <p v-if="container.devices">Devices: {{container.devices}}</p>
                         <p v-if="container.state">State: {{container.state}}</p>
                         <p>

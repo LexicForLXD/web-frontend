@@ -66,9 +66,12 @@
                             item-text="fingerprint"
                             :rules="[
                                 v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',
-                                v => this.selectedAlias === '' || 'Either alias or fingerprint',
                             ]"
                     />
+                    <!--:rules="[-->
+                    <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
+                    <!--v => this.selectedAlias === '' || 'Either alias or fingerprint',-->
+                    <!--]"-->
                 </v-flex>
 
                 <v-flex xs12 sm2>
@@ -81,9 +84,14 @@
                             label="Alias"
                             item-value="aliases[0].name"
                             item-text="aliases[0].name"
-                            required
-                            :rules="imageRules"
+                            :rules="[
+                                v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',
+                            ]"
                     />
+                    <!--:rules="[-->
+                    <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
+                    <!--v => this.selectedFingerprint === '' || 'Either alias or fingerprint',-->
+                    <!--]"-->
                 </v-flex>
             </v-layout>
 
@@ -191,8 +199,8 @@
 
         methods: {
             onSubmit() {
-                let bodyConfig = {};
-                let bodyDevices = {};
+                let bodyConfig = "";
+                let bodyDevices = "";
 
                 try {
                     bodyConfig = JSON.parse(this.config);
@@ -269,11 +277,11 @@
                     };
                 }
 
-                Object.keys(data).forEach(
+                Object.keys(data.container).forEach(
                     key =>
-                        (data[key] === null ||
-                            data[key] === undefined ||
-                            data[key].length) === 0 && delete data[key]
+                        (data.container[key] === null ||
+                            data.container[key] === undefined ||
+                            data.container[key].length) === 0 && delete data.container[key]
                 );
 
                 this.$store
