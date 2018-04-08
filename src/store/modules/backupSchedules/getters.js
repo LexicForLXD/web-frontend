@@ -8,5 +8,9 @@ export default {
 
     getBackupScheduleErrors({backupScheduleErrors}) {
         return backupScheduleErrors;
-    }
+    },
+
+    getBackupScheduleIndexById: ({backupSchedulesList}) => (id) => {
+        return backupSchedulesList.findIndex(schedule => schedule === id);
+    },
 }

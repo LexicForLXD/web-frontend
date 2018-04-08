@@ -8,5 +8,9 @@ export default {
 
     getBackupDestinationErrors({backupDestinationErrors}) {
         return backupDestinationErrors;
-    }
+    },
+
+    getBackupDestinationIndexById: ({backupDestinationsList}) => (id) => {
+        return backupDestinationsList.findIndex(dest => dest === id);
+    },
 }

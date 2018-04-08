@@ -33,4 +33,8 @@ export default {
         })
     },
 
+    getImageIndexById: ({imagesList}) => (id) => {
+        return imagesList.findIndex(item => item === id);
+    },
+
 }

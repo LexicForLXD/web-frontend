@@ -8,5 +8,9 @@ export default {
 
     getBackupErrors({backupErrors}) {
         return backupErrors;
-    }
+    },
+
+    getBackupIndexById: ({backupsList}) => (id) => {
+        return backupsList.findIndex(backup => backup === id);
+    },
 }
