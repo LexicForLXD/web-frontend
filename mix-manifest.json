@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/vendor.js": "/js/vendor.js",
-    "/js/manifest.js": "/js/manifest.js"
+    "/js/manifest.js": "/js/manifest.js",
+    "/css/vuetify.min.css": "/css/vuetify.min.css"
 }
