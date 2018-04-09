@@ -1,4 +1,5 @@
 # LEXIC web frontend
+[![Build Status](https://travis-ci.org/LexicForLXD/web-frontend.svg?branch=master)](https://travis-ci.org/LexicForLXD/web-frontend)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FLexicForLXD%2Fweb-frontend.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FLexicForLXD%2Fweb-frontend?ref=badge_shield)
 
 
