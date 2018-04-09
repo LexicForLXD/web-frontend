@@ -1,67 +1,53 @@
 <template>
-    <div>
-        <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="name" v-bind:class="{'is-danger': backupDestErrors.name}" required>
-            </div>
-            <div v-if="backupDestErrors.name.length > 0" class="help is-danger">
-                {{backupDestErrors.name}}
-            </div>
-        </div>
+    <v-form v-model="valid">
+        <v-text-field
+                label="Name"
+                v-model="name"
+                :rules="[v => !!v || 'Name is required']"
+                required
+        />
 
-        <div class="field">
-            <label class="label">Protocol</label>
-            <div class="control">
-                <input class="input" type="text" v-model="protocol" v-bind:class="{'is-danger': backupDestErrors.protocol}" required>
-            </div>
-            <div v-if="backupDestErrors.protocol.length > 0" class="help is-danger">
-                {{backupDestErrors.protocol}}
-            </div>
-        </div>
+        <v-text-field
+                label="Protocol"
+                v-model="protocol"
+                :rules="[v => !!v || 'Protocol is required']"
+                required
+        />
 
-        <div class="field">
-            <label class="label">Path</label>
-            <div class="control">
-                <input class="input" type="text" v-model="path" v-bind:class="{'is-danger': backupDestErrors.path}" required>
-            </div>
-            <div v-if="backupDestErrors.path.length > 0" class="help is-danger">
-                {{backupDestErrors.path}}
-            </div>
-        </div>
+        <v-text-field
+                label="Path"
+                v-model="path"
+                :rules="[v => !!v || 'Path is required']"
+                required
+        />
 
-        <div class="field">
-            <label class="label">Hostname</label>
-            <div class="control">
-                <input class="input" type="text" v-model="hostname" v-bind:class="{'is-danger': backupDestErrors.hostname}">
-            </div>
-            <div v-if="backupDestErrors.hostname.length > 0" class="help is-danger">
-                {{backupDestErrors.hostname}}
-            </div>
-        </div>
+        <v-text-field
+                label="Hostname"
+                v-model="hostname"
+        />
 
-        <div class="field">
-            <label class="label">Username</label>
-            <div class="control">
-                <input class="input" type="text" v-model="username" v-bind:class="{'is-danger': backupDestErrors.username}">
-            </div>
-            <div v-if="backupDestErrors.username.length > 0" class="help is-danger">
-                {{backupDestErrors.username}}
-            </div>
-        </div>
+        <v-text-field
+                label="username"
+                v-model="username"
+        />
 
-        <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-                <input class="input" type="password" v-model="password" v-bind:class="{'is-danger': backupDestErrors.password}">
-            </div>
-            <div v-if="backupDestErrors.password.length > 0" class="help is-danger">
-                {{backupDestErrors.password}}
-            </div>
-        </div>
+        <v-text-field
+                label="Password"
+                v-model="password"
+                :type="e1 ? 'password' : 'text'"
+                :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (e1 = !e1)"
+        />
 
-        <button class="button" @click="onSubmit">Save</button>
-    </div>
+        <v-btn
+            @click="onSubmit"
+            :disabled="!valid"
+        >
+            Submit
+        </v-btn>
+    </v-form>
+
+
 </template>
 
 <script>
@@ -76,6 +62,9 @@
 
         data() {
             return {
+                valid: false,
+                e1: true,
+
                 name: "",
                 protocol: "",
                 path: "",
@@ -94,7 +83,7 @@
                     hostname: this.hostname,
                     username: this.username,
                     password: this.password,
-                }
+                };
 
                 Object.keys(body).forEach(
                     key =>

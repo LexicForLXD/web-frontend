@@ -8,6 +8,10 @@ export default {
 
     getProfileErrors({profileErrors}) {
         return profileErrors;
-    }
+    },
+
+    getProfileIndexById: ({profilesList}) => (id) => {
+        return profilesList.findIndex(item => item === id);
+    },
 
 }

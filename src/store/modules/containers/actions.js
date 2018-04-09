@@ -66,8 +66,8 @@ export default {
 
     updateContainer({commit}, data) {
         commit(types.LOADING_BEGIN);
-        containerApi.update(data.hostId, data).then((res) => {
-            commit(types.CONTAINER_UPDATE_SUCCESS, {containers: res.data});
+        containerApi.update(data.containerId, data.container).then((res) => {
+            commit(types.CONTAINER_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((error) => {
             commit(types.LOADING_FAIL);

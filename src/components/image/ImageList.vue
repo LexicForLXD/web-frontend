@@ -1,51 +1,71 @@
 <template>
-  <div>
-    <div v-if="images.length > 0">
-      <table class="table is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th>Fingerprint</th>
-            <th>Alias</th>
-            <th><abbr title="Architecture">ARCH</abbr></th>
-            <th>Finished</th>
-            <th>Public</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <router-link 
-            v-for="(image, index) in images"
-            :key="image.id"
-            :to="{name: 'imageSingle', params: {index: index}}"
-            tag="tr">
-            <td v-if="image.finished">{{ image.fingerprint.substring(0,11) }}...</td>
-            <td v-else/>
-            <td v-if="image.aliases.length > 0">{{ image.aliases[0].name }}</td>
-            <td v-else/>
-            <td>{{ image.architecture }}</td>
-            <td><i 
-              :class="{ 'fa-times': !image.finished, 'fa-check': image.finished}"
-              class="fa"/></td>
-            <td><i 
-              :class="{ 'fa-times': !image.public, 'fa-check': image.public}"
-              class="fa"/></td>
-          </router-link>
-        </tbody>
-      </table>
+    <div>
+        <v-data-table
+                :headers="headers"
+                :items="images">
+            <template slot="items" slot-scope="props">
+                <td v-if="props.item.finished">
+                    <router-link
+                            :to="{ name: 'imageSingle', params: {index: getImageIndex(props.item.id)}}">
+                        {{ props.item.fingerprint.substring(0,11) }}...
+                    </router-link>
+                </td>
+                <td v-else/>
+                <td v-if="props.item.aliases.length > 0">{{ props.item.aliases[0].name }}</td>
+                <td v-else/>
+                <td>
+                    {{props.item.architecture}}
+                </td>
+                <td>
+                    <i :class="{ 'fa-times': !props.item.finished, 'fa-check': props.item.finished}"
+                        class="fa">
+                    </i>
+                </td>
+                <td>
+                    <i :class="{ 'fa-times': !props.item.public, 'fa-check': props.item.public}"
+                       class="fa">
+                    </i>
+                </td>
+            </template>
+        </v-data-table>
     </div>
-
-
-    <div v-else>
-      Keine Einträge vorhanden
-    </div>
-
-  </div>
 </template>
 
 <script>
     import {mapGetters} from "vuex";
 
     export default {
+        data() {
+            return {
+                headers: [
+                    {
+                        text: "Fingerprint",
+                        value: "fingerprint"
+                    },
+                    {
+                        text: "Alias",
+                        value: "aliases",
+                        sortable: false,
+                    },
+                    {
+                        text: "Architecture",
+                        value: "architecture",
+                        sortable: false,
+                    },
+                    {
+                        text: "Finished",
+                        value: "finished",
+                        sortable: false,
+                    },
+                    {
+                        text: "Public",
+                        value: "public",
+                        sortable: false,
+                    },
+                ]
+            }
+        },
+
         mounted() {
         },
 
@@ -67,6 +87,9 @@
 
             deleteHost(id) {
                 this.$store.dispatch("deleteHost", id);
+            },
+            getImageIndex(id) {
+                return this.$store.getters.getImageIndexById(id);
             }
         }
     };

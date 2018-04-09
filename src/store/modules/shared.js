@@ -6,7 +6,7 @@ import {assign} from 'lodash'
 const state = {
     initiated: false,
     loading: false,
-}
+};
 
 
 // getters
@@ -14,12 +14,12 @@ const getters = {
     getInitiated({initiated}) {
         return initiated;
     }
-}
+};
 
 
 // actions
 const actions = {
-    initShared({commit, dispatch, state, rootState}) {
+    initShared({commit, dispatch}) {
         return Promise.all([
             dispatch('initContainers'),
             dispatch('initHosts'),
@@ -27,16 +27,23 @@ const actions = {
             dispatch('initUser'),
             dispatch('initImages'),
             dispatch('initBackupDestinations'),
+            dispatch('initBackupSchedules'),
+            dispatch('initBackups'),
         ]).then(() => {
             console.log('init ready');
             commit(types.INIT_READY);
         }).catch((reason) => {
-            console.warn('not able to fetch init data');
-            console.log(reason)
+            console.warn('not able to fetch init data because:');
+            console.warn(reason);
+            if (reason.response.status === 401) {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("expiration");
+                location.reload();
+            }
         })
 
     }
-}
+};
 
 //mutations
 const mutations = {
@@ -59,7 +66,7 @@ const mutations = {
         app.$Progress.fail()
     },
 
-}
+};
 
 
 export default {

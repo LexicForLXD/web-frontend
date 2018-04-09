@@ -22,7 +22,7 @@
           <p v-if="image.finished">Finished: {{ image.finished }}</p>
           <p v-if="image.filename">Filename: {{ image.filename }}</p>
           <p v-if="image.properties">Properties: {{ JSON.stringify(image.properties) }}</p>
-          <p v-if="image.hostId">Host: {{ hosts[image.hostId].name }} </p>
+          <p v-if="image.hostId">Host: {{ host.name }} </p>
           <div v-if="image.aliases.length > 0">
             Aliases:
             <ul v-for="alias in image.aliases">
@@ -91,12 +91,15 @@
         computed: {
             ...mapGetters({
                 images: "getImages",
-                hosts: "getHosts",
             }),
 
             image() {
                 return this.images[this.index];
+            },
+            host() {
+                return this.$store.getters.getHostById(this.image.hostId);
             }
+
         },
         data() {
             return {

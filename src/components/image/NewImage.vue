@@ -1,130 +1,115 @@
 <template>
-    <div>
-        <div class="field">
-            <label class="label">Filename</label>
-            <div class="control">
-                <input class="input" type="text" v-model="filename"/>
-            </div>
-        </div>
+    <v-form v-model="valid">
+        <v-text-field
+                label="Filename"
+                v-model="filename"
+        />
 
-        <div class="field">
-            <label class="checkbox">Public</label>
-                <input type="checkbox" v-model="public"/>
-        </div>
+        <v-checkbox
+                label="Public"
+                v-model="public"
+        />
+
+        <v-text-field
+                label="Alias name"
+                v-model="aliases[0].name"
+        />
+
+        <v-text-field
+                label="Alias description"
+                v-model="aliases[0].description"
+        />
+
+        <v-select
+                :items="hosts"
+                v-model="hostId"
+                label="Host"
+                required
+                item-value="id"
+                item-text="name"
+                :rules="[v => !!v || 'Host is required']"
+        />
 
 
+        <v-text-field
+                label="Properties"
+                v-model="properties"
+                multi-line
+                placeholder='{"os": "Alpine"}'
+        />
 
-        <div class="field">
-            <label class="label">Alias name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="aliases[0].name"/>
-            </div>
-        </div>
+        <v-select
+                :items="sourceTypes"
+                v-model="source.type"
+                label="Source Type"
+                required
+                item-value="value"
+                item-text="text"
+                :rules="[v => !!v || 'Source type is required']"
+        />
 
-        <div class="field">
-            <label class="label">Alias description</label>
-            <div class="control">
-                <input class="input" type="text" v-model="aliases[0].description"/>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Properties</label>
-            <div class="control">
-                <textarea class="textarea" v-model="properties" placeholder='{"os": "Alpine"}'/>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Host</label>
-            <div class="control" v-if="hosts.length > 0">
-                <div class="select">
-                    <select name="host_select" v-model="hostId">
-                        <option v-for="host in hosts" v-bind:key="host.id" v-bind:value="host.id">
-                            {{ host.name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Source type</label>
-            <div class="control">
-                <div class="select">
-                    <select name="sourcetype_select" v-model="source.type">
-                        <option value="image">Remote image</option>
-                        <option value="container">Container</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
         <div v-if="source.type === 'image'">
+            <v-checkbox
+                    label="Automatic update"
+                    v-model="autoUpdate"
+            />
 
-            <div class="field">
-                <label class="checkbox">Auto-update</label>
-                <input type="checkbox" v-model="autoUpdate"/>
-            </div>
+            <v-text-field
+                    label="Remote server"
+                    v-model="source.server"
+                    required
+                    :rules="[v => !!v || 'Server is required']"
+            />
 
-            <div class="field">
-                <label class="label">Image server</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="source.server" placeholder="https://uk.images.linuxcontainers.org:8443"/>
-                </div>
-            </div>
+            <v-text-field
+                    label="Protocol"
+                    v-model="source.protocol"
+                    required
+                    :rules="[v => !!v || 'Protocol is required']"
+                    placeholder="lxd"
+            />
 
-            <div class="field">
-                <label class="label">Image protocol</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="source.protocol" placeholder="lxd"/>
-                </div>
-            </div>
+            <v-text-field
+                    label="Alias"
+                    v-model="source.alias"
+                    required
+                    :rules="[v => !!v || 'Alias is required']"
+                    placeholder="alpine/3.7/amd64"
+            />
 
-            <div class="field">
-                <label class="label">Image alias</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="source.alias" placeholder="alpine/3.7/amd64"/>
-                </div>
-            </div>
         </div>
 
         <div v-if="source.type === 'container'">
-
-            <div class="field">
-                <label class="label">Container</label>
-                <div class="control" v-if="containers.length > 0">
-                    <div class="select">
-                        <select name="container_select" v-model="source.name">
-                            <option v-for="container in containers" v-bind:key="container.id" v-bind:value="container.name">
-                                {{ container.name }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div v-else>
-                    No Containers available
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Compression algorithm</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="compressionAlgo"/>
-                </div>
-            </div>
+            <v-select
+                    :items="containers"
+                    v-model="source.name"
+                    label="Host"
+                    required
+                    item-value="name"
+                    item-text="name"
+                    :rules="[v => !!v || 'Host is required']"
+            />
 
 
+            <v-text-field
+                    label="Compression algorithm"
+                    v-model="compressionAlgo"
+                    required
+                    :rules="[v => !!v || 'Compression algorithm is required']"
+                    placeholder="rm"
+            />
         </div>
 
+        <v-btn
+                @click="onSubmit"
+                :disabled="!valid"
+        >
+            Submit
+        </v-btn>
 
 
-
-
-
-        <button class="button" @click="onSubmit">Save</button>
-
-    </div>
+    </v-form>
 </template>
 
 <script>
@@ -143,7 +128,7 @@
             },
 
             remoteAliases() {
-                let aliases
+                let aliases;
                 remoteImageApi.fetch().then((res) => {
                     aliases = res.data.metadata;
                     console.log(aliases);
@@ -179,8 +164,17 @@
                 compressionAlgo: "",
 
                 hostId: "",
-
-
+                valid: false,
+                sourceTypes: [
+                    {
+                        value: "image",
+                        text: "Remote image"
+                    },
+                    {
+                        value: "container",
+                        text: "Container"
+                    }
+                ]
             };
         },
 
@@ -188,7 +182,7 @@
             onSubmit() {
                 let body;
 
-                if(this.source.type == "container"){
+                if(this.source.type === "container"){
                     body = {
                         image: {
                             filename: this.filename,

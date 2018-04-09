@@ -1,61 +1,94 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="container" class="card">
-                <header class="card-header">
-                    <div class="card-header-title">
-                        Name: {{container.name}}
-                    </div>
-                </header>
-                <div class="card-content">
-                    <p v-if="container.architecture">Architecture: {{container.architecture}}</p>
-                    <p v-if="container.config">Config: {{container.config}}</p>
-                    <p v-if="container.devices">Devices: {{container.devices}}</p>
-                    <p v-if="container.state">State: {{container.state}}</p>
-                    <p>
-                        Host:
-                        <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
-                        </router-link>
-                    </p>
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12>
+                <v-card v-if="container" class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Name: {{container.name}}
+                        </v-toolbar-title>
+                    </v-toolbar>
 
-                    <a href="#" class="button" @click="onStart" v-bind:disabled="container.state != 'stopped'">Start</a>
-                    <a href="#" class="button" @click="onRestart"
-                       v-bind:disabled="container.state == 'stopped'">Restart</a>
-                    <a href="#" class="button" @click="onStop" v-bind:disabled="container.state == 'stopped'">Stop</a>
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
-        </div>
-        <div v-if="editing">
-            <label class="label">Name</label>
-            <input class="input" type="text" v-model="editName">
+                    <v-card-text v-if="!editing && !editName">
+                        <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
+                        <p v-if="container.config"><b>Config:</b> {{container.config}}</p>
+                        <p v-if="container.devices">Devices: {{container.devices}}</p>
+                        <p v-if="container.state">State: {{container.state}}</p>
+                        <p>
+                            Host:
+                            <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
+                            </router-link>
+                        </p>
 
-            <label class="label">DomainName</label>
-            <input class="input" type="text" v-model="editDomainName">
+                        <a href="#" class="button" @click="onStart"
+                           v-bind:disabled="container.state != 'stopped'">Start</a>
+                        <a href="#" class="button" @click="onRestart"
+                           v-bind:disabled="container.state == 'stopped'">Restart</a>
+                        <a href="#" class="button" @click="onStop"
+                           v-bind:disabled="container.state == 'stopped'">Stop</a>
+                    </v-card-text>
 
-            <label class="label">ipv4</label>
-            <input class="input" type="text" v-model="editIpv4">
 
-            <label class="label">ipv6</label>
-            <input class="input" type="text" v-model="editIpv6">
+                    <v-card-text v-if="editName">
+                        <v-text-field
+                                label="Name"
+                                v-model="name"
+                                :rules="[v => !!v || 'Name is required']"
+                                required
+                        />
 
-            <label class="label">Port</label>
-            <input class="input" type="number" v-model="editPort">
+                        <v-btn @click="onChangeNameSubmit">Save</v-btn>
 
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-    </div>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-btn flat @click="onEdit">Edit</v-btn>
+                        <v-btn flat @click="onDelete">Delete</v-btn>
+                        <v-btn flat @click="onChangeName">Change name</v-btn>
+                    </v-card-actions>
+
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12>
+                <v-card class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Monitoring
+                        </v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-tabs v-model="active" fixed-tabs grow>
+                            <v-tab key="logs">Logs</v-tab>
+                            <v-tab key="nagios">Nagios</v-tab>
+
+                            <v-tab-item key="logs">
+                                <log-container v-if="container" :containerId="container.id"/>
+                            </v-tab-item>
+
+                            <v-tab-item key="nagios">
+                                <nagios-container v-if="container" :containerId="container.id"/>
+                            </v-tab-item>
+                        </v-tabs>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
     import {mapGetters} from "vuex";
     import stateApi from "../../api/containers/containerState"
+    import LogContainer from "./logs/LogContainer"
+    import NagiosContainer from "./nagios/NagiosContainer"
 
     export default {
+        components: {
+            LogContainer,
+            NagiosContainer,
+        },
+
         computed: {
             ...mapGetters({
                 containers: "getContainers",
@@ -74,16 +107,18 @@
         },
         data() {
             return {
+                name: "",
                 editing: false,
                 editIpv4: "",
                 editIpv6: "",
                 editDomainName: "",
-                editName: "",
+                editName: false,
                 editPort: "",
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
                 // hostIndex: "",
+                active: null,
             };
         },
         methods: {
@@ -101,6 +136,7 @@
             },
             onCancel() {
                 this.editing = false;
+                this.editName = false;
             },
             onUpdate() {
                 this.$store.dispatch("updateImage", {
@@ -114,6 +150,19 @@
                     }
                 });
                 this.editing = false;
+            },
+
+            onChangeName() {
+                this.editName = !this.editName;
+            },
+
+            onChangeNameSubmit() {
+                this.$store.dispatch("updateContainer", {
+                    containerId: this.container.id,
+                    container: {
+                        name: this.name
+                    }
+                })
             },
 
             onStart() {

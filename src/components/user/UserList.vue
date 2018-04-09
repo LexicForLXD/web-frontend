@@ -1,31 +1,20 @@
 <template>
     <div>
-        <div v-if="users.length > 0">
-            <table class="table is-hoverable is-fullwidth">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <router-link v-for="(user, index) in users"
-                             :key="user.id"
-                             :to="{name: 'userSingle', params: {index: index}}"
-                             tag="tr">
-                    <td>{{user.firstName}} {{user.lastName}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.email}}</td>
-                </router-link>
-                </tbody>
-            </table>
-        </div>
 
-
-        <div v-else>
-            Keine Einträge vorhanden
-        </div>
+        <v-data-table
+                :headers="headers"
+                :items="users">
+            <template slot="items" slot-scope="props">
+                <td>
+                    <router-link
+                            :to="{ name: 'userSingle', params: {index: getUserIndex(props.item.id)}}">
+                        {{ props.item.firstName }} {{ props.item.lastName}}
+                    </router-link>
+                </td>
+                <td>{{props.item.username}}</td>
+                <td>{{props.item.email}}</td>
+            </template>
+        </v-data-table>
 
     </div>
 </template>
@@ -34,6 +23,25 @@
     import {mapGetters} from "vuex";
 
     export default {
+        data() {
+            return {
+                headers: [
+                    {
+                        text: "Name",
+                        value: "name"
+                    },
+                    {
+                        text: "Username",
+                        value: "username",
+                    },
+                    {
+                        text: "Email",
+                        value: "email",
+                    },
+                ]
+            }
+        },
+
         mounted() {
         },
 
@@ -44,13 +52,16 @@
             })
         },
 
-        components: {
-        },
+        components: {},
 
         methods: {
 
             deleteUser(id) {
                 this.$store.dispatch("deleteUser", id);
+            }
+            ,
+            getUserIndex(id) {
+                return this.$store.getters.getUserIndexById(id);
             }
         }
     };

@@ -1,60 +1,62 @@
+import backupApi from "../../../api/backup/backup";
 import * as types from "../../mutation-types";
-import imageApi from "../../../api/image/image";
 
 export default {
-    setImages({commit}) {
+    setBackups({commit}) {
         commit(types.LOADING_BEGIN);
-        imageApi.fetch().then((res) => {
-            commit(types.IMAGE_SET_ALL, {imagesData: res.data});
+        backupApi.fetch().then((res) => {
+            commit(types.BACKUP_SET_ALL, {backupsData: res.data});
             commit(types.LOADING_FINISH);
         }).catch((error) => {
             commit(types.LOADING_FAIL);
-            commit(types.IMAGE_SET_ALL_FAILURE, error);
+            commit(types.BACKUP_SET_ALL_FAILURE, error);
         })
     },
 
-    initImages({commit}) {
+    initBackups({commit}) {
         return new Promise((resolve, reject) => {
-            imageApi.fetch().then((res) => {
-                commit(types.IMAGE_SET_ALL, {imagesData: res.data});
+            backupApi.fetch().then((res) => {
+                commit(types.BACKUP_SET_ALL, {backupsData: res.data});
                 resolve();
             }).catch((error) => {
                 if (error.response) {
-                    commit(types.IMAGE_SET_ALL_FAILURE, {general: error.response.data.error.message});
                     if (error.response.status === 404) {
                         if (error.response.data.error.code === 404) {
-                            resolve(error.response.data.error.messages);
+                            resolve(error.response.data.error.message);
                         }
+
                     }
                 }
                 reject(error);
+                commit(types.BACKUP_SET_ALL_FAILURE, error);
             })
         })
     },
 
 
-    deleteImage({commit}, id) {
-        commit(types.IMAGE_DELETE, id);
+    deleteBackup({commit}, id) {
+        commit(types.BACKUP_DELETE, id);
         commit(types.LOADING_BEGIN);
-        imageApi.delete(id).then(() => {
+        backupApi.delete(id).then(() => {
             commit(types.LOADING_FINISH);
-            commit(types.IMAGE_DELETE_SUCCESS);
+            commit(types.BACKUP_DELETE_SUCCESS);
         }).catch((error) => {
             commit(types.LOADING_FAIL);
-            commit(types.IMAGE_DELETE_FAILURE, error);
+            commit(types.BACKUP_DELETE_FAILURE, error);
         })
     },
 
 
-    createImage({commit}, data) {
+    createBackup({commit}, data) {
         commit(types.LOADING_BEGIN);
         return new Promise((resolve, reject) => {
-            imageApi.create(data.hostId, data.image).then((res) => {
-                commit(types.IMAGE_ADD_NEW, {image: res.data});
+            backupApi.create(data).then((res) => {
+                commit(types.BACKUP_ADD_NEW, res.data);
                 commit(types.LOADING_FINISH);
+                commit(types.BACKUP_ADD_NEW_SUCCESS);
                 resolve();
             }).catch((error) => {
-                commit(types.IMAGE_ADD_NEW_FAILURE, error);
+                commit(types.BACKUP_ADD_NEW_FAILURE, error);
                 commit(types.LOADING_FAIL);
                 reject();
             })
@@ -62,16 +64,14 @@ export default {
     },
 
 
-    updateImage({commit}, data) {
+    updateBackup({commit}, data) {
         commit(types.LOADING_BEGIN);
-        imageApi.update(data.image_id, data.image).then((res) => {
-            commit(types.IMAGE_UPDATE_SUCCESS, res.data);
+        backupApi.update(data.backup_id, data.backup).then((res) => {
+            commit(types.BACKUP_UPDATE_SUCCESS, res.data);
             commit(types.LOADING_FINISH);
         }).catch((error) => {
             commit(types.LOADING_FAIL);
-            commit(types.IMAGE_UPDATE_FAILURE, error);
+            commit(types.BACKUP_UPDATE_FAILURE, error);
         })
-    },
-
-
+    }
 }

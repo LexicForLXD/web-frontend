@@ -72,45 +72,53 @@ export default {
 
 
 function setErrors(backupDestinationErrors, error) {
-    if (error.response.data.error.message.name) {
-        backupDestinationErrors.name = error.response.data.error.message.name;
-    } else {
-        backupDestinationErrors.name = "";
-    }
-    if (error.response.data.error.message.description) {
-        backupDestinationErrors.description = error.response.data.error.message.description;
-    } else {
-        backupDestinationErrors.description = "";
-    }
-    if (error.response.data.error.message.protocol) {
-        backupDestinationErrors.protocol = error.response.data.error.message.protocol;
-    } else {
-        backupDestinationErrors.protocol = "";
-    }
-    if (error.response.data.error.message.username) {
-        backupDestinationErrors.username = error.response.data.error.message.username;
-    } else {
-        backupDestinationErrors.username = "";
-    }
-    if (error.response.data.error.message.password) {
-        backupDestinationErrors.password = error.response.data.error.message.password;
-    } else {
-        backupDestinationErrors.password = "";
-    }
-    if (error.response.data.error.message.hostname) {
-        backupDestinationErrors.hostname = error.response.data.error.message.hostname;
-    } else {
-        backupDestinationErrors.hostname = "";
-    }
-    if (error.response.data.error.message.path) {
-        backupDestinationErrors.devices = error.response.data.error.message.devices;
-    } else {
-        backupDestinationErrors.devices = "";
-    }
-    if (error.response.data.error.message.general) {
-        backupDestinationErrors.general = error.response.data.error.message.general;
-    } else {
-        backupDestinationErrors.general = "";
+    if (error.response) {
+        if (error.response.data) {
+            if (error.response.data.error) {
+                if (error.response.data.error.message) {
+                    if (error.response.data.error.message.name) {
+                        backupDestinationErrors.name = error.response.data.error.message.name;
+                    } else {
+                        backupDestinationErrors.name = "";
+                    }
+                    if (error.response.data.error.message.description) {
+                        backupDestinationErrors.description = error.response.data.error.message.description;
+                    } else {
+                        backupDestinationErrors.description = "";
+                    }
+                    if (error.response.data.error.message.protocol) {
+                        backupDestinationErrors.protocol = error.response.data.error.message.protocol;
+                    } else {
+                        backupDestinationErrors.protocol = "";
+                    }
+                    if (error.response.data.error.message.username) {
+                        backupDestinationErrors.username = error.response.data.error.message.username;
+                    } else {
+                        backupDestinationErrors.username = "";
+                    }
+                    if (error.response.data.error.message.password) {
+                        backupDestinationErrors.password = error.response.data.error.message.password;
+                    } else {
+                        backupDestinationErrors.password = "";
+                    }
+                    if (error.response.data.error.message.hostname) {
+                        backupDestinationErrors.hostname = error.response.data.error.message.hostname;
+                    } else {
+                        backupDestinationErrors.hostname = "";
+                    }
+                    if (error.response.data.error.message.path) {
+                        backupDestinationErrors.devices = error.response.data.error.message.devices;
+                    } else {
+                        backupDestinationErrors.devices = "";
+                    }
+                    if (error.response.data.error.message.general) {
+                        backupDestinationErrors.general = error.response.data.error.message.general;
+                    } else {
+                        backupDestinationErrors.general = "";
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -11,7 +11,7 @@ export default {
                     resolve();
                 }).catch(() => {
                     commit(types.USER_SET_CURRENT_FAILED);
-                    reject('user data');
+                    reject('Could get current user');
                 })
             }),
             new Promise((resolve, reject) => {
