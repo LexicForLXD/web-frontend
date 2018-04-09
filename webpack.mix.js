@@ -12,10 +12,10 @@ let mix = require('laravel-mix');
  */
 
 
-
 mix.js('src/app.js', 'public/js')
-  .extract(['vue'])
-  .options({
-    publicPath: 'public'
-  })
-  .disableNotifications();
+    .copy('node_modules/vuetify/dist/vuetify.min.css', 'public/css/vuetify.min.css')
+    .extract(['vue'])
+    .options({
+        publicPath: 'public'
+    })
+    .disableNotifications();
