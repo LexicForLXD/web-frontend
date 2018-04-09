@@ -12,9 +12,7 @@
                     </div>
                 </v-container>
             </v-content>
-            <v-footer app>
-                <site-footer/>
-            </v-footer>
+            <site-footer/>
         </v-app>
     </div>
 </template>
