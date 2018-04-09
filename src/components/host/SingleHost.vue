@@ -6,7 +6,8 @@
                    <div class="card-header-title">
                        Name: {{hosts[index].name}}
                    </div>
-                    <i v-bind:class="{ 'fa-times': !hosts[index].authenticated, 'fa-check': hosts[index].authenticated}" class="fa card-header-icon"> </i>
+                    <v-icon v-if="hosts[index].authenticated">done</v-icon>
+                    <v-icon v-else>error</v-icon>
                 </header>
                 <div class="card-content">
                     <p v-if="hosts[index].domainName">DomainName: {{hosts[index].domainName}}</p>

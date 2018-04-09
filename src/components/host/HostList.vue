@@ -10,8 +10,10 @@
                         {{ props.item.name }}
                     </router-link>
                 </td>
-                <td><i v-bind:class="{ 'fa-times': !props.item.authenticated, 'fa-check': props.item.authenticated}"
-                       class="fa"> </i></td>
+                <td>
+                    <v-icon v-if="props.item.authenticated">done</v-icon>
+                    <v-icon v-else>error</v-icon>
+                </td>
             </template>
         </v-data-table>
 
