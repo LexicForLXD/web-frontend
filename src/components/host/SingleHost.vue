@@ -61,7 +61,7 @@
                             <v-tab key="nagios">Nagios</v-tab>
 
                             <v-tab-item key="logs">
-                                <!--<log-host v-if="host" :containerId="host.id"/>-->
+                                <log-host v-if="host" :hostId="host.id"/>
                             </v-tab-item>
 
                             <v-tab-item key="nagios">
@@ -77,6 +77,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import LogHost from "./LogHost";
 
     export default {
         computed: {
@@ -92,6 +93,11 @@
             },
 
         },
+
+        components: {
+            LogHost
+        },
+
         data() {
             return {
                 editing: false,
@@ -103,6 +109,7 @@
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
+                active: null
             };
         },
         methods: {
