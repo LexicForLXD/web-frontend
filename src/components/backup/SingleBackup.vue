@@ -1,6 +1,8 @@
 <template>
     <div>
         {{backup.timestamp}}
+        <p>{{destination.name}}</p>
+        <p>{{schedule.name}}</p>
     </div>
 
 </template>
@@ -10,11 +12,28 @@
 
     export default {
         computed: {
-            ...mapGetters({
-                b: "getHosts",
-            }),
             backup () {
-                return this.$store.getters.getBackupByIndex(this.index)
+                return this.$store.getters.getBackupByIndex(this.index);
+            },
+
+            destination () {
+                return this.$store.getters.getBackupDestinationById(this.backup.destinationId);
+            },
+
+            destinationIndex () {
+                return this.$store.getters.getBackupDestinationIndexById(this.backup.destinationId);
+            },
+
+            schedule() {
+                return this.$store.getters.getBackupScheduleById(this.backup.backupScheduleId);
+            },
+
+            scheduleIndex() {
+                return this.$store.getters.getBackupScheduleIndexById(this.backup.backupScheduleId);
+            },
+
+            containers() {
+                return this.$store.getters.getContainersByIds(this.backup.containerId);
             }
         },
         data() {
@@ -31,6 +50,11 @@
             };
         },
         methods: {
+
+            containerIndex(id) {
+                return this.$store.getters.getContainerIndexById(id);
+            },
+
             onDelete() {
                 this.$store.dispatch("deleteHost", this.id);
             },
