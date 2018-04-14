@@ -10,7 +10,10 @@
             <p><b>Schedule:</b> {{schedule.name}}</p>
             <p><b>Containers:</b></p>
             <ul v-for="container in containers">
-                <li> {{container.name}}</li>
+                <router-link
+                        :to="{ name: 'containerSingle', params: {index: containerIndex(container.id)}}" tag="li">
+                    {{container.name}}
+                </router-link>
             </ul>
 
         </v-card-text>
