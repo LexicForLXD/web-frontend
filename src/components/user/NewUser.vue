@@ -1,61 +1,46 @@
 <template>
-    <div>
-        <div class="field">
-            <label class="label">First name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="firstName" v-bind:class="{'is-danger': userErrors.firstName.length > 0}">
-            </div>
-            <div v-if="userErrors.firstName.length > 0" class="help is-danger">
-                {{userErrors.firstName}}
-            </div>
-        </div>
 
+    <v-form v-model="valid">
+        <v-text-field
+                label="First name"
+                v-model="firstName"
+                :rules="[v => !!v || 'First name is required']"
+                required
+        />
+        <v-text-field
+                label="Last name"
+                v-model="lastName"
+                :rules="[v => !!v || 'Last name is required']"
+                required
+        />
+        <v-text-field
+                label="Username"
+                v-model="username"
+                :rules="[v => !!v || 'Username is required']"
+                required
+        />
+        <v-text-field
+                label="Email"
+                v-model="email"
+                :rules="[v => !!v || 'Email name is required']"
+                required
+                type="email"
+        />
+        <v-text-field
+                label="Password"
+                v-model="password"
+                :type="e1 ? 'password' : 'text'"
+                :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (e1 = !e1)"
+        />
 
-
-        <div class="field">
-            <label class="label">Last name</label>
-            <div class="control">
-                <input class="input" type="text" v-model="lastName" v-bind:class="{'is-danger': userErrors.lastName.length > 0}">
-            </div>
-            <div v-if="userErrors.lastName.length > 0" class="help is-danger">
-                {{userErrors.lastName}}
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Username</label>
-            <div class="control">
-                <input class="input" type="text" v-model="username" v-bind:class="{'is-danger': userErrors.username.length > 0}">
-            </div>
-            <div v-if="userErrors.username.length > 0" class="help is-danger">
-                {{userErrors.username}}
-            </div>
-        </div>
-
-
-        <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-                <input class="input" type="email" v-model="email" v-bind:class="{'is-danger': userErrors.email.length > 0}">
-            </div>
-            <div v-if="userErrors.email.length > 0" class="help is-danger">
-                {{userErrors.email}}
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-                <input class="input" type="password" v-model="password" v-bind:class="{'is-danger': userErrors.password.length > 0}">
-            </div>
-            <div v-if="userErrors.password.length > 0" class="help is-danger">
-                {{userErrors.password}}
-            </div>
-        </div>
-
-        <button class="button" @click="onSubmit">Save</button>
-
-    </div>
+        <v-btn
+                @click="onSubmit"
+                :disabled="!valid"
+        >
+            Submit
+        </v-btn>
+    </v-form>
 </template>
 
 <script>
@@ -70,6 +55,8 @@
 
         data() {
             return {
+                valid: false,
+                e1: true,
                 firstName: "",
                 lastName: "",
                 username: "",
@@ -96,7 +83,7 @@
 
 
                 this.$store.dispatch("createUser", body).then(() => {
-                    this.$router.push({ name: "userOverview"})
+                    this.$router.push({name: "userOverview"})
                 }).catch(() => {
 
                 });
