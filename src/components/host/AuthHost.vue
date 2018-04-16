@@ -1,11 +1,23 @@
 <template>
-    <div>
-        <label class="label">Password</label>
-        <input class="input" type="password" v-model="password">
+    <v-form v-model="valid">
+        <v-text-field
+                label="Password"
+                v-model="password"
+                :type="e1 ? 'password' : 'text'"
+                :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (e1 = !e1)"
+                required
+                :rules="[v => !!v || 'Password is required']"
+        />
 
-        <button class="button" @click="onAuth">Authenticate</button>
+        <v-btn
+                @click="onAuth"
+                :disabled="!valid"
+        >
+            Authenticate
+        </v-btn>
 
-    </div>
+    </v-form>
 </template>
 
 <script>
@@ -20,6 +32,8 @@
 
         data() {
             return {
+                valid: false,
+                e1: true,
                 password: "",
                 index: this.$route.params.index,
             };
