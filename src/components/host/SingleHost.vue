@@ -1,68 +1,103 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="hosts[index]" class="card">
-                <header class="card-header">
-                   <div class="card-header-title">
-                       Name: {{hosts[index].name}}
-                   </div>
-                    <v-icon v-if="hosts[index].authenticated">done</v-icon>
-                    <v-icon v-else>error</v-icon>
-                </header>
-                <div class="card-content">
-                    <p v-if="hosts[index].domainName">DomainName: {{hosts[index].domainName}}</p>
-                    <p v-if="hosts[index].ipv4">ipv4: {{hosts[index].ipv4}}</p>
-                    <p v-if="hosts[index].ipv6">ipv6: {{hosts[index].ipv6}}</p>
-                    <p v-if="hosts[index].port">Port: {{hosts[index].port}}</p>
-                    <div v-if="hosts[index].containerId">
-                        Containers:
-                        <ul v-for="container in containersForHost">
-                            <li> {{container.name}} </li>
-                        </ul>
-                    </div>
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12>
+                <v-card v-if="host" class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Name: {{host.name}}
+                        </v-toolbar-title>
+                    </v-toolbar>
 
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <router-link  class="card-footer-item"  :to="{name: 'hostAuth', params: {index: index}}">Authenticate</router-link>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
-        </div>
-        <div v-if="editing">
-            <label class="label">Name</label>
-            <input class="input" type="text" v-model="editName">
+                    <v-card-text v-if="!editing && !editName">
+                        <p v-if="host.domainName">DomainName: {{host.domainName}}</p>
+                        <p v-if="host.ipv4">ipv4: {{host.ipv4}}</p>
+                        <p v-if="host.ipv6">ipv6: {{host.ipv6}}</p>
+                        <p v-if="host.port">Port: {{host.port}}</p>
+                        <div v-if="host.containerId">
+                            Containers:
+                            <v-list>
+                                <v-list-tile v-for="container in containersForHost">
+                                    <v-list-tile-content>
+                                        <router-link :to="{name: 'containerSingle', params: {index: getContainerIndex(container.id)}}">{{container.name}}</router-link>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
+                        </div>
+                    </v-card-text>
 
-            <label class="label">DomainName</label>
-            <input class="input" type="text" v-model="editDomainName">
 
-            <label class="label">ipv4</label>
-            <input class="input" type="text" v-model="editIpv4">
+                    <v-card-text v-if="editName">
+                        <v-text-field
+                                label="Name"
+                                v-model="name"
+                                :rules="[v => !!v || 'Name is required']"
+                                required
+                        />
 
-            <label class="label">ipv6</label>
-            <input class="input" type="text" v-model="editIpv6">
+                        <v-btn @click="onChangeNameSubmit">Save</v-btn>
 
-            <label class="label">Port</label>
-            <input class="input" type="number" v-model="editPort">
+                    </v-card-text>
 
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-    </div>
+                    <v-card-actions>
+                        <v-btn flat @click="onEdit">Edit</v-btn>
+                        <v-btn flat @click="onDelete">Delete</v-btn>
+                        <v-btn flat :to="{name: 'hostAuth', params: {index: index}}">Authenticate</v-btn>
+                    </v-card-actions>
+
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12>
+                <v-card class="my-2">
+                    <v-toolbar>
+                        <v-toolbar-title>
+                            Monitoring
+                        </v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-tabs v-model="active" fixed-tabs grow>
+                            <v-tab key="logs">Logs</v-tab>
+                            <v-tab key="nagios">Nagios</v-tab>
+
+                            <v-tab-item key="logs">
+                                <log-host v-if="host" :hostId="host.id"/>
+                            </v-tab-item>
+
+                            <v-tab-item key="nagios">
+                                <!--<nagios-host v-if="host" :containerId="host.id"/>-->
+                            </v-tab-item>
+                        </v-tabs>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
     import {mapGetters} from "vuex";
+    import LogHost from "./LogHost";
 
     export default {
         computed: {
             ...mapGetters({
                 hosts: "getHosts",
             }),
-            containersForHost () {
-                return this.$store.getters.getContainersByIds(this.hosts[this.index].containerId)
-            }
+            containersForHost() {
+                return this.$store.getters.getContainersByIds(this.host.containerId)
+            },
+
+            host() {
+                return this.hosts[this.index];
+            },
+
         },
+
+        components: {
+            LogHost
+        },
+
         data() {
             return {
                 editing: false,
@@ -74,12 +109,13 @@
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
+                active: null
             };
         },
         methods: {
             onDelete() {
                 this.$store.dispatch("deleteHost", this.hosts[this.index].id);
-                this.$router.push({ name: 'hostOverview'});
+                this.$router.push({name: 'hostOverview'});
             },
             onEdit() {
                 this.editIpv4 = this.hosts[this.index].ipv4;
@@ -105,7 +141,9 @@
                 });
                 this.editing = false;
             },
-
+            getContainerIndex(id) {
+                return this.$store.getters.getContainerIndexById(id);
+            }
 
         }
     };

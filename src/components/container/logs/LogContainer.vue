@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import logView from "./LogView.vue";
+    import logView from "../../log/LogView.vue";
     import containerLogApi from '../../../api/monitoring/containerMonitoring.js'
     import {mapMutations} from "vuex";
     import {LOADING_BEGIN, LOADING_FAIL, LOADING_FINISH} from "../../../store/mutation-types";
