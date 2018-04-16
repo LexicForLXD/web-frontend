@@ -9,17 +9,20 @@
                         </v-toolbar-title>
                     </v-toolbar>
 
-                    <v-card-text v-if="!editing && !editName">
-                        <p v-if="host.domainName">DomainName: {{host.domainName}}</p>
-                        <p v-if="host.ipv4">ipv4: {{host.ipv4}}</p>
-                        <p v-if="host.ipv6">ipv6: {{host.ipv6}}</p>
-                        <p v-if="host.port">Port: {{host.port}}</p>
+                    <v-card-text v-if="!editing">
+                        <p v-if="host.domainName"><b>DomainName:</b> {{host.domainName}}</p>
+                        <p v-if="host.ipv4"><b>ipv4:</b> {{host.ipv4}}</p>
+                        <p v-if="host.ipv6"><b>ipv6:</b> {{host.ipv6}}</p>
+                        <p v-if="host.port"><b>Port:</b> {{host.port}}</p>
                         <div v-if="host.containerId">
-                            Containers:
+                            <b>Containers:</b>
                             <v-list>
                                 <v-list-tile v-for="container in containersForHost">
                                     <v-list-tile-content>
-                                        <router-link :to="{name: 'containerSingle', params: {index: getContainerIndex(container.id)}}">{{container.name}}</router-link>
+                                        <router-link
+                                                :to="{name: 'containerSingle', params: {index: getContainerIndex(container.id)}}">
+                                            {{container.name}}
+                                        </router-link>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
@@ -27,22 +30,54 @@
                     </v-card-text>
 
 
-                    <v-card-text v-if="editName">
-                        <v-text-field
-                                label="Name"
-                                v-model="name"
-                                :rules="[v => !!v || 'Name is required']"
-                                required
-                        />
+                    <v-card-text v-if="editing">
+                        <v-form v-model="valid">
+                            <v-text-field
+                                    label="Name"
+                                    v-model="editName"
+                                    :rules="[v => !!v || 'Name is required']"
+                                    required
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                    label="ipv4"
+                                    v-model="editIpv4"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                    label="ipv6"
+                                    v-model="editIpv6"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                    label="Domainname"
+                                    v-model="editDomainName"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                    label="Port"
+                                    v-model="editPort"
+                                    :rules="[v => (v>=0 && v<=65555) || 'Port must be valid port number']"
+                            ></v-text-field>
 
-                        <v-btn @click="onChangeNameSubmit">Save</v-btn>
+                            <v-btn
+                                    @click="onUpdate"
+                                    :disabled="!valid"
+                            >
+                                Submit
+                            </v-btn>
+
+                        </v-form>
 
                     </v-card-text>
 
-                    <v-card-actions>
+                    <v-card-actions v-if="!editing">
                         <v-btn flat @click="onEdit">Edit</v-btn>
                         <v-btn flat @click="onDelete">Delete</v-btn>
                         <v-btn flat :to="{name: 'hostAuth', params: {index: index}}">Authenticate</v-btn>
+                    </v-card-actions>
+                    <v-card-actions v-else>
+                        <v-btn flat @click="onCancel">Abort</v-btn>
                     </v-card-actions>
 
                 </v-card>
@@ -100,6 +135,7 @@
 
         data() {
             return {
+                valid: false,
                 editing: false,
                 editIpv4: "",
                 editIpv6: "",
@@ -118,11 +154,11 @@
                 this.$router.push({name: 'hostOverview'});
             },
             onEdit() {
-                this.editIpv4 = this.hosts[this.index].ipv4;
-                this.editIpv6 = this.hosts[this.index].ipv6;
-                this.editDomainName = this.hosts[this.index].domainName;
-                this.editName = this.hosts[this.index].name;
-                this.editPort = this.hosts[this.index].port;
+                this.editIpv4 = this.host.ipv4;
+                this.editIpv6 = this.host.ipv6;
+                this.editDomainName = this.host.domainName;
+                this.editName = this.host.name;
+                this.editPort = this.host.port;
                 this.editing = true;
             },
             onCancel() {
@@ -130,7 +166,7 @@
             },
             onUpdate() {
                 this.$store.dispatch("updateHost", {
-                    host_id: this.hosts[this.index].id,
+                    host_id: this.host.id,
                     host: {
                         name: this.editName,
                         ipv4: this.editIpv4,
