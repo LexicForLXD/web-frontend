@@ -3,7 +3,7 @@
         <div v-if="this.$store.state.route.path !== '/images/new'">
             <button
                     @click="refresh"
-                    class="button"><i class="fa fa-retweet"/></button>
+                    class="button"><v-icon>refresh</v-icon></button>
         </div>
         <router-view/>
     </div>
