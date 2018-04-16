@@ -1,90 +1,76 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="backupDest" class="card">
-                <header class="card-header">
-                    <div class="card-header-title">
-                        Name: {{backupDest.name}}
-                    </div>
-                </header>
-                <div class="card-content">
-                    <p v-if="backupDest.protocol">Protocol: {{backupDest.protocol}}</p>
-                    <p v-if="backupDest.path">Path: {{backupDest.path}}</p>
-                    <p v-if="backupDest.hostname">Hostname: {{backupDest.hostname}}</p>
-                    <p v-if="backupDest.username">Username: {{backupDest.username}}</p>
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
-        </div>
-        <div v-if="editing">
+    <v-card v-if="backupDest">
+        <v-toolbar>
+            <v-toolbar-title>
+                Name: {{backupDest.name}}
+            </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text v-if="!editing">
+            <p v-if="backupDest.protocol"><b>Protocol:</b> {{backupDest.protocol}}</p>
+            <p v-if="backupDest.path"><b>Path:</b> {{backupDest.path}}</p>
+            <p v-if="backupDest.hostname"><b>Hostname:</b> {{backupDest.hostname}}</p>
+            <p v-if="backupDest.username"><b>Username:</b> {{backupDest.username}}</p>
+        </v-card-text>
+        <v-card-text v-else>
+            <v-form v-model="valid">
+                <v-text-field
+                        label="Name"
+                        v-model="editName"
+                        :rules="[v => !!v || 'Name is required']"
+                        required
+                />
 
-            <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editName">
-                </div>
-                <div v-if="backupDestErrors.name.length > 0" class="help is-danger">
-                    {{backupDestErrors.name}}
-                </div>
-            </div>
+                <v-text-field
+                        label="Protocol"
+                        v-model="editProtocol"
+                        :rules="[v => !!v || 'Protocol is required']"
+                        required
+                />
 
-            <div class="field">
-                <label class="label">Protocol</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editProtocol">
-                </div>
-                <div v-if="backupDestErrors.protocol.length > 0" class="help is-danger">
-                    {{backupDestErrors.protocol}}
-                </div>
-            </div>
+                <v-text-field
+                        label="Path"
+                        v-model="editPath"
+                        :rules="[v => !!v || 'Path is required']"
+                        required
+                />
 
-            <div class="field">
-                <label class="label">Path</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editPath">
-                </div>
-                <div v-if="backupDestErrors.path.length > 0" class="help is-danger">
-                    {{backupDestErrors.path}}
-                </div>
-            </div>
+                <v-text-field
+                        label="Hostname"
+                        v-model="editHostname"
+                />
 
-            <div class="field">
-                <label class="label">Hostname</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editHostname">
-                </div>
-                <div v-if="backupDestErrors.hostname.length > 0" class="help is-danger">
-                    {{backupDestErrors.hostname}}
-                </div>
-            </div>
+                <v-text-field
+                        label="username"
+                        v-model="editUsername"
+                />
 
-            <div class="field">
-                <label class="label">Username</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editUsername">
-                </div>
-                <div v-if="backupDestErrors.username.length > 0" class="help is-danger">
-                    {{backupDestErrors.username}}
-                </div>
-            </div>
+                <v-text-field
+                        label="Password"
+                        v-model="editPassword"
+                        :type="e1 ? 'password' : 'text'"
+                        :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                        :append-icon-cb="() => (e1 = !e1)"
+                />
 
-            <div class="field">
-                <label class="label">Password</label>
-                <div class="control">
-                    <input class="input" type="password" v-model="editPassword">
-                </div>
-                <div v-if="backupDestErrors.password.length > 0" class="help is-danger">
-                    {{backupDestErrors.password}}
-                </div>
-            </div>
+                <v-btn
+                        @click="onUpdate"
+                        :disabled="!valid"
+                >
+                    Submit
+                </v-btn>
+            </v-form>
+        </v-card-text>
 
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-    </div>
+        <v-card-actions v-if="!editing">
+            <v-btn flat @click="onEdit">Edit</v-btn>
+            <v-btn flat @click="onDelete">Delete</v-btn>
+        </v-card-actions>
+
+        <v-card-actions v-else>
+            <v-btn flat @click="onCancel">Abort</v-btn>
+        </v-card-actions>
+
+    </v-card>
 </template>
 
 <script>
@@ -103,6 +89,8 @@
         },
         data() {
             return {
+                valid: false,
+                e1: true,
                 editing: false,
                 editName: "",
                 editProtocol: "",

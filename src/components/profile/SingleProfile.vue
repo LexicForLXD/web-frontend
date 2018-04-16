@@ -1,62 +1,55 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="profiles[index]" class="card">
-                <header class="card-header">
-                    <div class="card-header-title">
-                        Name: {{profiles[index].name}}
-                    </div>
-                </header>
-                <div class="card-content">
-                    <p v-if="profiles[index].description">Description: {{profiles[index].description}}</p>
-                    <p v-if="profiles[index].config">Config: {{profiles[index].config}}</p>
-                    <p v-if="profiles[index].devices">Devices: {{profiles[index].devices}}</p>
-                    <div v-if="profiles[index].containerId">
-                        Containers:
-                        <ul v-for="container in containersForHost">
-                            <li> {{container.name}}</li>
-                        </ul>
-                    </div>
-                    <div v-if="profiles[index].hostId">
-                        Hosts:
-                        <ul v-for="host in containersForHost">
-                            <li> {{host.name}}</li>
-                        </ul>
-                    </div>
+    <v-card v-if="profile">
+        <v-toolbar>
+            <v-toolbar-title>
+                Name: {{profile.name}}
+            </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text v-if="!editing">
+            <p v-if="profile.description"><b>Description:</b> {{profiles[index].description}}</p>
+            <p v-if="profile.config"><b>Config:</b> {{profiles[index].config}}</p>
+            <p v-if="profile.devices"><b>Devices:</b> {{profiles[index].devices}}</p>
+        </v-card-text>
+        <v-card-text v-else>
+            <v-form v-model="valid">
+                <v-text-field
+                        label="Description"
+                        v-model="editDescription"
+                />
 
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
-        </div>
-        <div v-if="editing">
-            <label class="label">Name</label>
-            <input class="input" type="text" v-model="editName">
+                <v-text-field
+                        label="Config"
+                        v-model="editConfig"
+                        multi-line
+                        placeholder='{"limits.cpu": "2"}'
+                />
 
-            <label class="label">Description</label>
-            <input class="input" type="text" v-model="editDescription">
+                <v-text-field
+                        label="Devices"
+                        v-model="editDevices"
+                        multi-line
+                        placeholder='{}'
+                />
 
-            <div class="field">
-                <label class="label">Config</label>
-                <div class="control">
-                    <textarea class="textarea" v-model="editConfig"/>
-                </div>
-            </div>
+                <v-btn
+                        @click="onUpdate"
+                        :disabled="!valid"
+                >
+                    Submit
+                </v-btn>
+            </v-form>
+        </v-card-text>
 
+        <v-card-actions v-if="!editing">
+            <v-btn flat @click="onEdit">Edit</v-btn>
+            <v-btn flat @click="onDelete">Delete</v-btn>
+        </v-card-actions>
 
-            <div class="field">
-                <label class="label">Devices</label>
-                <div class="control">
-                    <textarea class="textarea" v-model="editDevices"/>
-                </div>
-            </div>
+        <v-card-actions v-else>
+            <v-btn flat @click="onCancel">Abort</v-btn>
+        </v-card-actions>
+    </v-card>
 
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-    </div>
 </template>
 
 <script>
@@ -70,9 +63,14 @@
             // containersForHost () {
             //     return this.$store.getters.getSingleContainerById(this.profiles[this.index].containerId)
             // }
+
+            profile() {
+                return this.profiles[this.index];
+            }
         },
         data() {
             return {
+                valid: false,
                 editing: false,
                 editDescription: "",
                 editConfig: {},
@@ -83,7 +81,7 @@
         methods: {
             onDelete() {
                 this.$store.dispatch("deleteProfile", this.profiles[this.index].id);
-                this.$router.push({ name: "profileOverview"});
+                this.$router.push({name: "profileOverview"});
             },
             onEdit() {
                 this.editDescription = this.profiles[this.index].description;
