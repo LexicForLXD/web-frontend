@@ -3,11 +3,11 @@ import {LEXIC_CONFIG} from '../config.js'
 const client = {
     auth: false,
     withAuth() {
-        client.auth = true
+        client.auth = true;
         return client
     },
     withoutAuth() {
-        client.auth = false
+        client.auth = false;
         return client
     }
 };
@@ -26,19 +26,19 @@ const client = {
                 headers: client.auth ? Object.assign({}, {'Authorization': `Bearer ` + localStorage.getItem('access_token')}, headers) : headers,
                 responseType: responseType
             }).then((res) => {
-                client.auth = false
+                client.auth = false;
                 resolve(res)
             }).catch((error) => {
-                client.auth = false
+                client.auth = false;
                 reject(error)
             })
         })
     }
-})
+});
 
 
 export default client;
 
-function newFunction() {
-    return 'get';
-}
+// function newFunction() {
+//     return 'get';
+// }
