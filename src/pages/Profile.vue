@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="this.$store.state.route.path != '/profiles/new'">
-            <button @click="refresh" class="button"><i class="fa fa-retweet"></i></button>
+            <button @click="refresh" class="button"><v-icon>refresh</v-icon></button>
         </div>
         <router-view></router-view>
     </div>

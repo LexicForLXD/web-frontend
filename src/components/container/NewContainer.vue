@@ -64,9 +64,7 @@
                             label="Fingerprint"
                             item-value="fingerprint"
                             item-text="fingerprint"
-                            :rules="[
-                                v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',
-                            ]"
+
                     />
                     <!--:rules="[-->
                     <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
@@ -84,9 +82,7 @@
                             label="Alias"
                             item-value="aliases[0].name"
                             item-text="aliases[0].name"
-                            :rules="[
-                                v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',
-                            ]"
+
                     />
                     <!--:rules="[-->
                     <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
