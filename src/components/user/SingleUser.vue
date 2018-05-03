@@ -71,12 +71,18 @@
     export default {
         computed: {
             ...mapGetters({
-                users: "getUsers",
                 userErrors: "getUserErrors",
-                currentUser: "getCurrentUser",
             }),
+
+            currentUser() {
+                return this.$store.getters.getCurrentUser();
+            },
+
             user() {
-                return this.users[this.index];
+                if(this.$store.state.route.name === "userCurrent") {
+                    return this.$store.getters.getCurrentUser();
+                }
+                return this.$store.getters.getUserByIndex(this.index);
             }
         },
 

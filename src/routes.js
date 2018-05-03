@@ -337,8 +337,8 @@ const router = new VueRouter({
                     path: "current",
                     name: "userCurrent",
                     component: Vue.component(
-                        "CurrentUser",
-                        require("./components/user/CurrentUser.vue")
+                        "SingleUser",
+                        require("./components/user/SingleUser.vue")
                     )
                 },
                 {
