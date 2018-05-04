@@ -16,16 +16,20 @@ export default {
         return "Loading";
     },
 
-    getCurrentUser({currentUserId, users}) {
+    getCurrentUser: ({currentUserId, users}) => () => {
         return users[keyForUser(currentUserId)];
     },
 
     getUsers({users, usersList}) {
-        return _.map(usersList, id => users[keyForUser(id)])
+        return _.map(usersList, id => users[keyForUser(id)]);
     },
 
     getUserIndexById: ({usersList}) => (userId) => {
-        return usersList.findIndex(user => user == userId)
+        return usersList.findIndex(user => user === userId);
+    },
+
+    getUserByIndex: ({usersList, users}) => (index) => {
+        return users[keyForUser(usersList[index])];
     },
 
     getUserErrors: ({userErrors}) => {

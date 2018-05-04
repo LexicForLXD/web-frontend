@@ -17,7 +17,7 @@
                         <div v-if="host.containerId">
                             <b>Containers:</b>
                             <v-list>
-                                <v-list-tile v-for="container in containersForHost">
+                                <v-list-tile v-for="container in containersForHost" :key="container.id">
                                     <v-list-tile-content>
                                         <router-link
                                                 :to="{name: 'containerSingle', params: {index: getContainerIndex(container.id)}}">

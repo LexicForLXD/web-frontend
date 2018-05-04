@@ -1,84 +1,68 @@
 <template>
-    <div>
-        <div v-if="!editing">
-            <div v-if="user" class="card">
-                <header class="card-header">
-                    <div class="card-header-title">
-                        Name: {{user.firstName}} {{user.lastName}}
-                    </div>
-                </header>
-                <div class="card-content">
-                    <p v-if="user.firstName">First name: {{user.firstName}}</p>
-                    <p v-if="user.lastName">Last name: {{user.lastName}}</p>
-                    <p v-if="user.username">Username: {{user.username}}</p>
-                    <p v-if="user.email">Email: {{user.email}}</p>
-                    <p v-if="user.isActive">Active: <i
-                            v-bind:class="{ 'fa-times': !user.isActive, 'fa-check': user.isActive}"
-                            class="fa"> </i></p>
+    <v-card v-if="user">
+        <v-toolbar>
+            <v-toolbar-title>
+                Name: {{user.firstName}} {{user.lastName}}
+            </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text v-if="!editing">
+            <p v-if="user.firstName">First name: <b>{{user.firstName}}</b></p>
+            <p v-if="user.lastName">Last name: <b>{{user.lastName}}</b></p>
+            <p v-if="user.username">Username: <b>{{user.username}}</b></p>
+            <p v-if="user.email">Email: <b>{{user.email}}</b></p>
+            <p>Active:
+                <v-icon v-if="user.isActive">done</v-icon>
+                <v-icon v-else>error</v-icon>
+            </p>
+        </v-card-text>
+        <v-card-text v-if="editing">
+            <v-form v-model="valid">
+                <v-text-field
+                        label="First name"
+                        v-model="editFirstName"
+                        :rules="[v => !!v || 'First name is required']"
+                        required
+                />
 
-                </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item" @click="onEdit">Edit</a>
-                    <a v-if="currentUser.id !== user.id" href="#" class="card-footer-item" @click="onDelete">Delete</a>
-                </footer>
-            </div>
-        </div>
-        <div v-if="editing">
-            <div class="field">
-                <label class="label">First name</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editFirstName" v-bind:class="{'is-danger': userErrors.firstName.length > 0}">
-                </div>
-                <div v-if="userErrors.firstName.length > 0" class="help is-danger">
-                    {{userErrors.firstName}}
-                </div>
-            </div>
+                <v-text-field
+                        label="Last name"
+                        v-model="editLastName"
+                        :rules="[v => !!v || 'Last name is required']"
+                        required
+                />
 
+                <v-text-field
+                        label="Username"
+                        v-model="editUsername"
+                        :rules="[v => !!v || 'Username is required']"
+                        required
+                />
+                <v-text-field
+                        label="Email"
+                        v-model="editEmail"
+                        :rules="[v => !!v || 'Email is required']"
+                        required
+                />
 
+                <v-btn
+                        @click="onUpdate"
+                        :disabled="!valid"
+                >
+                    Submit
+                </v-btn>
+            </v-form>
+        </v-card-text>
 
-            <div class="field">
-                <label class="label">Last name</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editLastName" v-bind:class="{'is-danger': userErrors.lastName.length > 0}">
-                </div>
-                <div v-if="userErrors.lastName.length > 0" class="help is-danger">
-                    {{userErrors.lastName}}
-                </div>
-            </div>
+        <v-card-actions v-if="!editing">
+            <v-btn flat @click="onEdit">Edit</v-btn>
+            <v-btn v-if="currentUser.id !== user.id" flat @click="onDelete">Delete</v-btn>
+        </v-card-actions>
+        <v-card-actions v-else>
+            <v-btn flat @click="onCancel">Abort</v-btn>
+        </v-card-actions>
 
-            <div class="field">
-                <label class="label">Username</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="editUsername" v-bind:class="{'is-danger': userErrors.username.length > 0}">
-                </div>
-                <div v-if="userErrors.username.length > 0" class="help is-danger">
-                    {{userErrors.username}}
-                </div>
-            </div>
+    </v-card>
 
-
-            <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                    <input class="input" type="email" v-model="editEmail" v-bind:class="{'is-danger': userErrors.email.length > 0}">
-                </div>
-                <div v-if="userErrors.email.length > 0" class="help is-danger">
-                    {{userErrors.email}}
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label" for="active">Active</label>
-                <div class="control">
-                    <input type="checkbox" id="active" v-model="editActive">
-                    <label for="active">Active</label>
-                </div>
-            </div>
-
-            <button class="button" @click="onUpdate">Save</button>
-            <button class="button" @click="onCancel">Abort</button>
-        </div>
-    </div>
 </template>
 
 <script>
@@ -87,12 +71,18 @@
     export default {
         computed: {
             ...mapGetters({
-                users: "getUsers",
                 userErrors: "getUserErrors",
-                currentUser: "getCurrentUser",
             }),
+
+            currentUser() {
+                return this.$store.getters.getCurrentUser();
+            },
+
             user() {
-                return this.users[this.index];
+                if(this.$store.state.route.name === "userCurrent") {
+                    return this.$store.getters.getCurrentUser();
+                }
+                return this.$store.getters.getUserByIndex(this.index);
             }
         },
 
