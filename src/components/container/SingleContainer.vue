@@ -20,12 +20,9 @@
                             </router-link>
                         </p>
 
-                        <a href="#" class="button" @click="onStart"
-                           v-bind:disabled="container.state != 'stopped'">Start</a>
-                        <a href="#" class="button" @click="onRestart"
-                           v-bind:disabled="container.state == 'stopped'">Restart</a>
-                        <a href="#" class="button" @click="onStop"
-                           v-bind:disabled="container.state == 'stopped'">Stop</a>
+                        <v-btn :disabled="container.state !== 'stopped'" @click="onStart">Start</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" @click="onRestart">Restart</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" @click="onStop">Stop</v-btn>
                     </v-card-text>
 
 
