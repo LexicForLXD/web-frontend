@@ -75,7 +75,6 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
     import stateApi from "../../api/containers/containerState"
     import LogContainer from "./logs/LogContainer"
     import NagiosContainer from "./nagios/NagiosContainer"
@@ -87,9 +86,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                containers: "getContainers",
-            }),
             host() {
                 return this.$store.getters.getHostById(this.container.hostId);
             },
@@ -99,7 +95,7 @@
             },
 
             container() {
-                return this.containers[this.index];
+                return this.$store.getters.getContainerByIndex(this.index);
             }
         },
         data() {

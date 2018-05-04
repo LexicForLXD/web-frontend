@@ -18,6 +18,10 @@ export default {
         return containersList.findIndex(container => container === containerId)
     },
 
+    getContainerByIndex: ({containers, containersList}) => (index) => {
+        return containers[keyForContainer(containersList[index])];
+    },
+
     getContainerErrors: ({containerErrors}) => {
         return containerErrors;
     }
