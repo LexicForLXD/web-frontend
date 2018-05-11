@@ -7,7 +7,7 @@
         </v-toolbar>
         <v-card-text v-if="!restore">
             <p><b>Destination:</b> {{destination.name}}</p>
-            <p><b>Schedule:</b> {{schedule.name}}</p>
+            <p v-if="schedule"><b>Schedule:</b> {{schedule.name}}</p>
             <p><b>Containers:</b></p>
             <ul v-for="container in containers">
                 <router-link
