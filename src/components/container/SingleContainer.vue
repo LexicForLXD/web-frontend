@@ -20,12 +20,9 @@
                             </router-link>
                         </p>
 
-                        <a href="#" class="button" @click="onStart"
-                           v-bind:disabled="container.state != 'stopped'">Start</a>
-                        <a href="#" class="button" @click="onRestart"
-                           v-bind:disabled="container.state == 'stopped'">Restart</a>
-                        <a href="#" class="button" @click="onStop"
-                           v-bind:disabled="container.state == 'stopped'">Stop</a>
+                        <v-btn :disabled="container.state !== 'stopped'" @click="onStart">Start</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" @click="onRestart">Restart</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" @click="onStop">Stop</v-btn>
                     </v-card-text>
 
 
@@ -78,7 +75,6 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
     import stateApi from "../../api/containers/containerState"
     import LogContainer from "./logs/LogContainer"
     import NagiosContainer from "./nagios/NagiosContainer"
@@ -90,9 +86,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                containers: "getContainers",
-            }),
             host() {
                 return this.$store.getters.getHostById(this.container.hostId);
             },
@@ -102,7 +95,7 @@
             },
 
             container() {
-                return this.containers[this.index];
+                return this.$store.getters.getContainerByIndex(this.index);
             }
         },
         data() {
