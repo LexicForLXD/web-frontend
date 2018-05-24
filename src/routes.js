@@ -353,6 +353,26 @@ const router = new VueRouter({
         },
 
         /**
+         * Import routes
+         */
+        {
+            path: "/import",
+            component: Vue.component("ImportPage", require("./pages/Import.vue")),
+            children: [
+                {
+                    path: "",
+                    name: "importOverview",
+                    component: Vue.component(
+                        "importOverview",
+                        require("./components/import/ImportOverview.vue")
+                    )
+                },
+            ]
+        },
+
+        
+
+        /**
          * Error routes
          */
         {

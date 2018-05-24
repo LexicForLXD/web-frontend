@@ -173,6 +173,10 @@
                             }
                         ]
                     },
+                    {
+                        title: "Import",
+                        route: "importOverview"
+                    }
                 ]
             }
         }
