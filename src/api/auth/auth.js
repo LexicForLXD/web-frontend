@@ -3,25 +3,53 @@ import client from '../client'
 import {LEXIC_CONFIG } from '../../config'
 
 export default {
+    // login (creds) {
+    //     let data = {
+    //         grant_type: "password",
+    //         client_id: LEXIC_CONFIG.CLIENT_ID,
+    //         client_secret: LEXIC_CONFIG.CLIENT_KEY,
+    //         username: creds.email,
+    //         password: creds.password
+    //     };
+    //     return client.withoutAuth().post('/oauth/v2/token', data)
+    // },
+
+    /**
+     * Login via first party proxy
+     *
+     * @param creds
+     * @returns {AxiosPromise<any>}
+     */
     login (creds) {
         let data = {
-            grant_type: "password",
-            client_id: LEXIC_CONFIG.CLIENT_ID,
-            client_secret: LEXIC_CONFIG.CLIENT_KEY,
             username: creds.email,
             password: creds.password
         };
-        return client.withoutAuth().post('/oauth/v2/token', data)
+        return client.withoutAuth().post('/login', data);
     },
 
+    /**
+     * Refresh token
+     *
+     * @returns {AxiosPromise<any>}
+     */
     refresh () {
         return client.withoutAuth().post('/users/login/refresh')
     },
 
+    /**
+     *
+     * @returns {AxiosPromise<any>}
+     */
     logout() {
         return client.withAuth().post('/users/logout')
     },
 
+    /**
+     * Returns current user
+     *
+     * @returns {AxiosPromise<any>}
+     */
     getUser() {
         return client.withAuth().get('/user')
     },
