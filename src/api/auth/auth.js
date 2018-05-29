@@ -35,10 +35,7 @@ export default {
      */
     refresh () {
         let data = {
-            grant_type: "refresh_token",
-            client_id: LEXIC_CONFIG.CLIENT_ID,
-            client_secret: LEXIC_CONFIG.CLIENT_KEY,
-            refresh_token: localStorage.getItem("refresh_token"),
+            refreshToken: localStorage.getItem("refresh_token"),
         };
 
         return client.withoutAuth().post('/refresh', data);

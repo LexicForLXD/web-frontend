@@ -51,18 +51,16 @@
         created() {
             const token = localStorage.getItem("access_token");
             const expiration = localStorage.getItem("expiration");
-            if (token && expiration > Date.now()) {
+            if (token && expiration > Date.now() / 1000) {
                 this.init();
-            } else if (token && expiration < Date.now()) {
-                this.$store.commit("LOADING_BEGIN");
+            } else if (token && expiration < Date.now() / 1000) {
                 authApi.refresh()
                     .then(res => {
                         this.error = "";
                         localStorage.setItem('access_token', res.data.access_token);
-                        localStorage.setItem('expiration', (res.data.expires_in * 1000) + Date.now());
+                        localStorage.setItem('expiration', (res.data.expires_in) + (Date.now() / 1000));
                         localStorage.setItem('refresh_token', res.data.refresh_token);
                         this.init();
-                        this.$store.commit("LOADING_FINISH");
                     })
 
                     .catch((error) => {
@@ -73,7 +71,7 @@
                         console.warn("could not refresh token");
                         localStorage.removeItem("access_token");
                         localStorage.removeItem("expiration");
-                        this.$store.commit("LOADING_FAIL");
+                        localStorage.removeItem("refresh_token");
                         location.reload();
                     });
             } else {
