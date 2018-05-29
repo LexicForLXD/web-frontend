@@ -3,16 +3,16 @@ import client from '../client'
 import {LEXIC_CONFIG } from '../../config'
 
 export default {
-    // login (creds) {
-    //     let data = {
-    //         grant_type: "password",
-    //         client_id: LEXIC_CONFIG.CLIENT_ID,
-    //         client_secret: LEXIC_CONFIG.CLIENT_KEY,
-    //         username: creds.email,
-    //         password: creds.password
-    //     };
-    //     return client.withoutAuth().post('/oauth/v2/token', data)
-    // },
+    oauth(creds) {
+        let data = {
+            grant_type: "password",
+            client_id: LEXIC_CONFIG.CLIENT_ID,
+            client_secret: LEXIC_CONFIG.CLIENT_KEY,
+            username: creds.email,
+            password: creds.password
+        };
+        return client.withoutAuth().post('/oauth/v2/token', data)
+    },
 
     /**
      * Login via first party proxy
@@ -34,7 +34,14 @@ export default {
      * @returns {AxiosPromise<any>}
      */
     refresh () {
-        return client.withoutAuth().post('/users/login/refresh')
+        let data = {
+            grant_type: "refresh_token",
+            client_id: LEXIC_CONFIG.CLIENT_ID,
+            client_secret: LEXIC_CONFIG.CLIENT_KEY,
+            refresh_token: localStorage.getItem("refresh_token"),
+        };
+
+        return client.withoutAuth().post('/refresh', data);
     },
 
     /**

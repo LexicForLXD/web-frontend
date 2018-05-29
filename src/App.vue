@@ -24,6 +24,7 @@
     import siteNav from "./components/sidebar/Sidebar";
     import siteLoading from "./pages/Loading";
     import {mapGetters} from "vuex";
+    import authApi from "./api/auth/auth";
 
     export default {
         name: "app",
@@ -53,10 +54,28 @@
             if (token && expiration > Date.now()) {
                 this.init();
             } else if (token && expiration < Date.now()) {
-                console.warn("could not refresh token");
-                localStorage.removeItem("access_token");
-                localStorage.removeItem("expiration");
-                location.reload();
+                this.$store.commit("LOADING_BEGIN");
+                authApi.refresh()
+                    .then(res => {
+                        this.error = "";
+                        localStorage.setItem('access_token', res.data.access_token);
+                        localStorage.setItem('expiration', (res.data.expires_in * 1000) + Date.now());
+                        localStorage.setItem('refresh_token', res.data.refresh_token);
+                        this.init();
+                        this.$store.commit("LOADING_FINISH");
+                    })
+
+                    .catch((error) => {
+                        if (error.response.data.error_description) {
+                            this.initError = error.response.data.error_description;
+                        }
+                        this.$router.push("/login");
+                        console.warn("could not refresh token");
+                        localStorage.removeItem("access_token");
+                        localStorage.removeItem("expiration");
+                        this.$store.commit("LOADING_FAIL");
+                        location.reload();
+                    });
             } else {
                 this.$router.push("/login");
             }

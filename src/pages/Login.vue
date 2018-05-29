@@ -75,6 +75,7 @@
                         const expiration = (res.data.expires_in * 1000) + Date.now();
                         localStorage.setItem('access_token', res.data.access_token);
                         localStorage.setItem('expiration', expiration);
+                        localStorage.setItem('refresh_token', res.data.refresh_token);
                         this.$store.dispatch('initShared');
                         this.$store.commit("LOADING_FINISH");
                         this.$router.push("/")
