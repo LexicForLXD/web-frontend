@@ -175,7 +175,13 @@
                     },
                     {
                         title: "Import",
-                        route: "importOverview"
+                        route: "importOverview",
+                        items: [
+                            {
+                                title: "Jobs",
+                                route: "importJobOverview"
+                            }
+                        ]
                     }
                 ]
             }
