@@ -10,8 +10,11 @@
                 :rules="[v => !!v || 'Host is required']"
         />
 
-        <v-btn @click="onImages">Images</v-btn>
-        <v-btn @click="onContainers">Containers</v-btn>
+        <h2>Import</h2>
+
+        <v-btn @click="importImages">Images</v-btn>
+        <v-btn @click="importContainers">Containers</v-btn>
+        <v-btn @click="importAll">Import All</v-btn>
 
         {{error}}
         {{message}}
@@ -47,7 +50,7 @@
                 stopLoading: LOADING_FINISH,
                 failLoading: LOADING_FAIL
             }),
-            onImages() {
+            importImages() {
                 this.startLoading();
                 importApi.images(this.selectedHost).then(res => {
                     this.message = res.data.message;
@@ -57,7 +60,7 @@
                     this.failLoading();
                 })
             },
-            onContainers() {
+            importContainers() {
                 this.startLoading();
                 importApi.containers(this.selectedHost).then(res => {
                     this.message = res.data.message;
@@ -67,10 +70,17 @@
                     this.failLoading();
                 })
             },
-
-
+            importAll() {
+                this.startLoading();
+                importApi.all(this.selectedHost).then(res => {
+                    this.message = res.data.message;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.error = error.response.data.message;
+                    this.failLoading();
+                })
+            },
         }
-
     }
 </script>
 
