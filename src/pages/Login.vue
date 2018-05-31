@@ -33,16 +33,13 @@
                 </v-btn>
 
             </v-form>
-        </v-card-text>
-
-        <div
-                v-if="error.length > 0"
-                class="message is-danger">
-            <div class="message-body">
+            <v-alert :value="error" type="error">
                 {{ error }}
-            </div>
-        </div>
-
+            </v-alert>
+            <v-alert :value="message" type="success">
+                {{ message }}
+            </v-alert>
+        </v-card-text>
     </v-card>
 
 </template>
@@ -56,6 +53,7 @@
                 email: '',
                 password: '',
                 error: "",
+                message: "",
                 valid: false,
                 e1: true
             }
@@ -72,12 +70,16 @@
                 authApi.login(data)
                     .then(res => {
                         this.error = "";
+                        this.message = "Login successful. Loading Application.";
                         localStorage.setItem('access_token', res.data.access_token);
                         localStorage.setItem('expiration', (res.data.expires_in) + (Date.now() / 1000));
                         localStorage.setItem('refresh_token', res.data.refresh_token);
-                        this.$store.dispatch('initShared');
                         this.$store.commit("LOADING_FINISH");
-                        this.$router.push("/")
+                        this.$store.dispatch('initShared').then(res => {
+                            this.$router.push("/");
+                        });
+
+
                     })
 
                     .catch((error) => {
@@ -94,8 +96,5 @@
 
 <style scoped>
 
-    .loginform {
-        padding: 20px;
-    }
 
 </style>

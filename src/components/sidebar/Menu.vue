@@ -173,6 +173,16 @@
                             }
                         ]
                     },
+                    {
+                        title: "Import",
+                        route: "importOverview",
+                        items: [
+                            {
+                                title: "Jobs",
+                                route: "importJobOverview"
+                            }
+                        ]
+                    }
                 ]
             }
         }

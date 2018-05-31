@@ -4,24 +4,6 @@
         <v-btn flat :to="{name: 'userCurrent'}">Hallo {{firstName}}</v-btn>
         <v-btn flat @click="logout">Logout</v-btn>
     </v-toolbar-items>
-
-    <!--<div-->
-    <!--class="navbar-end"-->
-    <!--v-if="isAuthenticated && firstName">-->
-    <!--<router-link-->
-    <!--:to="{name: 'userCurrent'}"-->
-    <!--class="navbar-item">Hallo {{ firstName }}-->
-    <!--</router-link>-->
-
-    <!--<a-->
-    <!--href="#"-->
-    <!--class="navbar-item"-->
-    <!--@click="logout">-->
-    <!--Logout-->
-    <!--</a>-->
-
-    <!--</div>-->
-
 </template>
 
 <script>
@@ -50,7 +32,5 @@
 </script>
 
 <style scoped>
-    .right {
-        float: right;
-    }
+
 </style>
