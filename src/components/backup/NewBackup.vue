@@ -36,6 +36,9 @@
         </v-btn>
     </v-form>
 
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -55,6 +58,7 @@
                 name: "",
                 selectedDestination: "",
                 selectedContainers: [],
+                error: "",
             };
         },
 
@@ -79,7 +83,7 @@
                 this.createBackup(body).then(() => {
                     this.$router.push({name: "backupOverview"})
                 }).catch(() => {
-
+                    this.error = error.response.data.error.message;
                 });
             }
         }

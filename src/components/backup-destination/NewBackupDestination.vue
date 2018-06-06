@@ -47,6 +47,9 @@
         </v-btn>
     </v-form>
 
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 
 </template>
 
@@ -71,6 +74,7 @@
                 hostname: "",
                 username: "",
                 password: "",
+                error: "",
             };
         },
 
@@ -95,6 +99,7 @@
                 this.$store.dispatch("createBackupDestination", body).then(() => {
                     this.$router.push({ name: "destinationOverview"})
                 }).catch(() => {
+                    this.error = error.response.data.error.message;
 
                 });
             }

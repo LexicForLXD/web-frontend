@@ -110,6 +110,9 @@
 
 
     </v-form>
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -174,7 +177,8 @@
                         value: "container",
                         text: "Container"
                     }
-                ]
+                ],
+                error: "",
             };
         },
 
@@ -227,7 +231,7 @@
                 this.$store.dispatch("createImage", body).then(() => {
                     this.$router.push({ name: "imageOverview"})
                 }).catch(() => {
-
+                    this.error = error.response.data.error.message;
                 });
             }
         }

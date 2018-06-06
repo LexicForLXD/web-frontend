@@ -44,7 +44,9 @@
         </v-btn>
 
     </v-form>
-
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -71,6 +73,7 @@
                 port: "",
                 password: "",
                 e1: true,
+                error: "",
             };
         },
 
@@ -83,7 +86,7 @@
                     domainName: this.domainName,
                     port: Number(this.port),
                     password: this.password
-                }
+                };
 
                 Object.keys(body).forEach(
                     key =>
@@ -95,6 +98,7 @@
                 this.$store.dispatch("createHost", body).then(() => {
                     this.$router.push({name: "hostOverview"})
                 }).catch(() => {
+                    this.error = error.response.data.error.message;
 
                 });
             }

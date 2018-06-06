@@ -127,6 +127,10 @@
 
     </v-form>
 
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
+
 </template>
 
 <script>
@@ -167,7 +171,7 @@
                 ],
 
                 imageRules: [
-                    v => !!this.selectedHost || 'Pleas select a host'
+                    v => !!this.selectedHost || 'Please select a host'
                 ],
 
                 //data
@@ -189,7 +193,8 @@
                 '       "pool": "default"\n' +
                 "    } \n" +
                 "}",
-                architecture: ""
+                architecture: "",
+                error: "",
             };
         },
 
@@ -286,6 +291,7 @@
                         this.$router.push({name: "containerOverview"});
                     })
                     .catch(() => {
+                        this.error = error.response.data.error.message;
                     });
             }
         }

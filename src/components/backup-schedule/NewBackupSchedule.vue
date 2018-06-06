@@ -57,6 +57,10 @@
         </v-btn>
 
     </v-form>
+
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -74,15 +78,14 @@
         data() {
             return {
                 valid: false,
-
                 name: "",
                 description: "",
                 executionTime: "",
                 type: "",
                 selectedDestination: "",
                 selectedContainers: [],
-            }
-                ;
+                data: "",
+            };
         },
 
         methods: {
@@ -98,7 +101,7 @@
                     type: this.type,
                     destination: this.selectedDestination,
                     containers: this.selectedContainers,
-                }
+                };
 
                 Object.keys(body).forEach(
                     key =>
@@ -109,6 +112,7 @@
                 this.createSchedule(body).then(() => {
                     this.$router.push({name: "scheduleOverview"})
                 }).catch(() => {
+                    this.error = error.response.data.error.message;
 
                 });
             }

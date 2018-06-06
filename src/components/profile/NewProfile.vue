@@ -34,6 +34,9 @@
         </v-btn>
 
     </v-form>
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -53,6 +56,7 @@
                 description: "",
                 config: "{}",
                 devices: "{}",
+                error: "",
             };
         },
 
@@ -63,7 +67,7 @@
                     description: this.description,
                     config: JSON.parse(this.config),
                     devices: JSON.parse(this.devices),
-                }
+                };
 
                 Object.keys(body).forEach(
                     key =>
@@ -75,7 +79,7 @@
                 this.$store.dispatch("createProfile", body).then(() => {
                     this.$router.push({name: "profileOverview"})
                 }).catch(() => {
-
+                    this.error = error.response.data.error.message;
                 });
             }
         }

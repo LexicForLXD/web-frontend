@@ -41,6 +41,10 @@
             Submit
         </v-btn>
     </v-form>
+
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
 </template>
 
 <script>
@@ -62,6 +66,7 @@
                 username: "",
                 email: "",
                 password: "",
+                error: "",
             };
         },
 
@@ -73,7 +78,7 @@
                     username: this.username,
                     email: this.email,
                     password: this.password,
-                }
+                };
 
                 Object.keys(body).forEach(
                     key =>
@@ -85,7 +90,7 @@
                 this.$store.dispatch("createUser", body).then(() => {
                     this.$router.push({name: "userOverview"})
                 }).catch(() => {
-
+                    this.error = error.response.data.error.message;
                 });
             }
         }
