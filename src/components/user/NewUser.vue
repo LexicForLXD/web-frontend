@@ -89,7 +89,7 @@
 
                 this.$store.dispatch("createUser", body).then(() => {
                     this.$router.push({name: "userOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
                 });
             }

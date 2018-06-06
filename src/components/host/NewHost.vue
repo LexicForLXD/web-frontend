@@ -97,7 +97,7 @@
 
                 this.$store.dispatch("createHost", body).then(() => {
                     this.$router.push({name: "hostOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
 
                 });

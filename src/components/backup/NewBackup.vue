@@ -82,7 +82,7 @@
 
                 this.createBackup(body).then(() => {
                     this.$router.push({name: "backupOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
                 });
             }

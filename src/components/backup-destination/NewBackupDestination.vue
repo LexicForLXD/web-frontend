@@ -98,7 +98,7 @@
 
                 this.$store.dispatch("createBackupDestination", body).then(() => {
                     this.$router.push({ name: "destinationOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
 
                 });

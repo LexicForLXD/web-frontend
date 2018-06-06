@@ -78,7 +78,7 @@
 
                 this.$store.dispatch("createProfile", body).then(() => {
                     this.$router.push({name: "profileOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
                 });
             }

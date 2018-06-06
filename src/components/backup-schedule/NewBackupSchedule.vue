@@ -111,7 +111,7 @@
 
                 this.createSchedule(body).then(() => {
                     this.$router.push({name: "scheduleOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
 
                 });

@@ -70,6 +70,9 @@
                     Submit
                 </v-btn>
             </v-form>
+            <v-alert :value="error" type="error">
+                {{ error }}
+            </v-alert>
         </v-card-text>
 
         <v-card-actions v-if="!editing">
@@ -108,6 +111,7 @@
                 editSelectedContainers: [],
                 editSelectedDestination: "",
                 index: this.$route.params.index,
+                error: ""
             };
         },
         methods: {
@@ -137,8 +141,12 @@
                         containers: this.editSelectedContainers,
                         destination: this.editSelectedDestination,
                     }
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
                 });
-                this.editing = false;
             },
 
 

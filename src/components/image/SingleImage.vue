@@ -63,6 +63,7 @@
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
+                error: "",
             };
         },
         methods: {
@@ -91,8 +92,12 @@
                         domainName: this.editDomainName,
                         port: this.editPort,
                     }
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
                 });
-                this.editing = false;
             },
 
 

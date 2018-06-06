@@ -230,7 +230,7 @@
 
                 this.$store.dispatch("createImage", body).then(() => {
                     this.$router.push({ name: "imageOverview"})
-                }).catch(() => {
+                }).catch((error) => {
                     this.error = error.response.data.error.message;
                 });
             }

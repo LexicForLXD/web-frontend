@@ -290,7 +290,7 @@
                     .then(() => {
                         this.$router.push({name: "containerOverview"});
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         this.error = error.response.data.error.message;
                     });
             }
