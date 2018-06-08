@@ -86,32 +86,32 @@ function setErrors(userErrors, error) {
                     if (error.response.data.error.message.firstName) {
                         userErrors.firstName = error.response.data.error.message.firstName;
                     } else {
-                        userErrors.firstName = "";
+                        userErrors.firstName = [];
                     }
                     if (error.response.data.error.message.lastName) {
                         userErrors.lastName = error.response.data.error.message.lastName;
                     } else {
-                        userErrors.lastName = "";
+                        userErrors.lastName = [];
                     }
                     if (error.response.data.error.message.username) {
                         userErrors.username = error.response.data.error.message.username;
                     } else {
-                        userErrors.username = "";
+                        userErrors.username = [];
                     }
                     if (error.response.data.error.message.email) {
                         userErrors.email = error.response.data.error.message.email;
                     } else {
-                        userErrors.email = "";
+                        userErrors.email = [];
                     }
                     if (error.response.data.error.message.password) {
                         userErrors.password = error.response.data.error.message.password;
                     } else {
-                        userErrors.password = "";
+                        userErrors.password = [];
                     }
                     if (error.response.data.error.message.roles) {
                         userErrors.roles = error.response.data.error.message.roles;
                     } else {
-                        userErrors.roles = "";
+                        userErrors.roles = [];
                     }
                 }
             }
@@ -121,10 +121,10 @@ function setErrors(userErrors, error) {
 }
 
 function clearErrors(userErrors) {
-    userErrors.firstName = "";
-    userErrors.lastName = "";
-    userErrors.username = "";
-    userErrors.email = "";
-    userErrors.password = "";
-    userErrors.roles = "";
+    userErrors.firstName = [];
+    userErrors.lastName = [];
+    userErrors.username = [];
+    userErrors.email = [];
+    userErrors.password = [];
+    userErrors.roles = [];
 }

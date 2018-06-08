@@ -1,50 +1,55 @@
 <template>
+    <div>
+        <v-form v-model="valid">
+            <v-text-field
+                    label="First name"
+                    v-model="firstName"
+                    :rules="[v => !!v || 'First name is required']"
+                    required
+                    :error-messages="userErrors.firstName"
+            />
+            <v-text-field
+                    label="Last name"
+                    v-model="lastName"
+                    :rules="[v => !!v || 'Last name is required']"
+                    required
+                    :error-messages="userErrors.lastName"
+            />
+            <v-text-field
+                    label="Username"
+                    v-model="username"
+                    :rules="[v => !!v || 'Username is required']"
+                    required
+                    :error-messages="userErrors.username"
+            />
+            <v-text-field
+                    label="Email"
+                    v-model="email"
+                    :rules="[v => !!v || 'Email name is required']"
+                    required
+                    type="email"
+                    :error-messages="userErrors.email"
+            />
+            <v-text-field
+                    label="Password"
+                    v-model="password"
+                    :type="e1 ? 'password' : 'text'"
+                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                    :append-icon-cb="() => (e1 = !e1)"
+            />
 
-    <v-form v-model="valid">
-        <v-text-field
-                label="First name"
-                v-model="firstName"
-                :rules="[v => !!v || 'First name is required']"
-                required
-        />
-        <v-text-field
-                label="Last name"
-                v-model="lastName"
-                :rules="[v => !!v || 'Last name is required']"
-                required
-        />
-        <v-text-field
-                label="Username"
-                v-model="username"
-                :rules="[v => !!v || 'Username is required']"
-                required
-        />
-        <v-text-field
-                label="Email"
-                v-model="email"
-                :rules="[v => !!v || 'Email name is required']"
-                required
-                type="email"
-        />
-        <v-text-field
-                label="Password"
-                v-model="password"
-                :type="e1 ? 'password' : 'text'"
-                :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                :append-icon-cb="() => (e1 = !e1)"
-        />
+            <v-btn
+                    @click="onSubmit"
+                    :disabled="!valid"
+            >
+                Submit
+            </v-btn>
+        </v-form>
 
-        <v-btn
-                @click="onSubmit"
-                :disabled="!valid"
-        >
-            Submit
-        </v-btn>
-    </v-form>
-
-    <v-alert :value="error" type="error">
-        {{ error }}
-    </v-alert>
+        <v-alert :value="error" type="error">
+            {{ error }}
+        </v-alert>
+    </div>
 </template>
 
 <script>
