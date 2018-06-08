@@ -14,13 +14,13 @@ const state = {
     deletedBackupSchedule: {},
     createdBackupSchedule: {},
     backupScheduleErrors: {
-        name: "",
-        description: "",
-        executionTime: "",
-        type: "",
-        destination: "",
-        containers: "",
-        general: "",
+        name: [],
+        description: [],
+        executionTime: [],
+        type: [],
+        destination: [],
+        containers: [],
+        general: [],
     }
 };
 

@@ -79,37 +79,37 @@ function setErrors(backupScheduleErrors, error) {
                     if (error.response.data.error.message.name) {
                         backupScheduleErrors.name = error.response.data.error.message.name;
                     } else {
-                        backupScheduleErrors.name = "";
+                        backupScheduleErrors.name = [];
                     }
                     if (error.response.data.error.message.description) {
                         backupScheduleErrors.description = error.response.data.error.message.description;
                     } else {
-                        backupScheduleErrors.description = "";
+                        backupScheduleErrors.description = [];
                     }
                     if (error.response.data.error.message.executionTime) {
                         backupScheduleErrors.executionTime = error.response.data.error.message.executionTime;
                     } else {
-                        backupScheduleErrors.executionTime = "";
+                        backupScheduleErrors.executionTime = [];
                     }
                     if (error.response.data.error.message.type) {
                         backupScheduleErrors.type = error.response.data.error.message.type;
                     } else {
-                        backupScheduleErrors.type = "";
+                        backupScheduleErrors.type = [];
                     }
                     if (error.response.data.error.message.destination) {
                         backupScheduleErrors.destination = error.response.data.error.message.destination;
                     } else {
-                        backupScheduleErrors.destination = "";
+                        backupScheduleErrors.destination = [];
                     }
                     if (error.response.data.error.message.containers) {
                         backupScheduleErrors.containers = error.response.data.error.message.containers;
                     } else {
-                        backupScheduleErrors.containers = "";
+                        backupScheduleErrors.containers = [];
                     }
                     if (error.response.data.error.message.general) {
                         backupScheduleErrors.general = error.response.data.error.message.general;
                     } else {
-                        backupScheduleErrors.general = "";
+                        backupScheduleErrors.general = [];
                     }
                 }
             }
@@ -119,11 +119,11 @@ function setErrors(backupScheduleErrors, error) {
 
 
 function clearErrors(backupScheduleErrors) {
-    backupScheduleErrors.name = "";
-    backupScheduleErrors.description = "";
-    backupScheduleErrors.executionTime = "";
-    backupScheduleErrors.type = "";
-    backupScheduleErrors.destination = "";
-    backupScheduleErrors.containers = "";
-    backupScheduleErrors.general = "";
+    backupScheduleErrors.name = [];
+    backupScheduleErrors.description = [];
+    backupScheduleErrors.executionTime = [];
+    backupScheduleErrors.type = [];
+    backupScheduleErrors.destination = [];
+    backupScheduleErrors.containers = [];
+    backupScheduleErrors.general = [];
 }
