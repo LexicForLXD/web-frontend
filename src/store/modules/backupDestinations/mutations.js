@@ -107,9 +107,9 @@ function setErrors(backupDestinationErrors, error) {
                         backupDestinationErrors.hostname = [];
                     }
                     if (error.response.data.error.message.path) {
-                        backupDestinationErrors.devices = error.response.data.error.message.devices;
+                        backupDestinationErrors.path = error.response.data.error.message.path;
                     } else {
-                        backupDestinationErrors.devices = [];
+                        backupDestinationErrors.path = [];
                     }
                     if (error.response.data.error.message.general) {
                         backupDestinationErrors.general = error.response.data.error.message.general;
