@@ -12,19 +12,19 @@
             <v-text-field
                     label="ipv4"
                     v-model="ipv4"
-                    :error-messages="hostErrors.uri"
+                    :error-messages="hostErrors.ipv4"
             >
             </v-text-field>
             <v-text-field
                     label="ipv6"
                     v-model="ipv6"
-                    :error-messages="hostErrors.uri"
+                    :error-messages="hostErrors.ipv6"
             >
             </v-text-field>
             <v-text-field
                     label="Domainname"
                     v-model="domainName"
-                    :error-messages="hostErrors.uri"
+                    :error-messages="hostErrors.domainName"
             >
             </v-text-field>
             <v-text-field
@@ -65,9 +65,6 @@
                 hostErrors: "getHostErrors"
             }),
 
-            nameError() {
-                return this.hostErrors.name.length > 0;
-            }
         },
 
         data() {

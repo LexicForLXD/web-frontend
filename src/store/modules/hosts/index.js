@@ -22,7 +22,6 @@ const state = {
         settings: [],
         auth: [],
         general: [],
-        uri: [],
     },
     hostLoading: {
         isLoading: false,

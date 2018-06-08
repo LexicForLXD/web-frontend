@@ -103,11 +103,10 @@ function setErrors(state, error) {
                         state.hostErrors.auth = [];
                     }
                     if (error.response.data.error.message.uri) {
-                        state.hostErrors.uri = error.response.data.error.message.uri;
-                    } else {
-                        state.hostErrors.uri = [];
+                        state.hostErrors.ipv4.push(error.response.data.error.message.uri);
+                        state.hostErrors.ipv6.push(error.response.data.error.message.uri);
+                        state.hostErrors.domainName.push(error.response.data.error.message.uri);
                     }
-
                     // if (error.response.data.error.message) {
                     //     state.hostErrors.general = error.response.data.error.message;
                     // } else {
@@ -128,5 +127,4 @@ function clearErrors(hostErrors) {
     hostErrors.settings = [];
     hostErrors.auth = [];
     hostErrors.general = [];
-    hostErrors.uri = [];
 }
