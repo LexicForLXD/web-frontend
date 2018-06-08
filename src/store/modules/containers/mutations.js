@@ -78,42 +78,56 @@ function setErrors(containerErrors, error) {
                     if (error.response.data.error.message.name) {
                         containerErrors.name = error.response.data.error.message.name;
                     } else {
-                        containerErrors.name = "";
+                        containerErrors.name = [];
                     }
                     if (error.response.data.error.message.ipv4) {
                         containerErrors.ipv4 = error.response.data.error.message.ipv4;
                     } else {
-                        containerErrors.ipv4 = "";
+                        containerErrors.ipv4 = [];
                     }
                     if (error.response.data.error.message.ipv6) {
                         containerErrors.ipv6 = error.response.data.error.message.ipv6;
                     } else {
-                        containerErrors.ipv6 = "";
+                        containerErrors.ipv6 = [];
                     }
                     if (error.response.data.error.message.domainName) {
                         containerErrors.domainName = error.response.data.error.message.domainName;
                     } else {
-                        containerErrors.domainName = "";
+                        containerErrors.domainName = [];
                     }
                     if (error.response.data.error.message.architecture) {
                         containerErrors.architecture = error.response.data.error.message.architecture;
                     } else {
-                        containerErrors.architecture = "";
+                        containerErrors.architecture = [];
                     }
                     if (error.response.data.error.message.config) {
                         containerErrors.config = error.response.data.error.message.config;
                     } else {
-                        containerErrors.config = "";
+                        containerErrors.config = [];
                     }
                     if (error.response.data.error.message.devices) {
                         containerErrors.devices = error.response.data.error.message.devices;
                     } else {
-                        containerErrors.devices = "";
+                        containerErrors.devices = [];
                     }
                     if (error.response.data.error.message.sourceType) {
                         containerErrors.sourceType = error.response.data.error.message.sourceType;
                     } else {
-                        containerErrors.sourceType = "";
+                        containerErrors.sourceType = [];
+                    }
+                    if (error.response.data.error.message.fingerprint) {
+                        containerErrors.fingerprint = error.response.data.error.message.fingerprint;
+                    } else {
+                        containerErrors.fingerprint = [];
+                    }
+                    if (error.response.data.error.message.alias) {
+                        containerErrors.alias = error.response.data.error.message.alias;
+                    } else {
+                        containerErrors.alias = [];
+                    }
+                    if (error.response.data.error.message.image) {
+                        containerErrors.alias.push(error.response.data.error.message.image);
+                        containerErrors.fingerprint.push(error.response.data.error.message.image);
                     }
                 }
             }
@@ -123,12 +137,15 @@ function setErrors(containerErrors, error) {
 
 
 function clearErrors(containerErrors) {
-    containerErrors.name = "";
-    containerErrors.ipv4 = "";
-    containerErrors.ipv6 = "";
-    containerErrors.domainName = "";
-    containerErrors.architecture = "";
-    containerErrors.config = "";
-    containerErrors.devices = "";
-    containerErrors.sourceType = "";
+    containerErrors.name = [];
+    containerErrors.ipv4 = [];
+    containerErrors.ipv6 = [];
+    containerErrors.domainName = [];
+    containerErrors.architecture = [];
+    containerErrors.config = [];
+    containerErrors.devices = [];
+    containerErrors.sourceType = [];
+    containerErrors.fingerprint = [];
+    containerErrors.alias = [];
+    containerErrors.image = [];
 }
