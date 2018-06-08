@@ -16,12 +16,12 @@ const state = {
     },
     loginError: "",
     userErrors: {
-        firstName: "",
-        lastName: "",
-        username:"",
-        email: "",
-        password: "",
-        roles: "",
+        firstName: [],
+        lastName: [],
+        username:[],
+        email: [],
+        password: [],
+        roles: [],
     }
 };
 

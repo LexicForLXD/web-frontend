@@ -51,6 +51,9 @@
                     Submit
                 </v-btn>
             </v-form>
+            <v-alert :value="error" type="error">
+                {{ error }}
+            </v-alert>
         </v-card-text>
 
         <v-card-actions v-if="!editing">
@@ -95,6 +98,7 @@
                 editActive: "",
                 editing: false,
                 index: this.$route.params.index,
+                error: "",
             }
         },
 
@@ -118,8 +122,6 @@
             },
 
             onUpdate() {
-
-
                 this.$store.dispatch("updateUser", {
                     userId: this.user.id,
                     user: {
@@ -129,7 +131,12 @@
                         email: this.editEmail,
                         isActive: this.editActive
                     }
-                })
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
+                });
             }
         },
 

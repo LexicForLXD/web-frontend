@@ -68,7 +68,9 @@
                             </v-btn>
 
                         </v-form>
-
+                        <v-alert :value="error" type="error">
+                            {{ error }}
+                        </v-alert>
                     </v-card-text>
 
                     <v-card-actions v-if="!editing">
@@ -145,7 +147,8 @@
                 // editSettings: "",
                 // editMac: "",
                 index: this.$route.params.index,
-                active: null
+                active: null,
+                error: "",
             };
         },
         methods: {
@@ -174,8 +177,12 @@
                         domainName: this.editDomainName,
                         port: this.editPort,
                     }
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
                 });
-                this.editing = false;
             },
             getContainerIndex(id) {
                 return this.$store.getters.getContainerIndexById(id);

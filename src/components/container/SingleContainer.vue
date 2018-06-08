@@ -35,6 +35,9 @@
                         />
 
                         <v-btn @click="onChangeNameSubmit">Save</v-btn>
+                        <v-alert :value="error" type="error">
+                            {{ error }}
+                        </v-alert>
 
                     </v-card-text>
 
@@ -112,6 +115,7 @@
                 index: this.$route.params.index,
                 // hostIndex: "",
                 active: null,
+                error: "",
             };
         },
         methods: {
@@ -141,8 +145,12 @@
                         domainName: this.editDomainName,
                         port: this.editPort,
                     }
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
                 });
-                this.editing = false;
             },
 
             onChangeName() {
@@ -155,7 +163,12 @@
                     container: {
                         name: this.name
                     }
-                })
+                }).then(() => {
+                    this.editing = false;
+                    this.error = "";
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
+                });
             },
 
             onStart() {

@@ -36,7 +36,7 @@ export default {
         })
     },
 
-    [types.BACKUP_SET_ALL_FAILURE] ({backupErrors}, error) {
+    [types.BACKUP_SET_ALL_FAILURE]({backupErrors}, error) {
         setErrors(backupErrors, error);
     },
 
@@ -70,51 +70,31 @@ export default {
 }
 
 
-
 function setErrors(backupErrors, error) {
     if (error.response) {
         if (error.response.data) {
             if (error.response.data.error) {
                 if (error.response.data.error.message) {
-                    if (error.response.data.error.message.name) {
-                        backupErrors.name = error.response.data.error.message.name;
+                    if (error.response.data.error.message.manualBackupName) {
+                        backupErrors.name = error.response.data.error.message.manualBackupName;
                     } else {
-                        backupErrors.name = "";
+                        backupErrors.name = [];
                     }
-                    if (error.response.data.error.message.description) {
-                        backupErrors.description = error.response.data.error.message.description;
+                    if (error.response.data.error.message.destination) {
+                        backupErrors.destination = error.response.data.error.message.destination;
                     } else {
-                        backupErrors.description = "";
+                        backupErrors.destination = [];
                     }
-                    if (error.response.data.error.message.protocol) {
-                        backupErrors.protocol = error.response.data.error.message.protocol;
+                    if (error.response.data.error.message.containers) {
+                        backupErrors.containers = error.response.data.error.message.containers;
                     } else {
-                        backupErrors.protocol = "";
+                        backupErrors.containers = [];
                     }
-                    if (error.response.data.error.message.username) {
-                        backupErrors.username = error.response.data.error.message.username;
-                    } else {
-                        backupErrors.username = "";
-                    }
-                    if (error.response.data.error.message.password) {
-                        backupErrors.password = error.response.data.error.message.password;
-                    } else {
-                        backupErrors.password = "";
-                    }
-                    if (error.response.data.error.message.hostname) {
-                        backupErrors.hostname = error.response.data.error.message.hostname;
-                    } else {
-                        backupErrors.hostname = "";
-                    }
-                    if (error.response.data.error.message.path) {
-                        backupErrors.devices = error.response.data.error.message.devices;
-                    } else {
-                        backupErrors.devices = "";
-                    }
+
                     if (error.response.data.error.message.general) {
                         backupErrors.general = error.response.data.error.message.general;
                     } else {
-                        backupErrors.general = "";
+                        backupErrors.general = [];
                     }
                 }
             }
@@ -124,12 +104,9 @@ function setErrors(backupErrors, error) {
 
 
 function clearErrors(backupErrors) {
-    backupErrors.name = "";
-    backupErrors.description = "";
-    backupErrors.protocol = "";
-    backupErrors.username = "";
-    backupErrors.password = "";
-    backupErrors.hostname = "";
-    backupErrors.path = "";
-    backupErrors.general = "";
+    backupErrors.name = [];
+    backupErrors.destination = [];
+    backupErrors.containers = [];
+    backupErrors.manualBackupName = [];
+    backupErrors.general = [];
 }

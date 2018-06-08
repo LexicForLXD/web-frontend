@@ -93,8 +93,8 @@ function setErrors(profileErrors, error) {
 }
 
 function clearErrors(profileErrors) {
-    profileErrors.name = "";
-    profileErrors.description = "";
-    profileErrors.config = "";
-    profileErrors.devices = "";
+    profileErrors.name = [];
+    profileErrors.description = [];
+    profileErrors.config = [];
+    profileErrors.devices = [];
 }

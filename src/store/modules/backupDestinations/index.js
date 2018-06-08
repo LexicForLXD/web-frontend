@@ -14,14 +14,14 @@ const state = {
     deletedBackupDestination: {},
     createdBackupDestination: {},
     backupDestinationErrors: {
-        name: "",
-        description: "",
-        protocol: "",
-        username: "",
-        password: "",
-        hostname: "",
-        path: "",
-        general: "",
+        name: [],
+        description: [],
+        protocol: [],
+        username: [],
+        password: [],
+        hostname: [],
+        path: [],
+        general: [],
     }
 };
 

@@ -18,14 +18,16 @@ const state = {
         hasLoadingErrors: false,
     },
     containerErrors: {
-        ipv4: "",
-        ipv6: "",
-        domainName: "",
-        name: "",
-        architecture: "",
-        config: "",
-        devices: "",
-        sourceType: "",
+        ipv4: [],
+        ipv6: [],
+        domainName: [],
+        name: [],
+        architecture: [],
+        config: [],
+        devices: [],
+        sourceType: [],
+        fingerprint: [],
+        alias: [],
     }
 
 };

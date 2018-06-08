@@ -1,10 +1,12 @@
 <template>
+    <div>
     <v-form v-model="valid">
         <v-text-field
                 label="Name"
                 v-model="name"
                 :rules="[v => !!v || 'Name is required']"
                 required
+                :error-messages="backupDestErrors.name"
         />
 
         <v-text-field
@@ -12,6 +14,7 @@
                 v-model="protocol"
                 :rules="[v => !!v || 'Protocol is required']"
                 required
+                :error-messages="backupDestErrors.protocol"
         />
 
         <v-text-field
@@ -19,16 +22,19 @@
                 v-model="path"
                 :rules="[v => !!v || 'Path is required']"
                 required
+                :error-messages="backupDestErrors.path"
         />
 
         <v-text-field
                 label="Hostname"
                 v-model="hostname"
+                :error-messages="backupDestErrors.hostname"
         />
 
         <v-text-field
                 label="username"
                 v-model="username"
+                :error-messages="backupDestErrors.username"
         />
 
         <v-text-field
@@ -47,7 +53,10 @@
         </v-btn>
     </v-form>
 
-
+    <v-alert :value="error" type="error">
+        {{ error }}
+    </v-alert>
+    </div>
 </template>
 
 <script>
@@ -71,6 +80,7 @@
                 hostname: "",
                 username: "",
                 password: "",
+                error: "",
             };
         },
 
@@ -94,7 +104,8 @@
 
                 this.$store.dispatch("createBackupDestination", body).then(() => {
                     this.$router.push({ name: "destinationOverview"})
-                }).catch(() => {
+                }).catch((error) => {
+                    this.error = error.response.data.error.message;
 
                 });
             }

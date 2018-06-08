@@ -14,10 +14,10 @@ const state = {
     deletedProfile: {},
     createdProfile: {},
     profileErrors: {
-        name: "",
-        description: "",
-        config: "",
-        devices: ""
+        name: [],
+        description: [],
+        config: [],
+        devices: []
     }
 
 };

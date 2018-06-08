@@ -1,132 +1,143 @@
 <template>
-    <v-form v-model="valid">
-        <v-text-field
-                label="Name"
-                v-model="name"
-                :rules="[v => !!v || 'Name is required']"
-                required
-        />
+    <div>
+        <v-form v-model="valid">
+            <v-text-field
+                    label="Name"
+                    v-model="name"
+                    :rules="[v => !!v || 'Name is required']"
+                    required
+                    :error-messages="containerErrors.name"
+            />
 
-        <v-select
-                :items="hosts"
-                v-model="selectedHost"
-                label="Host"
-                required
-                item-value="id"
-                item-text="name"
-                :rules="[v => !!v || 'Host is required']"
-        />
-
-        <v-select
-                :items="profiles"
-                v-model="selectedProfiles"
-                label="Profiles"
-                item-value="id"
-                item-text="name"
-                multiple
-        />
-
-        <v-text-field
-                label="Config"
-                v-model="config"
-                multi-line
-                placeholder='{"limits.cpu": "2"}'
-        />
-
-        <v-text-field
-                label="Devices"
-                v-model="devices"
-                multi-line
-                placeholder='{"limits.cpu": "2"}'
-                required
-                :rules="[v => !!v || 'Devices is required']"
-        />
-
-        <v-checkbox
-                label="Ephemeral"
-                v-model="ephemeral"
-        />
-
-        <v-select
-                :items="sourceTypes"
-                v-model="selectedType"
-                label="Source Type"
-                required
-                :rules="[v => !!v || 'Source type is required']"
-        />
-
-        <div v-if="selectedType === 'image'">
-            <v-layout row>
-                <v-flex xs12 sm5>
-                    <v-select
-                            :items="images"
-                            v-model="selectedFingerprint"
-                            label="Fingerprint"
-                            item-value="fingerprint"
-                            item-text="fingerprint"
-
-                    />
-                    <!--:rules="[-->
-                    <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
-                    <!--v => this.selectedAlias === '' || 'Either alias or fingerprint',-->
-                    <!--]"-->
-                </v-flex>
-
-                <v-flex xs12 sm2>
-                    OR
-                </v-flex>
-                <v-flex xs12 sm5>
-                    <v-select
-                            :items="imageAliases"
-                            v-model="selectedAlias"
-                            label="Alias"
-                            item-value="aliases[0].name"
-                            item-text="aliases[0].name"
-
-                    />
-                    <!--:rules="[-->
-                    <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
-                    <!--v => this.selectedFingerprint === '' || 'Either alias or fingerprint',-->
-                    <!--]"-->
-                </v-flex>
-            </v-layout>
-
-        </div>
-
-        <div v-if="selectedType === 'copy' || selectedType === 'migration'">
             <v-select
-                    :items="containers"
-                    v-model="selectedContainer"
-                    label="Containers"
+                    :items="hosts"
+                    v-model="selectedHost"
+                    label="Host"
+                    required
                     item-value="id"
                     item-text="name"
+                    :rules="[v => !!v || 'Host is required']"
+            />
+
+            <v-select
+                    :items="profiles"
+                    v-model="selectedProfiles"
+                    label="Profiles"
+                    item-value="id"
+                    item-text="name"
+                    multiple
+            />
+
+            <v-text-field
+                    label="Config"
+                    v-model="config"
+                    multi-line
+                    placeholder='{"limits.cpu": "2"}'
+                    :error-messages="containerErrors.config"
+            />
+
+            <v-text-field
+                    label="Devices"
+                    v-model="devices"
+                    multi-line
+                    placeholder='{"limits.cpu": "2"}'
                     required
+                    :rules="[v => !!v || 'Devices is required']"
+                    :error-messages="containerErrors.devices"
             />
 
             <v-checkbox
-                    label="Container only"
-                    v-model="containerOnly"
+                    label="Ephemeral"
+                    v-model="ephemeral"
             />
 
+            <v-select
+                    :items="sourceTypes"
+                    v-model="selectedType"
+                    label="Source Type"
+                    required
+                    :rules="[v => !!v || 'Source type is required']"
+                    :error-messages="containerErrors.sourceType"
+            />
 
-            <div v-if="selectedType === 'migration'">
-                <v-checkbox
-                        label="Live"
-                        v-model="live"
-                />
+            <div v-if="selectedType === 'image'">
+                <v-layout row>
+                    <v-flex xs12 sm5>
+                        <v-select
+                                :items="images"
+                                v-model="selectedFingerprint"
+                                label="Fingerprint"
+                                item-value="fingerprint"
+                                item-text="fingerprint"
+                                :error-messages="containerErrors.fingerprint"
+                                clearable
+                        />
+                        <!--:rules="[-->
+                        <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
+                        <!--v => this.selectedAlias === '' || 'Either alias or fingerprint',-->
+                        <!--]"-->
+                    </v-flex>
+
+                    <v-flex xs12 sm2>
+                        OR
+                    </v-flex>
+                    <v-flex xs12 sm5>
+                        <v-select
+                                :items="imageAliases"
+                                v-model="selectedAlias"
+                                label="Alias"
+                                item-value="aliases[0].name"
+                                item-text="aliases[0].name"
+                                :error-messages="containerErrors.alias"
+                                clearable
+                        />
+                        <!--:rules="[-->
+                        <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
+                        <!--v => this.selectedFingerprint === '' || 'Either alias or fingerprint',-->
+                        <!--]"-->
+                    </v-flex>
+                </v-layout>
+
             </div>
-        </div>
+
+            <div v-if="selectedType === 'copy' || selectedType === 'migration'">
+                <v-select
+                        :items="containers"
+                        v-model="selectedContainer"
+                        label="Containers"
+                        item-value="id"
+                        item-text="name"
+                        required
+                />
+
+                <v-checkbox
+                        label="Container only"
+                        v-model="containerOnly"
+                />
 
 
-        <v-btn
-                @click="onSubmit"
-                :disabled="!valid"
-        >
-            Submit
-        </v-btn>
+                <div v-if="selectedType === 'migration'">
+                    <v-checkbox
+                            label="Live"
+                            v-model="live"
+                    />
+                </div>
+            </div>
 
-    </v-form>
 
+            <v-btn
+                    @click="onSubmit"
+                    :disabled="!valid"
+            >
+                Submit
+            </v-btn>
+
+        </v-form>
+
+        <v-alert :value="error" type="error">
+            {{ error }}
+        </v-alert>
+    </div>
 </template>
 
 <script>
@@ -137,7 +148,8 @@
             ...mapGetters({
                 hosts: "getHosts",
                 containers: "getContainers",
-                profiles: "getProfiles"
+                profiles: "getProfiles",
+                containerErrors: "getContainerErrors"
             }),
             images() {
                 return this.$store.getters.getImagesForHost(this.selectedHost);
@@ -167,7 +179,7 @@
                 ],
 
                 imageRules: [
-                    v => !!this.selectedHost || 'Pleas select a host'
+                    () => !!this.selectedHost || 'Please select a host'
                 ],
 
                 //data
@@ -189,7 +201,8 @@
                 '       "pool": "default"\n' +
                 "    } \n" +
                 "}",
-                architecture: ""
+                architecture: "",
+                error: "",
             };
         },
 
@@ -285,7 +298,8 @@
                     .then(() => {
                         this.$router.push({name: "containerOverview"});
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        this.error = error.response.data.error.message;
                     });
             }
         }
