@@ -70,7 +70,7 @@
                                 item-value="fingerprint"
                                 item-text="fingerprint"
                                 :error-messages="containerErrors.fingerprint"
-
+                                clearable
                         />
                         <!--:rules="[-->
                         <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
@@ -89,6 +89,7 @@
                                 item-value="aliases[0].name"
                                 item-text="aliases[0].name"
                                 :error-messages="containerErrors.alias"
+                                clearable
                         />
                         <!--:rules="[-->
                         <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
