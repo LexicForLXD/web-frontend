@@ -1,3 +1,24 @@
+# [1.1.0](https://github.com/LexicForLXD/web-frontend/compare/v1.0.0...v1.1.0) (2018-06-08)
+
+
+### Bug Fixes
+
+* error handling on new forms ([1b6556f](https://github.com/LexicForLXD/web-frontend/commit/1b6556f))
+* error handling on update forms ([8763168](https://github.com/LexicForLXD/web-frontend/commit/8763168))
+* make image alias and fingerprint clearable ([ad3b7f1](https://github.com/LexicForLXD/web-frontend/commit/ad3b7f1))
+
+
+### Features
+
+* backup create error handling ([e074b9e](https://github.com/LexicForLXD/web-frontend/commit/e074b9e))
+* backup destination create error handling ([8fe6a76](https://github.com/LexicForLXD/web-frontend/commit/8fe6a76))
+* backup schedule create error handling ([f6fdabd](https://github.com/LexicForLXD/web-frontend/commit/f6fdabd))
+* container create error handling ([27f8ee1](https://github.com/LexicForLXD/web-frontend/commit/27f8ee1))
+* host create error handling ([8f1db40](https://github.com/LexicForLXD/web-frontend/commit/8f1db40))
+* image create error handling ([8ddeb22](https://github.com/LexicForLXD/web-frontend/commit/8ddeb22))
+* profile create error handling ([a132aec](https://github.com/LexicForLXD/web-frontend/commit/a132aec))
+* user create error handling ([aafdb2e](https://github.com/LexicForLXD/web-frontend/commit/aafdb2e))
+
 # 1.0.0 (2018-06-08)
 
 
