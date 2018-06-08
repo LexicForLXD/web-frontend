@@ -1,44 +1,50 @@
 <template>
-    <v-form v-model="valid">
-        <v-text-field
-                label="Name"
-                v-model="name"
-                :rules="[v => !!v || 'Name is required']"
-                required
-        />
+    <div>
+        <v-form v-model="valid">
+            <v-text-field
+                    label="Name"
+                    v-model="name"
+                    :rules="[v => !!v || 'Name is required']"
+                    required
+                    :error-messages="backupErrors.name"
+            />
 
-        <v-select
-                :items="containers"
-                v-model="selectedContainers"
-                label="Containers"
-                item-value="id"
-                item-text="name"
-                multiple
-                required
-                :rules="[v => !!v || 'At least one Container is required']"
-        />
+            <v-select
+                    :items="containers"
+                    v-model="selectedContainers"
+                    label="Containers"
+                    item-value="id"
+                    item-text="name"
+                    multiple
+                    required
+                    :rules="[v => !!v || 'At least one Container is required']"
+                    :error-messages="backupErrors.containers"
+            />
 
-        <v-select
-                :items="destinations"
-                v-model="selectedDestination"
-                label="Destination"
-                required
-                item-value="id"
-                item-text="name"
-                :rules="[v => !!v || 'Destination is required']"
-        />
+            <v-select
+                    :items="destinations"
+                    v-model="selectedDestination"
+                    label="Destination"
+                    required
+                    item-value="id"
+                    item-text="name"
+                    :rules="[v => !!v || 'Destination is required']"
+                    :error-messages="backupErrors.destination"
+            />
 
-        <v-btn
-                @click="onSubmit"
-                :disabled="!valid"
-        >
-            Submit
-        </v-btn>
-    </v-form>
+            <v-btn
+                    @click="onSubmit"
+                    :disabled="!valid"
+            >
+                Submit
+            </v-btn>
+        </v-form>
 
-    <v-alert :value="error" type="error">
-        {{ error }}
-    </v-alert>
+        <v-alert :value="error" type="error">
+            {{ backupErrors.general }}
+        </v-alert>
+
+    </div>
 </template>
 
 <script>
@@ -49,6 +55,7 @@
             ...mapGetters({
                 destinations: "getBackupDestinations",
                 containers: "getContainers",
+                backupErrors: "getBackupErrors"
             })
         },
 

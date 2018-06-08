@@ -13,7 +13,11 @@ const state = {
     backupsList: [],
     deletedBackup: {},
     backupErrors: {
-        general: "",
+        name: [],
+        destination: [],
+        containers: [],
+        manualBackupName: [],
+        general: [],
     }
 };
 
