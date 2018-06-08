@@ -58,7 +58,7 @@ export default {
             }).catch((error) => {
                 commit(types.HOST_ADD_NEW_FAILURE, error);
                 commit(types.LOADING_FAIL);
-                reject();
+                reject(error);
             })
         })
     },

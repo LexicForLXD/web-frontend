@@ -70,37 +70,42 @@ function setErrors(state, error) {
                     if (error.response.data.error.message.ipv4) {
                         state.hostErrors.ipv4 = error.response.data.error.message.ipv4;
                     } else {
-                        state.hostErrors.ipv4 = "";
+                        state.hostErrors.ipv4 = [];
                     }
                     if (error.response.data.error.message.ipv6) {
                         state.hostErrors.ipv6 = error.response.data.error.message.ipv6;
                     } else {
-                        state.hostErrors.ipv6 = "";
+                        state.hostErrors.ipv6 = [];
                     }
                     if (error.response.data.error.message.domainName) {
                         state.hostErrors.domainName = error.response.data.error.message.domainName;
                     } else {
-                        state.hostErrors.domainName = "";
+                        state.hostErrors.domainName = [];
                     }
                     if (error.response.data.error.message.name) {
                         state.hostErrors.name = error.response.data.error.message.name;
                     } else {
-                        state.hostErrors.name = "";
+                        state.hostErrors.name = [];
                     }
                     if (error.response.data.error.message.port) {
                         state.hostErrors.port = error.response.data.error.message.port;
                     } else {
-                        state.hostErrors.port = "";
+                        state.hostErrors.port = [];
                     }
                     if (error.response.data.error.message.settings) {
                         state.hostErrors.settings = error.response.data.error.message.settings;
                     } else {
-                        state.hostErrors.settings = "";
+                        state.hostErrors.settings = [];
                     }
                     if (error.response.data.error.message.auth) {
                         state.hostErrors.auth = error.response.data.error.message.auth;
                     } else {
-                        state.hostErrors.auth = "";
+                        state.hostErrors.auth = [];
+                    }
+                    if (error.response.data.error.message.uri) {
+                        state.hostErrors.uri = error.response.data.error.message.uri;
+                    } else {
+                        state.hostErrors.uri = [];
                     }
 
                     // if (error.response.data.error.message) {
@@ -115,12 +120,13 @@ function setErrors(state, error) {
 }
 
 function clearErrors(hostErrors) {
-    hostErrors.ipv4 = "";
-    hostErrors.ipv6 = "";
-    hostErrors.domainName = "";
-    hostErrors.name = "";
-    hostErrors.port = "";
-    hostErrors.settings = "";
-    hostErrors.auth = "";
-    hostErrors.general = "";
+    hostErrors.ipv4 = [];
+    hostErrors.ipv6 = [];
+    hostErrors.domainName = [];
+    hostErrors.name = [];
+    hostErrors.port = [];
+    hostErrors.settings = [];
+    hostErrors.auth = [];
+    hostErrors.general = [];
+    hostErrors.uri = [];
 }
