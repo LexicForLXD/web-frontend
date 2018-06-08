@@ -74,37 +74,37 @@ function setErrors(imageErrors, error) {
                     if (error.response.data.error.message.public) {
                         imageErrors.public = error.response.data.error.message.public;
                     } else {
-                        imageErrors.public = "";
+                        imageErrors.public = [];
                     }
                     if (error.response.data.error.message.filename) {
                         imageErrors.filename = error.response.data.error.message.filename;
                     } else {
-                        imageErrors.filename = "";
+                        imageErrors.filename = [];
                     }
                     if (error.response.data.error.message.properties) {
                         imageErrors.properties = error.response.data.error.message.properties;
                     } else {
-                        imageErrors.properties = "";
+                        imageErrors.properties = [];
                     }
                     if (error.response.data.error.message.type) {
                         imageErrors.type = error.response.data.error.message.type;
                     } else {
-                        imageErrors.type = "";
+                        imageErrors.type = [];
                     }
                     if (error.response.data.error.message.name) {
                         imageErrors.aliasName = error.response.data.error.message.name;
                     } else {
-                        imageErrors.aliasName = "";
+                        imageErrors.aliasName = [];
                     }
                     if (error.response.data.error.message.description) {
                         imageErrors.aliasDescription = error.response.data.error.message.description;
                     } else {
-                        imageErrors.aliasDescription = "";
+                        imageErrors.aliasDescription = [];
                     }
-                    if (error.general) {
-                        imageErrors.general = error.general;
+                    if (error.response.data.error.message.general) {
+                        imageErrors.general = error.response.data.error.message.general;
                     } else {
-                        imageErrors.general = "";
+                        imageErrors.general = [];
                     }
                 }
             }
@@ -113,12 +113,12 @@ function setErrors(imageErrors, error) {
 }
 
 function clearErrors(imageErrors) {
-    imageErrors.public = "";
-    imageErrors.filename = "";
-    imageErrors.properties = "";
-    imageErrors.type = "";
-    imageErrors.aliasDescription = "";
-    imageErrors.aliasName = "";
-    imageErrors.general = "";
+    imageErrors.public = [];
+    imageErrors.filename = [];
+    imageErrors.properties = [];
+    imageErrors.type = [];
+    imageErrors.aliasDescription = [];
+    imageErrors.aliasName = [];
+    imageErrors.general = [];
 
 }

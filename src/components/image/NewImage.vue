@@ -1,118 +1,126 @@
 <template>
-    <v-form v-model="valid">
-        <v-text-field
-                label="Filename"
-                v-model="filename"
-        />
+    <div>
+        <v-form v-model="valid">
+            <v-text-field
+                    label="Filename"
+                    v-model="filename"
+                    :error-messages="imageErrors.filename"
+            />
 
-        <v-checkbox
-                label="Public"
-                v-model="public"
-        />
-
-        <v-text-field
-                label="Alias name"
-                v-model="aliases[0].name"
-        />
-
-        <v-text-field
-                label="Alias description"
-                v-model="aliases[0].description"
-        />
-
-        <v-select
-                :items="hosts"
-                v-model="hostId"
-                label="Host"
-                required
-                item-value="id"
-                item-text="name"
-                :rules="[v => !!v || 'Host is required']"
-        />
-
-
-        <v-text-field
-                label="Properties"
-                v-model="properties"
-                multi-line
-                placeholder='{"os": "Alpine"}'
-        />
-
-        <v-select
-                :items="sourceTypes"
-                v-model="source.type"
-                label="Source Type"
-                required
-                item-value="value"
-                item-text="text"
-                :rules="[v => !!v || 'Source type is required']"
-        />
-
-
-        <div v-if="source.type === 'image'">
             <v-checkbox
-                    label="Automatic update"
-                    v-model="autoUpdate"
+                    label="Public"
+                    v-model="public"
+                    :error-messages="imageErrors.public"
             />
 
             <v-text-field
-                    label="Remote server"
-                    v-model="source.server"
-                    required
-                    :rules="[v => !!v || 'Server is required']"
+                    label="Alias name"
+                    v-model="aliases[0].name"
+                    :error-messages="imageErrors.aliasName"
             />
 
             <v-text-field
-                    label="Protocol"
-                    v-model="source.protocol"
-                    required
-                    :rules="[v => !!v || 'Protocol is required']"
-                    placeholder="lxd"
+                    label="Alias description"
+                    v-model="aliases[0].description"
+                    :error-messages="imageErrors.aliasDescription"
             />
 
-            <v-text-field
-                    label="Alias"
-                    v-model="source.alias"
-                    required
-                    :rules="[v => !!v || 'Alias is required']"
-                    placeholder="alpine/3.7/amd64"
-            />
-
-        </div>
-
-        <div v-if="source.type === 'container'">
             <v-select
-                    :items="containers"
-                    v-model="source.name"
+                    :items="hosts"
+                    v-model="hostId"
                     label="Host"
                     required
-                    item-value="name"
+                    item-value="id"
                     item-text="name"
                     :rules="[v => !!v || 'Host is required']"
             />
 
 
             <v-text-field
-                    label="Compression algorithm"
-                    v-model="compressionAlgo"
-                    required
-                    :rules="[v => !!v || 'Compression algorithm is required']"
-                    placeholder="rm"
+                    label="Properties"
+                    v-model="properties"
+                    multi-line
+                    placeholder='{"os": "Alpine"}'
+                    :error-messages="imageErrors.properties"
             />
-        </div>
 
-        <v-btn
-                @click="onSubmit"
-                :disabled="!valid"
-        >
-            Submit
-        </v-btn>
+            <v-select
+                    :items="sourceTypes"
+                    v-model="source.type"
+                    label="Source Type"
+                    required
+                    item-value="value"
+                    item-text="text"
+                    :rules="[v => !!v || 'Source type is required']"
+                    :error-messages="imageErrors.type"
+            />
 
 
-    </v-form>
-    <v-alert :value="error" type="error">
-        {{ error }}
-    </v-alert>
+            <div v-if="source.type === 'image'">
+                <v-checkbox
+                        label="Automatic update"
+                        v-model="autoUpdate"
+                />
+
+                <v-text-field
+                        label="Remote server"
+                        v-model="source.server"
+                        required
+                        :rules="[v => !!v || 'Server is required']"
+                />
+
+                <v-text-field
+                        label="Protocol"
+                        v-model="source.protocol"
+                        required
+                        :rules="[v => !!v || 'Protocol is required']"
+                        placeholder="lxd"
+                />
+
+                <v-text-field
+                        label="Alias"
+                        v-model="source.alias"
+                        required
+                        :rules="[v => !!v || 'Alias is required']"
+                        placeholder="alpine/3.7/amd64"
+                />
+
+            </div>
+
+            <div v-if="source.type === 'container'">
+                <v-select
+                        :items="containers"
+                        v-model="source.name"
+                        label="Host"
+                        required
+                        item-value="name"
+                        item-text="name"
+                        :rules="[v => !!v || 'Host is required']"
+                />
+
+
+                <v-text-field
+                        label="Compression algorithm"
+                        v-model="compressionAlgo"
+                        required
+                        :rules="[v => !!v || 'Compression algorithm is required']"
+                        placeholder="rm"
+                />
+            </div>
+
+            <v-btn
+                    @click="onSubmit"
+                    :disabled="!valid"
+            >
+                Submit
+            </v-btn>
+
+
+        </v-form>
+        <v-alert :value="error" type="error">
+            {{ imageErrors.general }}
+        </v-alert>
+    </div>
 </template>
 
 <script>
@@ -126,7 +134,7 @@
 
                 hosts: "getHosts"
             }),
-            containers () {
+            containers() {
                 return this.$store.getters.getContainersFromHost(this.hostId)
             },
 
@@ -138,7 +146,7 @@
                     return aliases;
                     // return aliases.map(a => a.replace('/1.0/images/aliases/', ''));
                 }).catch(() => {
-                    return[]
+                    return []
                 })
 
             }
@@ -186,7 +194,7 @@
             onSubmit() {
                 let body;
 
-                if(this.source.type === "container"){
+                if (this.source.type === "container") {
                     body = {
                         image: {
                             filename: this.filename,
@@ -229,7 +237,7 @@
 
 
                 this.$store.dispatch("createImage", body).then(() => {
-                    this.$router.push({ name: "imageOverview"})
+                    this.$router.push({name: "imageOverview"})
                 }).catch((error) => {
                     this.error = error.response.data.error.message;
                 });
