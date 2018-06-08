@@ -1,15 +1,18 @@
 <template>
+    <div>
     <v-form v-model="valid">
         <v-text-field
                 label="Name"
                 v-model="name"
                 :rules="[v => !!v || 'Name is required']"
                 required
+                :error-messages="profileErrors.name"
         />
 
         <v-text-field
                 label="Description"
                 v-model="description"
+                :error-messages="profileErrors.description"
         />
 
         <v-text-field
@@ -17,6 +20,7 @@
                 v-model="config"
                 multi-line
                 placeholder='{"limits.cpu": "2"}'
+                :error-messages="profileErrors.config"
         />
 
         <v-text-field
@@ -24,6 +28,7 @@
                 v-model="devices"
                 multi-line
                 placeholder='{}'
+                :error-messages="profileErrors.devices"
         />
 
         <v-btn
@@ -37,6 +42,7 @@
     <v-alert :value="error" type="error">
         {{ error }}
     </v-alert>
+    </div>
 </template>
 
 <script>
