@@ -25,4 +25,16 @@ jobs:
         github-token: $GITHUB_TOKEN
         keep-history: true
         local-dir: public
+    - stage: release
+      if: branch = master AND type != pull_request
+      language: node_js
+      node_js: node
+      script:
+        - npm install -g semantic-release
+        - npm install -g @semantic-release/changelog
+        - npm install -g @semantic-release/git
+      deploy:
+        provider: script
+        skip-cleanup: true
+        script: semantic-release
 
