@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit="onSubmit">
             <v-text-field
                     label="Name"
                     v-model="name"
