@@ -7,7 +7,7 @@
         </v-toolbar>
 
         <v-card-text>
-            <v-form v-model="valid">
+            <v-form v-model="valid" @submit="submit">
                 <v-text-field
                         label="Email or username"
                         v-model="email"
