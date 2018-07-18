@@ -306,6 +306,14 @@ const router = new VueRouter({
                         "AuthHost",
                         require("./components/host/AuthHost.vue")
                     )
+                },
+                {
+                    path: ":index/new-storage-pool",
+                    name: "hostNewStoragePool",
+                    component: Vue.component(
+                        "NewStoragePoolHost",
+                        require("./components/host/NewStoragePool.vue")
+                    )
                 }
             ]
         },
