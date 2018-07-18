@@ -27,6 +27,17 @@
                                 </v-list-tile>
                             </v-list>
                         </div>
+                        <div v-if="host.storagePoolIds">
+                            <b>Storage Pools:</b>
+                            <v-list>
+                                <v-list-tile v-for="storagePool in storagePools" :key="storagePool.id">
+                                    <v-list-tile-content>
+                                        Name: {{storagePool.name}},
+                                        Driver: {{storagePool.driver}}
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
+                        </div>
                     </v-card-text>
 
 
@@ -77,6 +88,7 @@
                         <v-btn flat @click="onEdit">Edit</v-btn>
                         <v-btn flat @click="onDelete">Delete</v-btn>
                         <v-btn flat :to="{name: 'hostAuth', params: {index: index}}">Authenticate</v-btn>
+                        <v-btn flat :to="{name: 'hostNewStoragePool', params: {index: index}}">New Storage Pool</v-btn>
                     </v-card-actions>
                     <v-card-actions v-else>
                         <v-btn flat @click="onCancel">Abort</v-btn>
@@ -115,6 +127,7 @@
 <script>
     import {mapGetters} from "vuex";
     import LogHost from "./LogHost";
+    import storageApi from "../../api/storage/storage.js"
 
     export default {
         computed: {
@@ -128,8 +141,16 @@
             host() {
                 return this.hosts[this.index];
             },
-
+        
         },
+
+        mounted() {
+                storageApi.fetchFromHost(this.host.id).then((res) => {
+                    this.storagePools = res.data;
+                })
+        },
+
+
 
         components: {
             LogHost
@@ -149,6 +170,7 @@
                 index: this.$route.params.index,
                 active: null,
                 error: "",
+                storagePools: [],
             };
         },
         methods: {
