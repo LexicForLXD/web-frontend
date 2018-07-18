@@ -20,6 +20,16 @@
             />
 
             <v-select
+                    :items="storagePools"
+                    v-model="selectedStoragePool"
+                    label="Storage Pool"
+                    required
+                    item-value="id"
+                    item-text="name"
+                    :rules="[v => !!v || 'Storage pool is required']"
+            />
+
+            <v-select
                     :items="profiles"
                     v-model="selectedProfiles"
                     label="Profiles"
@@ -40,9 +50,6 @@
                     label="Devices"
                     v-model="devices"
                     multi-line
-                    placeholder='{"limits.cpu": "2"}'
-                    required
-                    :rules="[v => !!v || 'Devices is required']"
                     :error-messages="containerErrors.devices"
             />
 
@@ -142,6 +149,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import storageApi from "../../api/storage/storage.js"
 
     export default {
         computed: {
@@ -154,9 +162,21 @@
             images() {
                 return this.$store.getters.getImagesForHost(this.selectedHost);
             },
+
             imageAliases() {
                 return this.$store.getters.getImagesWithAliasesForHost(this.selectedHost);
             }
+        },
+
+        watch: {
+            selectedHost: function(val) {
+                storageApi.fetchFromHost(this.selectedHost).then((res) => {
+                    this.storagePools = res.data;
+                }).catch((err) => {
+                    this.storagePools = [];
+                })
+            },
+
         },
 
         data() {
@@ -185,6 +205,7 @@
                 //data
                 selectedProfiles: [],
                 selectedHost: "",
+                selectedStoragePool: "",
                 selectedFingerprint: "",
                 selectedAlias: "",
                 selectedContainer: "",
@@ -203,6 +224,7 @@
                 "}",
                 architecture: "",
                 error: "",
+                storagePools: [],
             };
         },
 
@@ -236,7 +258,8 @@
                         ephemeral: this.ephemeral,
                         config: bodyConfig,
                         devices: bodyDevices,
-                        profiles: this.selectedProfiles
+                        profiles: this.selectedProfiles,
+                        storagePoolId: this.selectedStoragePool
                     };
                 } else if (this.selectedType === "image") {
                     if (this.selectedFingerprint !== "") {
@@ -247,7 +270,8 @@
                             config: bodyConfig,
                             devices: bodyDevices,
                             profiles: this.selectedProfiles,
-                            fingerprint: this.selectedFingerprint
+                            fingerprint: this.selectedFingerprint,
+                            storagePoolId: this.selectedStoragePool
                         };
                     }
                     if (this.selectedAlias !== "") {
@@ -258,7 +282,8 @@
                             config: bodyConfig,
                             devices: bodyDevices,
                             profiles: this.selectedProfiles,
-                            alias: this.selectedAlias
+                            alias: this.selectedAlias,
+                            storagePoolId: this.selectedStoragePool
                         };
                     }
                 } else if (this.selectedType === "copy") {
@@ -270,7 +295,8 @@
                         devices: bodyDevices,
                         profiles: this.selectedProfiles,
                         oldContainerId: this.selectedContainer,
-                        containerOnly: this.containerOnly
+                        containerOnly: this.containerOnly,
+                        storagePoolId: this.selectedStoragePool
                     };
                 } else if (this.selectedType === "migration") {
                     data.container = {
@@ -282,7 +308,8 @@
                         profiles: this.selectedProfiles,
                         oldContainerId: this.selectedContainer,
                         containerOnly: this.containerOnly,
-                        live: this.live
+                        live: this.live,
+                        storagePoolId: this.selectedStoragePool
                     };
                 }
 
