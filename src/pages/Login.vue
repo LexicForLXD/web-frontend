@@ -26,6 +26,7 @@
                 ></v-text-field>
 
                 <v-btn
+                    type="submit"
                         @click="submit"
                         :disabled="!valid"
                 >

@@ -48,6 +48,9 @@
                     </v-card-actions>
 
                 </v-card>
+                <v-alert :value="error" type="error">
+                            {{ error }}
+                        </v-alert>
             </v-flex>
 
             <v-flex xs12>
@@ -120,8 +123,12 @@
         },
         methods: {
             onDelete() {
-                this.$store.dispatch("deleteContainer", this.container.id);
-                this.$router.push({name: 'containerOverview'});
+                this.$store.dispatch("deleteContainer", this.container.id).then(res => {
+                    this.$router.push({name: 'containerOverview'});
+                }).catch(err => {
+                     this.error = err.response.data.error.message;
+                });
+                
             },
             onEdit() {
                 this.editIpv4 = this.containers.ipv4;
