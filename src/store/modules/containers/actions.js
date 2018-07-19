@@ -35,12 +35,16 @@ export default {
     deleteContainer({commit}, id) {
         commit(types.CONTAINER_DELETE, id);
         commit(types.LOADING_BEGIN);
-        containerApi.delete(id).then(() => {
-            commit(types.CONTAINER_DELETE_SUCCESS);
-            commit(types.LOADING_FINISH);
-        }).catch((error) => {
-            commit(types.CONTAINER_DELETE_FAILURE, error);
-            commit(types.LOADING_FAIL);
+        return new Promise((resolve, reject) => {
+            containerApi.delete(id).then(() => {
+                commit(types.CONTAINER_DELETE_SUCCESS);
+                commit(types.LOADING_FINISH);
+                resolve();
+            }).catch((error) => {
+                commit(types.CONTAINER_DELETE_FAILURE, error);
+                commit(types.LOADING_FAIL);
+                reject(error);
+            })
         })
     }
     ,

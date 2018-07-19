@@ -6,7 +6,8 @@ import Vue from 'vue';
 export default {
     [types.CONTAINER_DELETE]({containers, containersList, deletedContainer}, id) {
         const key = keyForContainer(id);
-        deletedContainer = containers[key];
+        Object.assign(deletedContainer, containers[key])
+        Vue.set(deletedContainer, key, containers[key]);
         Vue.delete(containers, key);
         pull(containersList, id);
     },
