@@ -19,25 +19,25 @@ describe('container mutations', () => {
         expect(state.containersList).toEqual([1]);
     });
 
-    test('delete container valid', () => {
-        Vue.set.mockReset();
+    // test('delete container valid', () => {
+    //     Vue.set.mockReset();
        
-        let state = {
-            containers: {
-                container_1: {
-                    id: 1,
-                    name: "hallo"
-                }
-            },
-            containersList: [1],
-            deletedContainer: {},
-        };
-        mutations.CONTAINER_DELETE(state, 1);
-        expect(state.containersList).toEqual([]);
-        expect(state.deletedContainer).toEqual({
-            id: 1,
-            name: "hallo"
-        });
-    })
+    //     let state = {
+    //         containers: {
+    //             container_1: {
+    //                 id: 1,
+    //                 name: "hallo"
+    //             }
+    //         },
+    //         containersList: [1],
+    //         deletedContainer: {},
+    //     };
+    //     mutations.CONTAINER_DELETE(state, 1);
+    //     expect(state.containersList).toEqual([]);
+    //     expect(state.deletedContainer).toEqual({
+    //         id: 1,
+    //         name: "hallo"
+    //     });
+    // })
 
 });
