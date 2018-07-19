@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/LexicForLXD/web-frontend/compare/v1.1.1...v1.2.0) (2018-07-19)
+
+
+### Bug Fixes
+
+* container delete ([00cf8cc](https://github.com/LexicForLXD/web-frontend/commit/00cf8cc))
+* login on enter ([0e14c98](https://github.com/LexicForLXD/web-frontend/commit/0e14c98))
+
+
+### Features
+
+* add new storage pool ([47a5fcd](https://github.com/LexicForLXD/web-frontend/commit/47a5fcd))
+* delete storage pool ([cd35464](https://github.com/LexicForLXD/web-frontend/commit/cd35464))
+* display storage pools ([e849ac7](https://github.com/LexicForLXD/web-frontend/commit/e849ac7))
+* import storage pools ([31710df](https://github.com/LexicForLXD/web-frontend/commit/31710df))
+* storage-pool api ([7322842](https://github.com/LexicForLXD/web-frontend/commit/7322842))
+
 ## [1.1.1](https://github.com/LexicForLXD/web-frontend/compare/v1.1.0...v1.1.1) (2018-06-17)
 
 
