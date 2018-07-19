@@ -32,8 +32,14 @@
                             <v-list>
                                 <v-list-tile v-for="storagePool in storagePools" :key="storagePool.id">
                                     <v-list-tile-content>
+                                        <li>
                                         Name: {{storagePool.name}},
-                                        Driver: {{storagePool.driver}}
+                                        Driver: {{storagePool.driver}} 
+                                        <v-btn color="red" @click="onDeleteStoragePool(storagePool.id)">
+                                            <v-icon>remove_circle</v-icon>
+                                            Delete
+                                        </v-btn>
+                                        </li>
                                     </v-list-tile-content>
                                 </v-list-tile>
                             </v-list>
@@ -86,7 +92,7 @@
 
                     <v-card-actions v-if="!editing">
                         <v-btn flat @click="onEdit">Edit</v-btn>
-                        <v-btn flat @click="onDelete">Delete</v-btn>
+                        <v-btn flat color="red" @click="onDelete">Delete</v-btn>
                         <v-btn flat :to="{name: 'hostAuth', params: {index: index}}">Authenticate</v-btn>
                         <v-btn flat :to="{name: 'hostNewStoragePool', params: {index: index}}">New Storage Pool</v-btn>
                     </v-card-actions>
@@ -95,6 +101,12 @@
                     </v-card-actions>
 
                 </v-card>
+                <v-alert :value="error" type="error">
+                    {{ error }}
+                </v-alert>
+                <v-alert :value="message" type="success">
+                    {{ message }}
+                </v-alert>
             </v-flex>
 
             <v-flex xs12>
@@ -125,93 +137,118 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
-    import LogHost from "./LogHost";
-    import storageApi from "../../api/storage/storage.js"
+import { mapGetters } from "vuex";
+import LogHost from "./LogHost";
+import storageApi from "../../api/storage/storage.js";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                hosts: "getHosts",
-            }),
-            containersForHost() {
-                return this.$store.getters.getContainersByIds(this.host.containerId)
-            },
+export default {
+  computed: {
+    ...mapGetters({
+      hosts: "getHosts"
+    }),
+    containersForHost() {
+      return this.$store.getters.getContainersByIds(this.host.containerId);
+    },
 
-            host() {
-                return this.hosts[this.index];
-            },
-        
-        },
+    host() {
+      return this.hosts[this.index];
+    }
+  },
 
-        mounted() {
-                storageApi.fetchFromHost(this.host.id).then((res) => {
-                    this.storagePools = res.data;
-                })
-        },
+  mounted() {
+    this.getStoragePools();
+  },
 
+  components: {
+    LogHost
+  },
 
-
-        components: {
-            LogHost
-        },
-
-        data() {
-            return {
-                valid: false,
-                editing: false,
-                editIpv4: "",
-                editIpv6: "",
-                editDomainName: "",
-                editName: "",
-                editPort: "",
-                // editSettings: "",
-                // editMac: "",
-                index: this.$route.params.index,
-                active: null,
-                error: "",
-                storagePools: [],
-            };
-        },
-        methods: {
-            onDelete() {
-                this.$store.dispatch("deleteHost", this.hosts[this.index].id);
-                this.$router.push({name: 'hostOverview'});
-            },
-            onEdit() {
-                this.editIpv4 = this.host.ipv4;
-                this.editIpv6 = this.host.ipv6;
-                this.editDomainName = this.host.domainName;
-                this.editName = this.host.name;
-                this.editPort = this.host.port;
-                this.editing = true;
-            },
-            onCancel() {
-                this.editing = false;
-            },
-            onUpdate() {
-                this.$store.dispatch("updateHost", {
-                    host_id: this.host.id,
-                    host: {
-                        name: this.editName,
-                        ipv4: this.editIpv4,
-                        ipv6: this.editIpv6,
-                        domainName: this.editDomainName,
-                        port: this.editPort,
-                    }
-                }).then(() => {
-                    this.editing = false;
-                    this.error = "";
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            },
-            getContainerIndex(id) {
-                return this.$store.getters.getContainerIndexById(id);
-            }
-
-        }
+  data() {
+    return {
+      valid: false,
+      editing: false,
+      editIpv4: "",
+      editIpv6: "",
+      editDomainName: "",
+      editName: "",
+      editPort: "",
+      index: this.$route.params.index,
+      active: null,
+      error: "",
+      message: "",
+      storagePools: []
     };
+  },
+  methods: {
+    onDelete() {
+      this.$store.dispatch("deleteHost", this.hosts[this.index].id);
+      this.$router.push({ name: "hostOverview" });
+    },
+    onEdit() {
+      this.editIpv4 = this.host.ipv4;
+      this.editIpv6 = this.host.ipv6;
+      this.editDomainName = this.host.domainName;
+      this.editName = this.host.name;
+      this.editPort = this.host.port;
+      this.editing = true;
+    },
+    onCancel() {
+      this.editing = false;
+    },
+    onUpdate() {
+      this.$store
+        .dispatch("updateHost", {
+          host_id: this.host.id,
+          host: {
+            name: this.editName,
+            ipv4: this.editIpv4,
+            ipv6: this.editIpv6,
+            domainName: this.editDomainName,
+            port: this.editPort
+          }
+        })
+        .then(() => {
+          this.editing = false;
+          this.error = "";
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    },
+    getContainerIndex(id) {
+      return this.$store.getters.getContainerIndexById(id);
+    },
+    getStoragePools() {
+      this.$store.commit("LOADING_BEGIN");
+      storageApi
+        .fetchFromHost(this.host.id)
+        .then(res => {
+          this.$store.commit("LOADING_FINISH");
+          this.storagePools = res.data;
+        })
+        .catch(err => {
+          this.$store.commit("LOADING_FAIL");
+        });
+    },
+    onDeleteStoragePool(id) {
+      this.$store.commit("LOADING_BEGIN");
+      storageApi
+        .delete(id)
+        .then(res => {
+            this.error = "";
+          this.$store.commit("LOADING_FINISH");
+          this.getStoragePools();
+        })
+        .catch(err => {
+            if (err.response.data) {
+                this.error = err.response.data;
+            }
+            this.message = "";
+          this.$store.commit("LOADING_FAIL");
+        });
+    }
+  }
+};
 </script>
 
 <style>
