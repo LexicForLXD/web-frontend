@@ -14,6 +14,7 @@
 
         <v-btn @click="importImages">Images</v-btn>
         <v-btn @click="importContainers">Containers</v-btn>
+        <v-btn @click="importStoragePools">Storage Pools</v-btn>
         <v-btn @click="importAll">Import All</v-btn>
 
         {{error}}
@@ -53,6 +54,16 @@
             importImages() {
                 this.startLoading();
                 importApi.images(this.selectedHost).then(res => {
+                    this.message = res.data.message;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.error = error.response.data.message;
+                    this.failLoading();
+                })
+            },
+            importStoragePools() {
+                this.startLoading();
+                importApi.storagePools(this.selectedHost).then(res => {
                     this.message = res.data.message;
                     this.stopLoading();
                 }).catch(error => {

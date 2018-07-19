@@ -21,6 +21,15 @@ export default {
     },
 
     /**
+     * Import storage pools from host.
+     * @param hostId
+     * @returns {AxiosPromise<any>}
+     */
+    storagePools(hostId) {
+        return client.withAuth().post('/sync/hosts/' + hostId + '/storage-pools')
+    },
+
+    /**
      * Import images and containers at the same time.
      * @param hostId
      * @returns {AxiosPromise<any>}
