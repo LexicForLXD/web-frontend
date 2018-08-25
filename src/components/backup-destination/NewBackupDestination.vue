@@ -15,6 +15,8 @@
                 :rules="[v => !!v || 'Protocol is required']"
                 required
                 :error-messages="backupDestErrors.protocol"
+                persistent-hint
+                hint="What protocol should be used for backup? See duplicity manual for all options."
         />
 
         <v-text-field
@@ -23,18 +25,24 @@
                 :rules="[v => !!v || 'Path is required']"
                 required
                 :error-messages="backupDestErrors.path"
+                persistent-hint
+                hint="Where should be the backups stored? The folder must exist."
         />
 
         <v-text-field
                 label="Hostname"
                 v-model="hostname"
                 :error-messages="backupDestErrors.hostname"
+                persistent-hint
+                hint="Hostname if you use a remote host. Depends on choosen protocol."
         />
 
         <v-text-field
                 label="username"
                 v-model="username"
                 :error-messages="backupDestErrors.username"
+                persistent-hint
+                hint="Username if you use a remote host. Depends on choosen protocol."
         />
 
         <v-text-field
@@ -43,6 +51,8 @@
                 :type="e1 ? 'password' : 'text'"
                 :append-icon="e1 ? 'visibility' : 'visibility_off'"
                 :append-icon-cb="() => (e1 = !e1)"
+                persistent-hint
+                hint="Password if you use a remote host. Depends on choosen protocol."
         />
 
         <v-btn
