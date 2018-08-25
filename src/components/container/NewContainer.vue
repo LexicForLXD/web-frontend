@@ -42,7 +42,7 @@
                     hint="Profiles will alter the default configuration."
             />
 
-            <v-text-field
+            <v-textarea
                     label="Config"
                     v-model="config"
                     multi-line
@@ -52,7 +52,7 @@
                     hint="You can input your own config."
             />
 
-            <v-text-field
+            <v-textarea
                     label="Devices"
                     v-model="devices"
                     multi-line
