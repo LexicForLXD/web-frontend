@@ -36,16 +36,19 @@
 </template>
 
 <script>
-import jobApi from '../../api/jobs/backup.js';
-import {mapGetters, mapMutations} from "vuex";
-import {LOADING_BEGIN, LOADING_FAIL, LOADING_FINISH} from "../../store/mutation-types";
-
+import jobApi from "../../api/jobs/backup.js";
+import { mapGetters, mapMutations } from "vuex";
+import {
+  LOADING_BEGIN,
+  LOADING_FAIL,
+  LOADING_FINISH
+} from "../../store/mutation-types";
 
 export default {
   mounted: function() {
-            this.getArchivedJobs();
-            this.getRunningJobs();
-        },
+    this.getArchivedJobs();
+    this.getRunningJobs();
+  },
 
   computed: {
     ...mapGetters({
@@ -69,9 +72,9 @@ export default {
           value: "backupScheduleId"
         }
       ],
-                running: [],
-                archived: [],
-                jobError: "",
+      running: [],
+      archived: [],
+      jobError: ""
     };
   },
 
@@ -81,11 +84,11 @@ export default {
 
   methods: {
     ...mapMutations({
-                startLoading: LOADING_BEGIN,
-                stopLoading: LOADING_FINISH,
-                failLoading: LOADING_FAIL
-            }),
-            
+      startLoading: LOADING_BEGIN,
+      stopLoading: LOADING_FINISH,
+      failLoading: LOADING_FAIL
+    }),
+
     newContainer() {
       this.$router.push({ name: "newContainer" });
     },
@@ -113,29 +116,35 @@ export default {
       return this.$store.getters.getBackupScheduleIndexById(id);
     },
     getArchivedJobs() {
-                this.startLoading();
-                jobApi.getArchivedJobs().then(res => {
-                    this.archived = res.data;
-                    this.jobError = "";
-                    this.stopLoading();
-                }).catch(error => {
-                    this.archived = [];
-                    this.jobError = error.response.data.error.message;
-                    this.failLoading();
-                })
-            },
-            getRunningJobs() {
-                this.startLoading();
-                jobApi.getRunningJobs().then(res => {
-                    this.jobError = "";
-                    this.running = res.data;
-                    this.stopLoading();
-                }).catch(error => {
-                    this.running = [];
-                    this.jobError = error.response.data.error.message;
-                    this.failLoading();
-                })
-            }
+      this.startLoading();
+      jobApi
+        .getArchivedJobs()
+        .then(res => {
+          this.archived = res.data;
+          this.jobError = "";
+          this.stopLoading();
+        })
+        .catch(error => {
+          this.archived = [];
+          this.jobError = error.response.data.error.message;
+          this.failLoading();
+        });
+    },
+    getRunningJobs() {
+      this.startLoading();
+      jobApi
+        .getRunningJobs()
+        .then(res => {
+          this.jobError = "";
+          this.running = res.data;
+          this.stopLoading();
+        })
+        .catch(error => {
+          this.running = [];
+          this.jobError = error.response.data.error.message;
+          this.failLoading();
+        });
+    }
   }
 };
 </script>
