@@ -7,7 +7,7 @@ export default {
      * @returns {AxiosPromise<any>}
      */
     getRunningJobs() {
-        return client.withAuth().get('/jobs/image?type=running');
+        return client.withAuth().get('/jobs/images?type=running');
     },
 
     /**
@@ -15,7 +15,7 @@ export default {
      * @returns {AxiosPromise<any>}
      */
     getArchivedJobs() {
-        return client.withAuth().get('/jobs/image?type=archived')
+        return client.withAuth().get('/jobs/images?type=archived')
     },
 
 
