@@ -26,6 +26,8 @@
                     required
                     item-value="id"
                     item-text="name"
+                    persistent-hint
+                    hint="You could save your container to different storage pools. This will result in different places where your container will be saved."
                     :rules="[v => !!v || 'Storage pool is required']"
             />
 
@@ -36,6 +38,8 @@
                     item-value="id"
                     item-text="name"
                     multiple
+                    persistent-hint
+                    hint="Profiles will alter the default configuration."
             />
 
             <v-text-field
@@ -44,6 +48,8 @@
                     multi-line
                     placeholder='{"limits.cpu": "2"}'
                     :error-messages="containerErrors.config"
+                    persistent-hint
+                    hint="You can input your own config."
             />
 
             <v-text-field
@@ -51,11 +57,15 @@
                     v-model="devices"
                     multi-line
                     :error-messages="containerErrors.devices"
+                    persistent-hint
+                    hint="You can input your own devices. Please don't include the storage device."
             />
 
             <v-checkbox
                     label="Ephemeral"
                     v-model="ephemeral"
+                    persistent-hint
+                    hint="A ephemeral container will be completely deleted after you stop the container."
             />
 
             <v-select
@@ -65,6 +75,8 @@
                     required
                     :rules="[v => !!v || 'Source type is required']"
                     :error-messages="containerErrors.sourceType"
+                    persistent-hint
+                    hint="From which source do you want to init your container?"
             />
 
             <div v-if="selectedType === 'image'">
@@ -78,6 +90,9 @@
                                 item-text="fingerprint"
                                 :error-messages="containerErrors.fingerprint"
                                 clearable
+                                persistent-hint
+                                hint="You can select an fingerprint of an existing image OR"
+                                no-data-text="Make sure you have selected the correct host."
                         />
                         <!--:rules="[-->
                         <!--v => this.selectedAlias === '' && !!v || 'One of alias or fingerprint',-->
@@ -97,6 +112,9 @@
                                 item-text="aliases[0].name"
                                 :error-messages="containerErrors.alias"
                                 clearable
+                                persistent-hint
+                                hint="you can select the alias of an existing image."
+                                no-data-text="Make sure you have selected the correct host."
                         />
                         <!--:rules="[-->
                         <!--v => this.selectedFingerprint === '' && !!v || 'One of alias or fingerprint',-->
@@ -115,11 +133,15 @@
                         item-value="id"
                         item-text="name"
                         required
+                        persistent-hint
+                        hint="The container you want to copy or migrate."
                 />
 
                 <v-checkbox
                         label="Container only"
                         v-model="containerOnly"
+                        persistent-hint
+                        hint="Container only will ditch all other things like snapshots."
                 />
 
 
@@ -127,6 +149,8 @@
                     <v-checkbox
                             label="Live"
                             v-model="live"
+                            persistent-hint
+                            hint="Live migration will reduce the downtime to a minimum."
                     />
                 </div>
             </div>
@@ -140,6 +164,10 @@
             </v-btn>
 
         </v-form>
+
+        <p>
+            If you get redirected to the container overview, the server accepted your request. Please have a look on the running jobs.
+        </p>
 
         <v-alert :value="error" type="error">
             {{ error }}
