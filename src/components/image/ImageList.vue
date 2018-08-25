@@ -28,15 +28,31 @@
                 </td>
             </template>
         </v-data-table>
+        <job-overview
+            :running="running" 
+            :archived="archived"
+            :error="jobError"
+            title="Image"
+            v-on:getArchivedJobs="getArchivedJobs"
+            v-on:getRunningJobs="getRunningJobs"
+            />
     </div>
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+    import jobApi from '../../api/jobs/image.js';
+    import {mapGetters, mapMutations} from "vuex";
+    import {LOADING_BEGIN, LOADING_FAIL, LOADING_FINISH} from "../../store/mutation-types";
+
 
     export default {
+    
+
         data() {
             return {
+                running: [],
+                archived: [],
+                jobError: "",
                 headers: [
                     {
                         text: "Fingerprint",
@@ -66,7 +82,9 @@
             }
         },
 
-        mounted() {
+        mounted: function() {
+            this.getArchivedJobs();
+            this.getRunningJobs();
         },
 
         computed: {
@@ -81,6 +99,11 @@
         },
 
         methods: {
+            ...mapMutations({
+                startLoading: LOADING_BEGIN,
+                stopLoading: LOADING_FINISH,
+                failLoading: LOADING_FAIL
+            }),
             newHost() {
                 this.$router.push({name: "newHost"});
             },
@@ -90,6 +113,30 @@
             },
             getImageIndex(id) {
                 return this.$store.getters.getImageIndexById(id);
+            },
+            getArchivedJobs() {
+                this.startLoading();
+                jobApi.getArchivedJobs().then(res => {
+                    this.archived = res.data;
+                    this.jobError = "";
+                    this.stopLoading();
+                }).catch(error => {
+                    this.archived = [];
+                    this.jobError = error.response.data.error.message;
+                    this.failLoading();
+                })
+            },
+            getRunningJobs() {
+                this.startLoading();
+                jobApi.getRunningJobs().then(res => {
+                    this.jobError = "";
+                    this.running = res.data;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.running = [];
+                    this.jobError = error.response.data.error.message;
+                    this.failLoading();
+                })
             }
         }
     };
