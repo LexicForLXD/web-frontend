@@ -374,15 +374,7 @@ const router = new VueRouter({
                         "importOverview",
                         require("./components/import/ImportOverview.vue")
                     )
-                },
-                {
-                    path: "jobs",
-                    name: "importJobOverview",
-                    component: Vue.component(
-                        "importJobOverview",
-                        require("./components/import/JobOverview.vue")
-                    )
-                },
+                }
             ]
         },
 
