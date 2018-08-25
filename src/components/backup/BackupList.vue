@@ -80,6 +80,12 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+                startLoading: LOADING_BEGIN,
+                stopLoading: LOADING_FINISH,
+                failLoading: LOADING_FAIL
+            }),
+            
     newContainer() {
       this.$router.push({ name: "newContainer" });
     },
