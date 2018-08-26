@@ -1,3 +1,18 @@
+# [1.3.0](https://github.com/LexicForLXD/web-frontend/compare/v1.2.0...v1.3.0) (2018-08-26)
+
+
+### Bug Fixes
+
+* api for jobs ([abe750f](https://github.com/LexicForLXD/web-frontend/commit/abe750f))
+* containers will be correctly displayed while creating an image. ([501b115](https://github.com/LexicForLXD/web-frontend/commit/501b115))
+* hints for container creation ([7c1e0f7](https://github.com/LexicForLXD/web-frontend/commit/7c1e0f7))
+* missing mapmutation ([81af553](https://github.com/LexicForLXD/web-frontend/commit/81af553))
+
+
+### Features
+
+* reflect api changes ([b9df3c5](https://github.com/LexicForLXD/web-frontend/commit/b9df3c5))
+
 # [1.2.0](https://github.com/LexicForLXD/web-frontend/compare/v1.1.1...v1.2.0) (2018-07-19)
 
 
