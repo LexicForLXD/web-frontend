@@ -9,21 +9,33 @@
                 item-text="name"
                 :rules="[v => !!v || 'Host is required']"
         />
+        
+            <h2>Import</h2>
 
-        <h2>Import</h2>
+            <v-btn @click="importImages">Images</v-btn>
+            <v-btn @click="importContainers">Containers</v-btn>
+            <v-btn @click="importStoragePools">Storage Pools</v-btn>
+            <v-btn @click="importAll">Import All</v-btn>
 
-        <v-btn @click="importImages">Images</v-btn>
-        <v-btn @click="importContainers">Containers</v-btn>
-        <v-btn @click="importStoragePools">Storage Pools</v-btn>
-        <v-btn @click="importAll">Import All</v-btn>
-
-        {{error}}
-        {{message}}
+            {{error}}
+            {{message}}
+        
+                
+        <v-divider></v-divider>
+        <job-overview
+            :running="running" 
+            :archived="archived"
+            :error="jobError"
+            title="Import"
+            v-on:getArchivedJobs="getArchivedJobs"
+            v-on:getRunningJobs="getRunningJobs"
+            />
     </div>
 </template>
 
 <script>
-    import importApi from '../../api/import/import.js'
+    import importApi from '../../api/import/import.js';
+    import jobApi from '../../api/jobs/import.js';
     import {mapGetters, mapMutations} from "vuex";
     import {LOADING_BEGIN, LOADING_FAIL, LOADING_FINISH} from "../../store/mutation-types";
 
@@ -34,8 +46,16 @@
             return {
                 selectedHost: "",
                 error: "",
-                message: ""
+                message: "",
+                running: [],
+                archived: [],
+                jobError: "",
             }
+        },
+
+        mounted: function() {
+            this.getArchivedJobs();
+            this.getRunningJobs();
         },
 
         computed: {
@@ -91,6 +111,30 @@
                     this.failLoading();
                 })
             },
+            getArchivedJobs() {
+                this.startLoading();
+                jobApi.getArchivedJobs().then(res => {
+                    this.archived = res.data;
+                    this.jobError = "";
+                    this.stopLoading();
+                }).catch(error => {
+                    this.archived = [];
+                    this.jobError = error.response.data.error.message;
+                    this.failLoading();
+                })
+            },
+            getRunningJobs() {
+                this.startLoading();
+                jobApi.getRunningJobs().then(res => {
+                    this.jobError = "";
+                    this.running = res.data;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.running = [];
+                    this.jobError = error.response.data.error.message;
+                    this.failLoading();
+                })
+            }
         }
     }
 </script>

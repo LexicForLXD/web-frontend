@@ -31,6 +31,8 @@
                     required
                     :rules="[v => !!v || 'Execution time is required']"
                     :error-messages="scheduleErrors.executionTime"
+                    persistent-hint
+                    hint="How often should be backed up?"
             />
 
             <v-select
@@ -43,6 +45,8 @@
                     required
                     :rules="[v => !!v || 'At least one Container is required']"
                     :error-messages="scheduleErrors.containers"
+                    persistent-hint
+                    hint="Which containers should be backed up? The containers have to be on the same host."
             />
 
             <v-select
@@ -54,6 +58,8 @@
                     item-text="name"
                     :rules="[v => !!v || 'Destination is required']"
                     :error-messages="scheduleErrors.destination"
+                    persistent-hint
+                    hint="To which destination the containers should be backed up."
             />
 
             <v-btn

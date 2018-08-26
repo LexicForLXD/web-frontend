@@ -19,6 +19,8 @@
                     required
                     :rules="[v => !!v || 'At least one Container is required']"
                     :error-messages="backupErrors.containers"
+                    persistent-hint
+                    hint="Which containers should be backed up."
             />
 
             <v-select
@@ -30,6 +32,8 @@
                     item-text="name"
                     :rules="[v => !!v || 'Destination is required']"
                     :error-messages="backupErrors.destination"
+                    persistent-hint
+                    hint="Where your backup should be stored."
             />
 
             <v-btn

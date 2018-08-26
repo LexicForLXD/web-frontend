@@ -5,24 +5,32 @@
                     label="Filename"
                     v-model="filename"
                     :error-messages="imageErrors.filename"
+                    persistent-hint
+                    hint="The filename will be used for export."
             />
 
             <v-checkbox
                     label="Public"
-                    v-model="public"
+                    v-model="publicImage"
                     :error-messages="imageErrors.public"
+                    persistent-hint
+                    hint="Whether the image can be downloaded by untrusted users"
             />
 
             <v-text-field
                     label="Alias name"
                     v-model="aliases[0].name"
                     :error-messages="imageErrors.aliasName"
+                    required
+                    :rules="[v => !!v || 'Alias is required']"
             />
 
             <v-text-field
                     label="Alias description"
                     v-model="aliases[0].description"
                     :error-messages="imageErrors.aliasDescription"
+                    required
+                    :rules="[v => !!v || 'Alias is required']"
             />
 
             <v-select
@@ -36,12 +44,14 @@
             />
 
 
-            <v-text-field
+            <v-textarea
                     label="Properties"
                     v-model="properties"
                     multi-line
                     placeholder='{"os": "Alpine"}'
                     :error-messages="imageErrors.properties"
+                    hint="Image properties (optional, applied on top of source properties)"
+                    persistent-hint
             />
 
             <v-select
@@ -53,6 +63,8 @@
                     item-text="text"
                     :rules="[v => !!v || 'Source type is required']"
                     :error-messages="imageErrors.type"
+                    hint="Which source should be used for the creation of the image?"
+                    persistent-hint
             />
 
 
@@ -60,6 +72,8 @@
                 <v-checkbox
                         label="Automatic update"
                         v-model="autoUpdate"
+                        hint="Whether the image should be auto-updated."
+                        persistent-hint
                 />
 
                 <v-text-field
@@ -67,6 +81,8 @@
                         v-model="source.server"
                         required
                         :rules="[v => !!v || 'Server is required']"
+                        hint="The server where the remote image is located."
+                        persistent-hint
                 />
 
                 <v-text-field
@@ -75,6 +91,8 @@
                         required
                         :rules="[v => !!v || 'Protocol is required']"
                         placeholder="lxd"
+                        hint="Protocol to talk to the remote server."
+                        persistent-hint
                 />
 
                 <v-text-field
@@ -83,6 +101,8 @@
                         required
                         :rules="[v => !!v || 'Alias is required']"
                         placeholder="alpine/3.7/amd64"
+                        hint='Alias of the remote image. A list can be found https://uk.images.linuxcontainers.org'
+                        persistent-hint
                 />
 
             </div>
@@ -90,23 +110,28 @@
             <div v-if="source.type === 'container'">
                 <v-select
                         :items="containers"
-                        v-model="source.name"
-                        label="Host"
+                        v-model="containers"
+                        label="Container"
                         required
                         item-value="name"
                         item-text="name"
                         :rules="[v => !!v || 'Host is required']"
+                        no-data-text="Make sure you have selected the correct host."
                 />
 
 
                 <v-text-field
                         label="Compression algorithm"
                         v-model="compressionAlgo"
-                        required
-                        :rules="[v => !!v || 'Compression algorithm is required']"
                         placeholder="rm"
+                        hint='Override the compression algorithm for the image (optional)'
+                        persistent-hint
                 />
             </div>
+
+            <p>
+                If you get redirected to the image overview, the server accepted your request. Please have a look on the running jobs.
+            </p>
 
             <v-btn
                     @click="onSubmit"
@@ -120,6 +145,7 @@
         <v-alert :value="error" type="error">
             {{ imageErrors.general }}
         </v-alert>
+
     </div>
 </template>
 
@@ -134,9 +160,6 @@
 
                 hosts: "getHosts"
             }),
-            containers() {
-                return this.$store.getters.getContainersFromHost(this.hostId)
-            },
 
             remoteAliases() {
                 let aliases;
@@ -152,10 +175,19 @@
             }
         },
 
+        watch: {
+            hostId: function(val) {
+                const containerId = this.$store.getters.getHostById(val).containerId;
+                this.containers = this.$store.getters.getContainersByIds(containerId);
+            },
+
+        },
+
         data() {
             return {
+                containers: [],
                 filename: "",
-                public: false,
+                publicImage: false,
                 autoUpdate: true,
                 aliases: [
                     {
@@ -198,7 +230,7 @@
                     body = {
                         image: {
                             filename: this.filename,
-                            public: this.public,
+                            public: this.publicImage,
                             aliases: this.aliases,
                             source: {
                                 type: this.source.type,
@@ -213,7 +245,7 @@
                     body = {
                         image: {
                             filename: this.filename,
-                            public: this.public,
+                            public: this.publicImage,
                             autoUpdate: this.autoUpdate,
                             aliases: this.aliases,
                             source: {

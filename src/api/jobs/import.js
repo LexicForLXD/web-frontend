@@ -7,7 +7,7 @@ export default {
      * @returns {AxiosPromise<any>}
      */
     getRunningJobs() {
-        return client.withAuth().get('/sync/hosts?type=running');
+        return client.withAuth().get('/jobs/import?type=running');
     },
 
     /**
@@ -15,7 +15,7 @@ export default {
      * @returns {AxiosPromise<any>}
      */
     getArchivedJobs() {
-        return client.withAuth().get('/sync/hosts?type=archived')
+        return client.withAuth().get('/jobs/import?type=archived')
     },
 
 

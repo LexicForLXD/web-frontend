@@ -1,10 +1,34 @@
 <template>
     <div>
+        <h2>{{title}} Jobs</h2>
         <v-btn @click="getArchivedJobs">Load archived jobs</v-btn>
         <v-btn @click="getRunningJobs">Load running jobs</v-btn>
+        <h4>Archived jobs</h4>
         <v-data-table
                 :headers="headers"
-                :items="jobs">
+                :items="archived">
+            <template slot="items" slot-scope="props">
+                <td>
+                    {{ props.item.method }}
+                </td>
+                <td>
+                    {{ props.item.startedAt }}
+                </td>
+                <td>
+                    {{ props.item.finishedAt }}
+                </td>
+                <td>
+                    {{ props.item.status }}
+                </td>
+                <td>
+                    {{ props.item.message }}
+                </td>
+            </template>
+        </v-data-table>
+        <h4>Running jobs</h4>
+        <v-data-table
+                :headers="headers"
+                :items="running">
             <template slot="items" slot-scope="props">
                 <td>
                     {{ props.item.method }}
@@ -32,12 +56,10 @@
 
 <script>
     import {mapMutations} from "vuex";
-    import {LOADING_BEGIN, LOADING_FAIL, LOADING_FINISH} from "../../store/mutation-types";
-    import jobApi from '../../api/import/job.js'
 
 
-    export default {
-        name: "JobOverview",
+    module.exports = {
+        name: "job-overview",
 
         data() {
             return {
@@ -67,40 +89,24 @@
                         sortable: false,
                     },
                 ],
-                jobs: [],
-                error: "",
             }
         },
 
+        props: {
+            archived: Array,
+            running: Array,
+            title: String,
+            error: String,
+        },
+
         methods: {
-            ...mapMutations({
-                startLoading: LOADING_BEGIN,
-                stopLoading: LOADING_FINISH,
-                failLoading: LOADING_FAIL
-            }),
+            
             getArchivedJobs() {
-                this.startLoading();
-                jobApi.getArchivedJobs().then(res => {
-                    this.jobs = res.data;
-                    this.error = "";
-                    this.stopLoading();
-                }).catch(error => {
-                    this.jobs = [];
-                    this.error = error.response.data.error.message;
-                    this.failLoading();
-                })
+                this.$emit('getArchivedJobs');
+                
             },
             getRunningJobs() {
-                this.startLoading();
-                jobApi.getRunningJobs().then(res => {
-                    this.error = "";
-                    this.jobs = res.data;
-                    this.stopLoading();
-                }).catch(error => {
-                    this.jobs = [];
-                    this.error = error.response.data.error.message;
-                    this.failLoading();
-                })
+                this.$emit('getRunningJobs');
             }
         },
     }

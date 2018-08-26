@@ -4,6 +4,7 @@ import router from './routes.js'
 import store from './store'
 import {sync} from 'vuex-router-sync'
 import Vuetify from 'vuetify'
+import JobOverview from './components/jobs/JobOverview.vue'
 import progressbar from './progressbar'
 
 window.Vue = Vue;
@@ -14,6 +15,7 @@ window.axios.defaults.headers.common = {
 };
 // window.axios.defaults.withCredentials = true;
 
+Vue.component('job-overview', JobOverview);
 Vue.use(Vuetify);
 sync(store, router);
 
