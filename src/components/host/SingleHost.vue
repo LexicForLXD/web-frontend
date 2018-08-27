@@ -44,6 +44,22 @@
                                 </v-list-tile>
                             </v-list>
                         </div>
+                        <div v-if="host.networkIds">
+                            <b>Networks:</b>
+                            <v-list>
+                                <v-list-tile v-for="network in networks" :key="network.id">
+                                    <v-list-tile-content>
+                                        <li>
+                                        Name: {{network.name}},
+                                        <v-btn color="red" @click="onDeleteNetwork(network.id)">
+                                            <v-icon>remove_circle</v-icon>
+                                            Delete
+                                        </v-btn>
+                                        </li>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
+                        </div>
                     </v-card-text>
 
 
@@ -140,6 +156,7 @@
 import { mapGetters } from "vuex";
 import LogHost from "./LogHost";
 import storageApi from "../../api/storage/storage.js";
+import networkApi from "../../api/networks/network.js";
 
 export default {
   computed: {
@@ -157,6 +174,7 @@ export default {
 
   mounted() {
     this.getStoragePools();
+    this.getNetworks();
   },
 
   components: {
@@ -176,7 +194,8 @@ export default {
       active: null,
       error: "",
       message: "",
-      storagePools: []
+      storagePools: [],
+      networks: []
     };
   },
   methods: {
@@ -230,20 +249,34 @@ export default {
           this.$store.commit("LOADING_FAIL");
         });
     },
+
+    getNetworks() {
+      this.$store.commit("LOADING_BEGIN");
+      networkApi
+        .fetchFromHost(this.host.id)
+        .then(res => {
+          this.$store.commit("LOADING_FINISH");
+          this.networks = res.data;
+        })
+        .catch(err => {
+          this.$store.commit("LOADING_FAIL");
+        });
+    },
+
     onDeleteStoragePool(id) {
       this.$store.commit("LOADING_BEGIN");
       storageApi
         .delete(id)
         .then(res => {
-            this.error = "";
+          this.error = "";
           this.$store.commit("LOADING_FINISH");
           this.getStoragePools();
         })
         .catch(err => {
-            if (err.response.data) {
-                this.error = err.response.data;
-            }
-            this.message = "";
+          if (err.response.data) {
+            this.error = err.response.data;
+          }
+          this.message = "";
           this.$store.commit("LOADING_FAIL");
         });
     }
