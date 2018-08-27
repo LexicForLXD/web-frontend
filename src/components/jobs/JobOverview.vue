@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="jobs">
         <h2>{{title}} Jobs</h2>
         <v-btn @click="getArchivedJobs">Load archived jobs</v-btn>
         <v-btn @click="getRunningJobs">Load running jobs</v-btn>
@@ -55,63 +55,62 @@
 </template>
 
 <script>
-    import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
 
+module.exports = {
+  name: "job-overview",
 
-    module.exports = {
-        name: "job-overview",
-
-        data() {
-            return {
-                headers: [
-                    {
-                        text: "Method",
-                        value: "method"
-                    },
-                    {
-                        text: "Started",
-                        value: "startedAt",
-                        sortable: false,
-                    },
-                    {
-                        text: "Finished",
-                        value: "finishedAt",
-                        sortable: false,
-                    },
-                    {
-                        text: "Status",
-                        value: "status",
-                        sortable: false,
-                    },
-                    {
-                        text: "Message",
-                        value: "message",
-                        sortable: false,
-                    },
-                ],
-            }
+  data() {
+    return {
+      headers: [
+        {
+          text: "Method",
+          value: "method"
         },
-
-        props: {
-            archived: Array,
-            running: Array,
-            title: String,
-            error: String,
+        {
+          text: "Started",
+          value: "startedAt",
+          sortable: false
         },
-
-        methods: {
-            
-            getArchivedJobs() {
-                this.$emit('getArchivedJobs');
-                
-            },
-            getRunningJobs() {
-                this.$emit('getRunningJobs');
-            }
+        {
+          text: "Finished",
+          value: "finishedAt",
+          sortable: false
         },
+        {
+          text: "Status",
+          value: "status",
+          sortable: false
+        },
+        {
+          text: "Message",
+          value: "message",
+          sortable: false
+        }
+      ]
+    };
+  },
+
+  props: {
+    archived: Array,
+    running: Array,
+    title: String,
+    error: String
+  },
+
+  methods: {
+    getArchivedJobs() {
+      this.$emit("getArchivedJobs");
+    },
+    getRunningJobs() {
+      this.$emit("getRunningJobs");
     }
+  }
+};
 </script>
 
 <style scoped>
-
+.jobs {
+  margin-top: 50px;
+}
 </style>

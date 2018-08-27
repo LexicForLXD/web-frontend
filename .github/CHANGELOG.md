@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/LexicForLXD/web-frontend/compare/v1.3.0...v1.3.1) (2018-08-27)
+
+
+### Bug Fixes
+
+* prevent reload on first login ([8573aa5](https://github.com/LexicForLXD/web-frontend/commit/8573aa5))
+
 # [1.3.0](https://github.com/LexicForLXD/web-frontend/compare/v1.2.0...v1.3.0) (2018-08-26)
 
 

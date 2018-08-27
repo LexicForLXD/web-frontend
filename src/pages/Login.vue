@@ -7,7 +7,7 @@
         </v-toolbar>
 
         <v-card-text>
-            <v-form v-model="valid" @submit="submit">
+            <v-form v-model="valid" @submit.prevent="submit">
                 <v-text-field
                         label="Email or username"
                         v-model="email"
@@ -28,6 +28,7 @@
                 <v-btn
                     type="submit"
                         @click="submit"
+                        @submit.prevent="submit"
                         :disabled="!valid"
                 >
                     Submit
@@ -46,56 +47,54 @@
 </template>
 
 <script>
-    import authApi from '../api/auth/auth'
+import authApi from "../api/auth/auth";
 
-    export default {
-        data() {
-            return {
-                email: '',
-                password: '',
-                error: "",
-                message: "",
-                valid: false,
-                e1: true
-            }
-        },
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+      error: "",
+      message: "",
+      valid: false,
+      e1: true
+    };
+  },
 
+  methods: {
+    submit() {
+      const data = {
+        email: this.email,
+        password: this.password
+      };
+      this.$store.commit("LOADING_BEGIN");
+      authApi
+        .login(data)
+        .then(res => {
+          this.error = "";
+          this.message = "Login successful. Loading Application.";
+          localStorage.setItem("access_token", res.data.access_token);
+          localStorage.setItem(
+            "expiration",
+            res.data.expires_in + Date.now() / 1000
+          );
+          localStorage.setItem("refresh_token", res.data.refresh_token);
+          this.$store.commit("LOADING_FINISH");
+          this.$store.dispatch("initShared").then(res => {
+            this.$router.push("/");
+          });
+        })
 
-        methods: {
-            submit() {
-                const data = {
-                    email: this.email,
-                    password: this.password
-                };
-                this.$store.commit("LOADING_BEGIN");
-                authApi.login(data)
-                    .then(res => {
-                        this.error = "";
-                        this.message = "Login successful. Loading Application.";
-                        localStorage.setItem('access_token', res.data.access_token);
-                        localStorage.setItem('expiration', (res.data.expires_in) + (Date.now() / 1000));
-                        localStorage.setItem('refresh_token', res.data.refresh_token);
-                        this.$store.commit("LOADING_FINISH");
-                        this.$store.dispatch('initShared').then(res => {
-                            this.$router.push("/");
-                        });
-
-
-                    })
-
-                    .catch((error) => {
-                        if (error.response.data.error_description) {
-                            this.error = error.response.data.error_description;
-                        }
-                        this.$store.commit("LOADING_FAIL");
-                    });
-
-            }
-        }
+        .catch(error => {
+          if (error.response.data.error_description) {
+            this.error = error.response.data.error_description;
+          }
+          this.$store.commit("LOADING_FAIL");
+        });
     }
+  }
+};
 </script>
 
 <style scoped>
-
-
 </style>
