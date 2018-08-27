@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/LexicForLXD/web-frontend/compare/v1.3.1...v1.4.0) (2018-08-27)
+
+
+### Features
+
+* see pub ssh key on host page ([2c2668b](https://github.com/LexicForLXD/web-frontend/commit/2c2668b))
+
 ## [1.3.1](https://github.com/LexicForLXD/web-frontend/compare/v1.3.0...v1.3.1) (2018-08-27)
 
 
