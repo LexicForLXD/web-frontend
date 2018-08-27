@@ -132,16 +132,32 @@
                     </v-card-text>
                 </v-card>
             </v-flex>
+
+            <v-flex xs12>
+                <v-card class="my-2">
+                    <ssh-pub/>
+                </v-card>
+            </v-flex>
+
         </v-layout>
     </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
+import SshPub from "../ssh/PubSSH";
 import LogHost from "./LogHost";
 import storageApi from "../../api/storage/storage.js";
 
 export default {
+  name: "SingleHost",
+
+  components: {
+    SshPub,
+    LogHost
+  },
+
   computed: {
     ...mapGetters({
       hosts: "getHosts"
@@ -157,10 +173,6 @@ export default {
 
   mounted() {
     this.getStoragePools();
-  },
-
-  components: {
-    LogHost
   },
 
   data() {
@@ -235,15 +247,15 @@ export default {
       storageApi
         .delete(id)
         .then(res => {
-            this.error = "";
+          this.error = "";
           this.$store.commit("LOADING_FINISH");
           this.getStoragePools();
         })
         .catch(err => {
-            if (err.response.data) {
-                this.error = err.response.data;
-            }
-            this.message = "";
+          if (err.response.data) {
+            this.error = err.response.data;
+          }
+          this.message = "";
           this.$store.commit("LOADING_FAIL");
         });
     }
