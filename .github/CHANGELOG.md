@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/LexicForLXD/web-frontend/compare/v1.5.2...v1.5.3) (2018-08-28)
+
+
+### Bug Fixes
+
+* delete button for storage pool is more subtile ([020b164](https://github.com/LexicForLXD/web-frontend/commit/020b164))
+
 ## [1.5.2](https://github.com/LexicForLXD/web-frontend/compare/v1.5.1...v1.5.2) (2018-08-28)
 
 
