@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/LexicForLXD/web-frontend/compare/v1.5.0...v1.5.1) (2018-08-28)
+
+
+### Bug Fixes
+
+* buttons only clickable when host selected ([9c136c1](https://github.com/LexicForLXD/web-frontend/commit/9c136c1))
+
 # [1.5.0](https://github.com/LexicForLXD/web-frontend/compare/v1.4.0...v1.5.0) (2018-08-28)
 
 
