@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/LexicForLXD/web-frontend/compare/v1.4.0...v1.5.0) (2018-08-28)
+
+
+### Bug Fixes
+
+* error handling host delete ([b6cf492](https://github.com/LexicForLXD/web-frontend/commit/b6cf492))
+
+
+### Features
+
+* delete job ([bd1656a](https://github.com/LexicForLXD/web-frontend/commit/bd1656a))
+
 # [1.4.0](https://github.com/LexicForLXD/web-frontend/compare/v1.3.1...v1.4.0) (2018-08-27)
 
 
