@@ -104,6 +104,7 @@
                 <v-alert :value="error" type="error">
                     {{ error }}
                 </v-alert>
+                
                 <v-alert :value="message" type="success">
                     {{ message }}
                 </v-alert>
@@ -193,8 +194,14 @@ export default {
   },
   methods: {
     onDelete() {
-      this.$store.dispatch("deleteHost", this.hosts[this.index].id);
-      this.$router.push({ name: "hostOverview" });
+      this.$store
+        .dispatch("deleteHost", this.hosts[this.index].id)
+        .then(() => {
+          this.$router.push({ name: "hostOverview" });
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
     },
     onEdit() {
       this.editIpv4 = this.host.ipv4;
