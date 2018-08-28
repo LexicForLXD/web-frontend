@@ -12,12 +12,16 @@
                     <v-card-text v-if="!editing && !editName">
                         <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
                         <p v-if="container.config"><b>Config:</b> {{container.config}}</p>
-                        <p v-if="container.devices">Devices: {{container.devices}}</p>
-                        <p v-if="container.state">State: {{container.state}}</p>
+                        <p v-if="container.devices"><b>Devices:</b> {{container.devices}}</p>
+                        <p v-if="container.state"><b>State:</b> {{container.state}}</p>
                         <p>
-                            Host:
+                            <b>Host:</b>
                             <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
                             </router-link>
+                        </p>
+                        <p>
+                            <b>StoragePool:</b>
+                            {{container.storagePool.name}}
                         </p>
 
                         <v-btn :disabled="container.state !== 'stopped'" @click="onStart">Start</v-btn>
@@ -81,118 +85,124 @@
 </template>
 
 <script>
-    import stateApi from "../../api/containers/containerState"
-    import LogContainer from "./logs/LogContainer"
-    import NagiosContainer from "./nagios/NagiosContainer"
+import stateApi from "../../api/containers/containerState";
+import LogContainer from "./logs/LogContainer";
+import NagiosContainer from "./nagios/NagiosContainer";
 
-    export default {
-        components: {
-            LogContainer,
-            NagiosContainer,
-        },
+export default {
+  components: {
+    LogContainer,
+    NagiosContainer
+  },
 
-        computed: {
-            host() {
-                return this.$store.getters.getHostById(this.container.hostId);
-            },
+  computed: {
+    host() {
+      return this.$store.getters.getHostById(this.container.hostId);
+    },
 
-            hostIndex() {
-                return this.$store.getters.getHostIndexById(this.container.hostId)
-            },
+    hostIndex() {
+      return this.$store.getters.getHostIndexById(this.container.hostId);
+    },
 
-            container() {
-                return this.$store.getters.getContainerByIndex(this.index);
-            }
-        },
-        data() {
-            return {
-                name: "",
-                editing: false,
-                editIpv4: "",
-                editIpv6: "",
-                editDomainName: "",
-                editName: false,
-                editPort: "",
-                // editSettings: "",
-                // editMac: "",
-                index: this.$route.params.index,
-                // hostIndex: "",
-                active: null,
-                error: "",
-            };
-        },
-        methods: {
-            onDelete() {
-                this.$store.dispatch("deleteContainer", this.container.id).then(res => {
-                    this.$router.push({name: 'containerOverview'});
-                }).catch(err => {
-                     this.error = err.response.data.error.message;
-                });
-                
-            },
-            onEdit() {
-                this.editIpv4 = this.containers.ipv4;
-                this.editIpv6 = this.containers.ipv6;
-                this.editDomainName = this.containers.domainName;
-                this.editName = this.containers.name;
-                this.editPort = this.containers.port;
-                this.editing = true;
-            },
-            onCancel() {
-                this.editing = false;
-                this.editName = false;
-            },
-            onUpdate() {
-                this.$store.dispatch("updateImage", {
-                    host_id: this.containers[this.index].id,
-                    host: {
-                        name: this.editName,
-                        ipv4: this.editIpv4,
-                        ipv6: this.editIpv6,
-                        domainName: this.editDomainName,
-                        port: this.editPort,
-                    }
-                }).then(() => {
-                    this.editing = false;
-                    this.error = "";
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            },
-
-            onChangeName() {
-                this.editName = !this.editName;
-            },
-
-            onChangeNameSubmit() {
-                this.$store.dispatch("updateContainer", {
-                    containerId: this.container.id,
-                    container: {
-                        name: this.name
-                    }
-                }).then(() => {
-                    this.editing = false;
-                    this.error = "";
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            },
-
-            onStart() {
-                stateApi.change(this.container.id, {action: "start"});
-            },
-
-            onRestart() {
-                stateApi.change(this.container.id, {action: "restart"});
-            },
-
-            onStop() {
-                stateApi.change(this.container.id, {action: "stop"});
-            }
-
-
-        }
+    container() {
+      return this.$store.getters.getContainerByIndex(this.index);
+    }
+  },
+  data() {
+    return {
+      name: "",
+      editing: false,
+      editIpv4: "",
+      editIpv6: "",
+      editDomainName: "",
+      editName: false,
+      editPort: "",
+      // editSettings: "",
+      // editMac: "",
+      index: this.$route.params.index,
+      // hostIndex: "",
+      active: null,
+      error: ""
     };
+  },
+  methods: {
+    onDelete() {
+      this.$store
+        .dispatch("deleteContainer", this.container.id)
+        .then(res => {
+          this.$router.push({ name: "containerOverview" });
+        })
+        .catch(err => {
+          this.error = err.response.data.error.message;
+        });
+    },
+    onEdit() {
+      this.editIpv4 = this.containers.ipv4;
+      this.editIpv6 = this.containers.ipv6;
+      this.editDomainName = this.containers.domainName;
+      this.editName = this.containers.name;
+      this.editPort = this.containers.port;
+      this.editing = true;
+    },
+    onCancel() {
+      this.editing = false;
+      this.editName = false;
+    },
+    onUpdate() {
+      this.$store
+        .dispatch("updateImage", {
+          host_id: this.containers[this.index].id,
+          host: {
+            name: this.editName,
+            ipv4: this.editIpv4,
+            ipv6: this.editIpv6,
+            domainName: this.editDomainName,
+            port: this.editPort
+          }
+        })
+        .then(() => {
+          this.editing = false;
+          this.error = "";
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    },
+
+    onChangeName() {
+      this.editName = !this.editName;
+    },
+
+    onChangeNameSubmit() {
+      this.$store
+        .dispatch("updateContainer", {
+          containerId: this.container.id,
+          container: {
+            name: this.name
+          }
+        })
+        .then(() => {
+          this.editing = false;
+          this.error = "";
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    },
+
+    onStart() {
+      stateApi.change(this.container.id, { action: "start" });
+    },
+
+    onRestart() {
+      stateApi.change(this.container.id, { action: "restart" });
+    },
+
+    onStop() {
+      stateApi.change(this.container.id, { action: "stop" });
+    }
+  }
+};
 </script>
 
 <style>
