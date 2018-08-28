@@ -35,9 +35,8 @@
                                         <li>
                                         Name: {{storagePool.name}},
                                         Driver: {{storagePool.driver}} 
-                                        <v-btn color="red" @click="onDeleteStoragePool(storagePool.id)">
-                                            <v-icon>remove_circle</v-icon>
-                                            Delete
+                                        <v-btn small icon color="red" @click="onDeleteStoragePool(storagePool.id)">
+                                            <v-icon>delete</v-icon>
                                         </v-btn>
                                         </li>
                                     </v-list-tile-content>
