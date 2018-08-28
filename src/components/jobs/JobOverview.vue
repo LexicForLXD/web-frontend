@@ -28,6 +28,11 @@
                     <td>
                         {{ props.item.message }}
                     </td>
+                    <td>
+                        <v-btn icon color="red" @click="deleteJob(props.item.id,'archived')">
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                    </td>
                 </template>
             </v-data-table>
             <h4>Running jobs</h4>
@@ -50,6 +55,11 @@
                     <td>
                         {{ props.item.message }}
                     </td>
+                    <td>
+                        <v-btn icon color="red" @click="deleteJob(props.item.id, 'running')">
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                    </td>
                 </template>
             </v-data-table>
             <v-alert :value="error" type="error">
@@ -61,7 +71,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import jobApi from "../../api/jobs/job.js";
 
 module.exports = {
   name: "job-overview",
@@ -92,6 +102,11 @@ module.exports = {
           text: "Message",
           value: "message",
           sortable: false
+        },
+        {
+          text: "Action",
+          value: "action",
+          sortable: false
         }
       ]
     };
@@ -110,6 +125,22 @@ module.exports = {
     },
     getRunningJobs() {
       this.$emit("getRunningJobs");
+    },
+
+    deleteJob: function(jobId, type) {
+      this.$store.commit("LOADING_BEGIN");
+      jobApi
+        .deleteJob(jobId, type)
+        .then(res => {
+          this.jobError = "";
+          this.getArchivedJobs();
+          this.getRunningJobs();
+          this.$store.commit("LOADING_FINISH");
+        })
+        .catch(error => {
+          this.jobError = error.response.data.error.message;
+          this.$store.commit("LOADING_FAIL");
+        });
     }
   }
 };
