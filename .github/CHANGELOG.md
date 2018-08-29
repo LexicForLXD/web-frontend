@@ -1,3 +1,11 @@
+## [1.5.5](https://github.com/LexicForLXD/web-frontend/compare/v1.5.4...v1.5.5) (2018-08-29)
+
+
+### Bug Fixes
+
+* container refresh ([b50b610](https://github.com/LexicForLXD/web-frontend/commit/b50b610))
+* multiline output is rendered in multiple lines ([7f379ee](https://github.com/LexicForLXD/web-frontend/commit/7f379ee))
+
 ## [1.5.4](https://github.com/LexicForLXD/web-frontend/compare/v1.5.3...v1.5.4) (2018-08-29)
 
 
