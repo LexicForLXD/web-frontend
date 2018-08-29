@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/LexicForLXD/web-frontend/compare/v1.5.5...v1.6.0) (2018-08-29)
+
+
+### Features
+
+* import profiles closes [#64](https://github.com/LexicForLXD/web-frontend/issues/64) ([368ca96](https://github.com/LexicForLXD/web-frontend/commit/368ca96))
+
 ## [1.5.5](https://github.com/LexicForLXD/web-frontend/compare/v1.5.4...v1.5.5) (2018-08-29)
 
 
