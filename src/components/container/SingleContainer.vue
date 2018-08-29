@@ -11,8 +11,8 @@
 
                     <v-card-text v-if="!editing && !editName">
                         <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
-                        <p v-if="container.config"><b>Config:</b> {{container.config}}</p>
-                        <p v-if="container.devices"><b>Devices:</b> {{container.devices}}</p>
+                        <p v-if="container.config"><b>Config:</b> <pre>{{container.config}}</pre></p>
+                        <p v-if="container.devices"><b>Devices:</b> <pre>{{container.devices}}</pre></p>
                         <p v-if="container.state"><b>State:</b> {{container.state}}</p>
                         <p>
                             <b>Host:</b>
