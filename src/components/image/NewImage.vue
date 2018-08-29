@@ -150,134 +150,137 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
-    import remoteImageApi from '../../api/image/remoteImage'
+import { mapGetters } from "vuex";
+import remoteImageApi from "../../api/image/remoteImage";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                imageErrors: "getImageErrors",
+export default {
+  computed: {
+    ...mapGetters({
+      imageErrors: "getImageErrors",
 
-                hosts: "getHosts"
-            }),
+      hosts: "getHosts"
+    }),
 
-            remoteAliases() {
-                let aliases;
-                remoteImageApi.fetch().then((res) => {
-                    aliases = res.data.metadata;
-                    console.log(aliases);
-                    return aliases;
-                    // return aliases.map(a => a.replace('/1.0/images/aliases/', ''));
-                }).catch(() => {
-                    return []
-                })
-
-            }
-        },
-
-        watch: {
-            hostId: function(val) {
-                const containerId = this.$store.getters.getHostById(val).containerId;
-                this.containers = this.$store.getters.getContainersByIds(containerId);
-            },
-
-        },
-
-        data() {
-            return {
-                containers: [],
-                filename: "",
-                publicImage: false,
-                autoUpdate: true,
-                aliases: [
-                    {
-                        name: "",
-                        description: ""
-                    }
-                ],
-                source: {
-                    type: "",
-                    mode: "pull",
-                    server: "https://uk.images.linuxcontainers.org:8443",
-                    protocol: "",
-                    alias: "",
-                    name: "",
-                },
-                properties: "",
-                compressionAlgo: "",
-
-                hostId: "",
-                valid: false,
-                sourceTypes: [
-                    {
-                        value: "image",
-                        text: "Remote image"
-                    },
-                    {
-                        value: "container",
-                        text: "Container"
-                    }
-                ],
-                error: "",
-            };
-        },
-
-        methods: {
-            onSubmit() {
-                let body;
-
-                if (this.source.type === "container") {
-                    body = {
-                        image: {
-                            filename: this.filename,
-                            public: this.publicImage,
-                            aliases: this.aliases,
-                            source: {
-                                type: this.source.type,
-                                name: this.source.name
-                            },
-                            properties: JSON.parse(this.properties),
-                            compression_algorithm: this.compressionAlgo
-                        },
-                        hostId: this.hostId
-                    }
-                } else {
-                    body = {
-                        image: {
-                            filename: this.filename,
-                            public: this.publicImage,
-                            autoUpdate: this.autoUpdate,
-                            aliases: this.aliases,
-                            source: {
-                                type: this.source.type,
-                                mode: this.source.mode,
-                                server: this.source.server,
-                                protocol: this.source.protocol,
-                                alias: this.source.alias
-                            },
-                            properties: JSON.parse(this.properties),
-                        },
-                        hostId: this.hostId
-                    }
-                }
-
-                Object.keys(body).forEach(
-                    key =>
-                        (body[key] === null || body[key] === undefined || body[key].length) ===
-                        0 && delete body[key]
-                );
-
-
-                this.$store.dispatch("createImage", body).then(() => {
-                    this.$router.push({name: "imageOverview"})
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            }
-        }
+    remoteAliases() {
+      let aliases;
+      remoteImageApi
+        .fetch()
+        .then(res => {
+          aliases = res.data.metadata;
+          console.log(aliases);
+          return aliases;
+          // return aliases.map(a => a.replace('/1.0/images/aliases/', ''));
+        })
+        .catch(() => {
+          return [];
+        });
     }
+  },
+
+  watch: {
+    hostId: function(val) {
+      const containerId = this.$store.getters.getHostById(val).containerId;
+      this.containers = this.$store.getters.getContainersByIds(containerId);
+    }
+  },
+
+  data() {
+    return {
+      containers: [],
+      filename: "",
+      publicImage: false,
+      autoUpdate: true,
+      aliases: [
+        {
+          name: "",
+          description: ""
+        }
+      ],
+      source: {
+        type: "",
+        mode: "pull",
+        server: "https://uk.images.linuxcontainers.org",
+        protocol: "",
+        alias: "",
+        name: ""
+      },
+      properties: "",
+      compressionAlgo: "",
+
+      hostId: "",
+      valid: false,
+      sourceTypes: [
+        {
+          value: "image",
+          text: "Remote image"
+        },
+        {
+          value: "container",
+          text: "Container"
+        }
+      ],
+      error: ""
+    };
+  },
+
+  methods: {
+    onSubmit() {
+      let body;
+
+      if (this.source.type === "container") {
+        body = {
+          image: {
+            filename: this.filename,
+            public: this.publicImage,
+            aliases: this.aliases,
+            source: {
+              type: this.source.type,
+              name: this.source.name
+            },
+            properties: JSON.parse(this.properties),
+            compression_algorithm: this.compressionAlgo
+          },
+          hostId: this.hostId
+        };
+      } else {
+        body = {
+          image: {
+            filename: this.filename,
+            public: this.publicImage,
+            autoUpdate: this.autoUpdate,
+            aliases: this.aliases,
+            source: {
+              type: this.source.type,
+              mode: this.source.mode,
+              server: this.source.server,
+              protocol: this.source.protocol,
+              alias: this.source.alias
+            },
+            properties: JSON.parse(this.properties)
+          },
+          hostId: this.hostId
+        };
+      }
+
+      Object.keys(body).forEach(
+        key =>
+          (body[key] === null ||
+            body[key] === undefined ||
+            body[key].length) === 0 && delete body[key]
+      );
+
+      this.$store
+        .dispatch("createImage", body)
+        .then(() => {
+          this.$router.push({ name: "imageOverview" });
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    }
+  }
+};
 </script>
 
 <style>
-
 </style>
