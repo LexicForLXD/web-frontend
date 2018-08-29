@@ -47,7 +47,6 @@
             <v-textarea
                     label="Properties"
                     v-model="properties"
-                    multi-line
                     placeholder='{"os": "Alpine"}'
                     :error-messages="imageErrors.properties"
                     hint="Image properties (optional, applied on top of source properties)"
@@ -76,34 +75,15 @@
                         persistent-hint
                 />
 
-                <v-text-field
-                        label="Remote server"
-                        v-model="source.server"
-                        required
-                        :rules="[v => !!v || 'Server is required']"
-                        hint="The server where the remote image is located."
-                        persistent-hint
-                />
-
-                <v-text-field
-                        label="Protocol"
-                        v-model="source.protocol"
-                        required
-                        :rules="[v => !!v || 'Protocol is required']"
-                        placeholder="lxd"
-                        hint="Protocol to talk to the remote server."
-                        persistent-hint
-                />
-
-                <v-text-field
-                        label="Alias"
-                        v-model="source.alias"
-                        required
-                        :rules="[v => !!v || 'Alias is required']"
-                        placeholder="alpine/3.7/amd64"
-                        hint='Alias of the remote image. A list can be found https://uk.images.linuxcontainers.org'
-                        persistent-hint
-                />
+                <v-autocomplete
+                    :items="remoteAliases"
+                    v-model="source.alias"
+                    label="Alias"
+                    required
+                    hint='Alias of the remote image. A list can be found <a target="_blank" href="https://uk.images.linuxcontainers.org">here</a>'
+                    persistent-hint
+                    :rules="[v => !!v || 'Alias is required']"
+            />
 
             </div>
 
@@ -150,134 +130,141 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
-    import remoteImageApi from '../../api/image/remoteImage'
+import { mapGetters } from "vuex";
+import remoteImageApi from "../../api/image/remoteImage";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                imageErrors: "getImageErrors",
+export default {
+  mounted: function() {
+    this.getRemoteAliases();
+  },
+  computed: {
+    ...mapGetters({
+      imageErrors: "getImageErrors",
+      hosts: "getHosts"
+    })
+  },
 
-                hosts: "getHosts"
-            }),
-
-            remoteAliases() {
-                let aliases;
-                remoteImageApi.fetch().then((res) => {
-                    aliases = res.data.metadata;
-                    console.log(aliases);
-                    return aliases;
-                    // return aliases.map(a => a.replace('/1.0/images/aliases/', ''));
-                }).catch(() => {
-                    return []
-                })
-
-            }
-        },
-
-        watch: {
-            hostId: function(val) {
-                const containerId = this.$store.getters.getHostById(val).containerId;
-                this.containers = this.$store.getters.getContainersByIds(containerId);
-            },
-
-        },
-
-        data() {
-            return {
-                containers: [],
-                filename: "",
-                publicImage: false,
-                autoUpdate: true,
-                aliases: [
-                    {
-                        name: "",
-                        description: ""
-                    }
-                ],
-                source: {
-                    type: "",
-                    mode: "pull",
-                    server: "https://uk.images.linuxcontainers.org:8443",
-                    protocol: "",
-                    alias: "",
-                    name: "",
-                },
-                properties: "",
-                compressionAlgo: "",
-
-                hostId: "",
-                valid: false,
-                sourceTypes: [
-                    {
-                        value: "image",
-                        text: "Remote image"
-                    },
-                    {
-                        value: "container",
-                        text: "Container"
-                    }
-                ],
-                error: "",
-            };
-        },
-
-        methods: {
-            onSubmit() {
-                let body;
-
-                if (this.source.type === "container") {
-                    body = {
-                        image: {
-                            filename: this.filename,
-                            public: this.publicImage,
-                            aliases: this.aliases,
-                            source: {
-                                type: this.source.type,
-                                name: this.source.name
-                            },
-                            properties: JSON.parse(this.properties),
-                            compression_algorithm: this.compressionAlgo
-                        },
-                        hostId: this.hostId
-                    }
-                } else {
-                    body = {
-                        image: {
-                            filename: this.filename,
-                            public: this.publicImage,
-                            autoUpdate: this.autoUpdate,
-                            aliases: this.aliases,
-                            source: {
-                                type: this.source.type,
-                                mode: this.source.mode,
-                                server: this.source.server,
-                                protocol: this.source.protocol,
-                                alias: this.source.alias
-                            },
-                            properties: JSON.parse(this.properties),
-                        },
-                        hostId: this.hostId
-                    }
-                }
-
-                Object.keys(body).forEach(
-                    key =>
-                        (body[key] === null || body[key] === undefined || body[key].length) ===
-                        0 && delete body[key]
-                );
-
-
-                this.$store.dispatch("createImage", body).then(() => {
-                    this.$router.push({name: "imageOverview"})
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            }
-        }
+  watch: {
+    hostId: function(val) {
+      const containerId = this.$store.getters.getHostById(val).containerId;
+      this.containers = this.$store.getters.getContainersByIds(containerId);
     }
+  },
+
+  data() {
+    return {
+      containers: [],
+      filename: "",
+      publicImage: false,
+      autoUpdate: true,
+      aliases: [
+        {
+          name: "",
+          description: ""
+        }
+      ],
+      source: {
+        type: "",
+        mode: "pull",
+        server: "https://uk.images.linuxcontainers.org",
+        protocol: "",
+        alias: "",
+        name: ""
+      },
+      properties: "",
+      compressionAlgo: "",
+      remoteAliasesLong: [],
+      remoteAliases: [],
+      hostId: "",
+      valid: false,
+      sourceTypes: [
+        {
+          value: "image",
+          text: "Remote image"
+        },
+        {
+          value: "container",
+          text: "Container"
+        }
+      ],
+      error: ""
+    };
+  },
+
+  methods: {
+    getRemoteAliases() {
+      remoteImageApi
+        .fetch()
+        .then(res => {
+          this.remoteAliasesLong = res.data.metadata;
+          console.log(this.remoteAliases);
+          this.remoteAliasesLong.forEach(element => {
+            this.remoteAliases.push(
+              element.replace("/1.0/images/aliases/", "")
+            );
+          });
+        })
+        .catch(() => {
+          return [];
+        });
+    },
+    onSubmit() {
+      let body;
+
+      if (this.source.type === "container") {
+        body = {
+          image: {
+            filename: this.filename,
+            public: this.publicImage,
+            aliases: this.aliases,
+            source: {
+              type: this.source.type,
+              name: this.source.name
+            },
+            properties: JSON.parse(this.properties),
+            compression_algorithm: this.compressionAlgo
+          },
+          hostId: this.hostId
+        };
+      } else {
+        body = {
+          image: {
+            filename: this.filename,
+            public: this.publicImage,
+            autoUpdate: this.autoUpdate,
+            aliases: this.aliases,
+            source: {
+              type: this.source.type,
+              mode: this.source.mode,
+              server: this.source.server,
+              protocol: this.source.protocol,
+              alias: this.source.alias
+            },
+            properties: JSON.parse(this.properties)
+          },
+          hostId: this.hostId
+        };
+      }
+
+      Object.keys(body).forEach(
+        key =>
+          (body[key] === null ||
+            body[key] === undefined ||
+            body[key].length) === 0 && delete body[key]
+      );
+
+      this.$store
+        .dispatch("createImage", body)
+        .then(() => {
+          this.$router.push({ name: "imageOverview" });
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    }
+  }
+};
 </script>
 
 <style>
-
 </style>
