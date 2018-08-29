@@ -1,3 +1,12 @@
+## [1.5.4](https://github.com/LexicForLXD/web-frontend/compare/v1.5.3...v1.5.4) (2018-08-29)
+
+
+### Bug Fixes
+
+* alias list ([f33535c](https://github.com/LexicForLXD/web-frontend/commit/f33535c))
+* remote aliases url without 8443 ([e59f0aa](https://github.com/LexicForLXD/web-frontend/commit/e59f0aa))
+* remote image host ([f89e88f](https://github.com/LexicForLXD/web-frontend/commit/f89e88f))
+
 ## [1.5.3](https://github.com/LexicForLXD/web-frontend/compare/v1.5.2...v1.5.3) (2018-08-28)
 
 
