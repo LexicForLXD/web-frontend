@@ -1,7 +1,9 @@
 <template>
     <div>
         <div v-if="log !== ''">
+            <pre>
             {{ log }}
+            </pre>
         </div>
         <div v-else>
             Select a log file on the left
@@ -13,15 +15,10 @@
 </template>
 
 <script>
-    export default {
-        props: [
-            'log',
-            'error',
-        ],
-
-    };
+export default {
+  props: ["log", "error"]
+};
 </script>
 
 <style>
-
 </style>
