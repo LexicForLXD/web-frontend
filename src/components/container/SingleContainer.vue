@@ -16,13 +16,19 @@
                     </v-toolbar>
 
                     <v-card-text v-if="!editing && !editName">
+                      <p v-if="container.state"><b>State:</b> {{container.state}}</p>
+                      <v-btn :disabled="container.state !== 'stopped'" :loading="loadingStart" @click="onStart">Start</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" :loading="loadingRestart" @click="onRestart">Restart</v-btn>
+                        <v-btn :disabled="container.state === 'stopped'" :loading="loadingStop" @click="onStop">Stop</v-btn>
+
+
                         <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
                         <p v-if="container.config"><b>Config:</b> <pre>{{container.config}}</pre></p>
                         <p v-if="container.devices"><b>Devices:</b> <pre>{{container.devices}}</pre></p>
                         <p v-if="container.expandedConfig"><b>Expanded Config:</b> <pre>{{container.expandedConfig}}</pre></p>
                         <p v-if="container.expandedDevices"><b>Expanded Devices:</b> <pre>{{container.expandedDevices}}</pre></p>
                         <p v-if="container.network"><b>Network:</b> <pre>{{container.network}}</pre></p>
-                        <p v-if="container.state"><b>State:</b> {{container.state}}</p>
+                        
                         <p>
                             <b>Host:</b>
                             <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}
@@ -33,9 +39,7 @@
                             {{container.storagePool.name}}
                         </p>
 
-                        <v-btn :disabled="container.state !== 'stopped'" @click="onStart">Start</v-btn>
-                        <v-btn :disabled="container.state === 'stopped'" @click="onRestart">Restart</v-btn>
-                        <v-btn :disabled="container.state === 'stopped'" @click="onStop">Stop</v-btn>
+                        
                     </v-card-text>
 
 
@@ -61,9 +65,11 @@
                     </v-card-actions>
 
                 </v-card>
-                <v-alert :value="error" type="error">
+                <v-bottom-sheet v-model="hasError">
+                  <v-alert :value="true" type="error">
                             {{ error }}
                         </v-alert>
+                </v-bottom-sheet>
             </v-flex>
 
             <v-flex xs12>
@@ -115,6 +121,18 @@ export default {
 
     container() {
       return this.$store.getters.getContainerByIndex(this.index);
+    },
+    hasError: {
+      get: function() {
+        if (this.error.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      set: function(newValue) {
+        this.error = "";
+      }
     }
   },
   data() {
@@ -131,12 +149,18 @@ export default {
       index: this.$route.params.index,
       // hostIndex: "",
       active: null,
-      error: ""
+      error: "",
+      loadingStart: false,
+      loadingRestart: false,
+      loadingStop: false
     };
   },
   methods: {
     refresh() {
       this.$store.dispatch("refreshContainer", this.container.id);
+      this.loadingStart = false;
+      this.loadingStop = false;
+      this.loadingRestart = false;
     },
 
     onDelete() {
@@ -204,15 +228,42 @@ export default {
     },
 
     onStart() {
-      stateApi.change(this.container.id, { action: "start" });
+      this.loadingStart = true;
+      stateApi
+        .change(this.container.id, { action: "start" })
+        .then(() => {
+          setTimeout(this.refresh(), 2000);
+        })
+        .catch(err => {
+          this.error = err.response.data.error.message;
+          this.loadingStart = false;
+        });
     },
 
     onRestart() {
-      stateApi.change(this.container.id, { action: "restart" });
+      this.loadingRestart = true;
+      stateApi
+        .change(this.container.id, { action: "restart" })
+        .then(() => {
+          setTimeout(this.refresh(), 2000);
+        })
+        .catch(err => {
+          this.error = err.response.data.error.message;
+          this.loadingRestart = false;
+        });
     },
 
     onStop() {
-      stateApi.change(this.container.id, { action: "stop" });
+      this.loadingStop = true;
+      stateApi
+        .change(this.container.id, { action: "stop" })
+        .then(() => {
+          setTimeout(this.refresh(), 2000);
+        })
+        .catch(err => {
+          this.error = err.response.data.error.message;
+          this.loadingStop = false;
+        });
     }
   }
 };
