@@ -47,7 +47,6 @@
             <v-textarea
                     label="Properties"
                     v-model="properties"
-                    multi-line
                     placeholder='{"os": "Alpine"}'
                     :error-messages="imageErrors.properties"
                     hint="Image properties (optional, applied on top of source properties)"
@@ -76,34 +75,15 @@
                         persistent-hint
                 />
 
-                <v-text-field
-                        label="Remote server"
-                        v-model="source.server"
-                        required
-                        :rules="[v => !!v || 'Server is required']"
-                        hint="The server where the remote image is located."
-                        persistent-hint
-                />
-
-                <v-text-field
-                        label="Protocol"
-                        v-model="source.protocol"
-                        required
-                        :rules="[v => !!v || 'Protocol is required']"
-                        placeholder="lxd"
-                        hint="Protocol to talk to the remote server."
-                        persistent-hint
-                />
-
-                <v-text-field
-                        label="Alias"
-                        v-model="source.alias"
-                        required
-                        :rules="[v => !!v || 'Alias is required']"
-                        placeholder="alpine/3.7/amd64"
-                        hint='Alias of the remote image. A list can be found https://uk.images.linuxcontainers.org'
-                        persistent-hint
-                />
+                <v-autocomplete
+                    :items="remoteAliases"
+                    v-model="source.alias"
+                    label="Alias"
+                    required
+                    hint='Alias of the remote image. A list can be found <a target="_blank" href="https://uk.images.linuxcontainers.org">here</a>'
+                    persistent-hint
+                    :rules="[v => !!v || 'Alias is required']"
+            />
 
             </div>
 
@@ -154,27 +134,14 @@ import { mapGetters } from "vuex";
 import remoteImageApi from "../../api/image/remoteImage";
 
 export default {
+  mounted: function() {
+    this.getRemoteAliases();
+  },
   computed: {
     ...mapGetters({
       imageErrors: "getImageErrors",
-
       hosts: "getHosts"
-    }),
-
-    remoteAliases() {
-      let aliases;
-      remoteImageApi
-        .fetch()
-        .then(res => {
-          aliases = res.data.metadata;
-          console.log(aliases);
-          return aliases;
-          // return aliases.map(a => a.replace('/1.0/images/aliases/', ''));
-        })
-        .catch(() => {
-          return [];
-        });
-    }
+    })
   },
 
   watch: {
@@ -206,7 +173,8 @@ export default {
       },
       properties: "",
       compressionAlgo: "",
-
+      remoteAliasesLong: [],
+      remoteAliases: [],
       hostId: "",
       valid: false,
       sourceTypes: [
@@ -224,6 +192,22 @@ export default {
   },
 
   methods: {
+    getRemoteAliases() {
+      remoteImageApi
+        .fetch()
+        .then(res => {
+          this.remoteAliasesLong = res.data.metadata;
+          console.log(this.remoteAliases);
+          this.remoteAliasesLong.forEach(element => {
+            this.remoteAliases.push(
+              element.replace("/1.0/images/aliases/", "")
+            );
+          });
+        })
+        .catch(() => {
+          return [];
+        });
+    },
     onSubmit() {
       let body;
 
