@@ -15,6 +15,7 @@
             <v-btn @click="importImages" :disabled="selectedHost === ''">Images</v-btn>
             <v-btn @click="importContainers" :disabled="selectedHost === ''">Containers</v-btn>
             <v-btn @click="importStoragePools" :disabled="selectedHost === ''">Storage Pools</v-btn>
+            <v-btn @click="importProfiles" :disabled="selectedHost === ''">Profiles</v-btn>
             <v-btn @click="importAll" :disabled="selectedHost === ''">Import All</v-btn>
 
             {{error}}
@@ -76,6 +77,19 @@ export default {
       this.startLoading();
       importApi
         .images(this.selectedHost)
+        .then(res => {
+          this.message = res.data.message;
+          this.stopLoading();
+        })
+        .catch(error => {
+          this.error = error.response.data.message;
+          this.failLoading();
+        });
+    },
+    importProfiles() {
+      this.startLoading();
+      importApi
+        .profiles(this.selectedHost)
         .then(res => {
           this.message = res.data.message;
           this.stopLoading();
