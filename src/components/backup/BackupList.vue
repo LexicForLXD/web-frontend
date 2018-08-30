@@ -4,7 +4,7 @@
       <template slot="items" slot-scope="props">
         <td>
           <router-link :to="{ name: 'backupSingle', params: {index: getBackupIndex(props.item.id)}}">
-            {{ props.item.name }}
+            {{ props.item.manualBackupName }}
           </router-link>
         </td>
         <td>
