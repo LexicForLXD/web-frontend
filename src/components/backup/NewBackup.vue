@@ -82,7 +82,7 @@
                 const body = {
                     name: this.name,
                     destination: this.selectedDestination,
-                    containers: this.selectedContainers,
+                    containerIds: this.selectedContainers,
                 };
 
                 Object.keys(body).forEach(
