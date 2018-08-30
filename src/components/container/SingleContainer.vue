@@ -60,26 +60,20 @@
                         
                     </v-card-text>
 
+                    <v-card-text v-if="editing">
+                      <edit-container :container="container" @submitted="onCancel"></edit-container>
+                    </v-card-text>
 
                     <v-card-text v-if="editName">
-                        <v-text-field
-                                label="Name"
-                                v-model="name"
-                                :rules="[v => !!v || 'Name is required']"
-                                required
-                        />
-
-                        <v-btn @click="onChangeNameSubmit">Save</v-btn>
-                        <v-alert :value="error" type="error">
-                            {{ error }}
-                        </v-alert>
-
+                      <edit-container-name :container="container" @submitted="onCancel"></edit-container-name>
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn flat @click="onEdit">Edit</v-btn>
-                        <v-btn flat @click="onDelete">Delete</v-btn>
-                        <v-btn flat @click="onChangeName">Change name</v-btn>
+                        <v-btn flat @click="editing = !editing" v-if="!editing && !editName">Edit</v-btn>
+                        <v-btn flat @click="onCancel" v-if="editing || editName">Cancel</v-btn>
+                        <v-btn flat @click="onDelete" v-if="!editing && !editName">Delete</v-btn>
+                        <v-btn flat @click="onChangeName" v-if="!editing && !editName">Change name</v-btn>
+                        
                     </v-card-actions>
 
                 </v-card>
@@ -121,11 +115,15 @@
 import stateApi from "../../api/containers/containerState";
 import LogContainer from "./logs/LogContainer";
 import NagiosContainer from "./nagios/NagiosContainer";
+import EditContainer from "./EditContainer";
+import EditContainerName from "./EditContainerName";
 
 export default {
   components: {
     LogContainer,
-    NagiosContainer
+    NagiosContainer,
+    EditContainer,
+    EditContainerName
   },
 
   computed: {
@@ -190,14 +188,6 @@ export default {
         .catch(err => {
           this.error = err.response.data.error.message;
         });
-    },
-    onEdit() {
-      this.editIpv4 = this.containers.ipv4;
-      this.editIpv6 = this.containers.ipv6;
-      this.editDomainName = this.containers.domainName;
-      this.editName = this.containers.name;
-      this.editPort = this.containers.port;
-      this.editing = true;
     },
     onCancel() {
       this.editing = false;
