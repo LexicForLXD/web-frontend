@@ -22,12 +22,30 @@
                         <v-btn :disabled="container.state === 'stopped'" :loading="loadingStop" @click="onStop">Stop</v-btn>
 
 
-                        <p v-if="container.architecture"><b>Architecture:</b> {{container.architecture}}</p>
-                        <p v-if="container.config"><b>Config:</b> <pre>{{container.config}}</pre></p>
-                        <p v-if="container.devices"><b>Devices:</b> <pre>{{container.devices}}</pre></p>
-                        <p v-if="container.expandedConfig"><b>Expanded Config:</b> <pre>{{container.expandedConfig}}</pre></p>
-                        <p v-if="container.expandedDevices"><b>Expanded Devices:</b> <pre>{{container.expandedDevices}}</pre></p>
-                        <p v-if="container.network"><b>Network:</b> <pre>{{container.network}}</pre></p>
+                        <p v-if="container.architecture" >
+                          <b>Architecture:</b><br>
+                          {{container.architecture}}
+                        </p>
+                        <p v-if="container.config">
+                          <b>Config:</b><br>
+                          <span class="long-text">{{container.config}}</span>
+                        </p>
+                        <p v-if="container.devices">
+                          <b>Devices:</b><br>
+                          <span class="long-text">{{container.devices}}</span>
+                        </p>
+                        <p v-if="container.expandedConfig">
+                          <b>Expanded Config:</b><br>
+                          <span class="long-text">{{container.expandedConfig}}</span>
+                        </p>
+                        <p v-if="container.expandedDevices">
+                          <b>Expanded Devices:</b> <br>
+                          <span class="long-text">{{container.expandedDevices}}</span>
+                        </p>
+                        <p v-if="container.network">
+                          <b>Network:</b> <br>
+                          <span class="long-text">{{container.network}}</span>
+                        </p>
                         
                         <p>
                             <b>Host:</b>

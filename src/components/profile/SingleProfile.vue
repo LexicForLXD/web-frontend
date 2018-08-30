@@ -7,8 +7,8 @@
         </v-toolbar>
         <v-card-text v-if="!editing">
             <p v-if="profile.description"><b>Description:</b> {{profiles[index].description}}</p>
-            <p v-if="profile.config"><b>Config:</b> {{profiles[index].config}}</p>
-            <p v-if="profile.devices"><b>Devices:</b> {{profiles[index].devices}}</p>
+            <p v-if="profile.config"><b>Config:</b> <span class="long-text">{profiles[index].config}}</span></p>
+            <p v-if="profile.devices"><b>Devices:</b> <span class="long-text">{{profiles[index].devices}}</span></p>
         </v-card-text>
         <v-card-text v-else>
             <v-form v-model="valid">
@@ -56,67 +56,68 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                profiles: "getProfiles",
-            }),
-            // containersForHost () {
-            //     return this.$store.getters.getSingleContainerById(this.profiles[this.index].containerId)
-            // }
+export default {
+  computed: {
+    ...mapGetters({
+      profiles: "getProfiles"
+    }),
+    // containersForHost () {
+    //     return this.$store.getters.getSingleContainerById(this.profiles[this.index].containerId)
+    // }
 
-            profile() {
-                return this.profiles[this.index];
-            }
-        },
-        data() {
-            return {
-                valid: false,
-                editing: false,
-                editDescription: "",
-                editConfig: {},
-                editDevices: "",
-                index: this.$route.params.index,
-                error: "",
-            };
-        },
-        methods: {
-            onDelete() {
-                this.$store.dispatch("deleteProfile", this.profiles[this.index].id);
-                this.$router.push({name: "profileOverview"});
-            },
-            onEdit() {
-                this.editDescription = this.profiles[this.index].description;
-                this.editName = this.profiles[this.index].name;
-                this.editConfig = JSON.stringify(this.profiles[this.index].config);
-                this.editDevices = JSON.stringify(this.profiles[this.index].devices);
-                this.editing = true;
-            },
-            onCancel() {
-                this.editing = false;
-            },
-            onUpdate() {
-                this.$store.dispatch("updateProfile", {
-                    profile_id: this.profiles[this.index].id,
-                    profile: {
-                        name: this.editName,
-                        description: this.editDescription,
-                        config: JSON.parse(this.editConfig),
-                        devices: JSON.parse(this.editDevices),
-                    }
-                }).then(() => {
-                    this.editing = false;
-                    this.error = "";
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            },
-
-
-        }
+    profile() {
+      return this.profiles[this.index];
+    }
+  },
+  data() {
+    return {
+      valid: false,
+      editing: false,
+      editDescription: "",
+      editConfig: {},
+      editDevices: "",
+      index: this.$route.params.index,
+      error: ""
     };
+  },
+  methods: {
+    onDelete() {
+      this.$store.dispatch("deleteProfile", this.profiles[this.index].id);
+      this.$router.push({ name: "profileOverview" });
+    },
+    onEdit() {
+      this.editDescription = this.profiles[this.index].description;
+      this.editName = this.profiles[this.index].name;
+      this.editConfig = JSON.stringify(this.profiles[this.index].config);
+      this.editDevices = JSON.stringify(this.profiles[this.index].devices);
+      this.editing = true;
+    },
+    onCancel() {
+      this.editing = false;
+    },
+    onUpdate() {
+      this.$store
+        .dispatch("updateProfile", {
+          profile_id: this.profiles[this.index].id,
+          profile: {
+            name: this.editName,
+            description: this.editDescription,
+            config: JSON.parse(this.editConfig),
+            devices: JSON.parse(this.editDevices)
+          }
+        })
+        .then(() => {
+          this.editing = false;
+          this.error = "";
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    }
+  }
+};
 </script>
 
 <style>

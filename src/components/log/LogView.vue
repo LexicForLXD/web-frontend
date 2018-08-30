@@ -1,9 +1,7 @@
 <template>
     <div>
-        <div v-if="log !== ''">
-            <pre>
+        <div v-if="log !== ''" class="long-text">
             {{ log }}
-            </pre>
         </div>
         <div v-else>
             Select a log file on the left

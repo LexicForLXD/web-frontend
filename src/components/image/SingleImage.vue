@@ -12,7 +12,7 @@
             <p v-if="image.public"><b>Public:</b> {{ image.public }}</p>
             <p v-if="image.finished"><b>Finished:</b> {{ image.finished }}</p>
             <p v-if="image.filename"><b>Filename:</b> {{ image.filename }}</p>
-            <p v-if="image.properties"><b>Properties:</b> <pre>{{ JSON.stringify(image.properties) }}</pre></p>
+            <p v-if="image.properties"><b>Properties:</b> <span class="long-text">{{ JSON.stringify(image.properties) }}</span></p>
             <p v-if="image.hostId"><b>Host:</b>
                 <router-link :to="{name: 'hostSingle', params: {index: hostIndex}}">{{host.name}}</router-link>
             </p>
