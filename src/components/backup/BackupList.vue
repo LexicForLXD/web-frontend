@@ -1,38 +1,31 @@
 <template>
-    <div>
-        <v-data-table
-                :headers="headers"
-                :items="backups">
-            <template slot="items" slot-scope="props">
-                <td>
-                    <router-link
-                            :to="{ name: 'backupSingle', params: {index: getBackupIndex(props.item.id)}}">
-                        {{ props.item.timestamp }}
-                    </router-link>
-                </td>
-                <td>
-                    <router-link
-                            :to="{ name: 'destinationSingle', params: {index: getBackupDestIndex(props.item.destinationId)}}">
-                        {{getDestination(props.item.destinationId).name}}
-                    </router-link>
-                </td>
-                <td>
-                    <router-link
-                            :to="{ name: 'scheduleSingle', params: {index: getBackupScheduleIndex(props.item.backupScheduleId)}}">
-                        {{getBackupSchedule(props.item.backupScheduleId).name}}
-                    </router-link>
-                </td>
-            </template>
-        </v-data-table>
-        <job-overview 
-                :running="running" 
-                :archived="archived"
-                :error="jobError"
-                title="Container"
-                v-on:getArchivedJobs="getArchivedJobs"
-                v-on:getRunningJobs="getRunningJobs"
-                />
-    </div>
+  <div>
+    <v-data-table :headers="headers" :items="backups">
+      <template slot="items" slot-scope="props">
+        <td>
+          <router-link :to="{ name: 'backupSingle', params: {index: getBackupIndex(props.item.id)}}">
+            {{ props.item.name }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="{ name: 'backupSingle', params: {index: getBackupIndex(props.item.id)}}">
+            {{ props.item.timestamp }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="{ name: 'destinationSingle', params: {index: getBackupDestIndex(props.item.destinationId)}}">
+            {{getDestination(props.item.destinationId).name}}
+          </router-link>
+        </td>
+        <td>
+          <router-link v-if="props.item.backupScheduleId" :to="{ name: 'scheduleSingle', params: {index: getBackupScheduleIndex(props.item.backupScheduleId)}}">
+            {{getBackupSchedule(props.item.backupScheduleId).name}}
+          </router-link>
+        </td>
+      </template>
+    </v-data-table>
+    <job-overview :running="running" :archived="archived" :error="jobError" title="Container" v-on:getArchivedJobs="getArchivedJobs" v-on:getRunningJobs="getRunningJobs" />
+  </div>
 </template>
 
 <script>
@@ -59,6 +52,10 @@ export default {
   data() {
     return {
       headers: [
+        {
+          text: "Name",
+          value: "name"
+        },
         {
           text: "Timestamp",
           value: "timestamp"
