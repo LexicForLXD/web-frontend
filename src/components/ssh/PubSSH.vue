@@ -7,7 +7,7 @@
                     </v-toolbar>
         <v-card-text v-if="publicKey !== ''">
             <v-alert :value="true" type="info">
-                    Please copy this public ssh key to the authorized_keys file on your host.
+                    Please copy this public ssh key to the authorized_keys file on your {{title}}.
             </v-alert>
             {{ publicKey }}
         </v-card-text>
@@ -36,6 +36,8 @@ export default {
       error: ""
     };
   },
+
+  props: ["title"],
 
   methods: {
     getPubKey() {

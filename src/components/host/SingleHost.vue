@@ -135,7 +135,7 @@
 
             <v-flex xs12>
                 <v-card class="my-2">
-                    <ssh-pub/>
+                    <ssh-pub title="lxc host"/>
                 </v-card>
             </v-flex>
 
