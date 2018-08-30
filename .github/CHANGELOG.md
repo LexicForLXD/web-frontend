@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/LexicForLXD/web-frontend/compare/v1.6.0...v1.7.0) (2018-08-29)
+
+
+### Bug Fixes
+
+* missing import api ([3479109](https://github.com/LexicForLXD/web-frontend/commit/3479109))
+
+
+### Features
+
+* loading on container state change closes [#63](https://github.com/LexicForLXD/web-frontend/issues/63) ([206cb42](https://github.com/LexicForLXD/web-frontend/commit/206cb42))
+
 # [1.6.0](https://github.com/LexicForLXD/web-frontend/compare/v1.5.5...v1.6.0) (2018-08-29)
 
 
