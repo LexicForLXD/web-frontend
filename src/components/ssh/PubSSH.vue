@@ -1,15 +1,21 @@
 <template>
-    <div>
+    <v-card class="pubssh">
         <v-toolbar>
-                        <v-toolbar-title>
-        SSH Public Key
-        </v-toolbar-title>
-                    </v-toolbar>
+          <v-toolbar-title>
+            SSH Public Key
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text v-if="publicKey !== ''">
             <v-alert :value="true" type="info">
-                    Please copy this public ssh key to the authorized_keys file on your {{title}}.
+              Please copy this public ssh key to the authorized_keys file on your {{title}}.
+              {{message}}
             </v-alert>
-            {{ publicKey }}
+            <v-textarea 
+              disabled 
+              v-model="publicKey"
+              auto-grow
+              flat
+              />
         </v-card-text>
         <v-card-text v-else>
             Waiting for public key.
@@ -17,7 +23,7 @@
         <v-alert :value="error" type="error">
                     {{ error }}
         </v-alert>
-    </div>
+    </v-card>
 </template>
 
 <script>
@@ -37,7 +43,7 @@ export default {
     };
   },
 
-  props: ["title"],
+  props: ["title", "message"],
 
   methods: {
     getPubKey() {
@@ -57,5 +63,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.pubssh {
+  margin-top: 50px;
+}
 </style>
