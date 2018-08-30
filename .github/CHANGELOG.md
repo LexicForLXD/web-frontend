@@ -1,3 +1,13 @@
+## [1.7.1](https://github.com/LexicForLXD/web-frontend/compare/v1.7.0...v1.7.1) (2018-08-30)
+
+
+### Bug Fixes
+
+* backup create ([21984cf](https://github.com/LexicForLXD/web-frontend/commit/21984cf))
+* backup delete ([8252db5](https://github.com/LexicForLXD/web-frontend/commit/8252db5))
+* backup list ([cac8a8c](https://github.com/LexicForLXD/web-frontend/commit/cac8a8c))
+* display long text ([f6f22c1](https://github.com/LexicForLXD/web-frontend/commit/f6f22c1))
+
 # [1.7.0](https://github.com/LexicForLXD/web-frontend/compare/v1.6.0...v1.7.0) (2018-08-29)
 
 
