@@ -93,16 +93,8 @@ export default {
     containerApi
       .refreshSingle(containerId)
       .then(res => {
-        containerApi
-          .show(containerId)
-          .then(res => {
-            commit(types.CONTAINER_REFRESH_SUCCESS, res.data);
-            commit(types.LOADING_FINISH);
-          })
-          .catch(error => {
-            commit(types.LOADING_FAIL);
-            commit(types.CONTAINER_REFRESH_FAILURE, error);
-          });
+        commit(types.CONTAINER_REFRESH_SUCCESS, res.data);
+        commit(types.LOADING_FINISH);
       })
       .catch(error => {
         commit(types.LOADING_FAIL);
