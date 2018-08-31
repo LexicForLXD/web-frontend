@@ -1,5 +1,8 @@
 <template>
     <div>
+        <v-alert v-model="showHint" type="info" :dismissible="true">
+            sftp is prefered over scp. See duplicity documentation.
+        </v-alert>
         <v-form v-model="valid" @submit="onSubmit">
             <v-text-field label="Name" v-model="name" :rules="[v => !!v || 'Name is required']" required :error-messages="backupDestErrors.name" />
 
@@ -33,7 +36,20 @@ export default {
   computed: {
     ...mapGetters({
       backupDestErrors: "getBackupDestinationErrors"
-    })
+    }),
+
+    showHint: {
+      get: function() {
+        if (this.$cookies.isKey("scp-hint")) {
+          return this.$cookies.get("scp-hint") !== "false";
+        }
+        return true;
+      },
+
+      set: function(newVal) {
+        this.$cookies.set("scp-hint", false, "1m");
+      }
+    }
   },
 
   components: {
