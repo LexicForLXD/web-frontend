@@ -7,10 +7,10 @@
                 </v-list-tile-title>
             </v-list-tile>
             <v-list-group
-                    v-model="item.active"
                     v-for="item in general"
                     :key="item.title"
                     no-action
+                    :value="item.group === $store.state.route.meta.group"
             >
                 <v-list-tile slot="activator" :to="{name: item.route}">
                     <v-list-tile-content>
@@ -30,7 +30,7 @@
                 </v-list-tile-title>
             </v-list-tile>
             <v-list-group
-                    v-model="item.active"
+                    :value="item.group === $store.state.route.meta.group"
                     v-for="item in backup"
                     :key="item.title"
                     no-action
@@ -55,7 +55,7 @@
                 </v-list-tile-title>
             </v-list-tile>
             <v-list-group
-                    v-model="item.active"
+                    :value="item.group === $store.state.route.meta.group"
                     v-for="item in misc"
                     :key="item.title"
                     no-action
@@ -78,119 +78,121 @@
 </template>
 
 <script>
-
-
-    export default {
-
-        data() {
-            return {
-                general: [
-                    {
-                        title: "Hosts",
-                        route: "hostOverview",
-                        items: [
-                            {
-                                title: "New Host",
-                                route: "hostNew"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Containers",
-                        route: "containerOverview",
-                        items: [
-                            {
-                                title: "New Container",
-                                route: "containerNew"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Profiles",
-                        route: "profileOverview",
-                        items: [
-                            {
-                                title: "New Profile",
-                                route: "profileNew"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Images",
-                        route: "imageOverview",
-                        items: [
-                            {
-                                title: "New Image",
-                                route: "imageNew"
-                            }
-                        ]
-                    },
-                ],
-                backup: [
-                    {
-                        title: "Backups",
-                        route: "backupOverview",
-                        items: [
-                            {
-                                title: "New Backup",
-                                route: "backupNew"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Destinations",
-                        route: "destinationOverview",
-                        items: [
-                            {
-                                title: "New Destination",
-                                route: "destinationNew"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Schedules",
-                        route: "scheduleOverview",
-                        items: [
-                            {
-                                title: "New Schedule",
-                                route: "scheduleNew"
-                            }
-                        ]
-                    },
-                ],
-                misc: [
-                    {
-                        title: "Users",
-                        route: "userOverview",
-                        items: [
-                            {
-                                title: "New User",
-                                route: "userNew"
-                            },
-                            {
-                                title: "Current User",
-                                route: "userCurrent"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Import",
-                        route: "importOverview",
-                        items: [
-                            
-                        ]
-                    }
-                ]
+export default {
+  data() {
+    return {
+      general: [
+        {
+          title: "Hosts",
+          route: "hostOverview",
+          group: "host",
+          items: [
+            {
+              title: "New Host",
+              route: "hostNew"
             }
+          ]
+        },
+        {
+          title: "Containers",
+          route: "containerOverview",
+          group: "container",
+          items: [
+            {
+              title: "New Container",
+              route: "containerNew"
+            }
+          ]
+        },
+        {
+          title: "Profiles",
+          route: "profileOverview",
+          group: "profile",
+          items: [
+            {
+              title: "New Profile",
+              route: "profileNew"
+            }
+          ]
+        },
+        {
+          title: "Images",
+          route: "imageOverview",
+          group: "image",
+          items: [
+            {
+              title: "New Image",
+              route: "imageNew"
+            }
+          ]
         }
-
-
-    }
+      ],
+      backup: [
+        {
+          title: "Backups",
+          route: "backupOverview",
+          group: "backup",
+          items: [
+            {
+              title: "New Backup",
+              route: "backupNew"
+            }
+          ]
+        },
+        {
+          title: "Destinations",
+          route: "destinationOverview",
+          group: "backupDest",
+          items: [
+            {
+              title: "New Destination",
+              route: "destinationNew"
+            }
+          ]
+        },
+        {
+          title: "Schedules",
+          route: "scheduleOverview",
+          group: "backupSchedule",
+          items: [
+            {
+              title: "New Schedule",
+              route: "scheduleNew"
+            }
+          ]
+        }
+      ],
+      misc: [
+        {
+          title: "Users",
+          route: "userOverview",
+          group: "user",
+          items: [
+            {
+              title: "New User",
+              route: "userNew"
+            },
+            {
+              title: "Current User",
+              route: "userCurrent"
+            }
+          ]
+        },
+        {
+          title: "Import",
+          route: "importOverview",
+          group: "import",
+          items: []
+        }
+      ]
+    };
+  }
+};
 </script>
 
 <style>
-    /*.router-link-active {*/
-    /*background: blue;*/
-    /*color: white;*/
-    /*}*/
+/*.router-link-active {*/
+/*background: blue;*/
+/*color: white;*/
+/*}*/
 </style>
