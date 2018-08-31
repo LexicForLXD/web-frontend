@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/LexicForLXD/web-frontend/compare/v1.7.1...v1.7.2) (2018-08-30)
+
+
+### Bug Fixes
+
+* backupname on backup list ([7086170](https://github.com/LexicForLXD/web-frontend/commit/7086170))
+
 ## [1.7.1](https://github.com/LexicForLXD/web-frontend/compare/v1.7.0...v1.7.1) (2018-08-30)
 
 
