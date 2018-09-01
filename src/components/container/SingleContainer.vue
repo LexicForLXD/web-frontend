@@ -1,7 +1,5 @@
 <template>
-    <v-container fluid>
-        <v-layout row wrap>
-            <v-flex xs12>
+    <div>
                 <v-card v-if="container" class="my-2">
                     <v-toolbar>
                         <v-toolbar-title>
@@ -82,9 +80,7 @@
                             {{ error }}
                         </v-alert>
                 </v-bottom-sheet>
-            </v-flex>
 
-            <v-flex xs12>
                 <v-card class="my-2">
                     <v-toolbar>
                         <v-toolbar-title>
@@ -106,9 +102,7 @@
                         </v-tabs>
                     </v-card-text>
                 </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
+          </div>
 </template>
 
 <script>
@@ -155,15 +149,8 @@ export default {
     return {
       name: "",
       editing: false,
-      editIpv4: "",
-      editIpv6: "",
-      editDomainName: "",
       editName: false,
-      editPort: "",
-      // editSettings: "",
-      // editMac: "",
       index: this.$route.params.index,
-      // hostIndex: "",
       active: null,
       error: "",
       loadingStart: false,
@@ -193,46 +180,9 @@ export default {
       this.editing = false;
       this.editName = false;
     },
-    onUpdate() {
-      this.$store
-        .dispatch("updateImage", {
-          host_id: this.containers[this.index].id,
-          host: {
-            name: this.editName,
-            ipv4: this.editIpv4,
-            ipv6: this.editIpv6,
-            domainName: this.editDomainName,
-            port: this.editPort
-          }
-        })
-        .then(() => {
-          this.editing = false;
-          this.error = "";
-        })
-        .catch(error => {
-          this.error = error.response.data.error.message;
-        });
-    },
 
     onChangeName() {
       this.editName = !this.editName;
-    },
-
-    onChangeNameSubmit() {
-      this.$store
-        .dispatch("updateContainer", {
-          containerId: this.container.id,
-          container: {
-            name: this.name
-          }
-        })
-        .then(() => {
-          this.editing = false;
-          this.error = "";
-        })
-        .catch(error => {
-          this.error = error.response.data.error.message;
-        });
     },
 
     onStart() {
