@@ -1,3 +1,13 @@
+## [1.7.3](https://github.com/LexicForLXD/web-frontend/compare/v1.7.2...v1.7.3) (2018-08-31)
+
+
+### Bug Fixes
+
+* edit container closes [#65](https://github.com/LexicForLXD/web-frontend/issues/65) ([e855441](https://github.com/LexicForLXD/web-frontend/commit/e855441))
+* error handling on new backup dest closes [#66](https://github.com/LexicForLXD/web-frontend/issues/66) ([f350b56](https://github.com/LexicForLXD/web-frontend/commit/f350b56))
+* navigation menu respects route closes [#73](https://github.com/LexicForLXD/web-frontend/issues/73) ([4c962ee](https://github.com/LexicForLXD/web-frontend/commit/4c962ee))
+* use cookies to save state of scp hint closes [#67](https://github.com/LexicForLXD/web-frontend/issues/67) ([4004c90](https://github.com/LexicForLXD/web-frontend/commit/4004c90))
+
 ## [1.7.2](https://github.com/LexicForLXD/web-frontend/compare/v1.7.1...v1.7.2) (2018-08-30)
 
 
