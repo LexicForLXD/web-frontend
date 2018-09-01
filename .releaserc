@@ -1,18 +1,16 @@
 {
-  "verifyConditions": [
-    "@semantic-release/github"
-  ],
+  "verifyConditions": ["@semantic-release/github"],
   "prepare": [
     {
       "path": "@semantic-release/changelog",
       "changelogFile": ".github/CHANGELOG.md"
     },
+    "@semantic-release/npm",
     {
       "path": "@semantic-release/git",
-      "assets": ".github/CHANGELOG.md"
+      "assets": [".github/CHANGELOG.md", "package.json"]
     }
   ],
-  "publish": [
-    "@semantic-release/github"
-  ]
+  "publish": ["@semantic-release/github"],
+  "npmPublish": false
 }
