@@ -1,11 +1,15 @@
 <template>
-    <v-card class="jobs">
+    <v-card class="jobs" >
         <v-toolbar>
             <v-toolbar-title>
                 {{title}} jobs
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+               <v-btn flat @click="showJobs = !showJobs">Toggle Jobs</v-btn>
+            </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
+        <v-card-text v-if="showJobs">
             <v-btn @click="getArchivedJobs">Load archived jobs</v-btn>
             <v-btn @click="getRunningJobs">Load running jobs</v-btn>
             <h4>Archived jobs</h4>
@@ -78,6 +82,7 @@ module.exports = {
 
   data() {
     return {
+      showJobs: false,
       headers: [
         {
           text: "Method",
