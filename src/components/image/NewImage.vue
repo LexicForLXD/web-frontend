@@ -4,7 +4,8 @@
             <v-text-field
                     label="Filename"
                     v-model="filename"
-                    :error-messages="imageErrors.filename"
+                    :error-messages="error.filename"
+                    @input="error.filename = []"
                     persistent-hint
                     hint="The filename will be used for export."
             />
@@ -12,7 +13,8 @@
             <v-checkbox
                     label="Public"
                     v-model="publicImage"
-                    :error-messages="imageErrors.public"
+                    :error-messages="error.public"
+                    @input="error.public = []"
                     persistent-hint
                     hint="Whether the image can be downloaded by untrusted users"
             />
@@ -20,7 +22,8 @@
             <v-text-field
                     label="Alias name"
                     v-model="aliases[0].name"
-                    :error-messages="imageErrors.aliasName"
+                    :error-messages="error.aliasName"
+                    @input="error.aliasName = []"
                     required
                     :rules="[v => !!v || 'Alias is required']"
             />
@@ -28,7 +31,8 @@
             <v-text-field
                     label="Alias description"
                     v-model="aliases[0].description"
-                    :error-messages="imageErrors.aliasDescription"
+                    :error-messages="error.aliasDescription"
+                    @input="error.aliasDescription = []"
                     required
                     :rules="[v => !!v || 'Alias is required']"
             />
@@ -38,6 +42,8 @@
                     v-model="hostId"
                     label="Host"
                     required
+                    :error-messages="error.hosts"
+                    @input="error.hosts = []"
                     item-value="id"
                     item-text="name"
                     :rules="[v => !!v || 'Host is required']"
@@ -48,7 +54,8 @@
                     label="Properties"
                     v-model="properties"
                     placeholder='{"os": "Alpine"}'
-                    :error-messages="imageErrors.properties"
+                    :error-messages="error.properties"
+                    @input="error.properties = []"
                     hint="Image properties (optional, applied on top of source properties)"
                     persistent-hint
             />
@@ -61,10 +68,17 @@
                     item-value="value"
                     item-text="text"
                     :rules="[v => !!v || 'Source type is required']"
-                    :error-messages="imageErrors.type"
+                    :error-messages="error.type"
+                    @input="error.type = []"
                     hint="Which source should be used for the creation of the image?"
                     persistent-hint
             />
+
+            <div v-if="source.type === 'localImage'">
+              <v-input >
+                <input type="file">
+              </v-input>
+            </div>
 
 
             <div v-if="source.type === 'image'">
@@ -83,20 +97,22 @@
                     hint='Alias of the remote image. A list can be found <a target="_blank" href="https://uk.images.linuxcontainers.org">here</a>'
                     persistent-hint
                     :rules="[v => !!v || 'Alias is required']"
-            />
+                />
 
             </div>
 
             <div v-if="source.type === 'container'">
                 <v-select
                         :items="containers"
-                        v-model="containers"
+                        v-model="source.name"
                         label="Container"
                         required
                         item-value="name"
                         item-text="name"
                         :rules="[v => !!v || 'Host is required']"
                         no-data-text="Make sure you have selected the correct host."
+                        :error-messages="error.container"
+                        @input="error.container = []"
                 />
 
 
@@ -106,6 +122,8 @@
                         placeholder="rm"
                         hint='Override the compression algorithm for the image (optional)'
                         persistent-hint
+                        :error-messages="error.compression"
+                        @input="error.compression = []"
                 />
             </div>
 
@@ -123,7 +141,7 @@
 
         </v-form>
         <v-alert :value="error" type="error">
-            {{ imageErrors.general }}
+            {{ error.general }}
         </v-alert>
 
     </div>
@@ -185,6 +203,10 @@ export default {
         {
           value: "container",
           text: "Container"
+        },
+        {
+          value: "localImage",
+          text: "Upload Image"
         }
       ],
       error: ""
@@ -221,7 +243,7 @@ export default {
               type: this.source.type,
               name: this.source.name
             },
-            properties: JSON.parse(this.properties),
+            // properties: JSON.parse(this.properties),
             compression_algorithm: this.compressionAlgo
           },
           hostId: this.hostId
@@ -239,8 +261,8 @@ export default {
               server: this.source.server,
               protocol: this.source.protocol,
               alias: this.source.alias
-            },
-            properties: JSON.parse(this.properties)
+            }
+            // properties: JSON.parse(this.properties)
           },
           hostId: this.hostId
         };

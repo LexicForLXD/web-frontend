@@ -6,13 +6,15 @@
                 v-model="name"
                 :rules="[v => !!v || 'Name is required']"
                 required
-                :error-messages="profileErrors.name"
+                :error-messages="error.name"
+                @input="error.name = []"
         />
 
         <v-text-field
                 label="Description"
                 v-model="description"
-                :error-messages="profileErrors.description"
+                :error-messages="error.description"
+                @input="error.description = []"
         />
 
         <v-text-field
@@ -20,7 +22,8 @@
                 v-model="config"
                 multi-line
                 placeholder='{"limits.cpu": "2"}'
-                :error-messages="profileErrors.config"
+                :error-messages="error.config"
+                @input="error.config = []"
         />
 
         <v-text-field
@@ -46,52 +49,54 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                profileErrors: "getProfileErrors"
-            })
-        },
+export default {
+  computed: {
+    ...mapGetters({
+      profileErrors: "getProfileErrors"
+    })
+  },
 
-        data() {
-            return {
-                valid: false,
-                name: "",
-                description: "",
-                config: "{}",
-                devices: "{}",
-                error: "",
-            };
-        },
+  data() {
+    return {
+      valid: false,
+      name: "",
+      description: "",
+      config: "{}",
+      devices: "{}",
+      error: ""
+    };
+  },
 
-        methods: {
-            onSubmit() {
-                let body = {
-                    name: this.name,
-                    description: this.description,
-                    config: JSON.parse(this.config),
-                    devices: JSON.parse(this.devices),
-                };
+  methods: {
+    onSubmit() {
+      let body = {
+        name: this.name,
+        description: this.description,
+        config: JSON.parse(this.config),
+        devices: JSON.parse(this.devices)
+      };
 
-                Object.keys(body).forEach(
-                    key =>
-                        (body[key] === null || body[key] === undefined || body[key].length) ===
-                        0 && delete body[key]
-                );
+      Object.keys(body).forEach(
+        key =>
+          (body[key] === null ||
+            body[key] === undefined ||
+            body[key].length) === 0 && delete body[key]
+      );
 
-
-                this.$store.dispatch("createProfile", body).then(() => {
-                    this.$router.push({name: "profileOverview"})
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            }
-        }
+      this.$store
+        .dispatch("createProfile", body)
+        .then(() => {
+          this.$router.push({ name: "profileOverview" });
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
     }
+  }
+};
 </script>
 
 <style>
-
 </style>

@@ -76,16 +76,20 @@ export default {
 
   updateHost({ commit }, data) {
     commit(types.LOADING_BEGIN);
-    hostApi
-      .update(data.host_id, data.host)
-      .then(res => {
-        commit(types.HOST_UPDATE_SUCCESS, res.data);
-        commit(types.LOADING_FINISH);
-      })
-      .catch(error => {
-        commit(types.HOST_UPDATE_FAILURE, error);
-        commit(types.LOADING_FAIL);
-      });
+    return new Promise((resolve, reject) => {
+      hostApi
+        .update(data.host_id, data.host)
+        .then(res => {
+          commit(types.HOST_UPDATE_SUCCESS, res.data);
+          commit(types.LOADING_FINISH);
+          resolve();
+        })
+        .catch(error => {
+          commit(types.HOST_UPDATE_FAILURE, error);
+          commit(types.LOADING_FAIL);
+          reject(error);
+        });
+    });
   },
 
   authHost({ commit }, data) {

@@ -5,6 +5,8 @@
               label="Name"
               v-model="name"
               :rules="[v => !!v || 'Name is required']"
+              :error-messages="error.name"
+              @input="error.name = []"
               required
             />
 
@@ -21,8 +23,8 @@
             If you get redirected to the container view, the server accepted your request. Please have a look on the running jobs.
         </p>
 
-        <v-alert :value="error" type="error">
-            {{ error }}
+        <v-alert :value="error.general" type="error">
+            {{ error.general }}
         </v-alert>
     </div>
 </template>

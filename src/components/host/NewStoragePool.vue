@@ -5,7 +5,8 @@
             v-model="name"
             :rules="[v => !!v || 'Name is required']"
             required
-            :error-messages="errors.name"
+            :error-messages="error.name"
+            @input="error.name = []"
             />
         
         <v-text-field
@@ -13,7 +14,8 @@
             v-model="source"
             :rules="[v => !!v || 'Source is required']"
             required
-            :error-messages="errors.name"
+            :error-messages="error.source"
+            @input="error.source = []"
             />
 
         <v-select
@@ -23,6 +25,8 @@
                     required
                     item-value="name"
                     item-text="name"
+                    :error-messages="error.driver"
+                    @input="error.driver = []"
                     :rules="[v => !!v || 'Driver is required']"
             />
 
@@ -38,7 +42,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import storageApi from "../../api/storage/storage.js"
+import storageApi from "../../api/storage/storage.js";
 
 export default {
   computed: {
@@ -54,38 +58,42 @@ export default {
       name: "",
       source: "",
       drivers: [
-          {
-              name: "dir"
-          },
-          {
-              name: "btrfs"
-          },
-          {
-              name: "zfs"
-          },
+        {
+          name: "dir"
+        },
+        {
+          name: "btrfs"
+        },
+        {
+          name: "zfs"
+        }
       ],
       selectedDriver: "",
-      errors: "",
+      error: "",
       index: this.$route.params.index
     };
   },
 
   methods: {
     onCreate() {
-    
-        const data = {
-            name: this.name,
-            driver: this.selectedDriver,
-            config: {
-                source: this.source
-            }
+      const data = {
+        name: this.name,
+        driver: this.selectedDriver,
+        config: {
+          source: this.source
         }
-      storageApi.create(this.hosts[this.index].id, data).then(res => {
-          this.$router.push({name: 'hostSingle', params: {index: this.index}});
-      }).catch(err => {
-          console.log(err)
-          this.errors = err.data.data
-      })
+      };
+      storageApi
+        .create(this.hosts[this.index].id, data)
+        .then(res => {
+          this.$router.push({
+            name: "hostSingle",
+            params: { index: this.index }
+          });
+        })
+        .catch(error => {
+          this.errors = error.response.data.error.message;
+        });
     }
   }
 };
