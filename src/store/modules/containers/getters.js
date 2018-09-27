@@ -10,8 +10,15 @@ export default {
         return map(ids, id => state.containers[keyForContainer(id)])
     },
 
-    getContainersFromHost: (state) => (hostId) => {
-        return filter(state.containers, ['host.id', hostId]);
+    getContainersFromHost: ({containers}) => (hostId) => {
+        const acceptedValues = [hostId];
+        var filteredObject = Object.keys(containers).reduce(function(r, e) {
+            if (acceptedValues.includes(containers[e])) r[e] = containers[e]
+            return r;
+          }, {})
+
+        // return containers.filter(container => container.hostId === hostId);
+        // return filter(state.containers, ['host.id', hostId]);
     },
 
     getContainerIndexById: ({containersList}) => (containerId) => {

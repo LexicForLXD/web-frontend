@@ -6,13 +6,15 @@
                     v-model="name"
                     :rules="[v => !!v || 'Name is required']"
                     required
-                    :error-messages="scheduleErrors.name"
+                    :error-messages="error.name"
+                    @error="erro.name = []"
             />
 
             <v-text-field
                     label="Description"
                     v-model="description"
-                    :error-messages="scheduleErrors.description"
+                    :error-messages="error.description"
+                    @error="erro.description = []"
             />
 
             <v-select
@@ -21,7 +23,8 @@
                     label="Type"
                     required
                     :rules="[v => !!v || 'Type is required']"
-                    :error-messages="scheduleErrors.type"
+                    :error-messages="error.type"
+                    @error="erro.type = []"
             />
 
             <v-select
@@ -30,7 +33,8 @@
                     label="Execution time"
                     required
                     :rules="[v => !!v || 'Execution time is required']"
-                    :error-messages="scheduleErrors.executionTime"
+                    :error-messages="error.executionTime"
+                    @error="erro.executionTime = []"
                     persistent-hint
                     hint="How often should be backed up?"
             />
@@ -44,7 +48,8 @@
                     multiple
                     required
                     :rules="[v => !!v || 'At least one Container is required']"
-                    :error-messages="scheduleErrors.containers"
+                    :error-messages="error.containers"
+                    @error="erro.containers = []"
                     persistent-hint
                     hint="Which containers should be backed up? The containers have to be on the same host."
             />
@@ -57,7 +62,8 @@
                     item-value="id"
                     item-text="name"
                     :rules="[v => !!v || 'Destination is required']"
-                    :error-messages="scheduleErrors.destination"
+                    :error-messages="error.destination"
+                    @error="erro.destination = []"
                     persistent-hint
                     hint="To which destination the containers should be backed up."
             />
@@ -70,70 +76,68 @@
             </v-btn>
 
         </v-form>
-
-        <v-alert :value="error" type="error">
-            {{ error }}
-        </v-alert>
     </div>
 </template>
 
 <script>
-    import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                scheduleErrors: "getBackupScheduleErrors",
-                destinations: "getBackupDestinations",
-                containers: "getContainers",
-            })
-        },
+export default {
+  computed: {
+    ...mapGetters({
+      scheduleErrors: "getBackupScheduleErrors",
+      destinations: "getBackupDestinations",
+      containers: "getContainers"
+    })
+  },
 
-        data() {
-            return {
-                valid: false,
-                name: "",
-                description: "",
-                executionTime: "",
-                type: "",
-                selectedDestination: "",
-                selectedContainers: [],
-                data: "",
-            };
-        },
+  data() {
+    return {
+      valid: false,
+      name: "",
+      description: "",
+      executionTime: "",
+      type: "",
+      selectedDestination: "",
+      selectedContainers: [],
+      data: "",
+      error: ""
+    };
+  },
 
-        methods: {
-            ...mapActions({
-                createSchedule: "createBackupSchedule"
-            }),
+  methods: {
+    ...mapActions({
+      createSchedule: "createBackupSchedule"
+    }),
 
-            onSubmit() {
-                const body = {
-                    name: this.name,
-                    description: this.description,
-                    executionTime: this.executionTime,
-                    type: this.type,
-                    destination: this.selectedDestination,
-                    containers: this.selectedContainers,
-                };
+    onSubmit() {
+      const body = {
+        name: this.name,
+        description: this.description,
+        executionTime: this.executionTime,
+        type: this.type,
+        destination: this.selectedDestination,
+        containers: this.selectedContainers
+      };
 
-                Object.keys(body).forEach(
-                    key =>
-                        (body[key] === null || body[key] === undefined || body[key].length) ===
-                        0 && delete body[key]
-                );
+      Object.keys(body).forEach(
+        key =>
+          (body[key] === null ||
+            body[key] === undefined ||
+            body[key].length) === 0 && delete body[key]
+      );
 
-                this.createSchedule(body).then(() => {
-                    this.$router.push({name: "scheduleOverview"})
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-
-                });
-            }
-        },
+      this.createSchedule(body)
+        .then(() => {
+          this.$router.push({ name: "scheduleOverview" });
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
     }
+  }
+};
 </script>
 
 <style>
-
 </style>

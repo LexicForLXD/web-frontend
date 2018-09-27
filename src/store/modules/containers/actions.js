@@ -76,16 +76,20 @@ export default {
 
   updateContainer({ commit }, data) {
     commit(types.LOADING_BEGIN);
-    containerApi
-      .update(data.containerId, data.container)
-      .then(res => {
-        commit(types.CONTAINER_UPDATE_SUCCESS, res.data);
-        commit(types.LOADING_FINISH);
-      })
-      .catch(error => {
-        commit(types.LOADING_FAIL);
-        commit(types.CONTAINER_UPDATE_FAILURE, error);
-      });
+    return new Promise((resolve, reject) => {
+      containerApi
+        .update(data.containerId, data.container)
+        .then(res => {
+          commit(types.CONTAINER_UPDATE_SUCCESS, res.data);
+          commit(types.LOADING_FINISH);
+          resolve();
+        })
+        .catch(error => {
+          commit(types.LOADING_FAIL);
+          commit(types.CONTAINER_UPDATE_FAILURE, error);
+          reject(error);
+        });
+    });
   },
 
   refreshContainer({ commit }, containerId) {

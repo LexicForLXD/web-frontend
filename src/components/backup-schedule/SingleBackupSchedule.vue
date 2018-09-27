@@ -87,71 +87,71 @@
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-    export default {
-        computed: {
-            ...mapGetters({
-                destinations: "getBackupDestinations",
-                containers: "getContainers",
-            }),
-            backupSchedule () {
-                return this.$store.getters.getBackupScheduleByIndex(this.index)
-            },
-
-        },
-        data() {
-            return {
-                valid: false,
-                editing: false,
-                editName: "",
-                editDescription: "",
-                editType: "",
-                editExecutionTime: "",
-                editSelectedContainers: [],
-                editSelectedDestination: "",
-                index: this.$route.params.index,
-                error: ""
-            };
-        },
-        methods: {
-            onDelete() {
-                this.$store.dispatch("deleteBackupSchedule", this.id);
-            },
-            onEdit() {
-                this.editName = this.backupSchedule.name;
-                this.editDescription = this.backupSchedule.description;
-                this.editType = this.backupSchedule.type;
-                this.editExecutionTime = this.backupSchedule.executionTime;
-                this.editSelectedContainers = this.backupSchedule.containerId;
-                this.editSelectedDestination = this.backupSchedule.destination;
-                this.editing = true;
-            },
-            onCancel() {
-                this.editing = false;
-            },
-            onUpdate() {
-                this.$store.dispatch("updateBackupSchedule", {
-                    host_id: this.backupSchedule.id,
-                    host: {
-                        name: this.editName,
-                        description: this.editDescription,
-                        type: this.editType,
-                        executionTime: this.editExecutionTime,
-                        containers: this.editSelectedContainers,
-                        destination: this.editSelectedDestination,
-                    }
-                }).then(() => {
-                    this.editing = false;
-                    this.error = "";
-                }).catch((error) => {
-                    this.error = error.response.data.error.message;
-                });
-            },
-
-
-        }
+export default {
+  computed: {
+    ...mapGetters({
+      destinations: "getBackupDestinations",
+      containers: "getContainers"
+    }),
+    backupSchedule() {
+      return this.$store.getters.getBackupScheduleByIndex(this.index);
+    }
+  },
+  data() {
+    return {
+      valid: false,
+      editing: false,
+      editName: "",
+      editDescription: "",
+      editType: "",
+      editExecutionTime: "",
+      editSelectedContainers: [],
+      editSelectedDestination: "",
+      index: this.$route.params.index,
+      error: ""
     };
+  },
+  methods: {
+    onDelete() {
+      this.$store.dispatch("deleteBackupSchedule", this.backupSchedule.id);
+    },
+    onEdit() {
+      this.editName = this.backupSchedule.name;
+      this.editDescription = this.backupSchedule.description;
+      this.editType = this.backupSchedule.type;
+      this.editExecutionTime = this.backupSchedule.executionTime;
+      this.editSelectedContainers = this.backupSchedule.containerId;
+      this.editSelectedDestination = this.backupSchedule.destination;
+      this.editing = true;
+    },
+    onCancel() {
+      this.editing = false;
+    },
+    onUpdate() {
+      this.$store
+        .dispatch("updateBackupSchedule", {
+          backupSchedule_id: this.backupSchedule.id,
+          backupSchedule: {
+            name: this.editName,
+            description: this.editDescription,
+            type: this.editType,
+            executionTime: this.editExecutionTime,
+            containers: this.editSelectedContainers,
+            destination: this.editSelectedDestination
+          }
+        })
+        .then(() => {
+          this.editing = false;
+          this.error = "";
+        })
+        .catch(error => {
+          this.error = error.response.data.error.message;
+        });
+    }
+  }
+};
 </script>
 
 <style>

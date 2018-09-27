@@ -7,6 +7,8 @@
                     label="Profiles"
                     item-value="id"
                     item-text="name"
+                    :error-messages="error.profiles"
+                    @error="erro.profiles = []"
                     multiple
                     persistent-hint
                     hint="Profiles will alter the default configuration."
@@ -17,7 +19,8 @@
                     v-model="config"
                     multi-line
                     placeholder='{"limits.cpu": "2"}'
-                    :error-messages="containerErrors.config"
+                    :error-messages="error.config"
+                    @error="erro.config = []"
                     persistent-hint
                     hint="You can input your own config."
             />
@@ -26,7 +29,8 @@
                     label="Devices"
                     v-model="devices"
                     multi-line
-                    :error-messages="containerErrors.devices"
+                    :error-messages="error.devices"
+                    @error="erro.devices = []"
                     persistent-hint
                     hint="You can input your own devices. Please don't include the storage device."
             />
@@ -44,8 +48,8 @@
             If you get redirected to the container view, the server accepted your request. Please have a look on the running jobs.
         </p>
 
-        <v-alert :value="error" type="error">
-            {{ error }}
+        <v-alert :value="error.general" type="error">
+            {{ error.general }}
         </v-alert>
     </div>
 </template>
