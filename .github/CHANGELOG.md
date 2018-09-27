@@ -1,3 +1,10 @@
+## [1.7.5](https://github.com/LexicForLXD/web-frontend/compare/v1.7.4...v1.7.5) (2018-09-27)
+
+
+### Bug Fixes
+
+* jobs collapsed by default closes [#78](https://github.com/LexicForLXD/web-frontend/issues/78) ([dd1d610](https://github.com/LexicForLXD/web-frontend/commit/dd1d610))
+
 ## [1.7.4](https://github.com/LexicForLXD/web-frontend/compare/v1.7.3...v1.7.4) (2018-09-01)
 
 
