@@ -1,3 +1,12 @@
+## [1.7.6](https://github.com/LexicForLXD/web-frontend/compare/v1.7.5...v1.7.6) (2018-09-27)
+
+
+### Bug Fixes
+
+* backup schedule delete and update closes [#86](https://github.com/LexicForLXD/web-frontend/issues/86) ([6616d86](https://github.com/LexicForLXD/web-frontend/commit/6616d86))
+* form error handling refers [#74](https://github.com/LexicForLXD/web-frontend/issues/74) ([fba4591](https://github.com/LexicForLXD/web-frontend/commit/fba4591))
+* new user error handling referes [#74](https://github.com/LexicForLXD/web-frontend/issues/74) ([922265d](https://github.com/LexicForLXD/web-frontend/commit/922265d))
+
 ## [1.7.5](https://github.com/LexicForLXD/web-frontend/compare/v1.7.4...v1.7.5) (2018-09-27)
 
 
