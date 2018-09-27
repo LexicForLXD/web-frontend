@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/LexicForLXD/web-frontend/compare/v1.7.3...v1.7.4) (2018-09-01)
+
+
+### Bug Fixes
+
+* unnecessary api call ([a32c69c](https://github.com/LexicForLXD/web-frontend/commit/a32c69c))
+
 ## [1.7.3](https://github.com/LexicForLXD/web-frontend/compare/v1.7.2...v1.7.3) (2018-08-31)
 
 
