@@ -11,10 +11,13 @@
               {{message}}
             </v-alert>
             <v-textarea 
-              disabled 
+              id="pub-key"
+              readonly 
               v-model="publicKey"
               auto-grow
               flat
+              append-outer-icon="file_copy"
+              :append-outer-icon-cb="copyKey"
               />
         </v-card-text>
         <v-card-text v-else>
@@ -58,6 +61,23 @@ export default {
           this.$store.commit("LOADING_FAIL");
           this.error = err.response.data.error.message;
         });
+    },
+
+    copyKey() {
+      let testingCodeToCopy = document.querySelector("#pub-key");
+      testingCodeToCopy.setAttribute("type", "text");
+      testingCodeToCopy.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+        alert("Public key was copied " + msg);
+      } catch (err) {
+        alert("Oops, unable to copy");
+      }
+      /* unselect the range */
+      testingCodeToCopy.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
     }
   }
 };
