@@ -120,6 +120,10 @@ export default {
     EditContainerName
   },
 
+  mounted: function() {
+    this.refresh();
+  },
+
   computed: {
     host() {
       return this.$store.getters.getHostById(this.container.hostId);
