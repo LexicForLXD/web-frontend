@@ -10,6 +10,16 @@
             <p><b>Description: </b>{{backupSchedule.description}}</p>
             <p><b>Type: </b>{{backupSchedule.type}}</p>
             <p><b>Execution time: </b>{{backupSchedule.executionTime}}</p>
+
+            <v-list>
+              <v-list-tile v-for="backup in backups" :key="backup.id">
+                <v-list-tile-content>
+                  <li>
+                    Timestamp: {{backup.timestamp}}
+                  </li>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
         </v-card-text>
 
         <v-card-text v-else>
@@ -88,6 +98,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import backupApi from "../../api/backup/backup.js";
 
 export default {
   computed: {
@@ -98,6 +109,10 @@ export default {
     backupSchedule() {
       return this.$store.getters.getBackupScheduleByIndex(this.index);
     }
+  },
+
+  mounted() {
+    this.getBackupsFromSchedule();
   },
   data() {
     return {
@@ -110,7 +125,8 @@ export default {
       editSelectedContainers: [],
       editSelectedDestination: "",
       index: this.$route.params.index,
-      error: ""
+      error: "",
+      backups: []
     };
   },
   methods: {
@@ -148,6 +164,18 @@ export default {
         })
         .catch(error => {
           this.error = error.response.data.error.message;
+        });
+    },
+    getBackupsFromSchedule() {
+      this.$store.commit("LOADING_BEGIN");
+      backupApi
+        .fetchFromSchedule(this.backupSchedule.id)
+        .then(res => {
+          this.$store.commit("LOADING_FINISH");
+          this.backupss = res.data;
+        })
+        .catch(err => {
+          this.$store.commit("LOADING_FAIL");
         });
     }
   }
