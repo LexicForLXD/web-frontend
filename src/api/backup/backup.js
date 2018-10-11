@@ -12,5 +12,8 @@ export default {
   },
   create(backup) {
     return client.withAuth().post("/backups", backup);
+  },
+  fetchFromSchedule(scheduleId) {
+    return client.withAuth().get("/schedules/" + scheduleId + "/backups");
   }
 };
