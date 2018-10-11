@@ -1,3 +1,12 @@
+## [1.7.8](https://github.com/LexicForLXD/web-frontend/compare/v1.7.7...v1.7.8) (2018-10-11)
+
+
+### Bug Fixes
+
+* copy ssh key via click  closes [#85](https://github.com/LexicForLXD/web-frontend/issues/85) ([e6e2b44](https://github.com/LexicForLXD/web-frontend/commit/e6e2b44))
+* refresh container on mounted closes [#82](https://github.com/LexicForLXD/web-frontend/issues/82) ([d4ad6b2](https://github.com/LexicForLXD/web-frontend/commit/d4ad6b2))
+* show backups under schedule closes [#88](https://github.com/LexicForLXD/web-frontend/issues/88) ([e4e3a94](https://github.com/LexicForLXD/web-frontend/commit/e4e3a94))
+
 ## [1.7.7](https://github.com/LexicForLXD/web-frontend/compare/v1.7.6...v1.7.7) (2018-09-27)
 
 
