@@ -13,7 +13,12 @@ export default {
   create(backup) {
     return client.withAuth().post("/backups", backup);
   },
-  fetchFromSchedule(scheduleId) {
+  fetchFromSchedule(scheduleId, count = undefined) {
+    if (count !== undefined) {
+      return client
+        .withAuth()
+        .get("/schedules/" + scheduleId + "/backups?count=" + count);
+    }
     return client.withAuth().get("/schedules/" + scheduleId + "/backups");
   }
 };
