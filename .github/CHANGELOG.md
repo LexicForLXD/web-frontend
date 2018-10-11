@@ -1,3 +1,10 @@
+## [1.7.9](https://github.com/LexicForLXD/web-frontend/compare/v1.7.8...v1.7.9) (2018-10-11)
+
+
+### Bug Fixes
+
+* show backups on schedule ([25f6f0b](https://github.com/LexicForLXD/web-frontend/commit/25f6f0b))
+
 ## [1.7.8](https://github.com/LexicForLXD/web-frontend/compare/v1.7.7...v1.7.8) (2018-10-11)
 
 
