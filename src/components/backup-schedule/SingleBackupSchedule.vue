@@ -172,7 +172,7 @@ export default {
         .fetchFromSchedule(this.backupSchedule.id)
         .then(res => {
           this.$store.commit("LOADING_FINISH");
-          this.backupss = res.data;
+          this.backups = res.data;
         })
         .catch(err => {
           this.$store.commit("LOADING_FAIL");
