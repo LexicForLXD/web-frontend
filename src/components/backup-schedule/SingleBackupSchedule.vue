@@ -14,9 +14,9 @@
             <v-list>
               <v-list-tile v-for="backup in backups" :key="backup.id">
                 <v-list-tile-content>
-                  <li>
-                    Timestamp: {{backup.timestamp}}
-                  </li>
+                  <router-link :to="{name: 'backupSingle', params: {index: getBackupIndex(backup.id)}}">
+                      Timestamp: {{backup.timestamp}}
+                  </router-link>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -177,6 +177,9 @@ export default {
         .catch(err => {
           this.$store.commit("LOADING_FAIL");
         });
+    },
+    getBackupIndex(id) {
+      return this.$store.getters.getBackupIndexById(id);
     }
   }
 };
