@@ -14,9 +14,9 @@
             <v-list>
               <v-list-tile v-for="backup in backups" :key="backup.id">
                 <v-list-tile-content>
-                  <li>
-                    Timestamp: {{backup.timestamp}}
-                  </li>
+                  <router-link :to="{name: 'backupSingle', params: {index: getBackupIndex(backup.id)}}">
+                      Timestamp: {{backup.timestamp}}
+                  </router-link>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -172,11 +172,14 @@ export default {
         .fetchFromSchedule(this.backupSchedule.id)
         .then(res => {
           this.$store.commit("LOADING_FINISH");
-          this.backupss = res.data;
+          this.backups = res.data;
         })
         .catch(err => {
           this.$store.commit("LOADING_FAIL");
         });
+    },
+    getBackupIndex(id) {
+      return this.$store.getters.getBackupIndexById(id);
     }
   }
 };
