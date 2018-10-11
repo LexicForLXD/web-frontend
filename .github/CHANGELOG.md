@@ -1,3 +1,10 @@
+## [1.7.7](https://github.com/LexicForLXD/web-frontend/compare/v1.7.6...v1.7.7) (2018-09-27)
+
+
+### Bug Fixes
+
+* version cache handling ([e81f812](https://github.com/LexicForLXD/web-frontend/commit/e81f812))
+
 ## [1.7.6](https://github.com/LexicForLXD/web-frontend/compare/v1.7.5...v1.7.6) (2018-09-27)
 
 
