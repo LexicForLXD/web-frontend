@@ -13,7 +13,7 @@ jobs:
       if: branch = master AND type != pull_request
       language: node_js
       node_js:
-        - "7"
+        - node
       install:
         - npm install
       before_script: cp src/config.js.EXAMPLE src/config.js
