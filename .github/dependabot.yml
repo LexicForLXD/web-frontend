@@ -1,0 +1,31 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "07:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: react-bootstrap
+    versions:
+    - ">= 0.a"
+  - dependency-name: eslint
+    versions:
+    - 7.18.0
+    - 7.19.0
+    - 7.20.0
+    - 7.21.0
+    - 7.22.0
+    - 7.23.0
+    - 7.24.0
+  - dependency-name: laravel-mix
+    versions:
+    - 6.0.13
+    - 6.0.16
+  - dependency-name: eslint-plugin-vue
+    versions:
+    - 7.5.0
+    - 7.6.0
+    - 7.7.0
+    - 7.8.0
